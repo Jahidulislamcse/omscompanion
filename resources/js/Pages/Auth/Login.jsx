@@ -3,7 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login() {
     const { data, setData, post, processing, errors } = useForm({
-        email: '',
+        login: '',
         password: '',
         remember: false,
     });
@@ -29,17 +29,18 @@ export default function Login() {
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label className="form-label" htmlFor="email">Email Address</label>
+                        <label className="form-label" htmlFor="login">Phone Number or Email Address</label>
                         <input
-                            type="email"
-                            id="email"
+                            type="text"
+                            id="login"
                             className="form-control"
-                            value={data.email}
-                            onChange={e => setData('email', e.target.value)}
+                            placeholder="Enter phone number or email"
+                            value={data.login}
+                            onChange={e => setData('login', e.target.value)}
                             required
                             autoComplete="username"
                         />
-                        {errors.email && <span className="form-error">{errors.email}</span>}
+                        {errors.login && <span className="form-error">{errors.login}</span>}
                     </div>
 
                     <div className="form-group">

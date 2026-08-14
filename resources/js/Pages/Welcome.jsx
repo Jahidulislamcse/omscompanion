@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+export function getYouTubeId(url) {
+    if (!url) return '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : url;
+}
 
-export default function Welcome({ freeVideos }) {
+export default function Welcome({ settings, freeVideos }) {
     const { auth } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
 
@@ -11,9 +15,43 @@ export default function Welcome({ freeVideos }) {
     };
 
     const formatDuration = (seconds) => {
+        if (!seconds) return 'Preview';
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}m ${secs}s`;
+    };
+
+    const getSetting = (key, defaultValue) => {
+        return settings && settings[key] ? settings[key] : defaultValue;
+    };
+
+    const getVideoSrc = (video) => {
+        if (!video) return '';
+        if (video.storage_type === 'local') {
+            return route('videos.public_stream', { video: video.id });
+        }
+        
+        // Handle external YouTube URLs for embedding
+        const url = video.video_path;
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let videoId = '';
+            try {
+                if (url.includes('youtube.com/watch')) {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    videoId = urlParams.get('v');
+                } else if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1].split('?')[0];
+                } else if (url.includes('youtube.com/embed/')) {
+                    videoId = url.split('youtube.com/embed/')[1].split('?')[0];
+                }
+            } catch (err) {
+                console.error("Invalid YouTube URL parsing", err);
+            }
+            if (videoId) {
+                return `https://www.youtube.com/embed/${videoId}`;
+            }
+        }
+        return url;
     };
 
     return (
@@ -55,11 +93,11 @@ export default function Welcome({ freeVideos }) {
                 </span>
                 
                 <h1 className="landing-hero-title">
-                    Bridging Dental Practices for <span>Premium Patient Care</span>
+                    {getSetting('hero_title', 'Bridging Dental Practices for Premium Patient Care')}
                 </h1>
                 
                 <p className="landing-hero-desc">
-                    DentistChamber is a professional referral and membership hub connecting BDS Doctors with state-of-the-art treatment pipelines, live tracking logs, and expert clinical videos.
+                    {getSetting('hero_subtitle', 'DentistChamber is a professional referral and membership hub connecting BDS Doctors with state-of-the-art treatment pipelines, live tracking logs, and expert clinical videos.')}
                 </p>
 
                 <div className="landing-hero-ctas">
@@ -93,33 +131,41 @@ export default function Welcome({ freeVideos }) {
                     <div className="dashboard-grid">
                         <div className="glass-panel goal-card">
                             <span className="goal-icon">📋</span>
-                            <h3 className="goal-title">Seamless Patient Referrals</h3>
+                            <h3 className="goal-title">
+                                {getSetting('goal_1_title', 'Seamless Patient Referrals')}
+                            </h3>
                             <p className="goal-desc">
-                                BDS members can refer patients with detailed clinical notes and urgency levels in a few simple taps.
+                                {getSetting('goal_1_desc', 'BDS members can refer patients with detailed clinical notes and urgency levels in a few simple taps.')}
                             </p>
                         </div>
 
                         <div className="glass-panel goal-card">
                             <span className="goal-icon">🛰️</span>
-                            <h3 className="goal-title">Live Treatment Tracking</h3>
+                            <h3 className="goal-title">
+                                {getSetting('goal_2_title', 'Live Treatment Tracking')}
+                            </h3>
                             <p className="goal-desc">
-                                Check status changes (Contacted, Under Treatment, Completed) live via our interactive chronological status timeline tracker.
+                                {getSetting('goal_2_desc', 'Check status changes (Contacted, Under Treatment, Completed) live via our interactive chronological status timeline tracker.')}
                             </p>
                         </div>
 
                         <div className="glass-panel goal-card">
                             <span className="goal-icon">🎓</span>
-                            <h3 className="goal-title">Premium Clinical Library</h3>
+                            <h3 className="goal-title">
+                                {getSetting('goal_3_title', 'Premium Clinical Library')}
+                            </h3>
                             <p className="goal-desc">
-                                Gain exclusive access to secure, masterclass surgical streams, tutorial tutorials, and premium learning guides.
+                                {getSetting('goal_3_desc', 'Gain exclusive access to secure, masterclass surgical streams, tutorial tutorials, and premium learning guides.')}
                             </p>
                         </div>
 
                         <div className="glass-panel goal-card">
                             <span className="goal-icon">📜</span>
-                            <h3 className="goal-title">Verified Digital Certificates</h3>
+                            <h3 className="goal-title">
+                                {getSetting('goal_4_title', 'Verified Digital Certificates')}
+                            </h3>
                             <p className="goal-desc">
-                                Download verified, high-quality digital membership certificates automatically generated with your clinic credentials.
+                                {getSetting('goal_4_desc', 'Download verified, high-quality digital membership certificates automatically generated with your clinic credentials.')}
                             </p>
                         </div>
                     </div>
@@ -137,24 +183,37 @@ export default function Welcome({ freeVideos }) {
                     </div>
 
                     <div className="video-grid free-video-grid">
-                        {freeVideos.map(vid => (
-                            <div key={vid.id} className="glass-panel video-card">
-                                <div 
-                                    onClick={() => setActiveVideo(vid)}
-                                    className="video-thumbnail free-video-thumb"
-                                >
-                                    <span className="play-icon">▶</span>
-                                    <span className="play-label">Watch Preview</span>
-                                    <span className="video-duration">{formatDuration(vid.duration)}</span>
-                                </div>
+                        {freeVideos.map(vid => {
+                            const ytId = getYouTubeId(vid.video_path);
+                            return (
+                                <div key={vid.id} className="glass-panel video-card">
+                                    <div 
+                                        onClick={() => setActiveVideo(vid)}
+                                        className="video-thumbnail free-video-thumb"
+                                        style={{ position: 'relative', overflow: 'hidden' }}
+                                    >
+                                        {ytId ? (
+                                            <img 
+                                                src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
+                                                alt={vid.title} 
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
+                                            />
+                                        ) : null}
+                                        <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.35)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                            <span className="play-icon">▶</span>
+                                            <span className="play-label">Watch Preview</span>
+                                        </div>
+                                        <span className="video-duration">{formatDuration(vid.duration)}</span>
+                                    </div>
 
-                                <div className="video-info free-video-info">
-                                    <span className="video-tag">Free Preview</span>
-                                    <h4 className="video-title">{vid.title}</h4>
-                                    <p className="video-desc">{vid.description}</p>
+                                    <div className="video-info free-video-info">
+                                        <span className="video-tag">Free Preview</span>
+                                        <h4 className="video-title">{vid.title}</h4>
+                                        <p className="video-desc">{vid.description}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -170,15 +229,28 @@ export default function Welcome({ freeVideos }) {
                             </button>
                         </div>
                         <div className="modal-video-frame">
-                            <iframe 
-                                width="100%" 
-                                height="100%" 
-                                src={activeVideo.embed_url} 
-                                title={activeVideo.title}
-                                frameBorder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                allowFullScreen
-                            ></iframe>
+                            {getYouTubeId(activeVideo.video_path) ? (
+                                <iframe 
+                                    width="100%" 
+                                    height="100%" 
+                                    src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(activeVideo.video_path)}?autoplay=1`} 
+                                    title={activeVideo.title}
+                                    frameBorder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowFullScreen
+                                ></iframe>
+                            ) : (
+                                <video 
+                                    controls 
+                                    style={{ width: '100%', height: '100%', backgroundColor: '#000' }} 
+                                    controlsList="nodownload" 
+                                    onContextMenu={e => e.preventDefault()}
+                                    autoPlay
+                                >
+                                    <source src={getVideoSrc(activeVideo)} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            )}
                         </div>
                     </div>
                 </div>

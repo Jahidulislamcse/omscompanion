@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
+export function getYouTubeId(url) {
+    if (!url) return '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : url;
+}
+
 export default function VideoLibrary({ categories }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedVideo, setSelectedVideo] = useState(null);
@@ -35,37 +42,46 @@ export default function VideoLibrary({ categories }) {
 
     const handleSelectVideo = (video) => {
         setSelectedVideo(video);
-        // Scroll to player smoothly
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     // Format duration from seconds to MM:SS
     const formatDuration = (seconds) => {
-        if (!seconds) return 'N/A';
+        if (!seconds) return 'Video';
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
     return (
-        <MemberLayout title="Premium Educational Video Library">
-            <Head title="Premium Video Library" />
+        <MemberLayout title="Educational Video Library">
+            <Head title="Video Library" />
 
-            {/* Video Player Modal/Section (if a video is selected) */}
+            {/* Video Player Section */}
             {selectedVideo && (
                 <div className="glass-panel" style={{ padding: '0px', overflow: 'hidden', border: '2px solid var(--accent-gold)' }}>
-                    <div className="video-player-container" style={{ position: 'relative' }}>
-                        {/* Custom video tag with security attributes */}
-                        <video 
-                            className="video-player"
-                            controls
-                            controlsList="nodownload"
-                            onContextMenu={e => e.preventDefault()}
-                            src={route('member.videos.stream', selectedVideo.id)}
-                            autoPlay
-                        >
-                            Your browser does not support the video tag.
-                        </video>
+                    <div className="video-player-container" style={{ position: 'relative', aspectRatio: '16/9' }}>
+                        {getYouTubeId(selectedVideo.video_path) ? (
+                            <iframe 
+                                className="video-player"
+                                style={{ width: '100%', height: '100%', border: 'none' }}
+                                src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(selectedVideo.video_path)}?autoplay=1`} 
+                                title={selectedVideo.title}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        ) : (
+                            <video 
+                                className="video-player"
+                                controls
+                                controlsList="nodownload"
+                                onContextMenu={e => e.preventDefault()}
+                                src={route('member.videos.stream', selectedVideo.id)}
+                                autoPlay
+                            >
+                                Your browser does not support the video tag.
+                            </video>
+                        )}
                         <button 
                             onClick={() => setSelectedVideo(null)} 
                             className="btn btn-danger" 
@@ -83,26 +99,24 @@ export default function VideoLibrary({ categories }) {
                         <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
                             {selectedVideo.description || 'No description available.'}
                         </p>
-                        <div style={{ marginTop: '15px', fontSize: '12px', color: 'var(--color-warning)', fontWeight: 'bold', display: 'flex', gap: '6px', alignItems: 'center' }}>
-                            <span>🔒</span> Secure Streaming Mode Enabled (Direct downloads are blocked)
-                        </div>
                     </div>
                 </div>
             )}
 
             {/* Search and Category Filters */}
             <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', gap: '15px', flexGrow: 1, maxWidth: '600px' }}>
+                <div style={{ display: 'flex', gap: '15px', flexGrow: 1, maxWidth: '600px', flexWrap: 'wrap' }}>
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Search video by title or description..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
+                        style={{ flex: '1 1 200px' }}
                     />
                     <select
                         className="form-control"
-                        style={{ maxWidth: '200px' }}
+                        style={{ flex: '1 1 160px', maxWidth: '100%' }}
                         value={activeCategoryFilter}
                         onChange={e => setActiveCategoryFilter(e.target.value)}
                     >
@@ -113,60 +127,80 @@ export default function VideoLibrary({ categories }) {
                     </select>
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                    Found {filteredVideos.length} premium videos
+                    Found {filteredVideos.length} educational videos
                 </div>
             </div>
 
             {/* Videos Grid */}
             <div className="video-grid">
                 {filteredVideos.length > 0 ? (
-                    filteredVideos.map((video) => (
-                        <div key={video.id} className="glass-panel video-card">
-                            {/* Video Thumbnail Placeholder with Play button */}
-                            <div 
-                                onClick={() => handleSelectVideo(video)}
-                                style={{ 
-                                    width: '100%', 
-                                    aspectRatio: '16/9', 
-                                    backgroundColor: '#0a1215', 
-                                    display: 'flex', 
-                                    flexDirection: 'column',
-                                    alignItems: 'center', 
-                                    justifyContent: 'center', 
-                                    cursor: 'pointer',
-                                    position: 'relative',
-                                    transition: 'var(--transition-smooth)'
-                                }}
-                                className="video-thumbnail"
-                            >
-                                <span style={{ fontSize: '48px', color: 'var(--accent-gold)', textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>▶</span>
-                                <span style={{ fontSize: '12px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '8px' }}>
-                                    Stream Video
-                                </span>
-                                <span className="video-duration">{formatDuration(video.duration)}</span>
-                            </div>
-
-                            <div className="video-info">
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--accent-gold)', textTransform: 'uppercase' }}>
-                                        {video.category_name}
-                                    </span>
-                                    <span style={{ fontSize: '11px', color: 'var(--text-light)' }}>
-                                        Added: {new Date(video.created_at).toLocaleDateString()}
-                                    </span>
-                                </div>
-                                <h4 
+                    filteredVideos.map((video) => {
+                        const ytId = getYouTubeId(video.video_path);
+                        return (
+                            <div key={video.id} className="glass-panel video-card">
+                                <div 
                                     onClick={() => handleSelectVideo(video)}
-                                    style={{ fontSize: '16px', fontWeight: '700', cursor: 'pointer', margin: '5px 0' }}
+                                    style={{ 
+                                        width: '100%', 
+                                        aspectRatio: '16/9', 
+                                        backgroundColor: '#0a1215', 
+                                        display: 'flex', 
+                                        flexDirection: 'column',
+                                        alignItems: 'center', 
+                                        justifyContent: 'center', 
+                                        cursor: 'pointer',
+                                        position: 'relative',
+                                        overflow: 'hidden'
+                                    }}
+                                    className="video-thumbnail"
                                 >
-                                    {video.title}
-                                </h4>
-                                <p style={{ fontSize: '13px', color: 'var(--text-muted)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', margin: 0 }}>
-                                    {video.description || 'No description available.'}
-                                </p>
+                                    {ytId ? (
+                                        <img 
+                                            src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
+                                            alt={video.title} 
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                        />
+                                    ) : null}
+
+                                    <div style={{ 
+                                        position: 'absolute', 
+                                        inset: 0, 
+                                        backgroundColor: 'rgba(0,0,0,0.35)', 
+                                        display: 'flex', 
+                                        flexDirection: 'column', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center' 
+                                    }}>
+                                        <span style={{ fontSize: '48px', color: 'var(--accent-gold)', textShadow: '0 0 15px rgba(212, 175, 55, 0.6)' }}>▶</span>
+                                        <span style={{ fontSize: '12px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '4px' }}>
+                                            Stream Video
+                                        </span>
+                                    </div>
+                                    <span className="video-duration">{formatDuration(video.duration)}</span>
+                                </div>
+
+                                <div className="video-info">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--accent-gold)', textTransform: 'uppercase' }}>
+                                            {video.category_name}
+                                        </span>
+                                        <span style={{ fontSize: '11px', color: 'var(--text-light)' }}>
+                                            {new Date(video.created_at).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                    <h4 
+                                        onClick={() => handleSelectVideo(video)}
+                                        style={{ fontSize: '16px', fontWeight: '700', cursor: 'pointer', margin: '5px 0' }}
+                                    >
+                                        {video.title}
+                                    </h4>
+                                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', margin: 0 }}>
+                                        {video.description || 'No description available.'}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
                     <div className="glass-panel" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '50px', color: 'var(--text-muted)' }}>
                         No videos found matching your filters.

@@ -88,6 +88,15 @@ export default function AdminLayout({ children, title }) {
                                     <span>&#127916;</span> Video Library
                                 </Link>
                             </li>
+                            <li>
+                                <Link 
+                                    href={route('admin.page_content')} 
+                                    className={`sidebar-link ${isCurrent('/admin/page-content') ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>&#128221;</span> Page Content
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
                 </div>

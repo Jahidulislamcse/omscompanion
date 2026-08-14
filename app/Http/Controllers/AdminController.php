@@ -7,6 +7,7 @@ use App\Models\PatientReferral;
 use App\Models\PatientStatusTimeline;
 use App\Models\VideoCategory;
 use App\Models\Video;
+use App\Models\LandingSetting;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,8 +81,9 @@ class AdminController extends Controller
         ]);
 
         // Send notifications
+        $prefix = !empty($user->bds_registration_number) ? 'Dr. ' : '';
         $subject = "Membership Approved - dentist chamber";
-        $message = "Dear Dr. {$user->name},\n\nYour membership application has been approved! Your unique Member ID is {$memberId}. You can now log into your dashboard using your registered credentials.\n\nBest Regards,\nDentistChamber Team";
+        $message = "Dear {$prefix}{$user->name},\n\nYour membership application has been approved! Your unique Member ID is {$memberId}. You can now log into your dashboard using your registered credentials.\n\nBest Regards,\nDentistChamber Team";
         
         NotificationService::send($user, $subject, $message, 'both');
 
@@ -99,8 +101,9 @@ class AdminController extends Controller
         ]);
 
         // Send notification
+        $prefix = !empty($user->bds_registration_number) ? 'Dr. ' : '';
         $subject = "Membership Application Update";
-        $message = "Dear Dr. {$user->name},\n\nWe regret to inform you that your membership application could not be approved at this time. If you have questions, please contact support.\n\nBest Regards,\nDentistChamber Team";
+        $message = "Dear {$prefix}{$user->name},\n\nWe regret to inform you that your membership application could not be approved at this time. If you have questions, please contact support.\n\nBest Regards,\nDentistChamber Team";
         
         NotificationService::send($user, $subject, $message, 'email');
 
@@ -143,6 +146,7 @@ class AdminController extends Controller
 
             // Notify referring member
             $member = $referral->member;
+            $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
             $statusLabels = [
                 'new' => 'New Referral',
                 'contacted' => 'Contacted',
@@ -153,7 +157,7 @@ class AdminController extends Controller
             ];
 
             $subject = "Patient Referral Status Update: {$referral->patient_name}";
-            $message = "Dear Dr. {$member->name},\n\nThe status of your referred patient, {$referral->patient_name}, has been updated to: \"{$statusLabels[$newStatus]}\".\nNotes: " . ($request->notes ?: 'None') . "\n\nTrack progress on your live case tracker dashboard.\n\nBest Regards,\nDentistChamber Team";
+            $message = "Dear {$prefix}{$member->name},\n\nThe status of your referred patient, {$referral->patient_name}, has been updated to: \"{$statusLabels[$newStatus]}\".\nNotes: " . ($request->notes ?: 'None') . "\n\nTrack progress on your live case tracker dashboard.\n\nBest Regards,\nDentistChamber Team";
             
             NotificationService::send($member, $subject, $message, 'both');
         }
@@ -180,8 +184,9 @@ class AdminController extends Controller
         if ($oldStatus !== $newStatus && $newStatus === 'paid') {
             // Notify member of commission paid
             $member = $referral->member;
+            $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
             $subject = "Commission Payment Approved: {$referral->patient_name}";
-            $message = "Dear Dr. {$member->name},\n\nWe have processed your referral commission payment of {$amount} USD for patient {$referral->patient_name}.\nStatus: Paid.\n\nThank you for your referral.\n\nBest Regards,\nDentistChamber Team";
+            $message = "Dear {$prefix}{$member->name},\n\nWe have processed your referral commission payment of {$amount} USD for patient {$referral->patient_name}.\nStatus: Paid.\n\nThank you for your referral.\n\nBest Regards,\nDentistChamber Team";
             
             NotificationService::send($member, $subject, $message, 'both');
         }
@@ -221,40 +226,72 @@ class AdminController extends Controller
             'category_id' => 'required|exists:video_categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'storage_type' => 'required|in:local,external',
-            'video_file' => 'required_if:storage_type,local|file|mimes:mp4,mov,avi,mkv|max:51200', // max 50MB
-            'video_url' => 'required_if:storage_type,external|nullable|url',
+            'video_url' => 'required|string',
             'duration' => 'nullable|integer|min:0',
+            'is_free' => 'nullable|boolean',
         ]);
-
-        $videoPath = '';
-
-        if ($request->storage_type === 'local') {
-            if ($request->hasFile('video_file')) {
-                $file = $request->file('video_file');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('videos', $filename, 'local'); // stored in storage/app/videos
-                $videoPath = $path;
-            }
-        } else {
-            $videoPath = $request->video_url;
-        }
 
         $video = Video::create([
             'category_id' => $request->category_id,
             'title' => $request->title,
             'description' => $request->description,
-            'video_path' => $videoPath,
-            'storage_type' => $request->storage_type,
+            'video_path' => $request->video_url,
+            'storage_type' => 'youtube',
             'duration' => $request->duration,
+            'is_free' => $request->boolean('is_free'),
         ]);
 
-        // Notify members about new premium video
-        $title = "New Premium Video Uploaded: {$video->title}";
-        $message = "Dear Member,\n\nA new educational video has been uploaded to our premium library: \"{$video->title}\".\nDescription: {$video->description}\n\nLog in now to stream it.\n\nBest Regards,\nDentistChamber Team";
+        // Notify members about new video
+        $typeLabel = $video->is_free ? 'Free Preview' : 'Premium';
+        $title = "New {$typeLabel} YouTube Video: {$video->title}";
+        $message = "Dear Member,\n\nA new educational video has been added to our library: \"{$video->title}\" ({$typeLabel}).\nDescription: {$video->description}\n\nLog in now to stream it.\n\nBest Regards,\nDentistChamber Team";
         
         NotificationService::broadcastToMembers($title, $message);
 
         return redirect()->back()->with('success', 'Video uploaded successfully.');
+    }
+
+    public function pageContent()
+    {
+        $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
+
+        return Inertia::render('Admin/PageContent', [
+            'settings' => $settings
+        ]);
+    }
+
+    public function updatePageContent(Request $request)
+    {
+        $request->validate([
+            'hero_title' => 'required|string|max:255',
+            'hero_subtitle' => 'required|string',
+            'goal_1_title' => 'required|string|max:255',
+            'goal_1_desc' => 'required|string',
+            'goal_2_title' => 'required|string|max:255',
+            'goal_2_desc' => 'required|string',
+            'goal_3_title' => 'required|string|max:255',
+            'goal_3_desc' => 'required|string',
+            'goal_4_title' => 'required|string|max:255',
+            'goal_4_desc' => 'required|string',
+        ]);
+
+        $settingsData = $request->only([
+            'hero_title',
+            'hero_subtitle',
+            'goal_1_title',
+            'goal_1_desc',
+            'goal_2_title',
+            'goal_2_desc',
+            'goal_3_title',
+            'goal_3_desc',
+            'goal_4_title',
+            'goal_4_desc',
+        ]);
+
+        foreach ($settingsData as $key => $value) {
+            LandingSetting::updateOrCreate(['key' => $key], ['value' => $value]);
+        }
+
+        return redirect()->back()->with('success', 'Landing page settings updated successfully.');
     }
 }

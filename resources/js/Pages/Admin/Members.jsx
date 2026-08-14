@@ -52,7 +52,7 @@ export default function Members({ members }) {
                     />
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                    Showing {filteredMembers.length} of {members.length} registered dentists
+                    Showing {filteredMembers.length} of {members.length} registered members
                 </div>
             </div>
 
@@ -65,7 +65,7 @@ export default function Members({ members }) {
                                 <th>Name</th>
                                 <th>Email / Phone</th>
                                 <th>BDS Registration</th>
-                                <th>Clinic Details</th>
+                                <th>Clinic / Store Details</th>
                                 <th>Member ID</th>
                                 <th>Status</th>
                                 <th style={{ textAlign: 'right' }}>Actions</th>
@@ -76,7 +76,9 @@ export default function Members({ members }) {
                                 filteredMembers.map((member) => (
                                     <tr key={member.id}>
                                         <td>
-                                            <div style={{ fontWeight: '700' }}>{member.name}</div>
+                                            <div style={{ fontWeight: '700' }}>
+                                                {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
+                                            </div>
                                             <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Joined {new Date(member.created_at).toLocaleDateString()}</div>
                                         </td>
                                         <td>
@@ -85,7 +87,7 @@ export default function Members({ members }) {
                                         </td>
                                         <td>
                                             <code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>
-                                                {member.bds_registration_number || 'N/A'}
+                                                {member.bds_registration_number || 'N/A (Store Keeper)'}
                                             </code>
                                         </td>
                                         <td>

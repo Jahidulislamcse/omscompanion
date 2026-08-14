@@ -23,7 +23,7 @@ export default function Profile({ user }) {
         <MemberLayout title="My Profile Settings">
             <Head title="My Profile" />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '30px', alignItems: 'start' }}>
+            <div className="grid-responsive-two-col">
                 {/* Account Details Cards */}
                 <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                     <h3 style={{ margin: 0 }}>Membership Identity</h3>

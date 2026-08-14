@@ -28,12 +28,12 @@ export default function Register() {
                         <span>&#128715;</span> Dentist<span>Chamber</span>
                     </div>
                     <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '10px' }}>
-                        BDS Doctor Membership Registration Form
+                        BDS Doctor & Medicine Store Member Registration
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="grid-responsive-2col-equal">
                         <div className="form-group">
                             <label className="form-label" htmlFor="name">Full Name</label>
                             <input
@@ -48,20 +48,22 @@ export default function Register() {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label" htmlFor="email">Email Address</label>
+                            <label className="form-label" htmlFor="email">
+                                Email Address <span style={{ fontWeight: 'normal', fontSize: '12px', color: 'var(--text-muted)' }}>(Optional)</span>
+                            </label>
                             <input
                                 type="email"
                                 id="email"
                                 className="form-control"
+                                placeholder="Optional email address"
                                 value={data.email}
                                 onChange={e => setData('email', e.target.value)}
-                                required
                             />
                             {errors.email && <span className="form-error">{errors.email}</span>}
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="grid-responsive-2col-equal">
                         <div className="form-group">
                             <label className="form-label" htmlFor="phone">Phone Number</label>
                             <input
@@ -76,14 +78,16 @@ export default function Register() {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label" htmlFor="bds_registration_number">BDS Registration No.</label>
+                            <label className="form-label" htmlFor="bds_registration_number">
+                                BDS Registration No. <span style={{ fontWeight: 'normal', fontSize: '12px', color: 'var(--text-muted)' }}>(Optional)</span>
+                            </label>
                             <input
                                 type="text"
                                 id="bds_registration_number"
                                 className="form-control"
+                                placeholder="Required for BDS Doctors"
                                 value={data.bds_registration_number}
                                 onChange={e => setData('bds_registration_number', e.target.value)}
-                                required
                             />
                             {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
                         </div>
@@ -116,7 +120,7 @@ export default function Register() {
                         {errors.address && <span className="form-error">{errors.address}</span>}
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="grid-responsive-2col-equal">
                         <div className="form-group">
                             <label className="form-label" htmlFor="password">Password</label>
                             <input

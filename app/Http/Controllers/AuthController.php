@@ -20,10 +20,18 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $request->validate([
+            'login' => 'required|string',
             'password' => 'required',
         ]);
+
+        $loginInput = trim($request->input('login'));
+        $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        $credentials = [
+            $fieldType => $loginInput,
+            'password' => $request->password,
+        ];
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
@@ -39,20 +47,20 @@ class AuthController extends Controller
                 } elseif ($user->status === 'pending') {
                     Auth::logout();
                     return back()->withErrors([
-                        'email' => 'Your account is pending admin approval. You will receive an email once approved.',
+                        'login' => 'Your account is pending admin approval.',
                     ]);
                 } else {
                     Auth::logout();
                     return back()->withErrors([
-                        'email' => 'Your registration was rejected. Please contact support.',
+                        'login' => 'Your registration was rejected. Please contact support.',
                     ]);
                 }
             }
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'login' => 'The provided credentials do not match our records.',
+        ])->onlyInput('login');
     }
 
     public function showRegister()
@@ -67,9 +75,9 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20',
-            'bds_registration_number' => 'required|string|max:50',
+            'phone' => 'required|string|max:20|unique:users,phone',
+            'email' => 'nullable|string|email|max:255|unique:users,email',
+            'bds_registration_number' => 'nullable|string|max:50',
             'clinic_name' => 'required|string|max:255',
             'address' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
@@ -77,7 +85,7 @@ class AuthController extends Controller
 
         User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->email ?: null,
             'phone' => $request->phone,
             'bds_registration_number' => $request->bds_registration_number,
             'clinic_name' => $request->clinic_name,

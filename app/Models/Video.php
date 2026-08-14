@@ -13,6 +13,7 @@ class Video extends Model
         'video_path',
         'storage_type',
         'duration',
+        'is_free',
     ];
 
     public function category()

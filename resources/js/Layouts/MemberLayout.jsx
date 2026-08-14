@@ -103,7 +103,7 @@ export default function MemberLayout({ children, title }) {
 
                 <div className="sidebar-user">
                     <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '4px' }}>
-                        Dr. {auth.user.name}
+                        {auth.user.bds_registration_number ? `Dr. ${auth.user.name}` : auth.user.name}
                     </div>
                     <div style={{ fontSize: '11px', color: 'var(--accent-gold)', fontWeight: '700', marginBottom: '4px' }}>
                         ID: {auth.user.member_id}

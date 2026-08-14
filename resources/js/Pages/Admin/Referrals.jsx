@@ -137,7 +137,7 @@ export default function Referrals({ referrals }) {
                         <thead>
                             <tr>
                                 <th>Patient Name</th>
-                                <th>Referring BDS Doctor</th>
+                                <th>Referring Member</th>
                                 <th>Condition & Urgency</th>
                                 <th>Case Status</th>
                                 <th>Commission</th>
@@ -154,7 +154,9 @@ export default function Referrals({ referrals }) {
                                             <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{referral.phone}</div>
                                         </td>
                                         <td>
-                                            <div style={{ fontWeight: '600' }}>Dr. {referral.member.name}</div>
+                                            <div style={{ fontWeight: '600' }}>
+                                                {referral.member.bds_registration_number ? `Dr. ${referral.member.name}` : referral.member.name}
+                                            </div>
                                             <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>ID: {referral.member.member_id}</div>
                                         </td>
                                         <td>

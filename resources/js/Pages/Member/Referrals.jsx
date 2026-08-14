@@ -56,7 +56,7 @@ export default function Referrals({ referrals }) {
         <MemberLayout title="Patient Referral Management">
             <Head title="Patient Referral Form" />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 2fr', gap: '30px', alignItems: 'start' }}>
+            <div className="grid-responsive-form-history">
                 
                 {/* Submit Form Card */}
                 <div className="glass-panel">
@@ -143,9 +143,9 @@ export default function Referrals({ referrals }) {
 
                 {/* History List Card */}
                 <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                         <h3 style={{ margin: 0 }}>Referral History</h3>
-                        <div style={{ width: '220px' }}>
+                        <div style={{ width: '220px', maxWidth: '100%' }}>
                             <input 
                                 type="text"
                                 className="form-control"

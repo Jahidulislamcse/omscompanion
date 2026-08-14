@@ -44,7 +44,7 @@ export default function ReferralTracker({ referral }) {
                 </div>
 
                 {/* Patient Profile Card */}
-                <div className="glass-panel" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+                <div className="glass-panel" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '20px' }}>
                     <div>
                         <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Patient Name</div>
                         <div style={{ fontSize: '18px', fontWeight: '800' }}>{referral.patient_name}</div>

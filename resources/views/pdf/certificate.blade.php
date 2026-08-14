@@ -135,7 +135,7 @@
 <body>
     <div class="container">
         <div class="inner-border">
-            <div class="badge">Official BDS</div>
+            <div class="badge">Official</div>
             
             <div class="header">DentistChamber Association</div>
             
@@ -145,12 +145,12 @@
             
             <div class="certify">This is to certify that</div>
             
-            <div class="name">Dr. {{ $name }}</div>
+            <div class="name">{{ $bds_number ? 'Dr. ' . $name : $name }}</div>
             
             <div class="details">
-                is registered as a verified <span class="bold">BDS Doctor Member</span> of DentistChamber.<br>
+                is registered as a verified <span class="bold">{{ $bds_number ? 'BDS Doctor Member' : 'Medicine Store Member' }}</span> of DentistChamber.<br>
                 Granted full membership rights, access to resources, and referral privileges.<br>
-                <span class="bold">Member ID:</span> {{ $member_id }} &nbsp;&nbsp;|&nbsp;&nbsp; <span class="bold">Clinic:</span> {{ $clinic_name }}
+                <span class="bold">Member ID:</span> {{ $member_id }} &nbsp;&nbsp;|&nbsp;&nbsp; <span class="bold">Clinic / Store:</span> {{ $clinic_name }}
             </div>
             
             <div class="footer-sec">
@@ -162,7 +162,7 @@
                 
                 <div class="footer-col" style="margin: 0 10%; display: inline-block;">
                     <div style="font-size: 10pt; font-weight: bold; color: #b3922e; border: 1px solid #b3922e; padding: 2px; border-radius: 4px; display: inline-block; width: 35mm; margin: 0 auto 2mm;">
-                        {{ $bds_number }}
+                        {{ $bds_number ? $bds_number : 'N/A' }}
                     </div>
                     <div class="footer-label">BDS Registration No.</div>
                 </div>

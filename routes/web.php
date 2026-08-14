@@ -5,31 +5,56 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\VideoStreamingController;
 use App\Http\Controllers\CertificateController;
+use App\Models\LandingSetting;
+use App\Models\Video;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // Public Landing Page
 Route::get('/', function () {
-    $freeVideos = [
-        [
-            'id' => 'free-1',
-            'title' => 'Dental Referral System Overview',
-            'description' => 'A comprehensive walk-through of the DentistChamber referral pipeline, showing how BDS Doctors refer cases and track live treatment milestones.',
-            'duration' => 155,
-            'embed_url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-        ],
-        [
-            'id' => 'free-2',
-            'title' => 'Premium Video Library Preview',
-            'description' => 'Take a peak at our high-definition clinical tutorials and educational video streams available exclusively to approved BDS members.',
-            'duration' => 205,
-            'embed_url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-        ]
-    ];
+    $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
+
+    $dbFreeVideos = Video::where('is_free', true)->orderBy('created_at', 'desc')->get()->map(function ($video) {
+        return [
+            'id' => $video->id,
+            'title' => $video->title,
+            'description' => $video->description,
+            'duration' => $video->duration,
+            'storage_type' => $video->storage_type,
+            'video_path' => $video->video_path,
+        ];
+    })->toArray();
+
+    // Fallback to maintain layout integrity if no free videos exist in database yet
+    if (empty($dbFreeVideos)) {
+        $dbFreeVideos = [
+            [
+                'id' => 'free-1',
+                'title' => 'Dental Referral System Overview',
+                'description' => 'A comprehensive walk-through of the DentistChamber referral pipeline, showing how BDS Doctors refer cases and track live treatment milestones.',
+                'duration' => 155,
+                'storage_type' => 'external',
+                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            ],
+            [
+                'id' => 'free-2',
+                'title' => 'Premium Video Library Preview',
+                'description' => 'Take a peak at our high-definition clinical tutorials and educational video streams available exclusively to approved BDS members.',
+                'duration' => 205,
+                'storage_type' => 'external',
+                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            ]
+        ];
+    }
+
     return Inertia::render('Welcome', [
-        'freeVideos' => $freeVideos
+        'settings' => $settings,
+        'freeVideos' => $dbFreeVideos
     ]);
 })->name('home');
+
+// Public Video Stream (No Auth)
+Route::get('/videos/stream/public/{video}', [VideoStreamingController::class, 'publicStream'])->name('videos.public_stream');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
@@ -56,6 +81,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/videos', [AdminController::class, 'videos'])->name('admin.videos');
     Route::post('/videos/categories', [AdminController::class, 'storeCategory'])->name('admin.videos.category.store');
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('admin.videos.store');
+    Route::get('/page-content', [AdminController::class, 'pageContent'])->name('admin.page_content');
+    Route::post('/page-content', [AdminController::class, 'updatePageContent'])->name('admin.page_content.update');
 });
 
 // Member Routes

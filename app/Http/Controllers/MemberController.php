@@ -128,13 +128,14 @@ class MemberController extends Controller
 
         // Send notifications to member
         $member = Auth::user();
+        $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
         $subject = "Referral Submitted: {$referral->patient_name}";
-        $message = "Dear Dr. {$member->name},\n\nYour patient referral for {$referral->patient_name} has been successfully submitted. You can track this case live in your referral history dashboard.\n\nBest Regards,\nDentistChamber Team";
+        $message = "Dear {$prefix}{$member->name},\n\nYour patient referral for {$referral->patient_name} has been successfully submitted. You can track this case live in your referral history dashboard.\n\nBest Regards,\nDentistChamber Team";
         
         NotificationService::send($member, $subject, $message, 'both');
 
         // Log notification for Admin (optional backend log)
-        \Illuminate\Support\Facades\Log::info("[ADMIN SYSTEM NOTIFICATION] New patient referral submitted by Dr. {$member->name} for patient: {$referral->patient_name}.");
+        \Illuminate\Support\Facades\Log::info("[ADMIN SYSTEM NOTIFICATION] New patient referral submitted by {$prefix}{$member->name} for patient: {$referral->patient_name}.");
 
         return redirect()->back()->with('success', 'Patient referral submitted successfully.');
     }

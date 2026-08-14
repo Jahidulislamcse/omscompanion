@@ -40,36 +40,21 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                 </div>
             </div>
 
-            <div className="dashboard-grid" style={{ marginTop: '24px' }}>
-                <div className="glass-panel stat-card" style={{ borderLeft: '4px solid var(--color-warning)' }}>
-                    <span className="stat-title">Pending Commission</span>
-                    <div className="stat-value" style={{ color: 'var(--color-warning)' }}>
-                        ${stats.pending_commissions.toFixed(2)}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                        Approved referral commission pending payout
-                    </div>
+            {/* Quick Action Banner */}
+            <div className="glass-panel" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '24px', padding: '20px 24px', flexWrap: 'wrap', gap: '16px' }}>
+                <div>
+                    <h3 style={{ margin: 0, fontSize: '18px' }}>Submit a Patient Referral</h3>
+                    <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                        Send patient cases to DentistChamber and track case progress in real-time.
+                    </p>
                 </div>
-
-                <div className="glass-panel stat-card" style={{ borderLeft: '4px solid var(--color-success)' }}>
-                    <span className="stat-title">Paid Commission</span>
-                    <div className="stat-value" style={{ color: 'var(--color-success)' }}>
-                        ${stats.paid_commissions.toFixed(2)}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                        Commissions disbursed to your clinic account
-                    </div>
-                </div>
-
-                <div className="glass-panel" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px' }}>
-                    <Link href={route('member.referrals')} className="btn btn-primary" style={{ width: '100%', height: '50px', fontSize: '15px' }}>
-                        ➕ Refer a New Patient
-                    </Link>
-                </div>
+                <Link href={route('member.referrals')} className="btn btn-primary" style={{ padding: '12px 24px', fontSize: '15px' }}>
+                    ➕ Refer a New Patient
+                </Link>
             </div>
 
             {/* Split layout: Recent Referrals & Notifications */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px', marginTop: '24px' }}>
+            <div className="dashboard-split-grid" style={{ marginTop: '24px' }}>
                 {/* Referrals table */}
                 <div className="glass-panel" style={{ padding: '24px 0px 0px' }}>
                     <div style={{ padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -136,11 +121,11 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                         {recentNotifications.length > 0 ? (
                             recentNotifications.map(notif => (
                                 <div key={notif.id} className="notification-item" style={{ borderBottom: '1px solid var(--border-color)', padding: '12px 24px' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', gap: '10px' }}>
                                         <span style={{ fontWeight: '700', fontSize: '14px', color: 'var(--accent-teal)' }}>{notif.title}</span>
-                                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{new Date(notif.created_at).toLocaleDateString()}</span>
+                                        <span style={{ fontSize: '10px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{new Date(notif.created_at).toLocaleDateString()}</span>
                                     </div>
-                                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                                         {notif.message}
                                     </p>
                                 </div>
