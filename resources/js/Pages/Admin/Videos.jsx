@@ -10,7 +10,7 @@ export function getYouTubeId(url) {
 }
 
 export default function Videos({ categories = [], videos = [], accessRequests = [] }) {
-    const pendingCount = (accessRequests || []).filter(r => r.status === 'pending').length;
+    const pendingCount = (accessRequests || []).filter(r => r.premium_access === 'pending').length;
     const [activeTab, setActiveTab] = useState(pendingCount > 0 ? 'requests' : 'upload'); // 'requests', 'upload', 'categories', 'list'
     const [requestFilter, setRequestFilter] = useState('all');
 
@@ -50,8 +50,8 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
         });
     };
 
-    const handleAccessRequestAction = (reqId, status) => {
-        router.post(route('admin.videos.access_requests.update', reqId), { status }, {
+    const handleAccessRequestAction = (userId, status) => {
+        router.post(route('admin.videos.access_requests.update', userId), { status }, {
             preserveScroll: true,
             onSuccess: () => {
                 alert(`Access request ${status} successfully.`);
@@ -61,11 +61,11 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
 
     const filteredRequests = (accessRequests || []).filter(req => {
         if (requestFilter === 'all') return true;
-        return req.status === requestFilter;
+        return req.premium_access === requestFilter;
     });
 
     return (
-        <AdminLayout title="YouTube Video Library & Access Requests">
+        <AdminLayout title="YouTube Video Library & Premium Access">
             <Head title="YouTube Video Management" />
 
             {/* Sub navigation Tabs */}
@@ -75,7 +75,7 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                     className={`btn ${activeTab === 'requests' ? 'btn-primary' : 'btn-outline'}`}
                     style={{ position: 'relative' }}
                 >
-                    🔑 Access Requests
+                    🔑 Premium Requests
                     {pendingCount > 0 && (
                         <span style={{ 
                             marginLeft: '8px', 
@@ -115,9 +115,9 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                 <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                         <div>
-                            <h3 style={{ margin: 0 }}>Member Video Access Requests</h3>
+                            <h3 style={{ margin: 0 }}>Member Premium Videos Access Requests</h3>
                             <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                                Approve or reject member access to premium educational videos.
+                                Approve or reject member access to the entire Premium Video Library.
                             </p>
                         </div>
                         <div style={{ width: '200px' }}>
@@ -139,42 +139,36 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                             <thead>
                                 <tr>
                                     <th>Member Doctor</th>
-                                    <th>Requested Video</th>
-                                    <th>Category</th>
-                                    <th>Request Date</th>
+                                    <th>Clinic / Phone</th>
+                                    <th>Last Updated</th>
                                     <th>Status</th>
                                     <th style={{ textAlign: 'right' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredRequests.length > 0 ? (
-                                    filteredRequests.map(req => {
-                                        const user = req.user || {};
-                                        const video = req.video || {};
+                                    filteredRequests.map(user => {
                                         const prefix = user.bds_registration_number ? 'Dr. ' : '';
                                         return (
-                                            <tr key={req.id}>
+                                            <tr key={user.id}>
                                                 <td>
                                                     <div style={{ fontWeight: '700' }}>{prefix}{user.name || 'Member'}</div>
                                                     <div style={{ fontSize: '11px', color: 'var(--accent-gold)' }}>ID: {user.member_id || 'N/A'}</div>
-                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user.clinic_name || user.phone}</div>
+                                                    {user.bds_registration_number && (
+                                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>BDS Reg: {user.bds_registration_number}</div>
+                                                    )}
                                                 </td>
                                                 <td>
-                                                    <div style={{ fontWeight: '700' }}>{video.title || 'Unknown Video'}</div>
-                                                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{video.duration ? `${Math.floor(video.duration / 60)}m` : 'YouTube Stream'}</div>
+                                                    <div style={{ fontWeight: '600' }}>{user.clinic_name || 'N/A'}</div>
+                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user.phone || 'N/A'}</div>
                                                 </td>
                                                 <td>
-                                                    <span style={{ fontWeight: '600', color: 'var(--accent-teal)' }}>
-                                                        {video.category?.name || 'Category'}
-                                                    </span>
+                                                    {new Date(user.updated_at).toLocaleString()}
                                                 </td>
                                                 <td>
-                                                    {new Date(req.created_at).toLocaleString()}
-                                                </td>
-                                                <td>
-                                                    {req.status === 'approved' ? (
+                                                    {user.premium_access === 'approved' ? (
                                                         <span className="badge-status badge-completed">Approved</span>
-                                                    ) : req.status === 'rejected' ? (
+                                                    ) : user.premium_access === 'rejected' ? (
                                                         <span className="badge-status badge-not-proceeding">Rejected</span>
                                                     ) : (
                                                         <span className="badge-status badge-booked">Pending</span>
@@ -182,18 +176,18 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                                 </td>
                                                 <td style={{ textAlign: 'right' }}>
                                                     <div style={{ display: 'inline-flex', gap: '8px' }}>
-                                                        {req.status !== 'approved' && (
+                                                        {user.premium_access !== 'approved' && (
                                                             <button 
-                                                                onClick={() => handleAccessRequestAction(req.id, 'approved')}
+                                                                onClick={() => handleAccessRequestAction(user.id, 'approved')}
                                                                 className="btn btn-primary"
                                                                 style={{ padding: '6px 12px', fontSize: '12px' }}
                                                             >
                                                                 Approve Access
                                                             </button>
                                                         )}
-                                                        {req.status !== 'rejected' && (
+                                                        {user.premium_access !== 'rejected' && (
                                                             <button 
-                                                                onClick={() => handleAccessRequestAction(req.id, 'rejected')}
+                                                                onClick={() => handleAccessRequestAction(user.id, 'rejected')}
                                                                 className="btn btn-danger"
                                                                 style={{ padding: '6px 12px', fontSize: '12px' }}
                                                             >
@@ -207,8 +201,8 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                     })
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                                            No video access requests found.
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                                            No premium access requests found.
                                         </td>
                                     </tr>
                                 )}

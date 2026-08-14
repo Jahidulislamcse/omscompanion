@@ -160,33 +160,20 @@ class MemberController extends Controller
     public function videos()
     {
         $categories = VideoCategory::with('videos')->get();
-        $userAccessRequests = VideoAccessRequest::where('user_id', Auth::id())
-            ->get()
-            ->keyBy('video_id');
 
         return Inertia::render('Member/VideoLibrary', [
             'categories' => $categories,
-            'userAccessRequests' => $userAccessRequests,
         ]);
     }
 
-    public function requestVideoAccess(Request $request, Video $video)
+    public function requestPremiumAccess(Request $request)
     {
-        if ($video->is_free) {
-            return redirect()->back()->with('error', 'This video is already a free preview.');
-        }
+        $user = Auth::user();
+        $user->update([
+            'premium_access' => 'pending'
+        ]);
 
-        VideoAccessRequest::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'video_id' => $video->id,
-            ],
-            [
-                'status' => 'pending',
-            ]
-        );
-
-        return redirect()->back()->with('success', 'Access request submitted for video: ' . $video->title);
+        return redirect()->back()->with('success', 'Premium videos access request submitted successfully.');
     }
 
     public function notifications()

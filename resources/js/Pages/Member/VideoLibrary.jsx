@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
 export function getYouTubeId(url) {
@@ -9,11 +9,13 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-export default function VideoLibrary({ categories = [], userAccessRequests = {} }) {
+export default function VideoLibrary({ categories = [] }) {
+    const { auth } = usePage().props;
+    const premiumAccess = auth.user.premium_access || 'none';
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
-    const [requestingId, setRequestingId] = useState(null);
+    const [requesting, setRequesting] = useState(false);
 
     // Get flat list of all videos with their category name
     const allVideos = (categories || []).reduce((acc, cat) => {
@@ -27,10 +29,7 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
         return acc;
     }, []);
 
-    // Filtered list of videos user has received approval for
-    const approvedVideos = allVideos.filter(v => !v.is_free && userAccessRequests[v.id]?.status === 'approved');
-
-    // Filter videos based on search and category filter
+    // Filter videos based on search, category and free vs premium status
     const filteredVideos = allVideos.filter(vid => {
         const query = (searchTerm || '').toLowerCase();
         const matchesSearch = 
@@ -44,22 +43,23 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
         return matchesSearch && matchesCategory;
     });
 
+    const freeVideos = filteredVideos.filter(v => v.is_free);
+    const premiumVideos = filteredVideos.filter(v => !v.is_free);
+
     const handleSelectVideo = (video) => {
-        const reqStatus = userAccessRequests[video.id]?.status;
-        if (!video.is_free && reqStatus !== 'approved') {
-            alert('This is a premium video. Please click "Request Access" to get approval from Admin.');
+        if (!video.is_free && premiumAccess !== 'approved') {
+            alert('This is a premium video. Please request access from Admin.');
             return;
         }
         setSelectedVideo(video);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleRequestAccess = (e, video) => {
-        e.stopPropagation();
-        setRequestingId(video.id);
-        router.post(route('member.videos.request_access', video.id), {}, {
+    const handleRequestPremiumAccess = () => {
+        setRequesting(true);
+        router.post(route('member.videos.request_premium_access'), {}, {
             preserveScroll: true,
-            onFinish: () => setRequestingId(null)
+            onFinish: () => setRequesting(false)
         });
     };
 
@@ -71,15 +71,12 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const renderVideoCard = (video, isApprovedSection = false) => {
+    const renderVideoCard = (video) => {
         const ytId = getYouTubeId(video.video_path);
-        const reqStatus = userAccessRequests[video.id]?.status;
-        const isUnlocked = video.is_free || reqStatus === 'approved';
-        const isPending = !video.is_free && reqStatus === 'pending';
-        const isRejected = !video.is_free && reqStatus === 'rejected';
+        const isUnlocked = video.is_free || premiumAccess === 'approved';
 
         return (
-            <div key={video.id} className="glass-panel video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', border: isApprovedSection ? '2px solid var(--accent-teal)' : undefined }}>
+            <div key={video.id} className="glass-panel video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div 
                     onClick={() => isUnlocked && handleSelectVideo(video)}
                     style={{ 
@@ -100,7 +97,7 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
                         <img 
                             src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
                             alt={video.title} 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: isUnlocked ? 1 : 0.4 }} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: isUnlocked ? 1 : 0.3 }} 
                         />
                     ) : null}
 
@@ -117,30 +114,16 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
                     }}>
                         {isUnlocked ? (
                             <>
-                                <span style={{ fontSize: '48px', color: 'var(--accent-gold)', textShadow: '0 0 15px rgba(212, 175, 55, 0.6)' }}>▶</span>
-                                <span style={{ fontSize: '12px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '4px' }}>
+                                <span style={{ fontSize: '42px', color: 'var(--accent-gold)', textShadow: '0 0 15px rgba(212, 175, 55, 0.6)' }}>▶</span>
+                                <span style={{ fontSize: '11px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '4px' }}>
                                     Stream Video
-                                </span>
-                            </>
-                        ) : isPending ? (
-                            <>
-                                <span style={{ fontSize: '36px' }}>⏳</span>
-                                <span style={{ fontSize: '12px', color: '#fbbf24', fontWeight: 'bold', marginTop: '6px' }}>
-                                    Access Pending Approval
-                                </span>
-                            </>
-                        ) : isRejected ? (
-                            <>
-                                <span style={{ fontSize: '36px' }}>❌</span>
-                                <span style={{ fontSize: '12px', color: '#ef4444', fontWeight: 'bold', marginTop: '6px' }}>
-                                    Access Rejected
                                 </span>
                             </>
                         ) : (
                             <>
-                                <span style={{ fontSize: '36px' }}>🔒</span>
-                                <span style={{ fontSize: '12px', color: '#fff', fontWeight: 'bold', marginTop: '6px' }}>
-                                    Premium Video
+                                <span style={{ fontSize: '32px' }}>🔒</span>
+                                <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 'bold', marginTop: '6px', textTransform: 'uppercase' }}>
+                                    Locked Premium
                                 </span>
                             </>
                         )}
@@ -156,14 +139,10 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
                             </span>
                             {video.is_free ? (
                                 <span className="badge-status badge-new" style={{ fontSize: '10px' }}>🔓 Free Preview</span>
-                            ) : reqStatus === 'approved' ? (
-                                <span className="badge-status badge-completed" style={{ fontSize: '10px' }}>✅ Approved</span>
-                            ) : reqStatus === 'pending' ? (
-                                <span className="badge-status badge-booked" style={{ fontSize: '10px' }}>⏳ Pending</span>
-                            ) : reqStatus === 'rejected' ? (
-                                <span className="badge-status badge-not-proceeding" style={{ fontSize: '10px' }}>❌ Rejected</span>
                             ) : (
-                                <span className="badge-status badge-treatment" style={{ fontSize: '10px' }}>🔒 Premium</span>
+                                <span className={`badge-status ${premiumAccess === 'approved' ? 'badge-completed' : 'badge-treatment'}`} style={{ fontSize: '10px' }}>
+                                    {premiumAccess === 'approved' ? '🔓 Unlocked' : '🔒 Premium'}
+                                </span>
                             )}
                         </div>
 
@@ -178,44 +157,22 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
                         </p>
                     </div>
 
-                    {!video.is_free && (
-                        <div style={{ marginTop: 'auto' }}>
-                            {isUnlocked ? (
-                                <button 
-                                    onClick={() => handleSelectVideo(video)}
-                                    className="btn btn-primary"
-                                    style={{ width: '100%', fontSize: '13px', padding: '8px 12px' }}
-                                >
-                                    ▶ Stream Now
-                                </button>
-                            ) : isPending ? (
-                                <button 
-                                    disabled
-                                    className="btn btn-outline"
-                                    style={{ width: '100%', fontSize: '12px', padding: '8px 12px', opacity: 0.8, cursor: 'not-allowed' }}
-                                >
-                                    ⏳ Request Pending Approval
-                                </button>
-                            ) : isRejected ? (
-                                <button 
-                                    onClick={(e) => handleRequestAccess(e, video)}
-                                    disabled={requestingId === video.id}
-                                    className="btn btn-secondary"
-                                    style={{ width: '100%', fontSize: '12px', padding: '8px 12px' }}
-                                >
-                                    {requestingId === video.id ? 'Submitting...' : '🔄 Re-Request Access'}
-                                </button>
-                            ) : (
-                                <button 
-                                    onClick={(e) => handleRequestAccess(e, video)}
-                                    disabled={requestingId === video.id}
-                                    className="btn btn-primary"
-                                    style={{ width: '100%', fontSize: '13px', padding: '8px 12px' }}
-                                >
-                                    {requestingId === video.id ? 'Submitting...' : '🔑 Request Access'}
-                                </button>
-                            )}
-                        </div>
+                    {isUnlocked ? (
+                        <button 
+                            onClick={() => handleSelectVideo(video)}
+                            className="btn btn-primary"
+                            style={{ width: '100%', fontSize: '13px', padding: '8px 12px' }}
+                        >
+                            ▶ Stream Now
+                        </button>
+                    ) : (
+                        <button 
+                            disabled
+                            className="btn btn-outline"
+                            style={{ width: '100%', fontSize: '12px', padding: '8px 12px', opacity: 0.6, cursor: 'not-allowed' }}
+                        >
+                            🔒 Locked Premium
+                        </button>
                     )}
                 </div>
             </div>
@@ -228,7 +185,7 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
 
             {/* Video Player Section */}
             {selectedVideo && (
-                <div className="glass-panel" style={{ padding: '0px', overflow: 'hidden', border: '2px solid var(--accent-gold)' }}>
+                <div className="glass-panel" style={{ padding: '0px', overflow: 'hidden', border: '2px solid var(--accent-gold)', marginBottom: '24px' }}>
                     <div className="video-player-container" style={{ position: 'relative', aspectRatio: '16/9' }}>
                         {getYouTubeId(selectedVideo.video_path) ? (
                             <iframe 
@@ -272,27 +229,66 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
                 </div>
             )}
 
-            {/* Approved Videos Section (Appears if user has approved premium access) */}
-            {approvedVideos.length > 0 && (
-                <div className="glass-panel" style={{ borderLeft: '4px solid var(--color-success)', marginBottom: '24px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                        <div>
-                            <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                🔓 My Approved Premium Videos
-                            </h3>
-                            <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                                You have received admin approval for {approvedVideos.length} premium educational video{approvedVideos.length > 1 ? 's' : ''}.
-                            </p>
-                        </div>
+            {/* Premium Access Status Banner */}
+            {premiumAccess !== 'approved' && (
+                <div className="glass-panel" style={{ 
+                    borderLeft: premiumAccess === 'pending' ? '4px solid var(--accent-gold)' : premiumAccess === 'rejected' ? '4px solid var(--color-danger)' : '4px solid var(--accent-teal)',
+                    marginBottom: '24px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '16px',
+                    padding: '20px 24px'
+                }}>
+                    <div>
+                        <h3 style={{ margin: 0, fontSize: '16px' }}>
+                            {premiumAccess === 'pending' ? '⏳ Premium Access Request Pending' : premiumAccess === 'rejected' ? '❌ Premium Access Request Rejected' : '🔒 Unlock Premium Educational Videos'}
+                        </h3>
+                        <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                            {premiumAccess === 'pending' 
+                                ? 'Your request for unlocking all premium clinical video streams is currently under review by admin.' 
+                                : premiumAccess === 'rejected' 
+                                ? 'Your access request to premium clinical tutorials was rejected. You can re-submit the request.' 
+                                : 'Gain access to our entire library of professional clinical videos and guides by submitting a one-time request.'}
+                        </p>
                     </div>
-                    <div className="video-grid">
-                        {approvedVideos.map(video => renderVideoCard(video, true))}
+                    <div>
+                        {premiumAccess === 'none' && (
+                            <button 
+                                onClick={handleRequestPremiumAccess}
+                                disabled={requesting}
+                                className="btn btn-primary"
+                                style={{ padding: '10px 20px', fontSize: '14px' }}
+                            >
+                                {requesting ? 'Requesting...' : '🔑 Request Premium Access'}
+                            </button>
+                        )}
+                        {premiumAccess === 'rejected' && (
+                            <button 
+                                onClick={handleRequestPremiumAccess}
+                                disabled={requesting}
+                                className="btn btn-secondary"
+                                style={{ padding: '10px 20px', fontSize: '14px' }}
+                            >
+                                {requesting ? 'Requesting...' : '🔄 Re-Request Access'}
+                            </button>
+                        )}
+                        {premiumAccess === 'pending' && (
+                            <button 
+                                disabled
+                                className="btn btn-outline"
+                                style={{ padding: '10px 20px', fontSize: '14px', opacity: 0.7, cursor: 'not-allowed' }}
+                            >
+                                ⏳ Pending Review
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
 
             {/* Search and Category Filters */}
-            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap' }}>
+            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', gap: '15px', flexGrow: 1, maxWidth: '600px', flexWrap: 'wrap' }}>
                     <input
                         type="text"
@@ -319,16 +315,43 @@ export default function VideoLibrary({ categories = [], userAccessRequests = {} 
                 </div>
             </div>
 
-            {/* Main Videos Grid */}
-            <div className="video-grid">
-                {filteredVideos.length > 0 ? (
-                    filteredVideos.map(video => renderVideoCard(video))
+            {/* Free Videos Section */}
+            <div style={{ marginBottom: '40px' }}>
+                <h3 style={{ marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                    🔓 Free Preview Videos
+                </h3>
+                {freeVideos.length > 0 ? (
+                    <div className="video-grid">
+                        {freeVideos.map(video => renderVideoCard(video))}
+                    </div>
                 ) : (
-                    <div className="glass-panel" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '50px', color: 'var(--text-muted)' }}>
-                        No videos found matching your filters.
+                    <div className="glass-panel" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                        No free preview videos found matching your filters.
                     </div>
                 )}
             </div>
+
+            {/* Premium Videos Section */}
+            <div>
+                <h3 style={{ marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    🔒 Premium Videos
+                    {premiumAccess === 'approved' && (
+                        <span className="badge-status badge-completed" style={{ fontSize: '11px', textTransform: 'uppercase' }}>
+                            Unlocked
+                        </span>
+                    )}
+                </h3>
+                {premiumVideos.length > 0 ? (
+                    <div className="video-grid">
+                        {premiumVideos.map(video => renderVideoCard(video))}
+                    </div>
+                ) : (
+                    <div className="glass-panel" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                        No premium clinical videos found matching your filters.
+                    </div>
+                )}
+            </div>
+
         </MemberLayout>
     );
 }

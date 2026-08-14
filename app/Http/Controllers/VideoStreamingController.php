@@ -22,15 +22,10 @@ class VideoStreamingController extends Controller
                 abort(403, 'Your member account is pending approval.');
             }
 
-            // If not a free preview video, check if access request has been approved
+            // If not a free preview video, check if user has approved premium access
             if (!$video->is_free) {
-                $isApproved = \App\Models\VideoAccessRequest::where('user_id', $user->id)
-                    ->where('video_id', $video->id)
-                    ->where('status', 'approved')
-                    ->exists();
-
-                if (!$isApproved) {
-                    abort(403, 'Access denied. Approval required to watch this premium video.');
+                if ($user->premium_access !== 'approved') {
+                    abort(403, 'Access denied. You must request and receive approval to access premium videos.');
                 }
             }
         }

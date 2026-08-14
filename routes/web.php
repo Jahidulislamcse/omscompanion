@@ -92,7 +92,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/videos', [AdminController::class, 'videos'])->name('admin.videos');
     Route::post('/videos/categories', [AdminController::class, 'storeCategory'])->name('admin.videos.category.store');
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('admin.videos.store');
-    Route::post('/videos/access-requests/{accessRequest}', [AdminController::class, 'updateVideoAccessRequest'])->name('admin.videos.access_requests.update');
+    Route::post('/videos/access-requests/{user}', [AdminController::class, 'updatePremiumAccess'])->name('admin.videos.access_requests.update');
     Route::get('/page-content', [AdminController::class, 'pageContent'])->name('admin.page_content');
     Route::post('/page-content', [AdminController::class, 'updatePageContent'])->name('admin.page_content.update');
 });
@@ -106,7 +106,7 @@ Route::middleware(['auth', 'member'])->prefix('member')->group(function () {
     Route::post('/referrals', [MemberController::class, 'storeReferral'])->name('member.referrals.store');
     Route::get('/referrals/{referral}/tracker', [MemberController::class, 'tracker'])->name('member.referrals.tracker');
     Route::get('/videos', [MemberController::class, 'videos'])->name('member.videos');
-    Route::post('/videos/{video}/request-access', [MemberController::class, 'requestVideoAccess'])->name('member.videos.request_access');
+    Route::post('/videos/request-premium-access', [MemberController::class, 'requestPremiumAccess'])->name('member.videos.request_premium_access');
     Route::get('/videos/{video}/stream', [VideoStreamingController::class, 'stream'])->name('member.videos.stream');
     Route::get('/certificate', [CertificateController::class, 'download'])->name('member.certificate.download');
     Route::get('/notifications', [MemberController::class, 'notifications'])->name('member.notifications');

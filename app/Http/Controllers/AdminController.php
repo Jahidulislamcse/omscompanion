@@ -199,8 +199,10 @@ class AdminController extends Controller
     {
         $categories = VideoCategory::with('videos')->get();
         $videos = Video::with('category')->orderBy('created_at', 'desc')->get();
-        $accessRequests = VideoAccessRequest::with(['user', 'video.category'])
-            ->orderBy('created_at', 'desc')
+        
+        $accessRequests = User::where('role', 'member')
+            ->whereIn('premium_access', ['pending', 'approved', 'rejected'])
+            ->orderBy('updated_at', 'desc')
             ->get();
 
         return Inertia::render('Admin/Videos', [
@@ -210,35 +212,29 @@ class AdminController extends Controller
         ]);
     }
 
-    public function updateVideoAccessRequest(Request $request, VideoAccessRequest $accessRequest)
+    public function updatePremiumAccess(Request $request, User $user)
     {
         $request->validate([
             'status' => 'required|in:approved,rejected',
         ]);
 
-        $accessRequest->update([
-            'status' => $request->status,
+        $user->update([
+            'premium_access' => $request->status,
         ]);
 
-        $user = $accessRequest->user;
-        $video = $accessRequest->video;
-        $prefix = (!empty($user) && !empty($user->bds_registration_number)) ? 'Dr. ' : '';
-        $userName = $user ? $user->name : 'Member';
-        $videoTitle = $video ? $video->title : 'Video';
+        $prefix = !empty($user->bds_registration_number) ? 'Dr. ' : '';
 
-        if ($user) {
-            if ($request->status === 'approved') {
-                $subject = "Video Access Approved: {$videoTitle}";
-                $message = "Dear {$prefix}{$userName},\n\nYour access request for premium video \"{$videoTitle}\" has been APPROVED by admin. You can now stream it anytime in your Video Library.\n\nBest Regards,\nDentistChamber Team";
-            } else {
-                $subject = "Video Access Request Update: {$videoTitle}";
-                $message = "Dear {$prefix}{$userName},\n\nYour access request for premium video \"{$videoTitle}\" was not approved at this time.\n\nBest Regards,\nDentistChamber Team";
-            }
-
-            NotificationService::send($user, $subject, $message, 'both');
+        if ($request->status === 'approved') {
+            $subject = "Premium Videos Access Approved!";
+            $message = "Dear {$prefix}{$user->name},\n\nWe are pleased to inform you that your request to access our Premium Video Library has been APPROVED by the admin. You can now stream all premium clinical tutorials under the \"Premium Videos\" section.\n\nBest Regards,\nDentistChamber Team";
+        } else {
+            $subject = "Premium Videos Access Request Update";
+            $message = "Dear {$prefix}{$user->name},\n\nYour request for access to our Premium Video Library has been rejected.\n\nBest Regards,\nDentistChamber Team";
         }
 
-        return redirect()->back()->with('success', 'Video access request updated to ' . $request->status . '.');
+        NotificationService::send($user, $subject, $message, 'both');
+
+        return redirect()->back()->with('success', 'Member premium access request updated to ' . $request->status . '.');
     }
 
     public function storeCategory(Request $request)
