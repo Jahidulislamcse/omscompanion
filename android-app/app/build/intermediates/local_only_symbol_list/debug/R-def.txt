@@ -3,3 +3,4 @@ local
 id progressBar
 id webview
 layout activity_main
+string app_name

@@ -27,66 +27,64 @@
 18-->[androidx.core:core:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
 19
 20    <application
-20-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:8:5-26:19
+20-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:8:5-25:19
 21        android:allowBackup="true"
 21-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:9:9-35
 22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 22-->[androidx.core:core:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
 23        android:debuggable="true"
 24        android:extractNativeLibs="true"
-25        android:icon="@mipmap/ic_launcher"
-25-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:9-43
+25        android:icon="@android:drawable/sym_def_app_icon"
+25-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:9-58
 26        android:label="@string/app_name"
 26-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:11:9-41
-27        android:roundIcon="@mipmap/ic_launcher_round"
-27-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:12:9-54
-28        android:supportsRtl="true"
-28-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:13:9-35
-29        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-29-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:14:9-65
-30        android:usesCleartextTraffic="true" >
-30-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:15:9-44
-31        <activity
-31-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:17:9-25:20
-32            android:name="com.omscompanion.MainActivity"
-32-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:18:13-41
-33            android:configChanges="orientation|screenSize|keyboardHidden"
-33-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:13-74
-34            android:exported="true" >
-34-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:19:13-36
-35            <intent-filter>
-35-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:21:13-24:29
-36                <action android:name="android.intent.action.MAIN" />
-36-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:17-69
-36-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:25-66
-37
-38                <category android:name="android.intent.category.LAUNCHER" />
-38-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:17-77
-38-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:27-74
-39            </intent-filter>
-40        </activity>
-41
-42        <provider
-42-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-43            android:name="androidx.startup.InitializationProvider"
-43-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
-44            android:authorities="com.omscompanion.androidx-startup"
-44-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
-45            android:exported="false" >
-45-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
-46            <meta-data
-46-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-47                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-47-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
-48                android:value="androidx.startup" />
-48-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
-49            <meta-data
-49-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\HP\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
-50                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-50-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\HP\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
-51                android:value="androidx.startup" />
-51-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\HP\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
-52        </provider>
-53    </application>
-54
-55</manifest>
+27        android:supportsRtl="true"
+27-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:12:9-35
+28        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+28-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:13:9-65
+29        android:usesCleartextTraffic="true" >
+29-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:14:9-44
+30        <activity
+30-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:16:9-24:20
+31            android:name="com.omscompanion.MainActivity"
+31-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:17:13-41
+32            android:configChanges="orientation|screenSize|keyboardHidden"
+32-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:19:13-74
+33            android:exported="true" >
+33-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:18:13-36
+34            <intent-filter>
+34-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:13-23:29
+35                <action android:name="android.intent.action.MAIN" />
+35-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:21:17-69
+35-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:21:25-66
+36
+37                <category android:name="android.intent.category.LAUNCHER" />
+37-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:17-77
+37-->D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:27-74
+38            </intent-filter>
+39        </activity>
+40
+41        <provider
+41-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+42            android:name="androidx.startup.InitializationProvider"
+42-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+43            android:authorities="com.omscompanion.androidx-startup"
+43-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+44            android:exported="false" >
+44-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+45            <meta-data
+45-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+46                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+46-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+47                android:value="androidx.startup" />
+47-->[androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+48            <meta-data
+48-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\HP\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+49                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+49-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\HP\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+50                android:value="androidx.startup" />
+50-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\HP\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+51        </provider>
+52    </application>
+53
+54</manifest>
