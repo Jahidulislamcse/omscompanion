@@ -23,6 +23,7 @@ export default function Referrals({ referrals = [] }) {
         });
     };
 
+    
     const getStatusBadge = (status) => {
         const labels = {
             new: 'New Referral',
