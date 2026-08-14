@@ -164,7 +164,6 @@ export default function Referrals({ referrals }) {
                                     <th>Patient</th>
                                     <th>Condition</th>
                                     <th>Status</th>
-                                    <th>Commission</th>
                                     <th style={{ textAlign: 'right' }}>Action</th>
                                 </tr>
                             </thead>
@@ -183,14 +182,6 @@ export default function Referrals({ referrals }) {
                                                 </span>
                                             </td>
                                             <td>{getStatusBadge(ref.status)}</td>
-                                            <td>
-                                                <div style={{ fontWeight: '700', fontSize: '13px' }}>
-                                                    ${parseFloat(ref.commission_amount).toFixed(2)}
-                                                </div>
-                                                <div style={{ fontSize: '10px', textTransform: 'uppercase', color: ref.commission_status === 'paid' ? 'var(--color-success)' : 'var(--text-muted)' }}>
-                                                    {ref.commission_status}
-                                                </div>
-                                            </td>
                                             <td style={{ textAlign: 'right' }}>
                                                 <Link 
                                                     href={route('member.referrals.tracker', ref.id)}
@@ -204,7 +195,7 @@ export default function Referrals({ referrals }) {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                                        <td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                                             No referral history records found.
                                         </td>
                                     </tr>
