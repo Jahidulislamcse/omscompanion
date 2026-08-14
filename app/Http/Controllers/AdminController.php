@@ -7,6 +7,7 @@ use App\Models\PatientReferral;
 use App\Models\PatientStatusTimeline;
 use App\Models\VideoCategory;
 use App\Models\Video;
+use App\Models\VideoAccessRequest;
 use App\Models\LandingSetting;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -198,11 +199,46 @@ class AdminController extends Controller
     {
         $categories = VideoCategory::with('videos')->get();
         $videos = Video::with('category')->orderBy('created_at', 'desc')->get();
+        $accessRequests = VideoAccessRequest::with(['user', 'video.category'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return Inertia::render('Admin/Videos', [
             'categories' => $categories,
             'videos' => $videos,
+            'accessRequests' => $accessRequests,
         ]);
+    }
+
+    public function updateVideoAccessRequest(Request $request, VideoAccessRequest $accessRequest)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+        ]);
+
+        $accessRequest->update([
+            'status' => $request->status,
+        ]);
+
+        $user = $accessRequest->user;
+        $video = $accessRequest->video;
+        $prefix = (!empty($user) && !empty($user->bds_registration_number)) ? 'Dr. ' : '';
+        $userName = $user ? $user->name : 'Member';
+        $videoTitle = $video ? $video->title : 'Video';
+
+        if ($user) {
+            if ($request->status === 'approved') {
+                $subject = "Video Access Approved: {$videoTitle}";
+                $message = "Dear {$prefix}{$userName},\n\nYour access request for premium video \"{$videoTitle}\" has been APPROVED by admin. You can now stream it anytime in your Video Library.\n\nBest Regards,\nDentistChamber Team";
+            } else {
+                $subject = "Video Access Request Update: {$videoTitle}";
+                $message = "Dear {$prefix}{$userName},\n\nYour access request for premium video \"{$videoTitle}\" was not approved at this time.\n\nBest Regards,\nDentistChamber Team";
+            }
+
+            NotificationService::send($user, $subject, $message, 'both');
+        }
+
+        return redirect()->back()->with('success', 'Video access request updated to ' . $request->status . '.');
     }
 
     public function storeCategory(Request $request)

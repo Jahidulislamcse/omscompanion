@@ -7,6 +7,7 @@ use App\Models\PatientReferral;
 use App\Models\PatientStatusTimeline;
 use App\Models\VideoCategory;
 use App\Models\Video;
+use App\Models\VideoAccessRequest;
 use App\Models\Notification;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -159,10 +160,33 @@ class MemberController extends Controller
     public function videos()
     {
         $categories = VideoCategory::with('videos')->get();
+        $userAccessRequests = VideoAccessRequest::where('user_id', Auth::id())
+            ->get()
+            ->keyBy('video_id');
 
         return Inertia::render('Member/VideoLibrary', [
-            'categories' => $categories
+            'categories' => $categories,
+            'userAccessRequests' => $userAccessRequests,
         ]);
+    }
+
+    public function requestVideoAccess(Request $request, Video $video)
+    {
+        if ($video->is_free) {
+            return redirect()->back()->with('error', 'This video is already a free preview.');
+        }
+
+        VideoAccessRequest::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'video_id' => $video->id,
+            ],
+            [
+                'status' => 'pending',
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Access request submitted for video: ' . $video->title);
     }
 
     public function notifications()

@@ -11,9 +11,28 @@ class VideoStreamingController extends Controller
 {
     public function stream(Video $video)
     {
-        // Enforce member authentication
-        if (!Auth::check() || Auth::user()->role !== 'member' || Auth::user()->status !== 'approved') {
+        // Enforce authentication & permissions
+        $user = Auth::user();
+        if (!$user || ($user->role !== 'member' && $user->role !== 'admin')) {
             abort(403, 'Unauthorized stream request.');
+        }
+
+        if ($user->role === 'member') {
+            if ($user->status !== 'approved') {
+                abort(403, 'Your member account is pending approval.');
+            }
+
+            // If not a free preview video, check if access request has been approved
+            if (!$video->is_free) {
+                $isApproved = \App\Models\VideoAccessRequest::where('user_id', $user->id)
+                    ->where('video_id', $video->id)
+                    ->where('status', 'approved')
+                    ->exists();
+
+                if (!$isApproved) {
+                    abort(403, 'Access denied. Approval required to watch this premium video.');
+                }
+            }
         }
 
         if ($video->storage_type === 'external') {
