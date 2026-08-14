@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
-export default function Referrals({ referrals }) {
+export default function Referrals({ referrals = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -40,15 +40,22 @@ export default function Referrals({ referrals }) {
             completed: 'badge-completed',
             not_proceeding: 'badge-not-proceeding'
         };
-        return <span className={`badge-status ${classNames[status]}`}>{labels[status]}</span>;
+        const key = status || 'new';
+        return <span className={`badge-status ${classNames[key] || 'badge-new'}`}>{labels[key] || key}</span>;
     };
 
-    const filteredReferrals = referrals.filter(ref => {
-        const query = searchTerm.toLowerCase();
+    const safeReferrals = Array.isArray(referrals) ? referrals : [];
+
+    const filteredReferrals = safeReferrals.filter(ref => {
+        if (!ref) return false;
+        const query = (searchTerm || '').toLowerCase();
+        const patientName = (ref.patient_name || '').toLowerCase();
+        const phone = ref.phone || '';
+        const condition = (ref.medical_condition || '').toLowerCase();
         return (
-            ref.patient_name.toLowerCase().includes(query) ||
-            ref.phone.includes(query) ||
-            ref.medical_condition.toLowerCase().includes(query)
+            patientName.includes(query) ||
+            phone.includes(query) ||
+            condition.includes(query)
         );
     });
 
@@ -172,13 +179,13 @@ export default function Referrals({ referrals }) {
                                     filteredReferrals.map(ref => (
                                         <tr key={ref.id}>
                                             <td>
-                                                <div style={{ fontWeight: '700' }}>{ref.patient_name}</div>
-                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{ref.phone}</div>
+                                                <div style={{ fontWeight: '700' }}>{ref.patient_name || 'N/A'}</div>
+                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{ref.phone || ''}</div>
                                             </td>
                                             <td>
-                                                <div style={{ fontSize: '13px', fontStyle: 'italic' }}>"{ref.medical_condition}"</div>
+                                                <div style={{ fontSize: '13px', fontStyle: 'italic' }}>"{ref.medical_condition || ''}"</div>
                                                 <span style={{ fontSize: '10px', fontWeight: 'bold', color: ref.urgency_level === 'critical' || ref.urgency_level === 'high' ? 'var(--color-danger)' : 'var(--text-muted)' }}>
-                                                    {ref.urgency_level}
+                                                    {ref.urgency_level || 'low'}
                                                 </span>
                                             </td>
                                             <td>{getStatusBadge(ref.status)}</td>
