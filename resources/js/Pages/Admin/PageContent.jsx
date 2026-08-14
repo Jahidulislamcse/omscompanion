@@ -1,10 +1,14 @@
-import React from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function PageContent({ settings }) {
-    // Form management via Inertia useForm helper
+    const { site_logo: currentLogo } = usePage().props;
+    const [logoPreview, setLogoPreview] = useState(null);
+
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
+        site_name: settings.site_name || 'OMSCOMPANION',
         hero_title: settings.hero_title || '',
         hero_subtitle: settings.hero_subtitle || '',
         goal_1_title: settings.goal_1_title || '',
@@ -15,30 +19,105 @@ export default function PageContent({ settings }) {
         goal_3_desc: settings.goal_3_desc || '',
         goal_4_title: settings.goal_4_title || '',
         goal_4_desc: settings.goal_4_desc || '',
+        site_logo: null,
+        remove_logo: false,
     });
+
+    const handleLogoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData(data => ({ ...data, site_logo: file, remove_logo: false }));
+            setLogoPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const handleRemoveLogo = () => {
+        setData(data => ({ ...data, site_logo: null, remove_logo: true }));
+        setLogoPreview(null);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('admin.page_content.update'), {
+            forceFormData: true,
             onSuccess: () => {
-                alert('Landing page settings updated successfully!');
+                alert('Site settings & logo updated successfully!');
             }
         });
     };
 
     return (
-        <AdminLayout title="Manage Landing Page Content">
-            <Head title="Landing Page Content" />
+        <AdminLayout title="Manage Landing Page & Branding">
+            <Head title="Site Branding & Content" />
 
             <div style={{ maxWidth: '850px', margin: '0 auto' }}>
                 {recentlySuccessful && (
                     <div className="glass-panel" style={{ borderLeft: '4px solid var(--color-success)', color: 'var(--color-success)', backgroundColor: 'var(--color-success-bg)', padding: '12px 20px', marginBottom: '20px' }}>
-                        ✓ Landing page items updated successfully! Visit the landing page to preview changes.
+                        ✓ Settings updated successfully!
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                     
+                    {/* Site Branding / Logo Section */}
+                    <div className="glass-panel">
+                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
+                            🖼️ Site Logo & Branding
+                        </h3>
+                        
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label className="form-label">Site Brand Title / Name</label>
+                            <input 
+                                type="text" 
+                                className="form-control"
+                                value={data.site_name}
+                                onChange={e => setData('site_name', e.target.value)}
+                                placeholder="e.g. OMSCOMPANION"
+                            />
+                            {errors.site_name && <span className="form-error">{errors.site_name}</span>}
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">Current Active Logo Preview</label>
+                            <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'inline-flex', alignItems: 'center', minWidth: '220px' }}>
+                                {logoPreview ? (
+                                    <img src={logoPreview} alt="Preview" style={{ maxHeight: '45px', objectFit: 'contain' }} />
+                                ) : data.remove_logo ? (
+                                    <div style={{ fontWeight: 800, fontSize: '18px' }}>
+                                        🦷 OMS<span style={{ color: 'var(--accent-gold, #f59e0b)' }}>COMPANION</span> (Default)
+                                    </div>
+                                ) : (
+                                    <ApplicationLogo height="45px" />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="form-group" style={{ marginTop: '15px' }}>
+                            <label className="form-label">Upload Custom Site Logo (PNG, JPG, SVG, WebP)</label>
+                            <input 
+                                type="file" 
+                                className="form-control"
+                                accept="image/*"
+                                onChange={handleLogoChange}
+                            />
+                            {errors.site_logo && <span className="form-error">{errors.site_logo}</span>}
+                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                Uploading a logo will replace the text logo across the website, navigation bar, sidebars, and login pages.
+                            </p>
+                        </div>
+
+                        {(currentLogo || logoPreview) && (
+                            <button 
+                                type="button" 
+                                className="btn btn-outline"
+                                style={{ marginTop: '10px', color: '#ef4444', borderColor: '#ef4444' }}
+                                onClick={handleRemoveLogo}
+                            >
+                                🗑️ Remove Custom Logo (Use Default OMSCOMPANION)
+                            </button>
+                        )}
+                    </div>
+
                     {/* Hero Section settings */}
                     <div className="glass-panel">
                         <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>

@@ -273,9 +273,33 @@ class AdminController extends Controller
             'goal_3_desc' => 'required|string',
             'goal_4_title' => 'required|string|max:255',
             'goal_4_desc' => 'required|string',
+            'site_name' => 'nullable|string|max:255',
+            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'remove_logo' => 'nullable|boolean',
         ]);
 
+        if ($request->boolean('remove_logo')) {
+            LandingSetting::where('key', 'site_logo')->delete();
+        } elseif ($request->hasFile('site_logo')) {
+            $file = $request->file('site_logo');
+            $extension = $file->getClientOriginalExtension() ?: 'png';
+            $filename = 'logo_' . time() . '.' . $extension;
+
+            $destinationPath = storage_path('app/public/logos');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $filename);
+
+            LandingSetting::updateOrCreate(
+                ['key' => 'site_logo'],
+                ['value' => 'storage/logos/' . $filename]
+            );
+        }
+
         $settingsData = $request->only([
+            'site_name',
             'hero_title',
             'hero_subtitle',
             'goal_1_title',

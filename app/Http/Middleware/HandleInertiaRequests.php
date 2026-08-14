@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\LandingSetting;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -55,6 +56,10 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
+            'site_logo' => LandingSetting::where('key', 'site_logo')->value('value') 
+                ? asset(ltrim(LandingSetting::where('key', 'site_logo')->value('value'), '/')) 
+                : null,
+            'site_name' => LandingSetting::where('key', 'site_name')->value('value') ?: 'OMSCOMPANION',
         ];
     }
 }

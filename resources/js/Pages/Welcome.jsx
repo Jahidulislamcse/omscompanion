@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { Link, Head, usePage } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
+
 export function getYouTubeId(url) {
     if (!url) return '';
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -60,10 +64,9 @@ export default function Welcome({ settings, freeVideos }) {
 
             {/* Header Navigation */}
             <header className="glass-panel landing-header">
-                <div className="landing-logo">
-                    <span>&#128715;</span>
-                    <div>Dentist<span>Chamber</span></div>
-                </div>
+                <Link href="/">
+                    <ApplicationLogo />
+                </Link>
 
                 <nav className="landing-nav">
                     <a href="#mission">Our Mission</a>
@@ -259,10 +262,9 @@ export default function Welcome({ settings, freeVideos }) {
             {/* Footer */}
             <footer className="landing-footer">
                 <div className="footer-container">
-                    <div className="footer-logo">
-                        <span>&#128715;</span>
-                        <div>Dentist<span>Chamber</span></div>
-                    </div>
+                    <Link href="/">
+                        <ApplicationLogo />
+                    </Link>
                     <p>
                         © 2026 DentistChamber Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
                     </p>

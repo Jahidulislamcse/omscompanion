@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function AdminLayout({ children, title }) {
     const { auth, flash } = usePage().props;
@@ -38,10 +39,9 @@ export default function AdminLayout({ children, title }) {
             <aside className={`app-sidebar ${isMobileOpen ? 'mobile-open' : ''}`}>
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                        <div className="sidebar-logo" style={{ marginBottom: 0 }}>
-                            <span>&#128715;</span>
-                            <div>Dentist<span>Chamber</span></div>
-                        </div>
+                        <Link href={route('admin.dashboard')}>
+                            <ApplicationLogo />
+                        </Link>
                         <button 
                             className="mobile-close-btn"
                             onClick={() => setIsMobileOpen(false)}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function Register() {
     const { data, setData, post, processing, errors } = useForm({
@@ -24,9 +25,9 @@ export default function Register() {
             
             <div className="glass-panel auth-card" style={{ maxWidth: '600px' }}>
                 <div className="auth-header">
-                    <div className="auth-logo">
-                        <span>&#128715;</span> Dentist<span>Chamber</span>
-                    </div>
+                    <Link href="/" style={{ display: 'inline-block' }}>
+                        <ApplicationLogo height="40px" />
+                    </Link>
                     <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '10px' }}>
                         BDS Doctor & Medicine Store Member Registration
                     </p>

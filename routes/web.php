@@ -56,6 +56,17 @@ Route::get('/', function () {
 // Public Video Stream (No Auth)
 Route::get('/videos/stream/public/{video}', [VideoStreamingController::class, 'publicStream'])->name('videos.public_stream');
 
+// Public Storage Files Handler (Serves logos & public uploads)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : null;
+    $mimeType = $mimeType ?: 'image/png';
+    return response()->file($filePath, ['Content-Type' => $mimeType]);
+})->where('path', '.*')->name('storage.public_file');
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
