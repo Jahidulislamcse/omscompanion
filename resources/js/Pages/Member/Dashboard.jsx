@@ -64,7 +64,7 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                         </Link>
                     </div>
 
-                    <div className="table-container">
+                    <div className="table-container hidden-mobile">
                         <table className="data-table">
                             <thead>
                                 <tr>
@@ -105,6 +105,48 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                                 )}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Mobile cards view */}
+                    <div className="visible-mobile" style={{ display: 'none' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '0 16px 24px 16px' }}>
+                            {recentReferrals.length > 0 ? (
+                                recentReferrals.map(ref => (
+                                    <div key={ref.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <span style={{ fontWeight: '700', fontSize: '15px' }}>{ref.patient_name}</span>
+                                            <span style={{ 
+                                                fontSize: '9px', 
+                                                padding: '3px 8px', 
+                                                borderRadius: '10px', 
+                                                textTransform: 'uppercase', 
+                                                fontWeight: 'bold', 
+                                                border: '1px solid var(--border-color)', 
+                                                color: 'var(--text-muted)' 
+                                            }}>
+                                                {ref.status}
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: '13px', fontStyle: 'italic', color: 'var(--text-light)' }}>
+                                            "{ref.medical_condition}"
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
+                                            <Link 
+                                                href={route('member.referrals.tracker', ref.id)}
+                                                className="btn btn-outline"
+                                                style={{ padding: '6px 14px', fontSize: '12px', width: '100%', textAlign: 'center' }}
+                                            >
+                                                Track Case
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontSize: '13px' }}>
+                                    No patients referred yet.
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

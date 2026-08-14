@@ -165,7 +165,7 @@ export default function Referrals({ referrals = [] }) {
                         </div>
                     </div>
 
-                    <div className="table-container">
+                    <div className="table-container hidden-mobile">
                         <table className="data-table">
                             <thead>
                                 <tr>
@@ -210,6 +210,53 @@ export default function Referrals({ referrals = [] }) {
                                 )}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Mobile cards view */}
+                    <div className="visible-mobile" style={{ display: 'none' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {filteredReferrals.length > 0 ? (
+                                filteredReferrals.map(ref => (
+                                    <div key={ref.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                                            <div>
+                                                <div style={{ fontWeight: '700', fontSize: '15px' }}>{ref.patient_name || 'N/A'}</div>
+                                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{ref.phone || ''}</div>
+                                            </div>
+                                            <div>
+                                                {getStatusBadge(ref.status)}
+                                            </div>
+                                        </div>
+                                        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '8px' }}>
+                                            <div style={{ fontSize: '13px', fontStyle: 'italic' }}>"{ref.medical_condition || ''}"</div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
+                                                <span style={{ 
+                                                    fontSize: '10px', 
+                                                    fontWeight: 'bold', 
+                                                    textTransform: 'uppercase', 
+                                                    color: ref.urgency_level === 'critical' || ref.urgency_level === 'high' ? 'var(--color-danger)' : 'var(--text-muted)' 
+                                                }}>
+                                                    {ref.urgency_level || 'low'} urgency
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div style={{ marginTop: '4px' }}>
+                                            <Link 
+                                                href={route('member.referrals.tracker', ref.id)}
+                                                className="btn btn-outline"
+                                                style={{ padding: '8px 12px', fontSize: '13px', width: '100%', display: 'block', textAlign: 'center' }}
+                                            >
+                                                Track Case
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)', fontSize: '13px' }}>
+                                    No referral history records found.
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

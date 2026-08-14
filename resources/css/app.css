@@ -1119,4 +1119,20 @@ h1, h2, h3, h4, h5, h6 {
     .auth-card {
         padding: 20px 15px;
     }
+
+    .glass-panel {
+        padding: 16px;
+    }
+
+    .hidden-mobile {
+        display: none !important;
+    }
+
+    .visible-mobile {
+        display: block !important;
+    }
+
+    .visible-mobile-flex {
+        display: flex !important;
+    }
 }
