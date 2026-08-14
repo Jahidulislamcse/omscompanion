@@ -1,8 +1,10 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
 export default function Dashboard({ stats, recentReferrals, recentNotifications }) {
+    const { site_name } = usePage().props;
+
     return (
         <MemberLayout title="Member Dashboard">
             <Head title="Doctor Dashboard" />
@@ -45,7 +47,7 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                 <div>
                     <h3 style={{ margin: 0, fontSize: '18px' }}>Submit a Patient Referral</h3>
                     <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                        Send patient cases to DentistChamber and track case progress in real-time.
+                        Send patient cases to {site_name || 'DentistChamber'} and track case progress in real-time.
                     </p>
                 </div>
                 <Link href={route('member.referrals')} className="btn btn-primary" style={{ padding: '12px 24px', fontSize: '15px' }}>

@@ -58,7 +58,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => $request->session()->get('error'),
             ],
             'site_logo' => LandingSetting::where('key', 'site_logo')->value('value') 
-                ? asset(ltrim(LandingSetting::where('key', 'site_logo')->value('value'), '/')) 
+                ? route('site.logo.stream') 
                 : null,
             'site_name' => LandingSetting::where('key', 'site_name')->value('value') ?: 'OMSCOMPANION',
         ];

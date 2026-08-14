@@ -67,6 +67,21 @@ Route::get('/storage/{path}', function ($path) {
     return response()->file($filePath, ['Content-Type' => $mimeType]);
 })->where('path', '.*')->name('storage.public_file');
 
+// Site Logo Stream Route (Bypasses cPanel symlink issues)
+Route::get('/site-logo-image', function () {
+    $logoPath = \App\Models\LandingSetting::where('key', 'site_logo')->value('value');
+    if (!$logoPath) {
+        abort(404);
+    }
+    $filename = basename($logoPath);
+    $filePath = storage_path('app/public/logos/' . $filename);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/png';
+    return response()->file($filePath, ['Content-Type' => $mimeType]);
+})->name('site.logo.stream');
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

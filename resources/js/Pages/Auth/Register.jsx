@@ -1,8 +1,9 @@
 import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function Register() {
+    const { site_name } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
@@ -21,7 +22,7 @@ export default function Register() {
 
     return (
         <div className="auth-page">
-            <Head title="Member Registration" />
+            <Head title={`Register - ${site_name || 'DentistChamber'}`} />
             
             <div className="glass-panel auth-card" style={{ maxWidth: '600px' }}>
                 <div className="auth-header">

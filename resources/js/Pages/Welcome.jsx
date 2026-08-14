@@ -10,7 +10,7 @@ export function getYouTubeId(url) {
 }
 
 export default function Welcome({ settings, freeVideos }) {
-    const { auth } = usePage().props;
+    const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
 
     const getDashboardRoute = () => {
@@ -60,7 +60,7 @@ export default function Welcome({ settings, freeVideos }) {
 
     return (
         <div className="landing-wrapper">
-            <Head title="DentistChamber - Referral & Membership Hub" />
+            <Head title={`${site_name || 'DentistChamber'} - Referral & Membership Hub`} />
 
             {/* Header Navigation */}
             <header className="glass-panel landing-header">
@@ -100,7 +100,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </h1>
                 
                 <p className="landing-hero-desc">
-                    {getSetting('hero_subtitle', 'DentistChamber is a professional referral and membership hub connecting BDS Doctors with state-of-the-art treatment pipelines, live tracking logs, and expert clinical videos.')}
+                    {getSetting('hero_subtitle', `${site_name || 'DentistChamber'} is a professional referral and membership hub connecting BDS Doctors with state-of-the-art treatment pipelines, live tracking logs, and expert clinical videos.`)}
                 </p>
 
                 <div className="landing-hero-ctas">
@@ -266,7 +266,7 @@ export default function Welcome({ settings, freeVideos }) {
                         <ApplicationLogo />
                     </Link>
                     <p>
-                        © 2026 DentistChamber Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
+                        © 2026 {site_name || 'DentistChamber'} Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
                     </p>
                 </div>
             </footer>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function Login() {
+    const { site_name } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         login: '',
         password: '',
@@ -16,7 +17,7 @@ export default function Login() {
 
     return (
         <div className="auth-page">
-            <Head title="Login" />
+            <Head title={`Login - ${site_name || 'DentistChamber'}`} />
             
             <div className="glass-panel auth-card">
                 <div className="auth-header">
