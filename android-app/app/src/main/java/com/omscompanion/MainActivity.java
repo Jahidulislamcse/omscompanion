@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     // IMPORTANT: Change this to your actual production domain
-    private static final String APP_URL = "https://techsolutionltdbd.com";
+    private static final String APP_URL = "http://omscompanion.com";
 
     private WebView webView;
     private ProgressBar progressBar;
