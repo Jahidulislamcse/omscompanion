@@ -1993,7 +1993,8 @@ h1, h2, h3, h4, h5, h6 {
 
     .section-sub-header-row {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
         gap: 6px;
         margin-bottom: 14px;
     }
@@ -2001,12 +2002,14 @@ h1, h2, h3, h4, h5, h6 {
     .sub-header-title {
         font-size: 16px !important;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
         gap: 2px;
     }
 
     .sub-header-note {
         font-size: 11px;
+        text-align: center;
     }
 
     .free-video-grid {
