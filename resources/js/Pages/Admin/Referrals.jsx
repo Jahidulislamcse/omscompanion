@@ -101,22 +101,23 @@ export default function Referrals({ referrals }) {
             <Head title="Patient Referrals" />
 
             {/* Filter Panel */}
-            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', gap: '15px', flexGrow: 1, maxWidth: '600px' }}>
+            <div className="glass-panel" style={{ padding: '16px', marginBottom: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px', width: '100%', marginBottom: '12px' }}>
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Search patient, referring doctor or condition..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
+                        style={{ gridColumn: 'span 1 / -1' }}
                     />
                     <select
                         className="form-control"
-                        style={{ maxWidth: '200px' }}
                         value={statusFilter}
                         onChange={e => setStatusFilter(e.target.value)}
+                        style={{ gridColumn: 'span 1 / -1' }}
                     >
-                        <option value="all">All Statuses</option>
+                        <option value="all">All Case Statuses</option>
                         <option value="new">New Referral</option>
                         <option value="contacted">Contacted</option>
                         <option value="appointment_booked">Appointment Booked</option>
@@ -125,13 +126,13 @@ export default function Referrals({ referrals }) {
                         <option value="not_proceeding">Not Proceeding</option>
                     </select>
                 </div>
-                <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)', textAlign: 'right' }}>
                     Showing {filteredReferrals.length} of {referrals.length} patient cases
                 </div>
             </div>
 
-            {/* Referrals List Table */}
-            <div className="glass-panel" style={{ padding: '0px' }}>
+            {/* Desktop Table View */}
+            <div className="glass-panel hidden-mobile" style={{ padding: '0px' }}>
                 <div className="table-container">
                     <table className="data-table">
                         <thead>
@@ -205,6 +206,75 @@ export default function Referrals({ referrals }) {
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            {/* Mobile Responsive Cards View */}
+            <div className="visible-mobile" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {filteredReferrals.length > 0 ? (
+                    filteredReferrals.map((referral) => (
+                        <div key={referral.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
+                                <div>
+                                    <div style={{ fontWeight: '700', fontSize: '15px' }}>{referral.patient_name}</div>
+                                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>📞 {referral.phone}</div>
+                                </div>
+                                <div>
+                                    {getStatusBadge(referral.status)}
+                                </div>
+                            </div>
+
+                            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '8px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '12px' }}>
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Referring Doctor</span>
+                                    <div style={{ fontWeight: '600' }}>
+                                        {referral.member.bds_registration_number ? `Dr. ${referral.member.name}` : referral.member.name}
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>ID: {referral.member.member_id}</div>
+                                </div>
+
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Condition & Urgency</span>
+                                    <div style={{ fontStyle: 'italic' }}>"{referral.medical_condition}"</div>
+                                    <span style={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', color: referral.urgency_level === 'critical' || referral.urgency_level === 'high' ? 'var(--color-danger)' : 'var(--text-muted)' }}>
+                                        {referral.urgency_level} urgency
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Commission</span>
+                                    <div style={{ fontWeight: '700' }}>${parseFloat(referral.commission_amount).toFixed(2)}</div>
+                                    <div>{getCommStatusBadge(referral.commission_status)}</div>
+                                </div>
+
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Last Updated</span>
+                                    <div style={{ color: 'var(--text-muted)' }}>{new Date(referral.updated_at).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+                                <button 
+                                    onClick={() => openStatusModal(referral)}
+                                    className="btn btn-primary"
+                                    style={{ flex: 1, padding: '8px', fontSize: '12px' }}
+                                >
+                                    Update Status
+                                </button>
+                                <button 
+                                    onClick={() => openCommissionModal(referral)}
+                                    className="btn btn-secondary"
+                                    style={{ flex: 1, padding: '8px', fontSize: '12px' }}
+                                >
+                                    Commission
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="glass-panel" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                        No referrals found matching your search.
+                    </div>
+                )}
             </div>
 
             {/* Modal: Update Referral Status */}
