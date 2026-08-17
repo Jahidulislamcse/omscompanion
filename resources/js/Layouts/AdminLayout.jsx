@@ -106,6 +106,15 @@ export default function AdminLayout({ children, title }) {
                                     <span>&#128221;</span> Page Content
                                 </Link>
                             </li>
+                            <li>
+                                <Link 
+                                    href={route('admin.profile')} 
+                                    className={`sidebar-link ${isCurrent('/admin/profile') ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>&#9881;</span> Profile Settings
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
                 </div>

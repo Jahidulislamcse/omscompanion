@@ -12,6 +12,7 @@ use App\Models\LandingSetting;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -376,5 +377,39 @@ class AdminController extends Controller
         }
 
         return redirect()->back()->with('success', 'Landing page settings updated successfully.');
+    }
+
+    public function profile()
+    {
+        return Inertia::render('Admin/Profile', [
+            'user' => Auth::user()
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        $updateData = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ];
+
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->password);
+            $updateData['raw_password'] = $request->password;
+        }
+
+        $user->update($updateData);
+
+        return redirect()->back()->with('success', 'Admin profile updated successfully.');
     }
 }

@@ -116,6 +116,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/videos/access-requests/{user}', [AdminController::class, 'updatePremiumAccess'])->name('admin.videos.access_requests.update');
     Route::get('/page-content', [AdminController::class, 'pageContent'])->name('admin.page_content');
     Route::post('/page-content', [AdminController::class, 'updatePageContent'])->name('admin.page_content.update');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
 });
 
 // Member Routes
