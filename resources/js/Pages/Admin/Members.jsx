@@ -185,7 +185,7 @@ export default function Members({ members }) {
             </div>
 
             {/* Mobile Responsive Cards View */}
-            <div className="visible-mobile" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="visible-mobile" style={{ flexDirection: 'column', gap: '12px' }}>
                 {filteredMembers.length > 0 ? (
                     filteredMembers.map((member) => (
                         <div key={member.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>

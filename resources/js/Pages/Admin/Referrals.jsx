@@ -200,7 +200,7 @@ export default function Referrals({ referrals }) {
             </div>
 
             {/* Mobile Responsive Cards View */}
-            <div className="visible-mobile" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="visible-mobile" style={{ flexDirection: 'column', gap: '12px' }}>
                 {filteredReferrals.length > 0 ? (
                     filteredReferrals.map((referral) => (
                         <div key={referral.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
