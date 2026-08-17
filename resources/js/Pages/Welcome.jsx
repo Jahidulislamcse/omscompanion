@@ -176,9 +176,8 @@ export default function Welcome({ settings, freeVideos }) {
                 </Link>
 
                 <nav className="landing-nav">
-                    <Link href="/" className="nav-link-item active-nav-item">Home</Link>
-                    <Link href={route('videos.public')} className="nav-link-item">Videos</Link>
-                    <a href="#faq" className="nav-link-item">FAQ</a>
+                    <Link href="/" className="nav-link-item active-nav-item">HOME</Link>
+                    <Link href={route('videos.public')} className="nav-link-item">VIDEOS</Link>
                     
                     {auth.user ? (
                         <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow">
