@@ -235,14 +235,13 @@ export default function Referrals({ referrals }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Timeline Transition Notes</label>
+                                <label className="form-label">Timeline Transition Notes (Optional)</label>
                                 <textarea 
                                     className="form-control"
                                     value={statusData.notes}
                                     onChange={e => setStatusData('notes', e.target.value)}
                                     rows="3"
-                                    placeholder="Enter comments about this status change (e.g., patient was called, treatment started successfully)..."
-                                    required
+                                    placeholder="Enter optional comments about this status change..."
                                 />
                             </div>
 
