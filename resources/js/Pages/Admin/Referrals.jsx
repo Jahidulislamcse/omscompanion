@@ -177,22 +177,13 @@ export default function Referrals({ referrals }) {
                                             </div>
                                         </td>
                                         <td style={{ textAlign: 'right' }}>
-                                            <div style={{ display: 'inline-flex', gap: '8px' }}>
-                                                <button 
-                                                    onClick={() => openStatusModal(referral)}
-                                                    className="btn btn-primary"
-                                                    style={{ padding: '6px 12px', fontSize: '12px' }}
-                                                >
-                                                    Update Status
-                                                </button>
-                                                <button 
-                                                    onClick={() => openCommissionModal(referral)}
-                                                    className="btn btn-secondary"
-                                                    style={{ padding: '6px 12px', fontSize: '12px' }}
-                                                >
-                                                    Commission
-                                                </button>
-                                            </div>
+                                            <button 
+                                                onClick={() => openStatusModal(referral)}
+                                                className="btn btn-primary"
+                                                style={{ padding: '6px 12px', fontSize: '12px' }}
+                                            >
+                                                Update Status
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
@@ -252,20 +243,13 @@ export default function Referrals({ referrals }) {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '8px', marginTop: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+                            <div style={{ marginTop: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
                                 <button 
                                     onClick={() => openStatusModal(referral)}
                                     className="btn btn-primary"
-                                    style={{ flex: 1, padding: '8px', fontSize: '12px' }}
+                                    style={{ width: '100%', padding: '8px', fontSize: '12px' }}
                                 >
                                     Update Status
-                                </button>
-                                <button 
-                                    onClick={() => openCommissionModal(referral)}
-                                    className="btn btn-secondary"
-                                    style={{ flex: 1, padding: '8px', fontSize: '12px' }}
-                                >
-                                    Commission
                                 </button>
                             </div>
                         </div>
