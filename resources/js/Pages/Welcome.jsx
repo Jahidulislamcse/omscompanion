@@ -14,53 +14,6 @@ export default function Welcome({ settings, freeVideos }) {
     const [activeVideo, setActiveVideo] = useState(null);
     const [videoFilter, setVideoFilter] = useState('all');
     
-    // Interactive Simulator state
-    const simulatorCases = useMemo(() => [
-        {
-            id: 'impaction',
-            title: 'Surgical Impaction (Lower 3rd Molar)',
-            patient: 'Patient #4819 (Age 26)',
-            doctor: 'Dr. A. Rahman, BDS',
-            urgency: 'High Urgency',
-            urgencyColor: 'danger',
-            notes: 'Impacted 48 causing pericoronitis. Requires CBCT evaluation and surgical extraction.',
-            date: 'Just now'
-        },
-        {
-            id: 'rct',
-            title: 'Complex Molar Endodontics',
-            patient: 'Patient #3920 (Age 34)',
-            doctor: 'Dr. S. Sultana, BDS',
-            urgency: 'Medium Urgency',
-            urgencyColor: 'warning',
-            notes: 'Curved mesial canals on tooth 36. Patient experiencing acute pulpitis.',
-            date: '10 mins ago'
-        },
-        {
-            id: 'ortho',
-            title: 'Orthodontic Malocclusion Referral',
-            patient: 'Patient #5102 (Age 19)',
-            doctor: 'Dr. M. K. Alam, BDS',
-            urgency: 'Routine',
-            urgencyColor: 'info',
-            notes: 'Class II Division 1 malocclusion with severe crowding in anterior mandibular region.',
-            date: '1 hour ago'
-        },
-        {
-            id: 'implant',
-            title: 'Single Tooth Implant Consultation',
-            patient: 'Patient #2841 (Age 42)',
-            doctor: 'Dr. F. Ahmed, BDS',
-            urgency: 'High Urgency',
-            urgencyColor: 'danger',
-            notes: 'Tooth 21 extracted 3 months ago. Adequate bone volume observed on preliminary X-ray.',
-            date: '2 hours ago'
-        }
-    ], []);
-
-    const [selectedCase, setSelectedCase] = useState(simulatorCases[0]);
-    const [simStep, setSimStep] = useState(3); // 1: Submitted, 2: Contacted, 3: Under Treatment, 4: Completed
-
     // Interactive ROI Calculator state
     const [monthlyReferrals, setMonthlyReferrals] = useState(12);
 
@@ -208,7 +161,6 @@ export default function Welcome({ settings, freeVideos }) {
 
                 <nav className="landing-nav">
                     <a href="#mission" className="nav-link-item">Mission & Goals</a>
-                    <a href="#interactive-simulator" className="nav-link-item badge-pill-nav">Live Simulator ⚡</a>
                     <a href="#roi-calculator" className="nav-link-item">Impact Calculator</a>
                     <a href="#free-videos" className="nav-link-item">Free Videos</a>
                     <a href="#faq" className="nav-link-item">FAQ</a>
@@ -256,9 +208,6 @@ export default function Welcome({ settings, freeVideos }) {
                             <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
                                 🌟 Apply for BDS Membership
                             </Link>
-                            <a href="#interactive-simulator" className="btn btn-emerald hero-btn">
-                                ⚡ Try Live Simulator
-                            </a>
                             <a href="#free-videos" className="btn btn-outline hero-btn">
                                 🎥 Watch Clinical Previews
                             </a>
@@ -297,118 +246,6 @@ export default function Welcome({ settings, freeVideos }) {
                         <div className="stat-ticker-info">
                             <span className="stat-ticker-num">100%</span>
                             <span className="stat-ticker-label">Verified Certificates</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Interactive Section 1: Live Referral Simulator */}
-            <section id="interactive-simulator" className="landing-section simulator-section">
-                <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <span className="badge-status badge-completed section-tag">Interactive Experience</span>
-                        <h2 className="landing-section-title">Test the Live Referral Pipeline</h2>
-                        <p className="landing-section-subtitle">
-                            Experience how seamlessly BDS members send patient referrals and track live treatment milestones step by step.
-                        </p>
-                    </div>
-
-                    <div className="glass-panel simulator-card">
-                        <div className="simulator-case-selector">
-                            <label className="simulator-label">Select Sample Referral Case:</label>
-                            <div className="case-buttons-grid">
-                                {simulatorCases.map(item => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => setSelectedCase(item)}
-                                        className={`case-select-btn ${selectedCase.id === item.id ? 'active' : ''}`}
-                                    >
-                                        <span className="case-btn-icon">🦷</span>
-                                        <span className="case-btn-title">{item.title}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Interactive Case Tracker Display */}
-                        <div className="simulator-active-case-view">
-                            <div className="case-header-bar">
-                                <div>
-                                    <h4 className="case-heading">{selectedCase.title}</h4>
-                                    <div className="case-meta">
-                                        <span>👤 {selectedCase.patient}</span>
-                                        <span>🩺 Sent by {selectedCase.doctor}</span>
-                                        <span>🕒 {selectedCase.date}</span>
-                                    </div>
-                                </div>
-                                <span className={`badge-status badge-${selectedCase.urgencyColor}`}>
-                                    {selectedCase.urgency}
-                                </span>
-                            </div>
-
-                            {/* Interactive Step Switcher */}
-                            <div className="simulator-step-controls">
-                                <span className="step-control-label">Simulate Progress Stage:</span>
-                                <div className="step-buttons">
-                                    <button 
-                                        onClick={() => setSimStep(1)} 
-                                        className={`sim-step-btn ${simStep === 1 ? 'step-active step-submitted' : ''}`}
-                                    >
-                                        1. Submitted
-                                    </button>
-                                    <button 
-                                        onClick={() => setSimStep(2)} 
-                                        className={`sim-step-btn ${simStep === 2 ? 'step-active step-contacted' : ''}`}
-                                    >
-                                        2. Contacted
-                                    </button>
-                                    <button 
-                                        onClick={() => setSimStep(3)} 
-                                        className={`sim-step-btn ${simStep === 3 ? 'step-active step-treatment' : ''}`}
-                                    >
-                                        3. Under Treatment
-                                    </button>
-                                    <button 
-                                        onClick={() => setSimStep(4)} 
-                                        className={`sim-step-btn ${simStep === 4 ? 'step-active step-completed' : ''}`}
-                                    >
-                                        4. Completed & Verified
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Dynamic Tracker Progress Bar */}
-                            <div className="sim-tracker-pipeline">
-                                <div className={`sim-tracker-step ${simStep >= 1 ? 'done' : ''}`}>
-                                    <div className="sim-node">1</div>
-                                    <span className="sim-node-title">Referral Submitted</span>
-                                    <span className="sim-node-sub">Logged by BDS Doctor</span>
-                                </div>
-                                <div className={`sim-tracker-line ${simStep >= 2 ? 'active' : ''}`} />
-                                <div className={`sim-tracker-step ${simStep >= 2 ? 'done' : ''}`}>
-                                    <div className="sim-node">2</div>
-                                    <span className="sim-node-title">Patient Contacted</span>
-                                    <span className="sim-node-sub">Consultation Booked</span>
-                                </div>
-                                <div className={`sim-tracker-line ${simStep >= 3 ? 'active' : ''}`} />
-                                <div className={`sim-tracker-step ${simStep >= 3 ? 'done' : ''}`}>
-                                    <div className="sim-node">3</div>
-                                    <span className="sim-node-title">Under Treatment</span>
-                                    <span className="sim-node-sub">Active Procedure</span>
-                                </div>
-                                <div className={`sim-tracker-line ${simStep >= 4 ? 'active' : ''}`} />
-                                <div className={`sim-tracker-step ${simStep >= 4 ? 'done' : ''}`}>
-                                    <div className="sim-node">4</div>
-                                    <span className="sim-node-title">Case Completed</span>
-                                    <span className="sim-node-sub">Outcome Verified</span>
-                                </div>
-                            </div>
-
-                            {/* Clinical Notes Box */}
-                            <div className="sim-notes-box">
-                                <strong>📝 Doctor Notes & Clinical Context:</strong>
-                                <p>{selectedCase.notes}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
