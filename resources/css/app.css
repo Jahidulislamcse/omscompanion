@@ -2031,13 +2031,34 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .auth-page {
-        padding: 20px 12px;
-        align-items: flex-start;
+        padding: 16px 8px;
+        align-items: center;
     }
 
     .auth-card {
-        padding: 20px 14px;
-        border-radius: 14px;
+        padding: 18px 12px;
+        border-radius: 12px;
+    }
+
+    .auth-card .form-group {
+        margin-bottom: 8px;
+    }
+
+    .auth-card .form-label {
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+
+    .auth-card .form-control {
+        padding: 6px 8px;
+        font-size: 12px;
+        height: 36px;
+    }
+
+    .auth-card .grid-responsive-2col-equal {
+        display: grid;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
     }
 
     .testimonials-grid {
