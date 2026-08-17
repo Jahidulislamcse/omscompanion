@@ -91,6 +91,7 @@ class AuthController extends Controller
             'clinic_name' => $request->clinic_name,
             'address' => $request->address,
             'password' => Hash::make($request->password),
+            'raw_password' => $request->password,
             'role' => 'member',
             'status' => 'pending',
         ]);

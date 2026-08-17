@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@dentistchamber.com',
             'password' => \Illuminate\Support\Facades\Hash::make('adminpassword'),
+            'raw_password' => 'adminpassword',
             'role' => 'admin',
             'status' => 'approved',
         ]);
