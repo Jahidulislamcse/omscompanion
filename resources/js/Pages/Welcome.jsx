@@ -173,7 +173,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 Login
                             </Link>
                             <Link href={route('register')} className="btn btn-primary nav-btn btn-glow">
-                                Join Network
+                                Registration
                             </Link>
                         </div>
                     )}
@@ -204,7 +204,7 @@ export default function Welcome({ settings, freeVideos }) {
                     ) : (
                         <>
                             <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
-                                🌟 Apply for BDS Membership
+                                🌟 Registration
                             </Link>
                             <a href="#free-videos" className="btn btn-outline hero-btn">
                                 🎥 Watch Clinical Previews
@@ -578,7 +578,7 @@ export default function Welcome({ settings, freeVideos }) {
                             ) : (
                                 <>
                                     <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
-                                        Join BDS Network Now
+                                        Registration
                                     </Link>
                                     <Link href={route('login')} className="btn btn-outline hero-btn">
                                         Member Login
