@@ -4,28 +4,40 @@ import AdminLayout from '@/Layouts/AdminLayout';
 
 export default function Members({ members }) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilter, setTypeFilter] = useState('all'); // 'all', 'doctors', 'storekeepers'
+    const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'pending', 'approved', 'rejected'
 
     const handleApprove = (userId) => {
-        if (confirm('Are you sure you want to approve this doctor membership?')) {
+        if (confirm('Are you sure you want to approve this membership application?')) {
             router.post(route('admin.members.approve', userId));
         }
     };
 
     const handleReject = (userId) => {
-        if (confirm('Are you sure you want to reject this doctor registration?')) {
+        if (confirm('Are you sure you want to reject this registration application?')) {
             router.post(route('admin.members.reject', userId));
         }
     };
 
-    // Filter members based on search
+    // Filter members based on search, type, and status
     const filteredMembers = members.filter(member => {
         const query = searchTerm.toLowerCase();
-        return (
-            member.name.toLowerCase().includes(query) ||
-            member.email.toLowerCase().includes(query) ||
+        const matchesSearch = 
+            (member.name || '').toLowerCase().includes(query) ||
+            (member.email || '').toLowerCase().includes(query) ||
+            (member.phone || '').toLowerCase().includes(query) ||
             (member.bds_registration_number && member.bds_registration_number.toLowerCase().includes(query)) ||
-            (member.clinic_name && member.clinic_name.toLowerCase().includes(query))
-        );
+            (member.clinic_name && member.clinic_name.toLowerCase().includes(query));
+            
+        const isDoctor = !!member.bds_registration_number;
+        const matchesType = 
+            typeFilter === 'all' || 
+            (typeFilter === 'doctors' && isDoctor) || 
+            (typeFilter === 'storekeepers' && !isDoctor);
+
+        const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
+
+        return matchesSearch && matchesType && matchesStatus;
     });
 
     const getStatusBadge = (status) => {
@@ -36,23 +48,55 @@ export default function Members({ members }) {
         }
     };
 
+    const getTypeBadge = (bdsReg) => {
+        if (bdsReg) {
+            return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ BDS Doctor</span>;
+        }
+        return <span className="badge-status badge-contacted" style={{ fontSize: '11px', padding: '2px 8px' }}>🏪 Storekeeper</span>;
+    };
+
     return (
         <AdminLayout title="Membership Management">
             <Head title="Membership Management" />
 
             {/* Filter Panel */}
-            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px' }}>
-                <div style={{ flexGrow: 1, maxWidth: '400px' }}>
+            <div className="glass-panel" style={{ display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '12px', flexGrow: 1, maxWidth: '750px', flexWrap: 'wrap' }}>
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by name, email, clinic or BDS registration number..."
+                        placeholder="Search by name, email, clinic or BDS reg number..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
+                        style={{ flexGrow: 1, minWidth: '220px' }}
                     />
+                    
+                    <select 
+                        className="form-control"
+                        style={{ maxWidth: '180px' }}
+                        value={typeFilter}
+                        onChange={e => setTypeFilter(e.target.value)}
+                    >
+                        <option value="all">All Member Types</option>
+                        <option value="doctors">👨‍⚕️ BDS Doctors</option>
+                        <option value="storekeepers">🏪 Storekeepers</option>
+                    </select>
+
+                    <select 
+                        className="form-control"
+                        style={{ maxWidth: '160px' }}
+                        value={statusFilter}
+                        onChange={e => setStatusFilter(e.target.value)}
+                    >
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
                 </div>
+
                 <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                    Showing {filteredMembers.length} of {members.length} registered members
+                    Showing {filteredMembers.length} of {members.length} members
                 </div>
             </div>
 
@@ -62,7 +106,7 @@ export default function Members({ members }) {
                     <table className="data-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Name & Role</th>
                                 <th>Email / Phone</th>
                                 <th>BDS Registration</th>
                                 <th>Clinic / Store Details</th>
@@ -79,15 +123,17 @@ export default function Members({ members }) {
                                             <div style={{ fontWeight: '700' }}>
                                                 {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
                                             </div>
-                                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Joined {new Date(member.created_at).toLocaleDateString()}</div>
+                                            <div style={{ marginTop: '4px' }}>
+                                                {getTypeBadge(member.bds_registration_number)}
+                                            </div>
                                         </td>
                                         <td>
-                                            <div>{member.email}</div>
+                                            <div>{member.email || 'N/A'}</div>
                                             <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{member.phone || 'N/A'}</div>
                                         </td>
                                         <td>
                                             <code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>
-                                                {member.bds_registration_number || 'N/A (Store Keeper)'}
+                                                {member.bds_registration_number || 'N/A (Storekeeper)'}
                                             </code>
                                         </td>
                                         <td>
@@ -131,7 +177,7 @@ export default function Members({ members }) {
                             ) : (
                                 <tr>
                                     <td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                                        No members found matching your search.
+                                        No members found matching your search or filters.
                                     </td>
                                 </tr>
                             )}
