@@ -134,9 +134,9 @@ export default function Index({ categories, videos }) {
             </header>
 
             {/* Main Content Area */}
-            <main className="landing-section" style={{ paddingTop: '120px', paddingBottom: '40px', flex: '1 0 auto' }}>
+            <main className="landing-section" style={{ paddingTop: '40px', paddingBottom: '30px', flex: '1 0 auto' }}>
                 <div className="landing-section-container">
-                    <div className="landing-section-header" style={{ marginBottom: '40px' }}>
+                    <div className="landing-section-header" style={{ marginBottom: '28px' }}>
                         <span className="badge-status badge-new section-tag">Video Library</span>
                         <h1 className="landing-section-title">Clinical Video Masterclasses</h1>
                         <p className="landing-section-subtitle">
