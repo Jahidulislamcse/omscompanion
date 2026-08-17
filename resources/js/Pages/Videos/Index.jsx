@@ -9,11 +9,15 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-export default function Index({ categories, videos }) {
+export default function Index({ categories, videos, settings = {} }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | 'unapproved' | null
     const [showScrollTop, setShowScrollTop] = useState(false);
+
+    const getSetting = (key, defaultValue = '') => {
+        return (settings && settings[key]) ? settings[key] : defaultValue;
+    };
 
     useEffect(() => {
         const handleScroll = () => {

@@ -68,9 +68,12 @@ class PublicVideoController extends Controller
             ]);
         }
 
+        $settings = \App\Models\LandingSetting::all()->pluck('value', 'key')->toArray();
+
         return Inertia::render('Videos/Index', [
             'categories' => $categories,
             'videos' => $allVideos,
+            'settings' => $settings,
         ]);
     }
 }
