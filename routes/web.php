@@ -53,6 +53,9 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+// Public Videos Page
+Route::get('/videos', [\App\Http\Controllers\PublicVideoController::class, 'index'])->name('videos.public');
+
 // Public Video Stream (No Auth)
 Route::get('/videos/stream/public/{video}', [VideoStreamingController::class, 'publicStream'])->name('videos.public_stream');
 

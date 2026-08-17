@@ -12,6 +12,7 @@ export function getYouTubeId(url) {
 export default function Welcome({ settings, freeVideos }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
+    const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | 'unapproved' | null
     const [simStep, setSimStep] = useState(3); // 1: Submitted, 2: Contacted, 3: Treatment, 4: Completed
     const [videoFilter, setVideoFilter] = useState('all');
 
@@ -79,6 +80,18 @@ export default function Welcome({ settings, freeVideos }) {
             }
         }
         return url;
+    };
+
+    const handleVideoClick = (video) => {
+        if (!auth.user) {
+            setAccessBlockedReason('unauthenticated');
+            return;
+        }
+        if (auth.user.role !== 'admin' && auth.user.status !== 'approved') {
+            setAccessBlockedReason('unapproved');
+            return;
+        }
+        setActiveVideo(video);
     };
 
     // Filtered videos based on tab selection
@@ -158,7 +171,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </Link>
 
                 <nav className="landing-nav">
-                    <a href="#free-videos" className="nav-link-item">Videos</a>
+                    <Link href={route('videos.public')} className="nav-link-item">Videos</Link>
                     <a href="#faq" className="nav-link-item">FAQ</a>
                     
                     {auth.user ? (
@@ -326,7 +339,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             </section>
 
-            {/* Videos Section with Filter Tabs */}
+            {/* Videos Section */}
             <section id="free-videos" className="landing-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
@@ -335,38 +348,19 @@ export default function Welcome({ settings, freeVideos }) {
                         <p className="landing-section-subtitle">
                             Explore clinical guides, surgical technique walkthroughs, and platform overviews.
                         </p>
-
-                        {/* Interactive Filter Tabs */}
-                        <div className="video-filter-tabs">
-                            <button 
-                                onClick={() => setVideoFilter('all')} 
-                                className={`filter-tab ${videoFilter === 'all' ? 'active' : ''}`}
-                            >
-                                All Videos ({freeVideos.length})
-                            </button>
-                            <button 
-                                onClick={() => setVideoFilter('clinical')} 
-                                className={`filter-tab ${videoFilter === 'clinical' ? 'active' : ''}`}
-                            >
-                                💉 Clinical Tutorials
-                            </button>
-                            <button 
-                                onClick={() => setVideoFilter('platform')} 
-                                className={`filter-tab ${videoFilter === 'platform' ? 'active' : ''}`}
-                            >
-                                💻 Platform Guides
-                            </button>
-                        </div>
                     </div>
 
                     <div className="video-grid free-video-grid">
-                        {filteredVideos.map(vid => {
+                        {freeVideos.map(vid => {
                             const ytId = getYouTubeId(vid.video_path);
+                            const isLocked = !auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved');
+
                             return (
                                 <div key={vid.id} className="glass-panel video-card colorful-video-card">
                                     <div 
-                                        onClick={() => setActiveVideo(vid)}
+                                        onClick={() => handleVideoClick(vid)}
                                         className="video-thumbnail free-video-thumb"
+                                        style={{ cursor: 'pointer' }}
                                     >
                                         {ytId ? (
                                             <img 
@@ -376,22 +370,49 @@ export default function Welcome({ settings, freeVideos }) {
                                             />
                                         ) : null}
                                         <div className="thumb-overlay">
-                                            <div className="play-button-glow">
-                                                <span className="play-icon">▶</span>
-                                            </div>
-                                            <span className="play-label">Watch Video</span>
+                                            {isLocked ? (
+                                                <>
+                                                    <div className="play-button-glow" style={{ background: 'rgba(239, 68, 68, 0.25)', borderColor: '#ef4444' }}>
+                                                        <span className="play-icon" style={{ fontSize: '18px' }}>🔒</span>
+                                                    </div>
+                                                    <span className="play-label" style={{ color: '#fca5a5' }}>
+                                                        {!auth.user ? "Register to Unlock" : "Approval Required"}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="play-button-glow">
+                                                        <span className="play-icon">▶</span>
+                                                    </div>
+                                                    <span className="play-label">Watch Video</span>
+                                                </>
+                                            )}
                                         </div>
                                         <span className="video-duration">{formatDuration(vid.duration)}</span>
                                     </div>
 
                                     <div className="video-info free-video-info">
-                                        <span className="video-tag badge-tag-glow">Video Guide</span>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                            <span className="video-tag badge-tag-glow">Video Guide</span>
+                                            {isLocked && (
+                                                <span style={{ fontSize: '11px', fontWeight: '700', color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
+                                                    Protected
+                                                </span>
+                                            )}
+                                        </div>
                                         <h4 className="video-title">{vid.title}</h4>
                                         <p className="video-desc">{vid.description}</p>
                                     </div>
                                 </div>
                             );
                         })}
+                    </div>
+
+                    {/* More Videos Button */}
+                    <div style={{ textAlign: 'center', marginTop: '36px' }}>
+                        <Link href={route('videos.public')} className="btn btn-secondary hero-btn btn-gold-glow">
+                            🎬 More Videos →
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -462,6 +483,48 @@ export default function Welcome({ settings, freeVideos }) {
                     </div>
                 </div>
             </section>
+
+            {/* Access Blocked Modal (Unauthenticated or Unapproved) */}
+            {accessBlockedReason && (
+                <div className="modal-wrapper" onClick={() => setAccessBlockedReason(null)}>
+                    <div className="glass-panel modal-card modal-card-colorful" style={{ maxWidth: '480px', padding: '32px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
+                        <div style={{ fontSize: '48px', marginBottom: '16px' }}>
+                            {accessBlockedReason === 'unauthenticated' ? '🔒' : '⏳'}
+                        </div>
+                        <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '10px', color: 'var(--text-main)' }}>
+                            {accessBlockedReason === 'unauthenticated' ? 'Registration Required' : 'Approval Pending'}
+                        </h3>
+                        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '24px' }}>
+                            {accessBlockedReason === 'unauthenticated'
+                                ? 'Clinical video masterclasses are strictly reserved for verified BDS Practitioners. Please register or login to your account to watch.'
+                                : 'Your BDS Doctor membership is currently pending admin approval. Access to full clinical video streams will unlock as soon as your account is approved.'
+                            }
+                        </p>
+                        
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                            {accessBlockedReason === 'unauthenticated' ? (
+                                <>
+                                    <Link href={route('register')} className="btn btn-primary hero-btn btn-glow">
+                                        🌟 Registration
+                                    </Link>
+                                    <Link href={route('login')} className="btn btn-outline hero-btn">
+                                        Login
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Link href={getDashboardRoute()} className="btn btn-primary hero-btn btn-glow">
+                                        Go to Dashboard
+                                    </Link>
+                                    <button onClick={() => setAccessBlockedReason(null)} className="btn btn-outline hero-btn">
+                                        Close
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Video Player Modal */}
             {activeVideo && (
