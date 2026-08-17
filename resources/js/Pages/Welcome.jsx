@@ -11,6 +11,7 @@ export function getYouTubeId(url) {
 
 export default function Welcome({ settings, freeVideos }) {
     const { auth, site_name } = usePage().props;
+    const [activeVideo, setActiveVideo] = useState(null);
     const [simStep, setSimStep] = useState(3); // 1: Submitted, 2: Contacted, 3: Treatment, 4: Completed
     const [videoFilter, setVideoFilter] = useState('all');
 
