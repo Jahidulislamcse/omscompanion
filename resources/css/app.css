@@ -1817,11 +1817,15 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
     .landing-header {
+        position: sticky;
+        top: 8px;
+        z-index: 1000;
         flex-direction: row;
         justify-content: space-between;
-        padding: 10px 15px;
+        padding: 10px 14px;
         width: 95%;
-        margin: 10px auto;
+        margin: 8px auto;
+        border-radius: 12px;
     }
 
     .landing-logo {
@@ -1830,7 +1834,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .landing-nav {
-        gap: 10px;
+        gap: 8px;
     }
 
     .landing-auth-buttons {
@@ -1838,28 +1842,90 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .nav-btn {
-        padding: 6px 10px;
+        padding: 7px 12px;
         font-size: 12px;
+        font-weight: 700;
     }
 
     .landing-nav a:not(.btn) {
         display: none;
     }
     
+    .landing-hero {
+        padding: 32px 16px 24px;
+    }
+
     .landing-hero-title {
-        font-size: 32px;
+        font-size: 26px !important;
+        line-height: 1.25;
     }
     
     .landing-hero-desc {
-        font-size: 15px;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .landing-hero-ctas {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .hero-btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 12px 18px;
+        font-size: 14px;
+    }
+
+    .hero-stats-ticker {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .stat-ticker-card {
+        padding: 12px 10px;
+        gap: 8px;
+    }
+
+    .stat-icon-wrapper {
+        font-size: 20px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .stat-ticker-num {
+        font-size: 18px;
+    }
+
+    .stat-ticker-label {
+        font-size: 11px;
+    }
+
+    .simple-pipeline-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .simple-pipeline-card {
+        padding: 20px 16px;
+    }
+
+    .pipeline-header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
     
     .landing-section {
-        padding: 50px 15px;
+        padding: 40px 15px;
     }
     
     .landing-section-title {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .free-video-grid {
@@ -1869,11 +1935,33 @@ h1, h2, h3, h4, h5, h6 {
     .video-grid {
         grid-template-columns: 1fr;
     }
+
+    .cta-banner-card {
+        padding: 28px 18px;
+    }
+
+    .cta-title {
+        font-size: 22px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
     .landing-header {
+        top: 6px;
         padding: 8px 10px;
+        width: 96%;
     }
 
     .landing-logo {
@@ -1886,9 +1974,13 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .nav-btn {
-        padding: 4px 6px;
-        font-size: 11px;
+        padding: 6px 10px;
+        font-size: 12px;
         letter-spacing: 0;
+    }
+
+    .hero-stats-ticker {
+        grid-template-columns: 1fr;
     }
 }
 
