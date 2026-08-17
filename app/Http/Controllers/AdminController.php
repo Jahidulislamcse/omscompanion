@@ -83,8 +83,20 @@ class AdminController extends Controller
 
         // Send notifications
         $prefix = !empty($user->bds_registration_number) ? 'Dr. ' : '';
-        $subject = "Membership Approved - dentist chamber";
-        $message = "Dear {$prefix}{$user->name},\n\nYour membership application has been approved! Your unique Member ID is {$memberId}. You can now log into your dashboard using your registered credentials.\n\nBest Regards,\nDentistChamber Team";
+        $userEmail = $user->email ?? 'N/A';
+        $userPhone = $user->phone ?? 'N/A';
+        $userPassword = $user->raw_password ?? '(Registered password)';
+
+        $subject = "Membership Approved - Your Dentist Chamber Credentials";
+        $message = "Dear {$prefix}{$user->name},\n\n"
+            . "Your membership application has been approved! Your unique Member ID is {$memberId}.\n\n"
+            . "Account Credentials:\n"
+            . "Email: {$userEmail}\n"
+            . "Phone: {$userPhone}\n"
+            . "Password: {$userPassword}\n\n"
+            . "You can now log into your dashboard using your credentials.\n\n"
+            . "Best Regards,\n"
+            . "DentistChamber Team";
         
         NotificationService::send($user, $subject, $message, 'both');
 

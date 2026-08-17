@@ -21,7 +21,7 @@ class NotificationService
             'message' => $message,
         ]);
 
-        // 2. Simulate Email Dispatch
+        // 2. Dispatch Email
         if ($type === 'email' || $type === 'both') {
             Log::info("=================================================");
             Log::info("[EMAIL NOTIFICATION DISPATCHED]");
@@ -29,6 +29,17 @@ class NotificationService
             Log::info("Subject: {$title}");
             Log::info("Message: {$message}");
             Log::info("=================================================");
+
+            if (!empty($user->email)) {
+                try {
+                    \Illuminate\Support\Facades\Mail::raw($message, function ($mail) use ($user, $title) {
+                        $mail->to($user->email, $user->name)
+                            ->subject($title);
+                    });
+                } catch (\Throwable $e) {
+                    Log::error("Failed to send real email: " . $e->getMessage());
+                }
+            }
         }
 
         // 3. Simulate SMS Dispatch
