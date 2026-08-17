@@ -48,9 +48,7 @@ export default function Dashboard({ stats }) {
                         Currently active patient status timelines
                     </div>
                 </div>
-            </div>
 
-            <div className="dashboard-grid" style={{ marginTop: '24px' }}>
                 <div className="glass-panel stat-card">
                     <span className="stat-title">Completed Treatments</span>
                     <div className="stat-value" style={{ color: 'var(--color-success)' }}>
@@ -58,26 +56,6 @@ export default function Dashboard({ stats }) {
                     </div>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                         Successfully completed dental treatments
-                    </div>
-                </div>
-
-                <div className="glass-panel stat-card" style={{ borderLeft: '4px solid var(--color-warning)' }}>
-                    <span className="stat-title">Pending Commissions</span>
-                    <div className="stat-value" style={{ color: 'var(--color-warning)' }}>
-                        ${stats.pending_commissions.toFixed(2)}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                        Commissions declared but unpaid
-                    </div>
-                </div>
-
-                <div className="glass-panel stat-card" style={{ borderLeft: '4px solid var(--color-success)' }}>
-                    <span className="stat-title">Paid Commissions</span>
-                    <div className="stat-value" style={{ color: 'var(--color-success)' }}>
-                        ${stats.paid_commissions.toFixed(2)}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                        Commissions paid out to members
                     </div>
                 </div>
 
