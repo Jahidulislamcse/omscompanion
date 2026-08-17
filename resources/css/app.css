@@ -693,30 +693,39 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .landing-header {
-    margin: 20px auto;
+    position: sticky;
+    top: 15px;
+    margin: 15px auto;
     width: 95%;
     max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+    padding: 14px 30px;
     border-radius: var(--radius-md);
-    z-index: 10;
+    z-index: 9999;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
 .header-sticky {
     position: sticky;
     top: 15px;
-    z-index: 100;
+    z-index: 9999;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.92);
     border: 1px solid rgba(229, 231, 235, 0.9);
 }
 
+[data-theme="dark"] .landing-header,
 [data-theme="dark"] .header-sticky {
-    background: rgba(15, 30, 37, 0.88);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(15, 30, 37, 0.92);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
 }
 
 .landing-brand-link {
@@ -738,19 +747,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .landing-nav {
     display: flex;
-    gap: 24px;
+    gap: 28px;
     align-items: center;
 }
 
 .nav-link-item {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     color: var(--text-muted);
     transition: var(--transition-smooth);
 }
 
-.nav-link-item:hover {
-    color: var(--color-cyan);
+.nav-link-item:hover,
+.nav-link-item.active-nav-item {
+    color: var(--accent-gold);
 }
 
 .badge-pill-nav {
