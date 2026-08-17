@@ -131,7 +131,7 @@ class MemberController extends Controller
         $member = Auth::user();
         $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
         $subject = "Referral Submitted: {$referral->patient_name}";
-        $message = "Dear {$prefix}{$member->name},\n\nYour patient referral for {$referral->patient_name} has been successfully submitted. You can track this case live in your referral history dashboard.\n\nBest Regards,\nDentistChamber Team";
+        $message = "Dear {$prefix}{$member->name},\n\nYour patient referral for {$referral->patient_name} has been successfully submitted. You can track this case live in your referral history dashboard.\n\nBest Regards,\nOMSCOMPANION Team";
         
         NotificationService::send($member, $subject, $message, 'both');
 

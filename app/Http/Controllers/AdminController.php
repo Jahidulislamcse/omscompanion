@@ -87,7 +87,7 @@ class AdminController extends Controller
         $userPhone = $user->phone ?? 'N/A';
         $userPassword = $user->raw_password ?? '(Registered password)';
 
-        $subject = "Membership Approved - Your Dentist Chamber Credentials";
+        $subject = "Membership Approved - Your OMSCOMPANION Credentials";
         $message = "Dear {$prefix}{$user->name},\n\n"
             . "Your membership application has been approved! Your unique Member ID is {$memberId}.\n\n"
             . "Account Credentials:\n"
@@ -96,7 +96,7 @@ class AdminController extends Controller
             . "Password: {$userPassword}\n\n"
             . "You can now log into your dashboard using your credentials.\n\n"
             . "Best Regards,\n"
-            . "DentistChamber Team";
+            . "OMSCOMPANION Team";
         
         NotificationService::send($user, $subject, $message, 'both');
 
@@ -116,7 +116,7 @@ class AdminController extends Controller
         // Send notification
         $prefix = !empty($user->bds_registration_number) ? 'Dr. ' : '';
         $subject = "Membership Application Update";
-        $message = "Dear {$prefix}{$user->name},\n\nWe regret to inform you that your membership application could not be approved at this time. If you have questions, please contact support.\n\nBest Regards,\nDentistChamber Team";
+        $message = "Dear {$prefix}{$user->name},\n\nWe regret to inform you that your membership application could not be approved at this time. If you have questions, please contact support.\n\nBest Regards,\nOMSCOMPANION Team";
         
         NotificationService::send($user, $subject, $message, 'email');
 
@@ -170,7 +170,7 @@ class AdminController extends Controller
             ];
 
             $subject = "Patient Referral Status Update: {$referral->patient_name}";
-            $message = "Dear {$prefix}{$member->name},\n\nThe status of your referred patient, {$referral->patient_name}, has been updated to: \"{$statusLabels[$newStatus]}\".\nNotes: " . ($request->notes ?: 'None') . "\n\nTrack progress on your live case tracker dashboard.\n\nBest Regards,\nDentistChamber Team";
+            $message = "Dear {$prefix}{$member->name},\n\nThe status of your referred patient, {$referral->patient_name}, has been updated to: \"{$statusLabels[$newStatus]}\".\nNotes: " . ($request->notes ?: 'None') . "\n\nTrack progress on your live case tracker dashboard.\n\nBest Regards,\nOMSCOMPANION Team";
             
             NotificationService::send($member, $subject, $message, 'both');
         }
@@ -199,7 +199,7 @@ class AdminController extends Controller
             $member = $referral->member;
             $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
             $subject = "Commission Payment Approved: {$referral->patient_name}";
-            $message = "Dear {$prefix}{$member->name},\n\nWe have processed your referral commission payment of {$amount} USD for patient {$referral->patient_name}.\nStatus: Paid.\n\nThank you for your referral.\n\nBest Regards,\nDentistChamber Team";
+            $message = "Dear {$prefix}{$member->name},\n\nWe have processed your referral commission payment of {$amount} USD for patient {$referral->patient_name}.\nStatus: Paid.\n\nThank you for your referral.\n\nBest Regards,\nOMSCOMPANION Team";
             
             NotificationService::send($member, $subject, $message, 'both');
         }
@@ -238,10 +238,10 @@ class AdminController extends Controller
 
         if ($request->status === 'approved') {
             $subject = "Premium Videos Access Approved!";
-            $message = "Dear {$prefix}{$user->name},\n\nWe are pleased to inform you that your request to access our Premium Video Library has been APPROVED by the admin. You can now stream all premium clinical tutorials under the \"Premium Videos\" section.\n\nBest Regards,\nDentistChamber Team";
+            $message = "Dear {$prefix}{$user->name},\n\nWe are pleased to inform you that your request to access our Premium Video Library has been APPROVED by the admin. You can now stream all premium clinical tutorials under the \"Premium Videos\" section.\n\nBest Regards,\nOMSCOMPANION Team";
         } else {
             $subject = "Premium Videos Access Request Update";
-            $message = "Dear {$prefix}{$user->name},\n\nYour request for access to our Premium Video Library has been rejected.\n\nBest Regards,\nDentistChamber Team";
+            $message = "Dear {$prefix}{$user->name},\n\nYour request for access to our Premium Video Library has been rejected.\n\nBest Regards,\nOMSCOMPANION Team";
         }
 
         NotificationService::send($user, $subject, $message, 'both');
@@ -288,7 +288,7 @@ class AdminController extends Controller
         // Notify members about new video
         $typeLabel = $video->is_free ? 'Free Preview' : 'Premium';
         $title = "New {$typeLabel} YouTube Video: {$video->title}";
-        $message = "Dear Member,\n\nA new educational video has been added to our library: \"{$video->title}\" ({$typeLabel}).\nDescription: {$video->description}\n\nLog in now to stream it.\n\nBest Regards,\nDentistChamber Team";
+        $message = "Dear Member,\n\nA new educational video has been added to our library: \"{$video->title}\" ({$typeLabel}).\nDescription: {$video->description}\n\nLog in now to stream it.\n\nBest Regards,\nOMSCOMPANION Team";
         
         NotificationService::broadcastToMembers($title, $message);
 
