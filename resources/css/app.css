@@ -1848,7 +1848,10 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .landing-nav a:not(.btn) {
-        display: none;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 4px;
     }
     
     .landing-hero {

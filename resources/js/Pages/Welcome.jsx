@@ -176,6 +176,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </Link>
 
                 <nav className="landing-nav">
+                    <Link href="/" className="nav-link-item active-nav-item">Home</Link>
                     <Link href={route('videos.public')} className="nav-link-item">Videos</Link>
                     <a href="#faq" className="nav-link-item">FAQ</a>
                     

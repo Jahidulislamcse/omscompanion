@@ -115,6 +115,7 @@ export default function Index({ categories, videos }) {
                 <nav className="landing-nav">
                     <Link href="/" className="nav-link-item">Home</Link>
                     <Link href={route('videos.public')} className="nav-link-item active-nav-item">Videos</Link>
+                    <a href="/#faq" className="nav-link-item">FAQ</a>
                     
                     {auth.user ? (
                         <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow">
