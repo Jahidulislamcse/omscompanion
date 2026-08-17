@@ -158,27 +158,6 @@ export default function Index({ categories, videos }) {
                             High-definition surgical technique walkthroughs, clinical protocols, and platform operational guides for BDS Practitioners.
                         </p>
 
-                        {/* Interactive Filter Tabs */}
-                        <div className="video-filter-tabs" style={{ marginTop: '20px' }}>
-                            <button 
-                                onClick={() => setVideoFilter('all')} 
-                                className={`filter-tab ${videoFilter === 'all' ? 'active' : ''}`}
-                            >
-                                All Videos ({videos.length})
-                            </button>
-                            <button 
-                                onClick={() => setVideoFilter('clinical')} 
-                                className={`filter-tab ${videoFilter === 'clinical' ? 'active' : ''}`}
-                            >
-                                💉 Clinical Tutorials
-                            </button>
-                            <button 
-                                onClick={() => setVideoFilter('platform')} 
-                                className={`filter-tab ${videoFilter === 'platform' ? 'active' : ''}`}
-                            >
-                                💻 Platform Guides
-                            </button>
-                        </div>
                     </div>
 
                     {/* Lock Access Status Alert Banner for Unauthenticated or Unapproved Users */}
@@ -228,7 +207,7 @@ export default function Index({ categories, videos }) {
 
                     {/* Video Cards Grid */}
                     <div className="video-grid free-video-grid">
-                        {filteredVideos.map(vid => {
+                        {videos.map(vid => {
                             const ytId = getYouTubeId(vid.video_path);
                             const isLocked = !auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved');
 
