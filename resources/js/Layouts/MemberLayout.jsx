@@ -54,15 +54,6 @@ export default function MemberLayout({ children, title }) {
                         <ul className="sidebar-menu">
                             <li>
                                 <Link 
-                                    href={route('home')} 
-                                    className={`sidebar-link ${window.location.pathname === '/' ? 'active' : ''}`}
-                                    onClick={() => setIsMobileOpen(false)}
-                                >
-                                    <span>&#127960;</span> Go to Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link 
                                     href={route('member.dashboard')} 
                                     className={`sidebar-link ${window.location.pathname === '/member/dashboard' ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
@@ -104,6 +95,15 @@ export default function MemberLayout({ children, title }) {
                                     onClick={() => setIsMobileOpen(false)}
                                 >
                                     <span>&#128101;</span> My Profile
+                                </Link>
+                            </li>
+                            <li>
+                                <Link 
+                                    href={route('home')} 
+                                    className={`sidebar-link ${window.location.pathname === '/' ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>&#127960;</span> Go to Home
                                 </Link>
                             </li>
                         </ul>
