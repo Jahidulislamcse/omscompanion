@@ -754,6 +754,8 @@ h1, h2, h3, h4, h5, h6 {
 .nav-link-item {
     font-size: 17px;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-muted);
     transition: var(--transition-smooth);
 }
@@ -1895,9 +1897,10 @@ h1, h2, h3, h4, h5, h6 {
 
     .landing-nav a:not(.btn) {
         display: inline-block;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
-        padding: 1px 3px;
+        text-transform: uppercase;
+        padding: 2px 4px;
     }
     
     .landing-hero {
