@@ -83,6 +83,11 @@ export default function Welcome({ settings, freeVideos }) {
     };
 
     const handleVideoClick = (video) => {
+        // Free preview videos require no login
+        if (video.is_free) {
+            setActiveVideo(video);
+            return;
+        }
         if (!auth.user) {
             setAccessBlockedReason('unauthenticated');
             return;
@@ -353,7 +358,7 @@ export default function Welcome({ settings, freeVideos }) {
                     <div className="video-grid free-video-grid">
                         {freeVideos.map(vid => {
                             const ytId = getYouTubeId(vid.video_path);
-                            const isLocked = !auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved');
+                            const isLocked = !vid.is_free && (!auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved'));
 
                             return (
                                 <div key={vid.id} className="glass-panel video-card colorful-video-card">
