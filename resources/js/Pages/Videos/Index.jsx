@@ -349,6 +349,34 @@ export default function Index({ categories, videos }) {
                 </div>
             )}
 
+            {/* Call To Action Banner */}
+            <section className="cta-banner-section" style={{ paddingBottom: '60px' }}>
+                <div className="landing-section-container">
+                    <div className="glass-panel cta-banner-card">
+                        <h2 className="cta-title">Ready to Elevate Your Dental Practice?</h2>
+                        <p className="cta-desc">
+                            Join hundreds of BDS Doctors using {site_name || 'DentistChamber'} for transparent referral tracking, clinical video masterclasses, and verified digital certificates.
+                        </p>
+                        <div className="cta-buttons">
+                            {auth.user ? (
+                                <Link href={getDashboardRoute()} className="btn btn-secondary hero-btn btn-gold-glow">
+                                    Open Your Dashboard
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
+                                        🌟 Registration
+                                    </Link>
+                                    <Link href={route('login')} className="btn btn-outline hero-btn">
+                                        Member Login
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Footer */}
             <footer className="landing-footer">
                 <div className="footer-container">
