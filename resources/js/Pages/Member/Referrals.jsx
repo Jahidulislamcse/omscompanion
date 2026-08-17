@@ -202,16 +202,17 @@ export default function Referrals({ referrals = [] }) {
                     position: 'fixed', 
                     top: 0, 
                     left: 0, 
-                    right: 0, 
-                    bottom: 0, 
+                    width: '100vw',
+                    height: '100vh',
                     backgroundColor: 'rgba(0,0,0,0.65)', 
                     display: 'flex', 
-                    justify: 'center', 
+                    justifyContent: 'center', 
                     alignItems: 'center', 
-                    zIndex: 1000,
-                    padding: '20px'
+                    zIndex: 99999,
+                    padding: '20px',
+                    boxSizing: 'border-box'
                 }}>
-                    <div className="glass-panel" style={{ width: '100%', maxWidth: '540px', backgroundColor: 'var(--bg-main)', maxHeight: '90vh', overflowY: 'auto' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '540px', backgroundColor: 'var(--bg-main)', maxHeight: '90vh', overflowY: 'auto', margin: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
                             <h3 style={{ margin: 0 }}>Submit Patient Referral</h3>
                             <button 

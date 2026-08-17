@@ -209,8 +209,8 @@ export default function Referrals({ referrals }) {
 
             {/* Modal: Update Referral Status */}
             {activeReferralForStatus && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100 }}>
-                    <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', backgroundColor: 'var(--bg-main)' }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.65)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 99999, padding: '20px', boxSizing: 'border-box' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', backgroundColor: 'var(--bg-main)', margin: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center' }}>
                             <h3 style={{ margin: 0 }}>Update Status: {activeReferralForStatus.patient_name}</h3>
                             <button onClick={() => setActiveReferralForStatus(null)} className="btn btn-outline" style={{ padding: '4px 8px' }}>X</button>
@@ -258,8 +258,8 @@ export default function Referrals({ referrals }) {
 
             {/* Modal: Update Commission */}
             {activeReferralForCommission && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100 }}>
-                    <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', backgroundColor: 'var(--bg-main)' }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.65)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 99999, padding: '20px', boxSizing: 'border-box' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', backgroundColor: 'var(--bg-main)', margin: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center' }}>
                             <h3 style={{ margin: 0 }}>Commission Setup: {activeReferralForCommission.patient_name}</h3>
                             <button onClick={() => setActiveReferralForCommission(null)} className="btn btn-outline" style={{ padding: '4px 8px' }}>X</button>
