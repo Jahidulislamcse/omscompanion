@@ -32,11 +32,20 @@ class AdminController extends Controller
         $totalCategories = VideoCategory::count();
         $totalVideos = Video::count();
 
-        // Calculate some simple video views placeholder or log stats
-        $videoStats = [
-            'total_categories' => $totalCategories,
-            'total_videos' => $totalVideos,
-        ];
+        // Real Monthly Referral Volume (Last 6 Months)
+        $monthlyVolume = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $count = PatientReferral::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+            
+            $monthlyVolume[] = [
+                'month' => $date->format('M'),
+                'year' => $date->year,
+                'count' => $count,
+            ];
+        }
 
         return Inertia::render('Admin/Dashboard', [
             'stats' => [
@@ -48,6 +57,7 @@ class AdminController extends Controller
                 'pending_commissions' => floatval($pendingCommissions),
                 'paid_commissions' => floatval($paidCommissions),
                 'video_stats' => $videoStats,
+                'monthly_referral_volume' => $monthlyVolume,
             ]
         ]);
     }

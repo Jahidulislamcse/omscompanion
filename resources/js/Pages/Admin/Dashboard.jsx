@@ -94,39 +94,46 @@ export default function Dashboard({ stats }) {
 
             {/* Graphics & Charts Container */}
             <div className="glass-panel" style={{ marginTop: '24px' }}>
-                <h3 style={{ marginBottom: '20px' }}>Monthly Referral Volume (Simulated)</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <h3 style={{ margin: 0 }}>Monthly Referral Volume</h3>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '600' }}>Real Database Records</div>
+                </div>
                 
                 {/* SVG Visual Chart */}
-                <div style={{ width: '100%', height: '220px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '10px 40px', position: 'relative' }}>
-                    
-                    {/* Y-Axis Guidlines */}
-                    <div style={{ position: 'absolute', left: 0, bottom: '20%', width: '100%', borderBottom: '1px dashed var(--border-color)', pointerEvents: 'none' }}></div>
-                    <div style={{ position: 'absolute', left: 0, bottom: '50%', width: '100%', borderBottom: '1px dashed var(--border-color)', pointerEvents: 'none' }}></div>
-                    <div style={{ position: 'absolute', left: 0, bottom: '80%', width: '100%', borderBottom: '1px dashed var(--border-color)', pointerEvents: 'none' }}></div>
-                    
-                    {/* Bars */}
-                    {[
-                        { month: 'Jan', val: 45 },
-                        { month: 'Feb', val: 62 },
-                        { month: 'Mar', val: 78 },
-                        { month: 'Apr', val: 56 },
-                        { month: 'May', val: 89 },
-                        { month: 'Jun', val: 110 },
-                        { month: 'Jul', val: stats.total_referrals ? stats.total_referrals * 10 : 95 }
-                    ].map((item, idx) => (
-                        <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', zIndex: 1, width: '8%' }}>
-                            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>{item.val}</div>
-                            <div style={{ 
-                                width: '100%', 
-                                height: `${(item.val / 120) * 140}px`, 
-                                background: 'linear-gradient(to top, var(--accent-teal), var(--accent-gold))', 
-                                borderRadius: '4px 4px 0 0',
-                                transition: 'var(--transition-smooth)'
-                            }}></div>
-                            <div style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-muted)' }}>{item.month}</div>
-                        </div>
-                    ))}
-                </div>
+                {stats.monthly_referral_volume && stats.monthly_referral_volume.length > 0 ? (
+                    <div style={{ width: '100%', height: '220px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', padding: '10px 20px', position: 'relative' }}>
+                        
+                        {/* Y-Axis Guidelines */}
+                        <div style={{ position: 'absolute', left: 0, bottom: '20%', width: '100%', borderBottom: '1px dashed var(--border-color)', pointerEvents: 'none' }}></div>
+                        <div style={{ position: 'absolute', left: 0, bottom: '50%', width: '100%', borderBottom: '1px dashed var(--border-color)', pointerEvents: 'none' }}></div>
+                        <div style={{ position: 'absolute', left: 0, bottom: '80%', width: '100%', borderBottom: '1px dashed var(--border-color)', pointerEvents: 'none' }}></div>
+                        
+                        {/* Bars */}
+                        {(() => {
+                            const maxVal = Math.max(...stats.monthly_referral_volume.map(item => item.count), 5);
+                            return stats.monthly_referral_volume.map((item, idx) => {
+                                const barHeight = item.count > 0 ? Math.max((item.count / maxVal) * 140, 15) : 4;
+                                return (
+                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', zIndex: 1, flexGrow: 1, maxWidth: '60px' }}>
+                                        <div style={{ fontSize: '11px', fontWeight: 'bold' }}>{item.count}</div>
+                                        <div style={{ 
+                                            width: '100%', 
+                                            height: `${barHeight}px`, 
+                                            background: item.count > 0 ? 'linear-gradient(to top, var(--accent-teal), var(--accent-gold))' : 'var(--border-color)', 
+                                            borderRadius: '4px 4px 0 0',
+                                            transition: 'var(--transition-smooth)'
+                                        }}></div>
+                                        <div style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-muted)' }}>{item.month}</div>
+                                    </div>
+                                );
+                            });
+                        })()}
+                    </div>
+                ) : (
+                    <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                        No referral data recorded yet.
+                    </div>
+                )}
             </div>
         </AdminLayout>
     );
