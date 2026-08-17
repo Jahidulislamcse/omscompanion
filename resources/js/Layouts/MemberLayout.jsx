@@ -138,9 +138,6 @@ export default function MemberLayout({ children, title }) {
                         <button onClick={toggleTheme} className="btn btn-outline" style={{ padding: '8px 12px' }}>
                             {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
                         </button>
-                        <Link href={route('member.certificate.download')} className="btn btn-secondary certificate-download-btn">
-                            📜 Download Certificate
-                        </Link>
                     </div>
                 </header>
 

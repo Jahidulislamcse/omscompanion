@@ -22,7 +22,7 @@ export default function Register() {
 
     return (
         <div className="auth-page page-colorful-theme">
-            <Head title={`Register - ${site_name || 'DentistChamber'}`} />
+            <Head title={`Register - ${site_name || 'OMSCOMPANION'}`} />
             
             {/* Ambient Glow Spheres */}
             <div className="ambient-glow glow-cyan" />

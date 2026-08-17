@@ -17,7 +17,7 @@ export default function Login() {
 
     return (
         <div className="auth-page page-colorful-theme">
-            <Head title={`Login - ${site_name || 'DentistChamber'}`} />
+            <Head title={`Login - ${site_name || 'OMSCOMPANION'}`} />
             
             {/* Ambient Glow Spheres */}
             <div className="ambient-glow glow-cyan" />
