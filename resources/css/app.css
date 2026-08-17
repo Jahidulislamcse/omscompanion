@@ -2400,15 +2400,20 @@ h1, h2, h3, h4, h5, h6 {
     .glass-panel {
         padding: 14px;
     }
+}
 
+/* Responsive visibility helpers */
+.visible-mobile,
+.visible-mobile-flex {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
     .hidden-mobile {
         display: none !important;
     }
 
-    .visible-mobile {
-        display: block !important;
-    }
-
+    .visible-mobile,
     .visible-mobile-flex {
         display: flex !important;
     }
