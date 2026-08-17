@@ -218,9 +218,9 @@ export default function Welcome({ settings, freeVideos }) {
                             <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
                                 🌟 Registration
                             </Link>
-                            <a href="#free-videos" className="btn btn-outline hero-btn">
+                            <Link href={route('videos.public')} className="btn btn-outline hero-btn">
                                 🎥 Watch Videos
-                            </a>
+                            </Link>
                         </>
                     )}
                 </div>
