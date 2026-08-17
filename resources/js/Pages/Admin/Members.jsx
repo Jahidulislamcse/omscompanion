@@ -60,20 +60,19 @@ export default function Members({ members }) {
             <Head title="Membership Management" />
 
             {/* Filter Panel */}
-            <div className="glass-panel" style={{ display: 'flex', gap: '15px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', gap: '12px', flexGrow: 1, maxWidth: '750px', flexWrap: 'wrap' }}>
+            <div className="glass-panel" style={{ padding: '16px', marginBottom: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px', width: '100%', marginBottom: '12px' }}>
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by name, email, clinic or BDS reg number..."
+                        placeholder="Search by name, email, clinic or BDS reg..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
-                        style={{ flexGrow: 1, minWidth: '220px' }}
+                        style={{ gridColumn: 'span 1 / -1' }}
                     />
                     
                     <select 
                         className="form-control"
-                        style={{ maxWidth: '180px' }}
                         value={typeFilter}
                         onChange={e => setTypeFilter(e.target.value)}
                     >
@@ -84,7 +83,6 @@ export default function Members({ members }) {
 
                     <select 
                         className="form-control"
-                        style={{ maxWidth: '160px' }}
                         value={statusFilter}
                         onChange={e => setStatusFilter(e.target.value)}
                     >
@@ -95,13 +93,13 @@ export default function Members({ members }) {
                     </select>
                 </div>
 
-                <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)', textAlign: 'right' }}>
                     Showing {filteredMembers.length} of {members.length} members
                 </div>
             </div>
 
-            {/* Table Panel */}
-            <div className="glass-panel" style={{ padding: '0px' }}>
+            {/* Desktop Table View */}
+            <div className="glass-panel hidden-mobile" style={{ padding: '0px' }}>
                 <div className="table-container">
                     <table className="data-table">
                         <thead>
@@ -184,6 +182,76 @@ export default function Members({ members }) {
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            {/* Mobile Responsive Cards View */}
+            <div className="visible-mobile" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {filteredMembers.length > 0 ? (
+                    filteredMembers.map((member) => (
+                        <div key={member.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
+                                <div>
+                                    <div style={{ fontWeight: '700', fontSize: '15px' }}>
+                                        {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
+                                    </div>
+                                    <div style={{ marginTop: '4px' }}>
+                                        {getTypeBadge(member.bds_registration_number)}
+                                    </div>
+                                </div>
+                                <div>
+                                    {getStatusBadge(member.status)}
+                                </div>
+                            </div>
+
+                            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '8px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '12px' }}>
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Contact</span>
+                                    <div style={{ fontWeight: '600', wordBreak: 'break-all' }}>{member.email || 'N/A'}</div>
+                                    <div style={{ color: 'var(--text-muted)' }}>{member.phone || 'N/A'}</div>
+                                </div>
+
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>BDS Reg</span>
+                                    <code style={{ fontSize: '11px' }}>{member.bds_registration_number || 'N/A (Storekeeper)'}</code>
+                                </div>
+
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Clinic / Store</span>
+                                    <div style={{ fontWeight: '600' }}>{member.clinic_name || 'N/A'}</div>
+                                    <div style={{ color: 'var(--text-muted)', fontSize: '11px' }}>{member.address || 'N/A'}</div>
+                                </div>
+
+                                <div>
+                                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Member ID</span>
+                                    <span style={{ fontWeight: '700', color: 'var(--accent-gold)' }}>{member.member_id || 'Pending'}</span>
+                                </div>
+                            </div>
+
+                            {member.status === 'pending' && (
+                                <div style={{ display: 'flex', gap: '8px', marginTop: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+                                    <button 
+                                        onClick={() => handleApprove(member.id)} 
+                                        className="btn btn-secondary"
+                                        style={{ flex: 1, padding: '8px', fontSize: '12px' }}
+                                    >
+                                        Approve
+                                    </button>
+                                    <button 
+                                        onClick={() => handleReject(member.id)} 
+                                        className="btn btn-outline"
+                                        style={{ flex: 1, padding: '8px', fontSize: '12px', color: 'var(--color-danger)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
+                                    >
+                                        Reject
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <div className="glass-panel" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                        No members found matching your search or filters.
+                    </div>
+                )}
             </div>
         </AdminLayout>
     );
