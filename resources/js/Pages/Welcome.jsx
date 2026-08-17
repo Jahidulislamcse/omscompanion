@@ -158,7 +158,6 @@ export default function Welcome({ settings, freeVideos }) {
                 </Link>
 
                 <nav className="landing-nav">
-                    <a href="#status-pipeline" className="nav-link-item">Status Workflow</a>
                     <a href="#free-videos" className="nav-link-item">Videos</a>
                     <a href="#faq" className="nav-link-item">FAQ</a>
                     
