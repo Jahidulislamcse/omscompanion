@@ -24,8 +24,8 @@
 
     --accent-teal: #1e4e5f;
     --accent-teal-hover: #163a48;
-    --accent-gold: #d4af37;
-    --accent-gold-hover: #b3922e;
+    --accent-gold: #2563eb;
+    --accent-gold-hover: #1d4ed8;
 
     /* Vibrant Accent Palette */
     --color-emerald: #10b981;
@@ -76,8 +76,8 @@
     
     --accent-teal: #1a647d;
     --accent-teal-hover: #227a98;
-    --accent-gold: #e5bf4c;
-    --accent-gold-hover: #d4af37;
+    --accent-gold: #3b82f6;
+    --accent-gold-hover: #2563eb;
 
     --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
@@ -434,7 +434,7 @@ h1, h2, h3, h4, h5, h6 {
 .badge-treatment { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
 .badge-completed { background-color: var(--color-success-bg); color: var(--color-success); }
 .badge-rejected, .badge-not-proceeding { background-color: var(--color-danger-bg); color: var(--color-danger); }
-.badge-pending { background-color: var(--color-warning-bg); color: var(--color-warning); }
+.badge-pending { background-color: rgba(59, 130, 246, 0.12); color: #2563eb; }
 .badge-approved { background-color: var(--color-success-bg); color: var(--color-success); }
 
 /* Live Case Tracker Timeline */
@@ -872,14 +872,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-gold-glow {
-    background: linear-gradient(135deg, #d4af37, #f59e0b);
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: #fff;
-    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
 }
 
 .btn-gold-glow:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
 /* Hero Stats Ticker Grid */
