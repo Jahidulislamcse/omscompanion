@@ -32,6 +32,11 @@ class AdminController extends Controller
         $totalCategories = VideoCategory::count();
         $totalVideos = Video::count();
 
+        $videoStats = [
+            'total_categories' => $totalCategories,
+            'total_videos' => $totalVideos,
+        ];
+
         // Real Monthly Referral Volume (Last 6 Months)
         $monthlyVolume = [];
         for ($i = 5; $i >= 0; $i--) {
