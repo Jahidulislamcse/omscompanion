@@ -1867,7 +1867,8 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .landing-hero-ctas {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         width: 100%;
         gap: 10px;
     }
@@ -1876,11 +1877,13 @@ h1, h2, h3, h4, h5, h6 {
         width: 100%;
         text-align: center;
         justify-content: center;
-        padding: 12px 18px;
-        font-size: 14px;
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: nowrap;
     }
 
     .hero-stats-ticker {
+        display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         margin-top: 24px;
@@ -1979,8 +1982,21 @@ h1, h2, h3, h4, h5, h6 {
         letter-spacing: 0;
     }
 
+    .landing-hero-ctas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .hero-btn {
+        padding: 10px 6px;
+        font-size: 12px;
+    }
+
     .hero-stats-ticker {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 }
 
