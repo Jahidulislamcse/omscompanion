@@ -2365,31 +2365,31 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: 10px;
     }
 
     .stat-card {
-        padding: 12px 14px !important;
+        padding: 12px 16px !important;
         gap: 4px !important;
         border-radius: var(--radius-sm);
     }
 
     .stat-card .stat-title {
-        font-size: 10px !important;
+        font-size: 11px !important;
         letter-spacing: 0.3px;
     }
 
     .stat-card .stat-value {
-        font-size: 20px !important;
+        font-size: 22px !important;
     }
 
     .stat-card .stat-value span {
-        font-size: 11px !important;
+        font-size: 12px !important;
     }
 
     .stat-card div:last-child {
-        font-size: 10px !important;
+        font-size: 11px !important;
         line-height: 1.3;
     }
     
