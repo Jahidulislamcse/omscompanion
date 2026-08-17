@@ -147,13 +147,12 @@ export default function Index({ categories, videos }) {
 
                     {/* SECTION 1: Free Access Videos (No Login Required) */}
                     {freeVideos.length > 0 && (
-                        <div style={{ marginBottom: '56px' }}>
-                            <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ marginBottom: '40px' }}>
+                            <div className="section-sub-header-row">
                                 <span className="badge-status badge-completed">🎥 Free Preview Streams</span>
-                                <h3 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
-                                    Open Access Videos
+                                <h3 className="sub-header-title">
+                                    Open Access Videos <span className="sub-header-note">(No login required)</span>
                                 </h3>
-                                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>(No login required)</span>
                             </div>
 
                             <div className="video-grid free-video-grid">
@@ -205,12 +204,11 @@ export default function Index({ categories, videos }) {
 
                     {/* SECTION 2: Member Exclusive Masterclasses (Protected) */}
                     <div>
-                        <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div className="section-sub-header-row">
                             <span className="badge-status badge-new">🔒 Member Exclusive</span>
-                            <h3 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
-                                BDS Practitioner Masterclasses
+                            <h3 className="sub-header-title">
+                                BDS Practitioner Masterclasses <span className="sub-header-note">(Requires Registration & Admin Approval)</span>
                             </h3>
-                            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>(Requires Registration & Admin Approval)</span>
                         </div>
 
                         {/* Lock Access Status Alert Banner for Unauthenticated or Unapproved Users */}

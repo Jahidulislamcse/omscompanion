@@ -1529,6 +1529,32 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.6;
 }
 
+/* Sub Section Header Row */
+.section-sub-header-row {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sub-header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sub-header-note {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
 /* Testimonials Section */
 .testimonials-section {
     background: rgba(6, 182, 212, 0.02);
@@ -1962,6 +1988,24 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .landing-section-subtitle {
+        font-size: 11px;
+    }
+
+    .section-sub-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    .sub-header-title {
+        font-size: 16px !important;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .sub-header-note {
         font-size: 11px;
     }
 
