@@ -1852,7 +1852,8 @@ h1, h2, h3, h4, h5, h6 {
     }
     
     .landing-hero {
-        padding: 24px 12px 20px;
+        padding: 56px 16px 24px;
+        margin-top: 12px;
     }
 
     .hero-badge {
