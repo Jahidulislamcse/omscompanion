@@ -22,6 +22,7 @@ Route::get('/', function () {
             'duration' => $video->duration,
             'storage_type' => $video->storage_type,
             'video_path' => $video->video_path,
+            'is_free' => true,
         ];
     })->toArray();
 
@@ -34,7 +35,8 @@ Route::get('/', function () {
                 'description' => 'A comprehensive walk-through of the DentistChamber referral pipeline, showing how BDS Doctors refer cases and track live treatment milestones.',
                 'duration' => 155,
                 'storage_type' => 'external',
-                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                'is_free' => true,
             ],
             [
                 'id' => 'free-2',
@@ -42,7 +44,8 @@ Route::get('/', function () {
                 'description' => 'Take a peak at our high-definition clinical tutorials and educational video streams available exclusively to approved BDS members.',
                 'duration' => 205,
                 'storage_type' => 'external',
-                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                'is_free' => true,
             ]
         ];
     }

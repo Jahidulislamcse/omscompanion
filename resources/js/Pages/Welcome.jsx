@@ -198,11 +198,6 @@ export default function Welcome({ settings, freeVideos }) {
 
             {/* Hero Section */}
             <section className="landing-hero hero-vibrant">
-                <div className="hero-badge-container">
-                    <span className="badge-status badge-new hero-badge hero-badge-pulse">
-                        <span className="pulse-dot"></span> Exclusively for BDS Doctors & Dental Surgeons
-                    </span>
-                </div>
                 
                 <h1 className="landing-hero-title hero-title-colorful">
                     {getSetting('hero_title', 'Bridging Dental Practices with Live Referral Intelligence')}
@@ -358,7 +353,7 @@ export default function Welcome({ settings, freeVideos }) {
                     <div className="video-grid free-video-grid">
                         {freeVideos.map(vid => {
                             const ytId = getYouTubeId(vid.video_path);
-                            const isLocked = !vid.is_free && (!auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved'));
+                            const isLocked = false;
 
                             return (
                                 <div key={vid.id} className="glass-panel video-card colorful-video-card">
