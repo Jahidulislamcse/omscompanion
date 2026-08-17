@@ -54,6 +54,15 @@ export default function AdminLayout({ children, title }) {
                         <ul className="sidebar-menu">
                             <li>
                                 <Link 
+                                    href={route('home')} 
+                                    className={`sidebar-link ${window.location.pathname === '/' ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>&#127960;</span> Go to Home
+                                </Link>
+                            </li>
+                            <li>
+                                <Link 
                                     href={route('admin.dashboard')} 
                                     className={`sidebar-link ${window.location.pathname === '/admin/dashboard' ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
