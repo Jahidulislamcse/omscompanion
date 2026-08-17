@@ -12,7 +12,6 @@ export function getYouTubeId(url) {
 export default function Welcome({ settings, freeVideos }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
-    const [simStep, setSimStep] = useState(3); // 1: Submitted, 2: Contacted, 3: Treatment, 4: Completed
     const [videoFilter, setVideoFilter] = useState('all');
 
     // Interactive FAQ state
@@ -104,7 +103,7 @@ export default function Welcome({ settings, freeVideos }) {
             a: "Once a BDS member submits a patient referral, the system logs every milestone chronologically—from initial contact and consultation booking to active treatment and final completion. You can view real-time status updates directly from your member dashboard."
         },
         {
-            q: "Are free preview videos accessible without an account?",
+            q: "Are preview videos accessible without an account?",
             a: "Yes! Preview videos on the landing page are open to everyone. However, approved BDS members gain full access to our premium high-definition surgical streams, masterclass tutorials, and downloadable educational guides."
         },
         {
@@ -143,7 +142,7 @@ export default function Welcome({ settings, freeVideos }) {
 
     return (
         <div className="landing-wrapper page-colorful-theme">
-            <Head title={`${site_name || 'DentistChamber'} - Interactive BDS Referral & Clinical Hub`} />
+            <Head title={`${site_name || 'DentistChamber'} - BDS Referral & Clinical Hub`} />
 
             {/* Vibrant Ambient Glow Blobs */}
             <div className="ambient-glow glow-cyan" />
@@ -158,9 +157,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </Link>
 
                 <nav className="landing-nav">
-                    <a href="#mission" className="nav-link-item">Mission & Goals</a>
-                    <a href="#roi-calculator" className="nav-link-item">Impact Calculator</a>
-                    <a href="#free-videos" className="nav-link-item">Free Videos</a>
+                    <a href="#free-videos" className="nav-link-item">Videos</a>
                     <a href="#faq" className="nav-link-item">FAQ</a>
                     
                     {auth.user ? (
@@ -207,7 +204,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 🌟 Registration
                             </Link>
                             <a href="#free-videos" className="btn btn-outline hero-btn">
-                                🎥 Watch Clinical Previews
+                                🎥 Watch Videos
                             </a>
                         </>
                     )}
@@ -249,152 +246,14 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             </section>
 
-            {/* Goals & Mission Section with Color-Coded Cards */}
-            <section id="mission" className="landing-section mission-section">
-                <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <span className="badge-status badge-new section-tag">Core Ecosystem</span>
-                        <h2 className="landing-section-title">Designed for Excellence in Dental Care</h2>
-                        <p className="landing-section-subtitle">
-                            Every feature in DentistChamber is built to empower BDS practitioners with transparency, learning resources, and clinical collaboration.
-                        </p>
-                    </div>
-
-                    <div className="dashboard-grid colorful-cards-grid">
-                        <div className="glass-panel goal-card goal-emerald hover-glow-emerald">
-                            <div className="goal-icon-badge bg-emerald-light">📋</div>
-                            <h3 className="goal-title">
-                                {getSetting('goal_1_title', 'Seamless Patient Referrals')}
-                            </h3>
-                            <p className="goal-desc">
-                                {getSetting('goal_1_desc', 'BDS members can refer patients with detailed clinical notes and urgency levels in a few simple taps.')}
-                            </p>
-                            <span className="goal-chip chip-emerald">Instant Logging</span>
-                        </div>
-
-                        <div className="glass-panel goal-card goal-cyan hover-glow-cyan">
-                            <div className="goal-icon-badge bg-cyan-light">🛰️</div>
-                            <h3 className="goal-title">
-                                {getSetting('goal_2_title', 'Live Treatment Tracking')}
-                            </h3>
-                            <p className="goal-desc">
-                                {getSetting('goal_2_desc', 'Check status changes (Contacted, Under Treatment, Completed) live via our interactive chronological status timeline tracker.')}
-                            </p>
-                            <span className="goal-chip chip-cyan">Real-Time Sync</span>
-                        </div>
-
-                        <div className="glass-panel goal-card goal-indigo hover-glow-indigo">
-                            <div className="goal-icon-badge bg-indigo-light">🎓</div>
-                            <h3 className="goal-title">
-                                {getSetting('goal_3_title', 'Premium Clinical Library')}
-                            </h3>
-                            <p className="goal-desc">
-                                {getSetting('goal_3_desc', 'Gain exclusive access to secure, masterclass surgical streams, tutorial tutorials, and premium learning guides.')}
-                            </p>
-                            <span className="goal-chip chip-indigo">HD Video Masterclass</span>
-                        </div>
-
-                        <div className="glass-panel goal-card goal-amber hover-glow-amber">
-                            <div className="goal-icon-badge bg-amber-light">📜</div>
-                            <h3 className="goal-title">
-                                {getSetting('goal_4_title', 'Verified Digital Certificates')}
-                            </h3>
-                            <p className="goal-desc">
-                                {getSetting('goal_4_desc', 'Download verified, high-quality digital membership certificates automatically generated with your clinic credentials.')}
-                            </p>
-                            <span className="goal-chip chip-amber">Automated PDF Export</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Simple Patient Referral Status Pipeline Simulation */}
-            <section id="status-pipeline" className="landing-section pipeline-section">
-                <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <span className="badge-status badge-completed section-tag">Live Status Pipeline</span>
-                        <h2 className="landing-section-title">Transparent Patient Referral Workflow</h2>
-                        <p className="landing-section-subtitle">
-                            Track every stage of your patient's referral journey live with automatic milestone status updates.
-                        </p>
-                    </div>
-
-                    <div className="glass-panel simple-pipeline-card">
-                        <div className="pipeline-header-info">
-                            <div>
-                                <h4 className="pipeline-demo-title">🦷 Sample Case: Surgical Molar Impaction</h4>
-                                <span className="pipeline-demo-sub">Patient #4819 • Referred by Dr. A. Rahman, BDS</span>
-                            </div>
-                            <span className="badge-status badge-treatment live-pill">
-                                <span className="pulse-dot"></span> Live Tracking Active
-                            </span>
-                        </div>
-
-                        <div className="simple-pipeline-grid">
-                            <div 
-                                onClick={() => setSimStep(1)} 
-                                className={`pipeline-step-box step-box-cyan ${simStep === 1 ? 'active-step' : ''}`}
-                            >
-                                <div className="step-num-badge">1</div>
-                                <span className="badge-status badge-new">1. Submitted</span>
-                                <h4 className="step-box-title">Referral Logged</h4>
-                                <p className="step-box-desc">Case details, urgency, and clinical notes logged by BDS Doctor.</p>
-                            </div>
-
-                            <div 
-                                onClick={() => setSimStep(2)} 
-                                className={`pipeline-step-box step-box-purple ${simStep === 2 ? 'active-step' : ''}`}
-                            >
-                                <div className="step-num-badge">2</div>
-                                <span className="badge-status badge-contacted">2. Contacted</span>
-                                <h4 className="step-box-title">Patient Contacted</h4>
-                                <p className="step-box-desc">Consultation slot confirmed with the patient via phone/SMS.</p>
-                            </div>
-
-                            <div 
-                                onClick={() => setSimStep(3)} 
-                                className={`pipeline-step-box step-box-amber ${simStep === 3 ? 'active-step' : ''}`}
-                            >
-                                <div className="step-num-badge">3</div>
-                                <span className="badge-status badge-treatment">3. Treatment</span>
-                                <h4 className="step-box-title">Under Treatment</h4>
-                                <p className="step-box-desc">Specialized dental procedure or surgery underway.</p>
-                            </div>
-
-                            <div 
-                                onClick={() => setSimStep(4)} 
-                                className={`pipeline-step-box step-box-emerald ${simStep === 4 ? 'active-step' : ''}`}
-                            >
-                                <div className="step-num-badge">4</div>
-                                <span className="badge-status badge-completed">4. Completed</span>
-                                <h4 className="step-box-title">Case Completed</h4>
-                                <p className="step-box-desc">Procedure verified, outcome notes & status finalized.</p>
-                            </div>
-                        </div>
-
-                        {/* Dynamic Status Detail Note */}
-                        <div className="pipeline-active-note">
-                            <span className="note-icon">💡</span>
-                            <div>
-                                <strong>Stage {simStep} Detail: </strong>
-                                {simStep === 1 && "Case submitted directly from chamber dashboard. Urgency level set to High."}
-                                {simStep === 2 && "Patient contacted within 2 hours. Consultation scheduled for tomorrow morning."}
-                                {simStep === 3 && "Patient currently undergoing procedure under specialist care."}
-                                {simStep === 4 && "Procedure successfully completed. Final report and updates sent back to referring BDS Doctor."}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Free Videos Section with Filter Tabs */}
+            {/* Videos Section with Filter Tabs */}
             <section id="free-videos" className="landing-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
                         <span className="badge-status badge-new section-tag">Video Library</span>
-                        <h2 className="landing-section-title">Free Preview Video Masterclasses</h2>
+                        <h2 className="landing-section-title">Video Masterclasses</h2>
                         <p className="landing-section-subtitle">
-                            Explore sample clinical guides, surgical technique previews, and platform overviews available for preview.
+                            Explore clinical guides, surgical technique walkthroughs, and platform overviews.
                         </p>
 
                         {/* Interactive Filter Tabs */}
@@ -403,7 +262,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 onClick={() => setVideoFilter('all')} 
                                 className={`filter-tab ${videoFilter === 'all' ? 'active' : ''}`}
                             >
-                                All Previews ({freeVideos.length})
+                                All Videos ({freeVideos.length})
                             </button>
                             <button 
                                 onClick={() => setVideoFilter('clinical')} 
@@ -440,13 +299,13 @@ export default function Welcome({ settings, freeVideos }) {
                                             <div className="play-button-glow">
                                                 <span className="play-icon">▶</span>
                                             </div>
-                                            <span className="play-label">Watch Preview Stream</span>
+                                            <span className="play-label">Watch Video</span>
                                         </div>
                                         <span className="video-duration">{formatDuration(vid.duration)}</span>
                                     </div>
 
                                     <div className="video-info free-video-info">
-                                        <span className="video-tag badge-tag-glow">Free Preview</span>
+                                        <span className="video-tag badge-tag-glow">Video Guide</span>
                                         <h4 className="video-title">{vid.title}</h4>
                                         <p className="video-desc">{vid.description}</p>
                                     </div>
