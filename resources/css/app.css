@@ -1912,18 +1912,19 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .landing-hero-ctas {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
         width: 100%;
-        gap: 6px;
+        gap: 8px;
     }
 
     .hero-btn {
-        width: 100%;
         text-align: center;
         justify-content: center;
-        padding: 7px 6px;
-        font-size: 11px;
+        padding: 10px 18px;
+        font-size: 13px;
         white-space: nowrap;
     }
 
@@ -2190,14 +2191,19 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .landing-hero-ctas {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
     }
 
     .hero-btn {
-        padding: 8px 4px;
-        font-size: 11px;
+        padding: 9px 16px;
+        font-size: 12px;
+        text-align: center;
+        justify-content: center;
     }
 
     .hero-stats-ticker {
