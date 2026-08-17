@@ -1251,92 +1251,140 @@ h1, h2, h3, h4, h5, h6 {
 .chip-indigo { background: rgba(99, 102, 241, 0.1); color: #4f46e5; }
 .chip-amber { background: rgba(245, 158, 11, 0.1); color: #b3922e; }
 
-/* Interactive BDS Doctor Calculator */
-.calculator-card {
+/* Simple Patient Referral Status Pipeline */
+.simple-pipeline-card {
     padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 28px;
-    background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.08) 0%, transparent 70%), var(--bg-card);
+    gap: 24px;
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.06) 0%, transparent 60%), var(--bg-card);
 }
 
-.calculator-slider-box {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.slider-header {
+.pipeline-header-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     flex-wrap: wrap;
-    gap: 10px;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--border-color);
 }
 
-.slider-label {
-    font-size: 16px;
+.pipeline-demo-title {
+    font-size: 18px;
     font-weight: 700;
+    margin: 0 0 4px 0;
     color: var(--text-main);
 }
 
-.slider-value-badge {
-    font-size: 14px;
-    font-weight: 800;
-    color: #fff;
-    background: linear-gradient(135deg, #06b6d4, #10b981);
-    padding: 6px 14px;
-    border-radius: 9999px;
-    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
-}
-
-.colorful-slider {
-    width: 100%;
-    accent-color: #06b6d4;
-    height: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.slider-ticks {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
+.pipeline-demo-sub {
+    font-size: 13px;
     color: var(--text-muted);
 }
 
-.calculator-results-grid {
+.live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.simple-pipeline-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
 }
 
-.calc-result-item {
-    padding: 20px;
+.pipeline-step-box {
+    position: relative;
+    padding: 24px 20px;
     border-radius: var(--radius-md);
+    background: var(--bg-main);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition-smooth);
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    text-align: center;
+    gap: 10px;
 }
 
-.result-cyan { background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2); }
-.result-cyan .calc-result-number { color: #0284c7; }
-.result-emerald { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
-.result-emerald .calc-result-number { color: #059669; }
-.result-amber { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); }
-.result-amber .calc-result-number { color: #d4af37; }
+.pipeline-step-box:hover {
+    transform: translateY(-4px);
+}
 
-.calc-result-number {
-    font-size: 32px;
+.pipeline-step-box.active-step {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.step-box-cyan.active-step {
+    border-color: #06b6d4;
+    background: rgba(6, 182, 212, 0.08);
+}
+
+.step-box-purple.active-step {
+    border-color: #9333ea;
+    background: rgba(147, 51, 234, 0.08);
+}
+
+.step-box-amber.active-step {
+    border-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.step-box-emerald.active-step {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.step-num-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--border-color);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 800;
-    line-height: 1;
+    font-size: 12px;
 }
 
-.calc-result-label {
+.active-step .step-num-badge {
+    background: #06b6d4;
+    color: #fff;
+}
+
+.step-box-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 4px 0 0 0;
+    color: var(--text-main);
+}
+
+.step-box-desc {
     font-size: 13px;
     color: var(--text-muted);
-    font-weight: 600;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.pipeline-active-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(6, 182, 212, 0.08);
+    border-left: 4px solid #06b6d4;
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.note-icon {
+    font-size: 20px;
 }
 
 /* Video Section with Filter Tabs */

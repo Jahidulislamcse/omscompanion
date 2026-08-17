@@ -11,11 +11,8 @@ export function getYouTubeId(url) {
 
 export default function Welcome({ settings, freeVideos }) {
     const { auth, site_name } = usePage().props;
-    const [activeVideo, setActiveVideo] = useState(null);
+    const [simStep, setSimStep] = useState(3); // 1: Submitted, 2: Contacted, 3: Treatment, 4: Completed
     const [videoFilter, setVideoFilter] = useState('all');
-    
-    // Interactive ROI Calculator state
-    const [monthlyReferrals, setMonthlyReferrals] = useState(12);
 
     // Interactive FAQ state
     const [openFaq, setOpenFaq] = useState(null);
@@ -310,53 +307,79 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             </section>
 
-            {/* Interactive Section 3: BDS Doctor Impact Calculator */}
-            <section id="roi-calculator" className="landing-section calculator-section">
+            {/* Simple Patient Referral Status Pipeline Simulation */}
+            <section id="status-pipeline" className="landing-section pipeline-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
-                        <span className="badge-status badge-booked section-tag">Interactive Calculator</span>
-                        <h2 className="landing-section-title">Estimate Your Chamber Practice Impact</h2>
+                        <span className="badge-status badge-completed section-tag">Live Status Pipeline</span>
+                        <h2 className="landing-section-title">Transparent Patient Referral Workflow</h2>
                         <p className="landing-section-subtitle">
-                            See how much time and communication friction your dental chamber saves by tracking referrals through DentistChamber.
+                            Track every stage of your patient's referral journey live with automatic milestone status updates.
                         </p>
                     </div>
 
-                    <div className="glass-panel calculator-card">
-                        <div className="calculator-slider-box">
-                            <div className="slider-header">
-                                <label className="slider-label">Monthly Patient Referrals Sent:</label>
-                                <span className="slider-value-badge">{monthlyReferrals} Referrals / Month</span>
+                    <div className="glass-panel simple-pipeline-card">
+                        <div className="pipeline-header-info">
+                            <div>
+                                <h4 className="pipeline-demo-title">🦷 Sample Case: Surgical Molar Impaction</h4>
+                                <span className="pipeline-demo-sub">Patient #4819 • Referred by Dr. A. Rahman, BDS</span>
                             </div>
-                            <input 
-                                type="range" 
-                                min="1" 
-                                max="50" 
-                                value={monthlyReferrals} 
-                                onChange={(e) => setMonthlyReferrals(parseInt(e.target.value))} 
-                                className="colorful-slider"
-                            />
-                            <div className="slider-ticks">
-                                <span>1 Case</span>
-                                <span>15 Cases</span>
-                                <span>30 Cases</span>
-                                <span>50 Cases</span>
+                            <span className="badge-status badge-treatment live-pill">
+                                <span className="pulse-dot"></span> Live Tracking Active
+                            </span>
+                        </div>
+
+                        <div className="simple-pipeline-grid">
+                            <div 
+                                onClick={() => setSimStep(1)} 
+                                className={`pipeline-step-box step-box-cyan ${simStep === 1 ? 'active-step' : ''}`}
+                            >
+                                <div className="step-num-badge">1</div>
+                                <span className="badge-status badge-new">1. Submitted</span>
+                                <h4 className="step-box-title">Referral Logged</h4>
+                                <p className="step-box-desc">Case details, urgency, and clinical notes logged by BDS Doctor.</p>
+                            </div>
+
+                            <div 
+                                onClick={() => setSimStep(2)} 
+                                className={`pipeline-step-box step-box-purple ${simStep === 2 ? 'active-step' : ''}`}
+                            >
+                                <div className="step-num-badge">2</div>
+                                <span className="badge-status badge-contacted">2. Contacted</span>
+                                <h4 className="step-box-title">Patient Contacted</h4>
+                                <p className="step-box-desc">Consultation slot confirmed with the patient via phone/SMS.</p>
+                            </div>
+
+                            <div 
+                                onClick={() => setSimStep(3)} 
+                                className={`pipeline-step-box step-box-amber ${simStep === 3 ? 'active-step' : ''}`}
+                            >
+                                <div className="step-num-badge">3</div>
+                                <span className="badge-status badge-treatment">3. Treatment</span>
+                                <h4 className="step-box-title">Under Treatment</h4>
+                                <p className="step-box-desc">Specialized dental procedure or surgery underway.</p>
+                            </div>
+
+                            <div 
+                                onClick={() => setSimStep(4)} 
+                                className={`pipeline-step-box step-box-emerald ${simStep === 4 ? 'active-step' : ''}`}
+                            >
+                                <div className="step-num-badge">4</div>
+                                <span className="badge-status badge-completed">4. Completed</span>
+                                <h4 className="step-box-title">Case Completed</h4>
+                                <p className="step-box-desc">Procedure verified, outcome notes & status finalized.</p>
                             </div>
                         </div>
 
-                        <div className="calculator-results-grid">
-                            <div className="calc-result-item result-cyan">
-                                <span className="calc-result-number">{(monthlyReferrals * 2.5).toFixed(0)} hrs</span>
-                                <span className="calc-result-label">Follow-up Time Saved / Mo</span>
-                            </div>
-
-                            <div className="calc-result-item result-emerald">
-                                <span className="calc-result-number">100%</span>
-                                <span className="calc-result-label">Transparent Status Visibility</span>
-                            </div>
-
-                            <div className="calc-result-item result-amber">
-                                <span className="calc-result-number">{monthlyReferrals * 150} pts</span>
-                                <span className="calc-result-label">Network Milestone Points</span>
+                        {/* Dynamic Status Detail Note */}
+                        <div className="pipeline-active-note">
+                            <span className="note-icon">💡</span>
+                            <div>
+                                <strong>Stage {simStep} Detail: </strong>
+                                {simStep === 1 && "Case submitted directly from chamber dashboard. Urgency level set to High."}
+                                {simStep === 2 && "Patient contacted within 2 hours. Consultation scheduled for tomorrow morning."}
+                                {simStep === 3 && "Patient currently undergoing procedure under specialist care."}
+                                {simStep === 4 && "Procedure successfully completed. Final report and updates sent back to referring BDS Doctor."}
                             </div>
                         </div>
                     </div>
