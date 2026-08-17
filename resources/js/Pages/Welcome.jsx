@@ -594,14 +594,76 @@ export default function Welcome({ settings, freeVideos }) {
             </section>
 
             {/* Footer */}
-            <footer className="landing-footer">
-                <div className="footer-container">
-                    <Link href="/" className="landing-brand-link">
-                        <ApplicationLogo />
-                    </Link>
-                    <p>
-                        © 2026 {site_name || 'DentistChamber'} Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
-                    </p>
+            <footer className="landing-footer" style={{ padding: '60px 0 30px 0', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-white)' }}>
+                <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '40px', marginBottom: '40px' }}>
+                        
+                        {/* Brand Column */}
+                        <div>
+                            <Link href="/" className="landing-brand-link" style={{ display: 'inline-block', marginBottom: '16px' }}>
+                                <ApplicationLogo />
+                            </Link>
+                            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6' }}>
+                                OMSCOMPANION connects BDS Practitioners with automated patient referral pipelines, live status tracking, and surgical masterclasses.
+                            </p>
+                        </div>
+
+                        {/* Office Location Column */}
+                        <div>
+                            <h4 style={{ color: '#fff', fontSize: '16px', marginBottom: '16px', fontWeight: '700' }}>📍 Office Location</h4>
+                            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6', margin: 0 }}>
+                                {getSetting('footer_office_location', 'Dhaka, Bangladesh')}
+                            </p>
+                        </div>
+
+                        {/* Contact Information Column */}
+                        <div>
+                            <h4 style={{ color: '#fff', fontSize: '16px', marginBottom: '16px', fontWeight: '700' }}>📞 Contact & Support</h4>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>
+                                {getSetting('footer_contact_phone') && (
+                                    <div>
+                                        <strong>Phone:</strong> <a href={`tel:${getSetting('footer_contact_phone')}`} style={{ color: 'var(--accent-gold)', textDecoration: 'none' }}>{getSetting('footer_contact_phone')}</a>
+                                    </div>
+                                )}
+                                {getSetting('footer_contact_email') && (
+                                    <div>
+                                        <strong>Email:</strong> <a href={`mailto:${getSetting('footer_contact_email')}`} style={{ color: 'var(--accent-gold)', textDecoration: 'none' }}>{getSetting('footer_contact_email')}</a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Social Links Column */}
+                        <div>
+                            <h4 style={{ color: '#fff', fontSize: '16px', marginBottom: '16px', fontWeight: '700' }}>🌐 Connect With Us</h4>
+                            {getSetting('footer_facebook_url') ? (
+                                <a 
+                                    href={getSetting('footer_facebook_url')} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="btn btn-outline"
+                                    style={{ 
+                                        display: 'inline-flex', 
+                                        alignItems: 'center', 
+                                        gap: '8px', 
+                                        color: '#fff', 
+                                        borderColor: 'rgba(255,255,255,0.2)',
+                                        padding: '8px 16px',
+                                        borderRadius: '6px'
+                                    }}
+                                >
+                                    <span>🔵</span> Facebook Page
+                                </a>
+                            ) : (
+                                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>Official Facebook page link coming soon.</p>
+                            )}
+                        </div>
+
+                    </div>
+
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px', textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
+                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
+                    </div>
                 </div>
             </footer>
 

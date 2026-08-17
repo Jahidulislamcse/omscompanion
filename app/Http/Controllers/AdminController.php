@@ -357,6 +357,10 @@ class AdminController extends Controller
             'goal_3_desc',
             'goal_4_title',
             'goal_4_desc',
+            'footer_office_location',
+            'footer_contact_phone',
+            'footer_contact_email',
+            'footer_facebook_url',
         ]);
 
         foreach ($settingsData as $key => $value) {

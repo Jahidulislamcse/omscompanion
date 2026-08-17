@@ -19,6 +19,10 @@ export default function PageContent({ settings }) {
         goal_3_desc: settings.goal_3_desc || '',
         goal_4_title: settings.goal_4_title || '',
         goal_4_desc: settings.goal_4_desc || '',
+        footer_office_location: settings.footer_office_location || '',
+        footer_contact_phone: settings.footer_contact_phone || '',
+        footer_contact_email: settings.footer_contact_email || '',
+        footer_facebook_url: settings.footer_facebook_url || '',
         site_logo: null,
         remove_logo: false,
     });
@@ -273,6 +277,65 @@ export default function PageContent({ settings }) {
                                         {errors.goal_4_desc && <span className="form-error">{errors.goal_4_desc}</span>}
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer & Contact Info Config */}
+                    <div className="glass-panel">
+                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
+                            📌 Footer & Contact Information Config
+                        </h3>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <div className="form-group">
+                                <label className="form-label">Office Location</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={data.footer_office_location}
+                                    onChange={e => setData('footer_office_location', e.target.value)}
+                                    rows="2"
+                                    placeholder="e.g. House 12, Road 5, Dhanmondi, Dhaka, Bangladesh"
+                                />
+                                {errors.footer_office_location && <span className="form-error">{errors.footer_office_location}</span>}
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '15px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Contact Phone Number</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={data.footer_contact_phone}
+                                        onChange={e => setData('footer_contact_phone', e.target.value)}
+                                        placeholder="e.g. +880 1712-345678"
+                                    />
+                                    {errors.footer_contact_phone && <span className="form-error">{errors.footer_contact_phone}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Contact Email Address</label>
+                                    <input 
+                                        type="email" 
+                                        className="form-control"
+                                        value={data.footer_contact_email}
+                                        onChange={e => setData('footer_contact_email', e.target.value)}
+                                        placeholder="e.g. info@omscompanion.com"
+                                    />
+                                    {errors.footer_contact_email && <span className="form-error">{errors.footer_contact_email}</span>}
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Facebook Page Link / URL</label>
+                                <input 
+                                    type="url" 
+                                    className="form-control"
+                                    value={data.footer_facebook_url}
+                                    onChange={e => setData('footer_facebook_url', e.target.value)}
+                                    placeholder="e.g. https://facebook.com/omscompanion"
+                                />
+                                {errors.footer_facebook_url && <span className="form-error">{errors.footer_facebook_url}</span>}
                             </div>
                         </div>
                     </div>
