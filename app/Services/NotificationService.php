@@ -32,7 +32,21 @@ class NotificationService
 
             if (!empty($user->email)) {
                 try {
-                    \Illuminate\Support\Facades\Mail::raw($message, function ($mail) use ($user, $title) {
+                    $htmlMessage = nl2br(e($message));
+                    $htmlContent = '
+                    <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 25px; color: #333;">
+                        <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 8px; padding: 25px; border: 1px solid #e2e8f0;">
+                            <h2 style="color: #0f172a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #3b82f6; padding-bottom: 10px;">' . e($title) . '</h2>
+                            <div style="font-size: 15px; line-height: 1.6; color: #334155; margin-top: 15px;">
+                                ' . $htmlMessage . '
+                            </div>
+                            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
+                                &copy; ' . date('Y') . ' OMSCOMPANION. All rights reserved.
+                            </div>
+                        </div>
+                    </div>';
+
+                    \Illuminate\Support\Facades\Mail::html($htmlContent, function ($mail) use ($user, $title) {
                         $mail->to($user->email, $user->name)
                             ->subject($title);
                     });
