@@ -321,17 +321,22 @@ class AdminController extends Controller
             'goal_4_title' => 'required|string|max:255',
             'goal_4_desc' => 'required|string',
             'site_name' => 'nullable|string|max:255',
-            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'site_logo' => 'nullable|file|max:2048',
             'remove_logo' => 'nullable|boolean',
-            'hero_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            'hero_banner' => 'nullable|file|max:5120',
             'remove_banner' => 'nullable|boolean',
         ]);
+
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
 
         if ($request->boolean('remove_logo')) {
             LandingSetting::where('key', 'site_logo')->delete();
         } elseif ($request->hasFile('site_logo')) {
             $file = $request->file('site_logo');
-            $extension = $file->getClientOriginalExtension() ?: 'png';
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            if (!in_array($extension, $allowedExtensions)) {
+                return back()->withErrors(['site_logo' => 'The logo file must be a valid image (jpg, png, gif, svg, webp).']);
+            }
             $filename = 'logo_' . time() . '.' . $extension;
 
             $destinationPath = storage_path('app/public/logos');
@@ -351,7 +356,10 @@ class AdminController extends Controller
             LandingSetting::where('key', 'hero_banner')->delete();
         } elseif ($request->hasFile('hero_banner')) {
             $file = $request->file('hero_banner');
-            $extension = $file->getClientOriginalExtension() ?: 'png';
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            if (!in_array($extension, $allowedExtensions)) {
+                return back()->withErrors(['hero_banner' => 'The banner file must be a valid image (jpg, png, gif, svg, webp).']);
+            }
             $filename = 'banner_' . time() . '.' . $extension;
 
             $destinationPath = storage_path('app/public/banners');
