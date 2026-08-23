@@ -66,7 +66,7 @@ export default function Register() {
 
                     <form onSubmit={handleSubmit}>
                         {/* Row 1: Name (single row) */}
-                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                        <div className="form-group" style={{ marginBottom: '12px' }}>
                             <label className="form-label" htmlFor="name" style={{ fontWeight: '600', fontSize: '13px' }}>Full Name</label>
                             <input
                                 type="text"
@@ -76,13 +76,12 @@ export default function Register() {
                                 value={data.name}
                                 onChange={e => setData('name', e.target.value)}
                                 required
-                                style={{ padding: '11px 14px', borderRadius: '8px' }}
                             />
                             {errors.name && <span className="form-error">{errors.name}</span>}
                         </div>
 
                         {/* Row 2: Email (single row, required) */}
-                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                        <div className="form-group" style={{ marginBottom: '12px' }}>
                             <label className="form-label" htmlFor="email" style={{ fontWeight: '600', fontSize: '13px' }}>Email Address</label>
                             <input
                                 type="email"
@@ -92,13 +91,12 @@ export default function Register() {
                                 value={data.email}
                                 onChange={e => setData('email', e.target.value)}
                                 required
-                                style={{ padding: '11px 14px', borderRadius: '8px' }}
                             />
                             {errors.email && <span className="form-error">{errors.email}</span>}
                         </div>
 
                         {/* Row 3: Phone and BDS Number (in a row on all screen sizes including mobile) */}
-                        <div className="grid-2col-fixed-row" style={{ marginBottom: '16px' }}>
+                        <div className="grid-2col-fixed-row" style={{ marginBottom: '12px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="phone" style={{ fontWeight: '600', fontSize: '13px' }}>Phone Number</label>
                                 <input
@@ -109,7 +107,6 @@ export default function Register() {
                                     value={data.phone}
                                     onChange={e => setData('phone', e.target.value)}
                                     required
-                                    style={{ padding: '11px 14px', borderRadius: '8px' }}
                                 />
                                 {errors.phone && <span className="form-error">{errors.phone}</span>}
                             </div>
@@ -124,14 +121,13 @@ export default function Register() {
                                     value={data.bds_registration_number}
                                     onChange={e => setData('bds_registration_number', e.target.value)}
                                     required
-                                    style={{ padding: '11px 14px', borderRadius: '8px' }}
                                 />
                                 {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
                             </div>
                         </div>
 
                         {/* Row 4: Clinic Name (single row) */}
-                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                        <div className="form-group" style={{ marginBottom: '12px' }}>
                             <label className="form-label" htmlFor="clinic_name" style={{ fontWeight: '600', fontSize: '13px' }}>Clinic / Chamber Name</label>
                             <input
                                 type="text"
@@ -141,13 +137,12 @@ export default function Register() {
                                 value={data.clinic_name}
                                 onChange={e => setData('clinic_name', e.target.value)}
                                 required
-                                style={{ padding: '11px 14px', borderRadius: '8px' }}
                             />
                             {errors.clinic_name && <span className="form-error">{errors.clinic_name}</span>}
                         </div>
 
                         {/* Row 5: Address (single row) */}
-                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                        <div className="form-group" style={{ marginBottom: '12px' }}>
                             <label className="form-label" htmlFor="address" style={{ fontWeight: '600', fontSize: '13px' }}>Clinic Address</label>
                             <input
                                 type="text"
@@ -157,13 +152,12 @@ export default function Register() {
                                 value={data.address}
                                 onChange={e => setData('address', e.target.value)}
                                 required
-                                style={{ padding: '11px 14px', borderRadius: '8px' }}
                             />
                             {errors.address && <span className="form-error">{errors.address}</span>}
                         </div>
 
                         {/* Row 6: Password & Confirm (in a row on all screen sizes including mobile) */}
-                        <div className="grid-2col-fixed-row" style={{ marginBottom: '22px' }}>
+                        <div className="grid-2col-fixed-row" style={{ marginBottom: '16px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '13px' }}>Password</label>
                                 <input

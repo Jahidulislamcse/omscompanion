@@ -2520,21 +2520,39 @@ h1, h2, h3, h4, h5, h6 {
 .grid-2col-fixed-row {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 14px;
+    gap: 12px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
     .grid-2col-fixed-row {
-        gap: 10px !important;
+        gap: 8px !important;
     }
 
     .grid-2col-fixed-row .form-control {
-        padding: 9px 10px !important;
+        padding: 8px 10px !important;
         font-size: 12px !important;
     }
 
     .grid-2col-fixed-row .form-label {
         font-size: 11px !important;
+        margin-bottom: 3px !important;
+    }
+
+    .auth-container {
+        padding: 0 5px !important;
+    }
+
+    .auth-card {
+        padding: 20px 16px !important;
+    }
+
+    .auth-card .form-group {
+        margin-bottom: 10px !important;
+    }
+
+    .auth-card .form-control {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
     }
 }
 
