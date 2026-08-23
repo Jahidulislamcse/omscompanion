@@ -285,7 +285,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </p>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                Click link to archive →
+                                Browse Video Archive 🎥
                             </Link>
                         </div>
 
@@ -302,7 +302,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </p>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                Click link to archive →
+                                Explore Surgical Archive 📈
                             </Link>
                         </div>
 
@@ -324,7 +324,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 rel="noopener noreferrer"
                                 className="benefit-action-btn btn-whatsapp"
                             >
-                                Click link to WhatsApp chat box 📲
+                                Consult via WhatsApp Chat 📲
                             </a>
                         </div>
 
@@ -341,7 +341,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </p>
                             </div>
                             <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
-                                Click link to referral page 📋
+                                Go to Referral Portal 📋
                             </Link>
                         </div>
 
@@ -358,7 +358,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </p>
                             </div>
                             <a href="#news" className="benefit-action-btn btn-outline">
-                                Click link to news 📰
+                                Read Training & News 📰
                             </a>
                         </div>
 
@@ -375,7 +375,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </p>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                Click link to archive →
+                                View Clinical Guides Archive 🩺
                             </Link>
                         </div>
 
@@ -392,7 +392,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </p>
                             </div>
                             <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
-                                Click link to referral page 📋
+                                Join Referral Team 🤝
                             </Link>
                         </div>
                     </div>
