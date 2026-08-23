@@ -342,7 +342,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 </div>
                                 <h3 className="benefit-title">Improve clinical skills / Professional training</h3>
                             </div>
-                            <a href="#news" className="benefit-action-btn btn-outline">
+                            <a href="#news" className="benefit-action-btn btn-rose-glow">
                                 News & Training 📰
                             </a>
                         </div>

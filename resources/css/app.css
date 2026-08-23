@@ -2629,6 +2629,15 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(244, 63, 94, 0.1);
     color: #e11d48;
 }
+.btn-rose-glow {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+}
+.btn-rose-glow:hover {
+    box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
+    transform: translateY(-2px);
+}
 
 .card-glow-amber {
     border-top: 4px solid #f59e0b;
