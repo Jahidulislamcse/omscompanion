@@ -22,6 +22,9 @@ export default function Welcome({ settings, freeVideos }) {
     // Back to top state
     const [showScrollTop, setShowScrollTop] = useState(false);
 
+    // Mobile Navigation state
+    const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 400) {
@@ -175,20 +178,29 @@ export default function Welcome({ settings, freeVideos }) {
                     <ApplicationLogo />
                 </Link>
 
-                <nav className="landing-nav">
-                    <Link href="/" className="nav-link-item active-nav-item">HOME</Link>
-                    <Link href={route('videos.public')} className="nav-link-item">ARCHIVE</Link>
+                <button 
+                    type="button" 
+                    className="mobile-menu-toggle"
+                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                    aria-label="Toggle navigation menu"
+                >
+                    {mobileNavOpen ? '✕' : '☰'}
+                </button>
+
+                <nav className={`landing-nav ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
+                    <Link href="/" className="nav-link-item active-nav-item" onClick={() => setMobileNavOpen(false)}>HOME</Link>
+                    <Link href={route('videos.public')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ARCHIVE</Link>
                     
                     {auth.user ? (
-                        <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow">
+                        <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
                             Dashboard →
                         </Link>
                     ) : (
                         <div className="landing-auth-buttons">
-                            <Link href={route('login')} className="btn btn-outline nav-btn">
+                            <Link href={route('login')} className="btn btn-outline nav-btn" onClick={() => setMobileNavOpen(false)}>
                                 Login
                             </Link>
-                            <Link href={route('register')} className="btn btn-primary nav-btn btn-glow">
+                            <Link href={route('register')} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
                                 Registration
                             </Link>
                         </div>
