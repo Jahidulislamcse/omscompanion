@@ -52,7 +52,7 @@ export default function Login() {
                     
                     {/* Left Column: Form */}
                     <div className="auth-form-column">
-                        <div style={{ marginBottom: '16px' }}>
+                        <div style={{ marginBottom: '16px', textAlign: 'center' }}>
                             <Link href="/" style={{ display: 'inline-block' }}>
                                 <ApplicationLogo height="38px" />
                             </Link>
