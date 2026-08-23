@@ -791,26 +791,30 @@ h1, h2, h3, h4, h5, h6 {
 /* Mobile Header Navigation Toggle */
 .mobile-menu-toggle {
     display: none;
-    background: rgba(6, 182, 212, 0.1);
-    border: 1px solid rgba(6, 182, 212, 0.35);
-    color: #0f172a;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-smooth);
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: var(--color-cyan, #06b6d4) !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3) !important;
 }
 
 .mobile-menu-toggle:hover {
-    background: rgba(6, 182, 212, 0.2);
+    background: #0891b2 !important;
 }
 
-[data-theme="dark"] .mobile-menu-toggle {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    color: #ffffff;
+.hamburger-bar {
+    display: block !important;
+    width: 20px !important;
+    height: 2.5px !important;
+    background-color: #ffffff !important;
+    border-radius: 2px !important;
 }
 
 @media (max-width: 768px) {
