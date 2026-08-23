@@ -282,7 +282,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <h3 className="benefit-title">Free access to surgical reference videos</h3>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                Browse Video Archive 🎥
+                                View Archive →
                             </Link>
                         </div>
 
@@ -296,7 +296,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <h3 className="benefit-title">Improve your range of treatments</h3>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                Explore Surgical Archive 📈
+                                View Archive →
                             </Link>
                         </div>
 
@@ -315,7 +315,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 rel="noopener noreferrer"
                                 className="benefit-action-btn btn-whatsapp"
                             >
-                                Consult via WhatsApp Chat 📲
+                                WhatsApp Chat 📲
                             </a>
                         </div>
 
@@ -329,7 +329,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <h3 className="benefit-title">Don’t lose your patient through referral</h3>
                             </div>
                             <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
-                                Go to Referral Portal 📋
+                                Referral Page 📋
                             </Link>
                         </div>
 
@@ -343,7 +343,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <h3 className="benefit-title">Improve clinical skills / Professional training</h3>
                             </div>
                             <a href="#news" className="benefit-action-btn btn-outline">
-                                Read Training & News 📰
+                                News & Training 📰
                             </a>
                         </div>
 
@@ -357,7 +357,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <h3 className="benefit-title">Manage more co-morbid patients</h3>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                View Clinical Guides Archive 🩺
+                                View Archive →
                             </Link>
                         </div>
 
@@ -371,7 +371,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <h3 className="benefit-title">Participate in Maxillofacial surgery cases as a team</h3>
                             </div>
                             <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
-                                Join Referral Team 🤝
+                                Referral Page 📋
                             </Link>
                         </div>
                     </div>
