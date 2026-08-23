@@ -280,9 +280,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">Surgical Archive</span>
                                 </div>
                                 <h3 className="benefit-title">Free access to surgical reference videos</h3>
-                                <p className="benefit-desc">
-                                    Access high-definition surgical technique walkthroughs, procedure guides, and educational videos anytime.
-                                </p>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
                                 Browse Video Archive 🎥
@@ -297,9 +294,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">Clinical Expansion</span>
                                 </div>
                                 <h3 className="benefit-title">Improve your range of treatments</h3>
-                                <p className="benefit-desc">
-                                    Expand clinical capabilities with specialized surgical methodologies and step-by-step case demonstrations.
-                                </p>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
                                 Explore Surgical Archive 📈
@@ -314,9 +308,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">WhatsApp Support</span>
                                 </div>
                                 <h3 className="benefit-title">Online consultation / Expert opinion</h3>
-                                <p className="benefit-desc">
-                                    Connect directly with oral & maxillofacial surgery specialists for real-time advice and case guidance.
-                                </p>
                             </div>
                             <a 
                                 href={`https://wa.me/${(getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000'}?text=${encodeURIComponent('Hello OMSCOMPANION! I would like an Online consultation / Expert opinion.')}`}
@@ -336,9 +327,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">Case Tracking</span>
                                 </div>
                                 <h3 className="benefit-title">Don’t lose your patient through referral</h3>
-                                <p className="benefit-desc">
-                                    Maintain complete patient connection with live status tracking logs from initial consultation to completion.
-                                </p>
                             </div>
                             <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
                                 Go to Referral Portal 📋
@@ -353,9 +341,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">Training & News</span>
                                 </div>
                                 <h3 className="benefit-title">Improve clinical skills / Professional training</h3>
-                                <p className="benefit-desc">
-                                    Stay ahead with clinical workshop announcements, surgical masterclasses, and news updates.
-                                </p>
                             </div>
                             <a href="#news" className="benefit-action-btn btn-outline">
                                 Read Training & News 📰
@@ -370,9 +355,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">Complex Cases</span>
                                 </div>
                                 <h3 className="benefit-title">Manage more co-morbid patients</h3>
-                                <p className="benefit-desc">
-                                    Access clinical reference guides for managing medically compromised patients undergoing oral surgery.
-                                </p>
                             </div>
                             <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
                                 View Clinical Guides Archive 🩺
@@ -387,9 +369,6 @@ export default function Welcome({ settings, freeVideos }) {
                                     <span className="benefit-tag">Multidisciplinary</span>
                                 </div>
                                 <h3 className="benefit-title">Participate in Maxillofacial surgery cases as a team</h3>
-                                <p className="benefit-desc">
-                                    Collaborate seamlessly on complex surgical cases as a recognized member of our multidisciplinary network.
-                                </p>
                             </div>
                             <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
                                 Join Referral Team 🤝
