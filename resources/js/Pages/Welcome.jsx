@@ -202,7 +202,7 @@ export default function Welcome({ settings, freeVideos }) {
                     <>
                         <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
                             <img 
-                                src={route('site.banner.stream')} 
+                                src={`${route('site.banner.stream')}?v=${getSetting('hero_banner_updated_at', Date.now())}`} 
                                 alt={getSetting('hero_title', 'Site Banner')} 
                                 style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'cover' }}
                             />

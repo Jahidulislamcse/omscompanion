@@ -85,7 +85,12 @@ Route::get('/site-logo-image', function () {
         abort(404);
     }
     $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/png';
-    return response()->file($filePath, ['Content-Type' => $mimeType]);
+    return response()->file($filePath, [
+        'Content-Type' => $mimeType,
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        'Pragma' => 'no-cache',
+        'Expires' => '0',
+    ]);
 })->name('site.logo.stream');
 
 // Site Dynamic Banner Stream Route (Bypasses cPanel symlink issues)
@@ -100,7 +105,12 @@ Route::get('/site-banner-image', function () {
         abort(404);
     }
     $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/png';
-    return response()->file($filePath, ['Content-Type' => $mimeType]);
+    return response()->file($filePath, [
+        'Content-Type' => $mimeType,
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        'Pragma' => 'no-cache',
+        'Expires' => '0',
+    ]);
 })->name('site.banner.stream');
 
 // Guest Routes

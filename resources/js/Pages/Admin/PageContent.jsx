@@ -150,7 +150,7 @@ export default function PageContent({ settings }) {
                                 {bannerPreview ? (
                                     <img src={bannerPreview} alt="Banner Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
                                 ) : (!data.remove_banner && settings.hero_banner) ? (
-                                    <img src={route('site.banner.stream')} alt="Hero Banner" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
+                                    <img src={`${route('site.banner.stream')}?v=${settings.hero_banner_updated_at || Date.now()}`} alt="Hero Banner" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
                                 ) : (
                                     <div style={{ padding: '30px', color: 'var(--text-muted)', fontSize: '14px' }}>
                                         No custom banner image active. The default dynamic hero text section will display on the homepage.

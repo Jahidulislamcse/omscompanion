@@ -331,6 +331,7 @@ class AdminController extends Controller
 
         if ($request->boolean('remove_logo')) {
             LandingSetting::where('key', 'site_logo')->delete();
+            LandingSetting::where('key', 'site_logo_updated_at')->delete();
         } elseif ($request->hasFile('site_logo')) {
             $file = $request->file('site_logo');
             $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
@@ -350,10 +351,15 @@ class AdminController extends Controller
                 ['key' => 'site_logo'],
                 ['value' => 'storage/logos/' . $filename]
             );
+            LandingSetting::updateOrCreate(
+                ['key' => 'site_logo_updated_at'],
+                ['value' => (string) time()]
+            );
         }
 
         if ($request->boolean('remove_banner')) {
             LandingSetting::where('key', 'hero_banner')->delete();
+            LandingSetting::where('key', 'hero_banner_updated_at')->delete();
         } elseif ($request->hasFile('hero_banner')) {
             $file = $request->file('hero_banner');
             $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
@@ -372,6 +378,10 @@ class AdminController extends Controller
             LandingSetting::updateOrCreate(
                 ['key' => 'hero_banner'],
                 ['value' => 'storage/banners/' . $filename]
+            );
+            LandingSetting::updateOrCreate(
+                ['key' => 'hero_banner_updated_at'],
+                ['value' => (string) time()]
             );
         }
 
