@@ -113,6 +113,26 @@ Route::get('/site-banner-image', function () {
     ]);
 })->name('site.banner.stream');
 
+// Login Page Side Image Stream Route (Bypasses cPanel symlink issues)
+Route::get('/site-login-image', function () {
+    $imgPath = \App\Models\LandingSetting::where('key', 'login_side_image')->value('value');
+    if (!$imgPath) {
+        abort(404);
+    }
+    $filename = basename($imgPath);
+    $filePath = storage_path('app/public/login_images/' . $filename);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/png';
+    return response()->file($filePath, [
+        'Content-Type' => $mimeType,
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        'Pragma' => 'no-cache',
+        'Expires' => '0',
+    ]);
+})->name('site.login_image.stream');
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

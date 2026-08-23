@@ -7,6 +7,7 @@ export default function PageContent({ settings }) {
     const { site_logo: currentLogo } = usePage().props;
     const [logoPreview, setLogoPreview] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
+    const [loginPreview, setLoginPreview] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -28,6 +29,10 @@ export default function PageContent({ settings }) {
         remove_logo: false,
         hero_banner: null,
         remove_banner: false,
+        login_side_title: settings.login_side_title || '',
+        login_side_subtitle: settings.login_side_subtitle || '',
+        login_side_image: null,
+        remove_login_image: false,
     });
 
     const handleLogoChange = (e) => {
@@ -54,6 +59,19 @@ export default function PageContent({ settings }) {
     const handleRemoveBanner = () => {
         setData(data => ({ ...data, hero_banner: null, remove_banner: true }));
         setBannerPreview(null);
+    };
+
+    const handleLoginImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData(data => ({ ...data, login_side_image: file, remove_login_image: false }));
+            setLoginPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const handleRemoveLoginImage = () => {
+        setData(data => ({ ...data, login_side_image: null, remove_login_image: true }));
+        setLoginPreview(null);
     };
 
     const handleSubmit = (e) => {
@@ -209,7 +227,76 @@ export default function PageContent({ settings }) {
                         </div>
                     </div>
 
-                    {/* Goals Config Grid */}
+                    {/* Login Page Side Image & Text Config */}
+                    <div className="glass-panel">
+                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
+                            🖼️ Login Page Side Image & Banner Config
+                        </h3>
+                        
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label className="form-label">Active Login Side Image Preview</label>
+                            <div style={{ padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                                {loginPreview ? (
+                                    <img src={loginPreview} alt="Login Side Preview" style={{ width: '100%', maxHeight: '220px', objectFit: 'cover', borderRadius: '6px' }} />
+                                ) : (!data.remove_login_image && settings.login_side_image) ? (
+                                    <img src={`${route('site.login_image.stream')}?v=${settings.login_side_image_updated_at || Date.now()}`} alt="Login Side Image" style={{ width: '100%', maxHeight: '220px', objectFit: 'cover', borderRadius: '6px' }} />
+                                ) : (
+                                    <div style={{ padding: '30px', color: 'var(--text-muted)', fontSize: '14px' }}>
+                                        No custom login image uploaded. Default themed side banner will display on the login page.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label className="form-label">Upload Custom Login Page Side Image (PNG, JPG, WebP)</label>
+                            <input 
+                                type="file" 
+                                className="form-control"
+                                accept="image/*"
+                                onChange={handleLoginImageChange}
+                            />
+                            {errors.login_side_image && <span className="form-error">{errors.login_side_image}</span>}
+                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                Uploading an image will render the side banner image beside the login form.
+                            </p>
+                        </div>
+
+                        {((settings && settings.login_side_image && !data.remove_login_image) || loginPreview) && (
+                            <button 
+                                type="button" 
+                                className="btn btn-outline"
+                                style={{ marginBottom: '24px', color: '#ef4444', borderColor: '#ef4444' }}
+                                onClick={handleRemoveLoginImage}
+                            >
+                                🗑️ Remove Custom Login Side Image
+                            </button>
+                        )}
+
+                        <div className="form-group">
+                            <label className="form-label">Login Side Overlay Title</label>
+                            <input 
+                                type="text" 
+                                className="form-control"
+                                value={data.login_side_title}
+                                onChange={e => setData('login_side_title', e.target.value)}
+                                placeholder="e.g. Discover your next journey"
+                            />
+                            {errors.login_side_title && <span className="form-error">{errors.login_side_title}</span>}
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">Login Side Overlay Subtitle / Description</label>
+                            <textarea 
+                                className="form-control"
+                                value={data.login_side_subtitle}
+                                onChange={e => setData('login_side_subtitle', e.target.value)}
+                                rows="3"
+                                placeholder="e.g. Explore ideas, stories, and experiences designed to inspire your everyday practice."
+                            />
+                            {errors.login_side_subtitle && <span className="form-error">{errors.login_side_subtitle}</span>}
+                        </div>
+                    </div>
                     <div className="glass-panel">
                         <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
                             📋 Chamber Goals & Mission Config

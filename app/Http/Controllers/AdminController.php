@@ -325,6 +325,10 @@ class AdminController extends Controller
             'remove_logo' => 'nullable|boolean',
             'hero_banner' => 'nullable|file|max:5120',
             'remove_banner' => 'nullable|boolean',
+            'login_side_image' => 'nullable|file|max:5120',
+            'remove_login_image' => 'nullable|boolean',
+            'login_side_title' => 'nullable|string|max:255',
+            'login_side_subtitle' => 'nullable|string',
         ]);
 
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
@@ -385,6 +389,34 @@ class AdminController extends Controller
             );
         }
 
+        if ($request->boolean('remove_login_image')) {
+            LandingSetting::where('key', 'login_side_image')->delete();
+            LandingSetting::where('key', 'login_side_image_updated_at')->delete();
+        } elseif ($request->hasFile('login_side_image')) {
+            $file = $request->file('login_side_image');
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            if (!in_array($extension, $allowedExtensions)) {
+                return back()->withErrors(['login_side_image' => 'The login side image must be a valid image (jpg, png, gif, svg, webp).']);
+            }
+            $filename = 'login_side_' . time() . '.' . $extension;
+
+            $destinationPath = storage_path('app/public/login_images');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $filename);
+
+            LandingSetting::updateOrCreate(
+                ['key' => 'login_side_image'],
+                ['value' => 'storage/login_images/' . $filename]
+            );
+            LandingSetting::updateOrCreate(
+                ['key' => 'login_side_image_updated_at'],
+                ['value' => (string) time()]
+            );
+        }
+
         $settingsData = $request->only([
             'site_name',
             'hero_title',
@@ -397,6 +429,8 @@ class AdminController extends Controller
             'goal_3_desc',
             'goal_4_title',
             'goal_4_desc',
+            'login_side_title',
+            'login_side_subtitle',
             'footer_office_location',
             'footer_contact_phone',
             'footer_contact_email',

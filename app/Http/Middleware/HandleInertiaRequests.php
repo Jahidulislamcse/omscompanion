@@ -61,6 +61,11 @@ class HandleInertiaRequests extends Middleware
                 ? route('site.logo.stream') . '?v=' . (LandingSetting::where('key', 'site_logo_updated_at')->value('value') ?: time())
                 : null,
             'site_name' => LandingSetting::where('key', 'site_name')->value('value') ?: 'OMSCOMPANION',
+            'login_side_image' => LandingSetting::where('key', 'login_side_image')->value('value') 
+                ? route('site.login_image.stream') . '?v=' . (LandingSetting::where('key', 'login_side_image_updated_at')->value('value') ?: time())
+                : null,
+            'login_side_title' => LandingSetting::where('key', 'login_side_title')->value('value') ?: 'Discover your next journey',
+            'login_side_subtitle' => LandingSetting::where('key', 'login_side_subtitle')->value('value') ?: 'Explore ideas, stories, and experiences designed to inspire your everyday practice.',
         ];
     }
 }
