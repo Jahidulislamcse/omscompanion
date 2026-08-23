@@ -2516,6 +2516,28 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+/* Forced 2-column row layout for mobile and desktop */
+.grid-2col-fixed-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px;
+}
+
+@media (max-width: 480px) {
+    .grid-2col-fixed-row {
+        gap: 10px !important;
+    }
+
+    .grid-2col-fixed-row .form-control {
+        padding: 9px 10px !important;
+        font-size: 12px !important;
+    }
+
+    .grid-2col-fixed-row .form-label {
+        font-size: 11px !important;
+    }
+}
+
 @media (max-width: 820px) {
     .auth-split-card {
         grid-template-columns: 1fr;
