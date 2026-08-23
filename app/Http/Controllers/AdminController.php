@@ -323,6 +323,8 @@ class AdminController extends Controller
             'site_name' => 'nullable|string|max:255',
             'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'remove_logo' => 'nullable|boolean',
+            'hero_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            'remove_banner' => 'nullable|boolean',
         ]);
 
         if ($request->boolean('remove_logo')) {
@@ -342,6 +344,26 @@ class AdminController extends Controller
             LandingSetting::updateOrCreate(
                 ['key' => 'site_logo'],
                 ['value' => 'storage/logos/' . $filename]
+            );
+        }
+
+        if ($request->boolean('remove_banner')) {
+            LandingSetting::where('key', 'hero_banner')->delete();
+        } elseif ($request->hasFile('hero_banner')) {
+            $file = $request->file('hero_banner');
+            $extension = $file->getClientOriginalExtension() ?: 'png';
+            $filename = 'banner_' . time() . '.' . $extension;
+
+            $destinationPath = storage_path('app/public/banners');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $filename);
+
+            LandingSetting::updateOrCreate(
+                ['key' => 'hero_banner'],
+                ['value' => 'storage/banners/' . $filename]
             );
         }
 

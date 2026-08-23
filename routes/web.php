@@ -88,6 +88,21 @@ Route::get('/site-logo-image', function () {
     return response()->file($filePath, ['Content-Type' => $mimeType]);
 })->name('site.logo.stream');
 
+// Site Dynamic Banner Stream Route (Bypasses cPanel symlink issues)
+Route::get('/site-banner-image', function () {
+    $bannerPath = \App\Models\LandingSetting::where('key', 'hero_banner')->value('value');
+    if (!$bannerPath) {
+        abort(404);
+    }
+    $filename = basename($bannerPath);
+    $filePath = storage_path('app/public/banners/' . $filename);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/png';
+    return response()->file($filePath, ['Content-Type' => $mimeType]);
+})->name('site.banner.stream');
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

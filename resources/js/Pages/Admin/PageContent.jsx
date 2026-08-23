@@ -6,6 +6,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 export default function PageContent({ settings }) {
     const { site_logo: currentLogo } = usePage().props;
     const [logoPreview, setLogoPreview] = useState(null);
+    const [bannerPreview, setBannerPreview] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -25,6 +26,8 @@ export default function PageContent({ settings }) {
         footer_facebook_url: settings.footer_facebook_url || '',
         site_logo: null,
         remove_logo: false,
+        hero_banner: null,
+        remove_banner: false,
     });
 
     const handleLogoChange = (e) => {
@@ -40,12 +43,25 @@ export default function PageContent({ settings }) {
         setLogoPreview(null);
     };
 
+    const handleBannerChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData(data => ({ ...data, hero_banner: file, remove_banner: false }));
+            setBannerPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const handleRemoveBanner = () => {
+        setData(data => ({ ...data, hero_banner: null, remove_banner: true }));
+        setBannerPreview(null);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('admin.page_content.update'), {
             forceFormData: true,
             onSuccess: () => {
-                alert('Site settings & logo updated successfully!');
+                alert('Site settings & page content updated successfully!');
             }
         });
     };
@@ -122,14 +138,54 @@ export default function PageContent({ settings }) {
                         )}
                     </div>
 
-                    {/* Hero Section settings */}
+                    {/* Dynamic Hero Banner & Section Config */}
                     <div className="glass-panel">
                         <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            ✨ Hero Section Config
+                            🖼️ Dynamic Hero Banner & Section Config
                         </h3>
                         
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label className="form-label">Active Hero Banner Preview</label>
+                            <div style={{ padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                                {bannerPreview ? (
+                                    <img src={bannerPreview} alt="Banner Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
+                                ) : (!data.remove_banner && settings.hero_banner) ? (
+                                    <img src={route('site.banner.stream')} alt="Hero Banner" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
+                                ) : (
+                                    <div style={{ padding: '30px', color: 'var(--text-muted)', fontSize: '14px' }}>
+                                        No custom banner image active. The default dynamic hero text section will display on the homepage.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label className="form-label">Upload Custom Dynamic Hero Banner Image (PNG, JPG, WebP)</label>
+                            <input 
+                                type="file" 
+                                className="form-control"
+                                accept="image/*"
+                                onChange={handleBannerChange}
+                            />
+                            {errors.hero_banner && <span className="form-error">{errors.hero_banner}</span>}
+                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                Uploading a banner image will display the dynamic hero banner on the top of the homepage.
+                            </p>
+                        </div>
+
+                        {((settings && settings.hero_banner && !data.remove_banner) || bannerPreview) && (
+                            <button 
+                                type="button" 
+                                className="btn btn-outline"
+                                style={{ marginBottom: '24px', color: '#ef4444', borderColor: '#ef4444' }}
+                                onClick={handleRemoveBanner}
+                            >
+                                🗑️ Remove Custom Hero Banner Image
+                            </button>
+                        )}
+
                         <div className="form-group">
-                            <label className="form-label">Hero Banner Title</label>
+                            <label className="form-label">Hero Section Title (Dynamic Text)</label>
                             <input 
                                 type="text" 
                                 className="form-control"
@@ -138,13 +194,10 @@ export default function PageContent({ settings }) {
                                 required
                             />
                             {errors.hero_title && <span className="form-error">{errors.hero_title}</span>}
-                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                Highlight key features by wrapping text inside class stylings on the homepage.
-                            </p>
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Hero Description Sub-title</label>
+                            <label className="form-label">Hero Section Description (Dynamic Text)</label>
                             <textarea 
                                 className="form-control"
                                 value={data.hero_subtitle}

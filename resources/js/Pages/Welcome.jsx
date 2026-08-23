@@ -196,68 +196,79 @@ export default function Welcome({ settings, freeVideos }) {
                 </nav>
             </header>
 
-            {/* Hero Section */}
+            {/* Hero Section (Supports Dynamic Banner Image from Site Settings) */}
             <section className="landing-hero hero-vibrant">
-                
-                <h1 className="landing-hero-title hero-title-colorful">
-                    {getSetting('hero_title', 'Bridging Dental Practices with Live Referral Intelligence')}
-                </h1>
-                
-                <p className="landing-hero-desc">
-                    {getSetting('hero_subtitle', `${site_name || 'DentistChamber'} connects BDS Practitioners with automated patient referral pipelines, live status tracking logs, masterclass surgical streams, and verified digital certificates.`)}
-                </p>
-
-                <div className="landing-hero-ctas">
-                    {auth.user ? (
-                        <Link href={getDashboardRoute()} className="btn btn-secondary hero-btn btn-gold-glow">
-                            🚀 Go to Your Dashboard
-                        </Link>
-                    ) : (
-                        <>
-                            <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
-                                🌟 Registration
-                            </Link>
-                            <Link href={route('videos.public')} className="btn btn-outline hero-btn">
-                                📁 View Archive
-                            </Link>
-                        </>
-                    )}
-                </div>
-
-                {/* Hero Stats Ticker Cards */}
-                <div className="hero-stats-ticker">
-                    <div className="glass-panel stat-ticker-card stat-cyan">
-                        <div className="stat-icon-wrapper">🩺</div>
-                        <div className="stat-ticker-info">
-                            <span className="stat-ticker-num">500+</span>
-                            <span className="stat-ticker-label">BDS Member Doctors</span>
-                        </div>
+                {settings && settings.hero_banner ? (
+                    <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                        <img 
+                            src={route('site.banner.stream')} 
+                            alt={getSetting('hero_title', 'Site Banner')} 
+                            style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'cover' }}
+                        />
                     </div>
+                ) : (
+                    <>
+                        <h1 className="landing-hero-title hero-title-colorful">
+                            {getSetting('hero_title', 'Bridging Dental Practices with Live Referral Intelligence')}
+                        </h1>
+                        
+                        <p className="landing-hero-desc">
+                            {getSetting('hero_subtitle', `${site_name || 'DentistChamber'} connects BDS Practitioners with automated patient referral pipelines, live status tracking logs, masterclass surgical streams, and verified digital certificates.`)}
+                        </p>
 
-                    <div className="glass-panel stat-ticker-card stat-emerald">
-                        <div className="stat-icon-wrapper">📋</div>
-                        <div className="stat-ticker-info">
-                            <span className="stat-ticker-num">3,400+</span>
-                            <span className="stat-ticker-label">Patient Referrals Tracked</span>
+                        <div className="landing-hero-ctas">
+                            {auth.user ? (
+                                <Link href={getDashboardRoute()} className="btn btn-secondary hero-btn btn-gold-glow">
+                                    🚀 Go to Your Dashboard
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
+                                        🌟 Registration
+                                    </Link>
+                                    <Link href={route('videos.public')} className="btn btn-outline hero-btn">
+                                        📁 View Archive
+                                    </Link>
+                                </>
+                            )}
                         </div>
-                    </div>
 
-                    <div className="glass-panel stat-ticker-card stat-indigo">
-                        <div className="stat-icon-wrapper">⚡</div>
-                        <div className="stat-ticker-info">
-                            <span className="stat-ticker-num">99.8%</span>
-                            <span className="stat-ticker-label">Live Status Precision</span>
-                        </div>
-                    </div>
+                        {/* Hero Stats Ticker Cards */}
+                        <div className="hero-stats-ticker">
+                            <div className="glass-panel stat-ticker-card stat-cyan">
+                                <div className="stat-icon-wrapper">🩺</div>
+                                <div className="stat-ticker-info">
+                                    <span className="stat-ticker-num">500+</span>
+                                    <span className="stat-ticker-label">BDS Member Doctors</span>
+                                </div>
+                            </div>
 
-                    <div className="glass-panel stat-ticker-card stat-amber">
-                        <div className="stat-icon-wrapper">🎓</div>
-                        <div className="stat-ticker-info">
-                            <span className="stat-ticker-num">100%</span>
-                            <span className="stat-ticker-label">Verified Certificates</span>
+                            <div className="glass-panel stat-ticker-card stat-emerald">
+                                <div className="stat-icon-wrapper">📋</div>
+                                <div className="stat-ticker-info">
+                                    <span className="stat-ticker-num">3,400+</span>
+                                    <span className="stat-ticker-label">Patient Referrals Tracked</span>
+                                </div>
+                            </div>
+
+                            <div className="glass-panel stat-ticker-card stat-indigo">
+                                <div className="stat-icon-wrapper">⚡</div>
+                                <div className="stat-ticker-info">
+                                    <span className="stat-ticker-num">99.8%</span>
+                                    <span className="stat-ticker-label">Live Status Precision</span>
+                                </div>
+                            </div>
+
+                            <div className="glass-panel stat-ticker-card stat-amber">
+                                <div className="stat-icon-wrapper">🎓</div>
+                                <div className="stat-ticker-info">
+                                    <span className="stat-ticker-num">100%</span>
+                                    <span className="stat-ticker-label">Verified Certificates</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
             </section>
 
             {/* Benefits of Membership Section */}
