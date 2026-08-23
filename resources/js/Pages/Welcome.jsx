@@ -177,7 +177,7 @@ export default function Welcome({ settings, freeVideos }) {
 
                 <nav className="landing-nav">
                     <Link href="/" className="nav-link-item active-nav-item">HOME</Link>
-                    <Link href={route('videos.public')} className="nav-link-item">VIDEOS</Link>
+                    <Link href={route('videos.public')} className="nav-link-item">ARCHIVE</Link>
                     
                     {auth.user ? (
                         <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow">
@@ -218,7 +218,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 🌟 Registration
                             </Link>
                             <Link href={route('videos.public')} className="btn btn-outline hero-btn">
-                                🎥 Watch Videos
+                                📁 View Archive
                             </Link>
                         </>
                     )}
@@ -260,6 +260,145 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             </section>
 
+            {/* Benefits of Membership Section */}
+            <section id="benefits" className="landing-section benefits-section">
+                <div className="landing-section-container">
+                    <div className="landing-section-header">
+                        <span className="badge-status badge-approved section-tag">✨ Member Advantages</span>
+                        <h2 className="landing-section-title">Benefit of Membership</h2>
+                        <p className="landing-section-subtitle">
+                            Explore how joining {site_name || 'DentistChamber'} empowers BDS Doctors with surgical video archives, online consultations, transparent referral tracking, and professional training.
+                        </p>
+                    </div>
+
+                    <div className="benefits-grid">
+                        {/* Benefit 1 */}
+                        <div className="glass-panel benefit-card card-glow-cyan">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">🎥</div>
+                                    <span className="benefit-tag">Surgical Archive</span>
+                                </div>
+                                <h3 className="benefit-title">Free access to surgical reference videos</h3>
+                                <p className="benefit-desc">
+                                    Access high-definition surgical technique walkthroughs, procedure guides, and educational videos anytime.
+                                </p>
+                            </div>
+                            <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
+                                Click link to archive →
+                            </Link>
+                        </div>
+
+                        {/* Benefit 2 */}
+                        <div className="glass-panel benefit-card card-glow-emerald">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">📈</div>
+                                    <span className="benefit-tag">Clinical Expansion</span>
+                                </div>
+                                <h3 className="benefit-title">Improve your range of treatments</h3>
+                                <p className="benefit-desc">
+                                    Expand clinical capabilities with specialized surgical methodologies and step-by-step case demonstrations.
+                                </p>
+                            </div>
+                            <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
+                                Click link to archive →
+                            </Link>
+                        </div>
+
+                        {/* Benefit 3 */}
+                        <div className="glass-panel benefit-card card-glow-gold">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">💬</div>
+                                    <span className="benefit-tag">WhatsApp Support</span>
+                                </div>
+                                <h3 className="benefit-title">Online consultation / Expert opinion</h3>
+                                <p className="benefit-desc">
+                                    Connect directly with oral & maxillofacial surgery specialists for real-time advice and case guidance.
+                                </p>
+                            </div>
+                            <a 
+                                href={`https://wa.me/${(getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000'}?text=${encodeURIComponent('Hello OMSCOMPANION! I would like an Online consultation / Expert opinion.')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="benefit-action-btn btn-whatsapp"
+                            >
+                                Click link to WhatsApp chat box 📲
+                            </a>
+                        </div>
+
+                        {/* Benefit 4 */}
+                        <div className="glass-panel benefit-card card-glow-indigo">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">🛡️</div>
+                                    <span className="benefit-tag">Case Tracking</span>
+                                </div>
+                                <h3 className="benefit-title">Don’t lose your patient through referral</h3>
+                                <p className="benefit-desc">
+                                    Maintain complete patient connection with live status tracking logs from initial consultation to completion.
+                                </p>
+                            </div>
+                            <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
+                                Click link to referral page 📋
+                            </Link>
+                        </div>
+
+                        {/* Benefit 5 */}
+                        <div className="glass-panel benefit-card card-glow-rose">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">🎓</div>
+                                    <span className="benefit-tag">Training & News</span>
+                                </div>
+                                <h3 className="benefit-title">Improve clinical skills / Professional training</h3>
+                                <p className="benefit-desc">
+                                    Stay ahead with clinical workshop announcements, surgical masterclasses, and news updates.
+                                </p>
+                            </div>
+                            <a href="#news" className="benefit-action-btn btn-outline">
+                                Click link to news 📰
+                            </a>
+                        </div>
+
+                        {/* Benefit 6 */}
+                        <div className="glass-panel benefit-card card-glow-amber">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">🩺</div>
+                                    <span className="benefit-tag">Complex Cases</span>
+                                </div>
+                                <h3 className="benefit-title">Manage more co-morbid patients</h3>
+                                <p className="benefit-desc">
+                                    Access clinical reference guides for managing medically compromised patients undergoing oral surgery.
+                                </p>
+                            </div>
+                            <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
+                                Click link to archive →
+                            </Link>
+                        </div>
+
+                        {/* Benefit 7 */}
+                        <div className="glass-panel benefit-card card-glow-cyan">
+                            <div>
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-wrapper">🤝</div>
+                                    <span className="benefit-tag">Multidisciplinary</span>
+                                </div>
+                                <h3 className="benefit-title">Participate in Maxillofacial surgery cases as a team</h3>
+                                <p className="benefit-desc">
+                                    Collaborate seamlessly on complex surgical cases as a recognized member of our multidisciplinary network.
+                                </p>
+                            </div>
+                            <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
+                                Click link to referral page 📋
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Simple Patient Referral Status Pipeline Simulation */}
             <section id="status-pipeline" className="landing-section pipeline-section">
                 <div className="landing-section-container">
@@ -268,6 +407,7 @@ export default function Welcome({ settings, freeVideos }) {
                         <h2 className="landing-section-title">Transparent Patient Referral Workflow</h2>
                         <p className="landing-section-subtitle">
                             Track every stage of your patient's referral journey live with automatic milestone status updates.
+
                         </p>
                     </div>
 
@@ -444,6 +584,69 @@ export default function Welcome({ settings, freeVideos }) {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* News & Professional Training Section */}
+            <section id="news" className="landing-section news-section">
+                <div className="landing-section-container">
+                    <div className="landing-section-header">
+                        <span className="badge-status badge-new section-tag">📰 Latest Updates</span>
+                        <h2 className="landing-section-title">Clinical News & Professional Training</h2>
+                        <p className="landing-section-subtitle">
+                            Stay updated with recent surgical case studies, workshop schedules, and professional training announcements for BDS Doctors.
+                        </p>
+                    </div>
+
+                    <div className="news-grid">
+                        <div className="glass-panel news-card card-glow-indigo">
+                            <div className="news-meta">
+                                <span className="badge-status badge-new">Workshop</span>
+                                <span>Upcoming Training</span>
+                            </div>
+                            <h4 style={{ fontSize: '18px', fontWeight: '700' }}>Advanced Maxillofacial Impaction & Surgical Masterclass</h4>
+                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                                Hands-on surgical training program focusing on complex 3rd molar impactions and piezosurgery techniques for general practitioners.
+                            </p>
+                            <Link href={route('videos.public')} className="btn btn-outline" style={{ alignSelf: 'flex-start', marginTop: 'auto' }}>
+                                View Related Masterclass Videos →
+                            </Link>
+                        </div>
+
+                        <div className="glass-panel news-card card-glow-emerald">
+                            <div className="news-meta">
+                                <span className="badge-status badge-completed">Clinical Guide</span>
+                                <span>Latest Guidelines</span>
+                            </div>
+                            <h4 style={{ fontSize: '18px', fontWeight: '700' }}>Co-Morbid Patient Management Protocols in Minor Oral Surgery</h4>
+                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                                Updated clinical guidelines for treating medically compromised and diabetic patients safely in chamber setups.
+                            </p>
+                            <Link href={route('videos.public')} className="btn btn-outline" style={{ alignSelf: 'flex-start', marginTop: 'auto' }}>
+                                Explore Clinical Guides →
+                            </Link>
+                        </div>
+
+                        <div className="glass-panel news-card card-glow-cyan">
+                            <div className="news-meta">
+                                <span className="badge-status badge-approved">Consultation</span>
+                                <span>Live Support</span>
+                            </div>
+                            <h4 style={{ fontSize: '18px', fontWeight: '700' }}>Online Consultation & Multidisciplinary Case Discussions</h4>
+                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                                BDS doctors can now directly request real-time expert opinions and surgical team collaboration via direct WhatsApp desk.
+                            </p>
+                            <a 
+                                href={`https://wa.me/${(getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000'}?text=${encodeURIComponent('Hello OMSCOMPANION! I would like to join the Multidisciplinary Case Discussions.')}`}
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn btn-whatsapp" 
+                                style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
+                            >
+                                Join WhatsApp Consultation 💬
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -76,7 +76,7 @@ export default function MemberLayout({ children, title }) {
                                     className={`sidebar-link ${isCurrent('/member/videos') ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
                                 >
-                                    <span>&#127916;</span> Videos
+                                    <span>&#127916;</span> Archive
                                 </Link>
                             </li>
                             <li>
