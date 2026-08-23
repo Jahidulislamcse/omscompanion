@@ -76,8 +76,8 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20|unique:users,phone',
-            'email' => 'nullable|string|email|max:255|unique:users,email',
-            'bds_registration_number' => 'nullable|string|max:50',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'bds_registration_number' => 'required|string|max:50',
             'clinic_name' => 'required|string|max:255',
             'address' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
