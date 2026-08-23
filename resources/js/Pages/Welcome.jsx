@@ -199,13 +199,20 @@ export default function Welcome({ settings, freeVideos }) {
             {/* Hero Section (Supports Dynamic Banner Image from Site Settings) */}
             <section className="landing-hero hero-vibrant">
                 {settings && settings.hero_banner ? (
-                    <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                        <img 
-                            src={route('site.banner.stream')} 
-                            alt={getSetting('hero_title', 'Site Banner')} 
-                            style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'cover' }}
-                        />
-                    </div>
+                    <>
+                        <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                            <img 
+                                src={route('site.banner.stream')} 
+                                alt={getSetting('hero_title', 'Site Banner')} 
+                                style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'cover' }}
+                            />
+                        </div>
+                        {getSetting('hero_subtitle') && (
+                            <p className="landing-hero-desc" style={{ marginTop: '12px' }}>
+                                {getSetting('hero_subtitle')}
+                            </p>
+                        )}
+                    </>
                 ) : (
                     <>
                         <h1 className="landing-hero-title hero-title-colorful">
