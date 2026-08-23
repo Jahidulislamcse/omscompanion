@@ -52,11 +52,11 @@ export default function Login() {
                     
                     {/* Left Column: Form */}
                     <div className="auth-form-column">
-                        <div style={{ marginBottom: '24px' }}>
+                        <div style={{ marginBottom: '16px' }}>
                             <Link href="/" style={{ display: 'inline-block' }}>
-                                <ApplicationLogo height="44px" />
+                                <ApplicationLogo height="38px" />
                             </Link>
-                            <h2 style={{ fontSize: '26px', fontWeight: '800', marginTop: '16px', marginBottom: '4px', letterSpacing: '-0.5px' }}>
+                            <h2 style={{ fontSize: '24px', fontWeight: '800', marginTop: '10px', marginBottom: '2px', letterSpacing: '-0.5px' }}>
                                 Welcome Back!
                             </h2>
                             <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: 0 }}>
@@ -65,8 +65,8 @@ export default function Login() {
                         </div>
 
                         <form onSubmit={handleSubmit}>
-                            <div className="form-group" style={{ marginBottom: '18px' }}>
-                                <label className="form-label" htmlFor="login" style={{ fontWeight: '600', fontSize: '13px' }}>
+                            <div className="form-group" style={{ marginBottom: '14px' }}>
+                                <label className="form-label" htmlFor="login" style={{ fontWeight: '600', fontSize: '13px', marginBottom: '4px' }}>
                                     Phone Number or Email Address
                                 </label>
                                 <input
@@ -78,13 +78,13 @@ export default function Login() {
                                     onChange={e => setData('login', e.target.value)}
                                     required
                                     autoComplete="username"
-                                    style={{ padding: '11px 14px', borderRadius: '8px' }}
+                                    style={{ padding: '10px 12px', borderRadius: '8px' }}
                                 />
                                 {errors.login && <span className="form-error">{errors.login}</span>}
                             </div>
 
-                            <div className="form-group" style={{ marginBottom: '18px' }}>
-                                <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '13px' }}>
+                            <div className="form-group" style={{ marginBottom: '14px' }}>
+                                <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '13px', marginBottom: '4px' }}>
                                     Password
                                 </label>
                                 <input
@@ -96,12 +96,12 @@ export default function Login() {
                                     onChange={e => setData('password', e.target.value)}
                                     required
                                     autoComplete="current-password"
-                                    style={{ padding: '11px 14px', borderRadius: '8px' }}
+                                    style={{ padding: '10px 12px', borderRadius: '8px' }}
                                 />
                                 {errors.password && <span className="form-error">{errors.password}</span>}
                             </div>
 
-                            <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '8px', marginBottom: '22px' }}>
+                            <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                                 <input
                                     type="checkbox"
                                     id="remember"
@@ -114,8 +114,8 @@ export default function Login() {
                                 </label>
                             </div>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                                <button type="submit" className="btn btn-primary btn-glow hero-btn" style={{ width: '100%', padding: '13px', fontSize: '15px', fontWeight: '700', borderRadius: '8px' }} disabled={processing}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <button type="submit" className="btn btn-primary btn-glow hero-btn" style={{ width: '100%', padding: '12px', fontSize: '14px', fontWeight: '700', borderRadius: '8px' }} disabled={processing}>
                                     {processing ? 'Logging in...' : 'Login'}
                                 </button>
                                 
