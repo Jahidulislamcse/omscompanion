@@ -789,9 +789,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .landing-hero {
-    padding: 80px 20px 60px 20px;
+    padding: 40px 20px 50px 20px;
     text-align: center;
-    max-width: 950px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
