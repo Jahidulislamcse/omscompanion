@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import PublicNavbar from '@/Components/PublicNavbar';
 
 export default function Index({ settings = {}, services = [] }) {
     const { auth, site_name } = usePage().props;
@@ -35,50 +36,7 @@ export default function Index({ settings = {}, services = [] }) {
             <Head title={`Services - ${site_name || 'OMSCOMPANION'}`} />
 
             {/* Header Navigation */}
-            <header className="glass-panel landing-header header-sticky">
-                <Link href="/" className="landing-brand-link">
-                    <ApplicationLogo />
-                </Link>
-
-                <button 
-                    type="button" 
-                    className="mobile-menu-toggle"
-                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                    aria-label="Toggle navigation menu"
-                >
-                    {mobileNavOpen ? (
-                        <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#ffffff', lineHeight: 1 }}>✕</span>
-                    ) : (
-                        <>
-                            <span className="hamburger-bar" />
-                            <span className="hamburger-bar" />
-                            <span className="hamburger-bar" />
-                        </>
-                    )}
-                </button>
-
-                <nav className={`landing-nav ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
-                    <Link href="/" className="nav-link-item" onClick={() => setMobileNavOpen(false)}>HOME</Link>
-                    <Link href={route('videos.public')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ARCHIVE</Link>
-                    <Link href={route('about')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ABOUT</Link>
-                    <Link href={route('services')} className="nav-link-item active-nav-item" onClick={() => setMobileNavOpen(false)}>SERVICES</Link>
-                    
-                    {auth.user ? (
-                        <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
-                            Dashboard →
-                        </Link>
-                    ) : (
-                        <div className="landing-auth-buttons">
-                            <Link href={route('login')} className="btn btn-outline nav-btn" onClick={() => setMobileNavOpen(false)}>
-                                Login
-                            </Link>
-                            <Link href={route('register')} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
-                                Registration
-                            </Link>
-                        </div>
-                    )}
-                </nav>
-            </header>
+            <PublicNavbar activePage="services" />
 
             {/* Main Services Page Content */}
             <main style={{ padding: '60px 24px 100px', flex: '1 0 auto' }}>

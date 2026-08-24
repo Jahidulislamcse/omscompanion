@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, Head, usePage, useForm, router } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import PublicNavbar from '@/Components/PublicNavbar';
 
 export function getYouTubeId(url) {
     if (!url) return '';
@@ -333,60 +334,7 @@ export default function Welcome({ settings, freeVideos }) {
             <div className="ambient-glow glow-indigo" />
 
             {/* Header Navigation */}
-            <header className="glass-panel landing-header header-sticky">
-                <Link href="/" className="landing-brand-link">
-                    <ApplicationLogo />
-                </Link>
-
-                <button 
-                    type="button" 
-                    className="mobile-menu-toggle"
-                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                    aria-label="Toggle navigation menu"
-                >
-                    {mobileNavOpen ? (
-                        <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#ffffff', lineHeight: 1 }}>✕</span>
-                    ) : (
-                        <>
-                            <span className="hamburger-bar" />
-                            <span className="hamburger-bar" />
-                            <span className="hamburger-bar" />
-                        </>
-                    )}
-                </button>
-
-                <nav className={`landing-nav ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
-                    <Link href="/" className="nav-link-item active-nav-item" onClick={() => setMobileNavOpen(false)}>HOME</Link>
-                    <Link href={route('videos.public')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ARCHIVE</Link>
-                    <Link href={route('about')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ABOUT</Link>
-                    <Link href={route('services')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>SERVICES</Link>
-                    
-                    {/* Single Refer a Patient Button */}
-                    <button 
-                        type="button"
-                        onClick={handleReferralClick} 
-                        className="btn btn-secondary nav-btn btn-gold-glow"
-                        style={{ marginRight: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
-                    >
-                        <span>📋</span> Refer a Patient
-                    </button>
-
-                    {auth.user ? (
-                        <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
-                            Dashboard →
-                        </Link>
-                    ) : (
-                        <div className="landing-auth-buttons">
-                            <Link href={route('login')} className="btn btn-outline nav-btn" onClick={() => setMobileNavOpen(false)}>
-                                Login
-                            </Link>
-                            <Link href={route('register')} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
-                                Registration
-                            </Link>
-                        </div>
-                    )}
-                </nav>
-            </header>
+            <PublicNavbar activePage="home" onReferralClick={handleReferralClick} />
 
             {/* Hero Section */}
             <section className="landing-hero hero-vibrant">
