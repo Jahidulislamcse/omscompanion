@@ -218,6 +218,16 @@ class AdminController extends Controller
 
     public function videos()
     {
+        // Ensure default categories exist
+        VideoCategory::firstOrCreate(
+            ['name' => 'Surgical approaches'],
+            ['description' => 'Surgical techniques and surgical approaches.']
+        );
+        VideoCategory::firstOrCreate(
+            ['name' => 'Clinical lecture/ tips tricks'],
+            ['description' => 'Clinical lectures, guides, and practical tips & tricks.']
+        );
+
         $categories = VideoCategory::with('videos')->get();
         $videos = Video::with('category')->orderBy('created_at', 'desc')->get();
         

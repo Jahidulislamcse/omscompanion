@@ -8,6 +8,7 @@ use App\Http\Controllers\VideoStreamingController;
 use App\Http\Controllers\CertificateController;
 use App\Models\LandingSetting;
 use App\Models\Video;
+use App\Models\VideoCategory;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,7 +16,43 @@ use Inertia\Inertia;
 Route::get('/', function () {
     $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
 
-    $dbFreeVideos = Video::where('is_free', true)->orderBy('created_at', 'desc')->get()->map(function ($video) {
+    // Ensure the 2 default categories exist
+    $surgicalCat = VideoCategory::firstOrCreate(
+        ['name' => 'Surgical approaches'],
+        ['description' => 'Surgical techniques and surgical approaches.']
+    );
+    $clinicalCat = VideoCategory::firstOrCreate(
+        ['name' => 'Clinical lecture/ tips tricks'],
+        ['description' => 'Clinical lectures, guides, and practical tips & tricks.']
+    );
+
+    // Ensure free videos exist for Surgical approaches category
+    if (Video::where('category_id', $surgicalCat->id)->where('is_free', true)->count() === 0) {
+        Video::create([
+            'category_id' => $surgicalCat->id,
+            'title' => "EUROPE'S BIGGEST AIRPLANE GRAVEYARD",
+            'description' => 'Detailed clinical video covering surgical approaches and procedure techniques.',
+            'duration' => 640,
+            'storage_type' => 'youtube',
+            'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            'is_free' => true,
+        ]);
+    }
+
+    // Ensure free videos exist for Clinical lecture/ tips tricks category
+    if (Video::where('category_id', $clinicalCat->id)->where('is_free', true)->count() === 0) {
+        Video::create([
+            'category_id' => $clinicalCat->id,
+            'title' => 'IMPERIAL AIRWAYS LONDON - Clinical Tips',
+            'description' => 'Comprehensive clinical lecture covering practical tips & tricks for BDS practitioners.',
+            'duration' => 480,
+            'storage_type' => 'youtube',
+            'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            'is_free' => true,
+        ]);
+    }
+
+    $dbFreeVideos = Video::with('category')->where('is_free', true)->orderBy('created_at', 'desc')->get()->map(function ($video) {
         return [
             'id' => $video->id,
             'title' => $video->title,
@@ -24,36 +61,23 @@ Route::get('/', function () {
             'storage_type' => $video->storage_type,
             'video_path' => $video->video_path,
             'is_free' => true,
+            'category_id' => $video->category_id,
+            'category_name' => $video->category ? $video->category->name : 'General',
         ];
     })->toArray();
 
-    // Fallback to maintain layout integrity if no free videos exist in database yet
-    if (empty($dbFreeVideos)) {
-        $dbFreeVideos = [
-            [
-                'id' => 'free-1',
-                'title' => 'Dental Referral System Overview',
-                'description' => 'A comprehensive walk-through of the DentistChamber referral pipeline, showing how BDS Doctors refer cases and track live treatment milestones.',
-                'duration' => 155,
-                'storage_type' => 'external',
-                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                'is_free' => true,
-            ],
-            [
-                'id' => 'free-2',
-                'title' => 'Premium Video Library Preview',
-                'description' => 'Take a peak at our high-definition clinical tutorials and educational video streams available exclusively to approved BDS members.',
-                'duration' => 205,
-                'storage_type' => 'external',
-                'video_path' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                'is_free' => true,
-            ]
+    $categories = VideoCategory::all()->map(function ($cat) {
+        return [
+            'id' => $cat->id,
+            'name' => $cat->name,
+            'description' => $cat->description,
         ];
-    }
+    })->toArray();
 
     return Inertia::render('Welcome', [
         'settings' => $settings,
-        'freeVideos' => $dbFreeVideos
+        'freeVideos' => $dbFreeVideos,
+        'categories' => $categories,
     ]);
 })->name('home');
 

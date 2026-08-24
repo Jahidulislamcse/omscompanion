@@ -9,6 +9,120 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
+function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick }) {
+    const categoryVideos = useMemo(() => {
+        if (!videos || videos.length === 0) return [];
+
+        const targetCat = categoryTitle.toLowerCase();
+        let matches = videos.filter(v => {
+            const cName = (v.category_name || '').toLowerCase();
+            return (cName.includes('surgical') && targetCat.includes('surgical')) ||
+                   (cName.includes('clinical') && targetCat.includes('clinical')) ||
+                   cName === targetCat || targetCat.includes(cName);
+        });
+
+        if (matches.length === 0) {
+            if (targetCat.includes('surgical')) {
+                matches = videos.filter(v => 
+                    (v.title || '').toLowerCase().includes('surgical') || 
+                    (v.description || '').toLowerCase().includes('surgical') ||
+                    (v.title || '').toLowerCase().includes('airplane') ||
+                    (v.title || '').toLowerCase().includes('molar')
+                );
+            } else {
+                matches = videos.filter(v => 
+                    (v.title || '').toLowerCase().includes('clinical') || 
+                    (v.description || '').toLowerCase().includes('clinical') ||
+                    (v.title || '').toLowerCase().includes('imperial') ||
+                    (v.title || '').toLowerCase().includes('lecture')
+                );
+            }
+        }
+
+        return matches.length > 0 ? matches : videos;
+    }, [videos, categoryTitle]);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (categoryVideos.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentIndex(prev => (prev + 1) % categoryVideos.length);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, [categoryVideos]);
+
+    if (categoryVideos.length === 0) return null;
+
+    const currentVid = categoryVideos[currentIndex % categoryVideos.length];
+    const ytId = getYouTubeId(currentVid.video_path);
+
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <h3 className="category-column-title">{categoryTitle}</h3>
+
+            <div className="rolling-video-card" style={{ width: '100%', cursor: 'pointer' }} onClick={() => onVideoClick(currentVid)}>
+                {ytId ? (
+                    <img 
+                        src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
+                        alt={currentVid.title} 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
+                    />
+                ) : (
+                    <div style={{ width: '100%', height: '100%', background: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', textAlign: 'center' }}>
+                        <span style={{ color: '#fff', fontSize: '15px', fontWeight: 'bold' }}>{currentVid.title}</span>
+                    </div>
+                )}
+
+                <div className="thumb-overlay">
+                    <div className="play-button-glow golden-play-button">
+                        <span className="play-icon">▶</span>
+                    </div>
+                    <span className="play-label" style={{ fontWeight: '800', letterSpacing: '0.5px', color: '#ffffff' }}>WATCH VIDEO</span>
+                </div>
+
+                <span className="video-duration" style={{ position: 'absolute', bottom: '12px', right: '12px', background: 'rgba(0,0,0,0.85)', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold', color: '#ffffff' }}>
+                    Preview
+                </span>
+            </div>
+
+            {categoryVideos.length > 1 && (
+                <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
+                    {categoryVideos.map((_, idx) => (
+                        <span 
+                            key={idx}
+                            onClick={() => setCurrentIndex(idx)}
+                            style={{
+                                width: idx === currentIndex ? '20px' : '8px',
+                                height: '8px',
+                                borderRadius: '4px',
+                                backgroundColor: idx === currentIndex ? '#0d9488' : 'rgba(15, 23, 42, 0.25)',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                            }}
+                        />
+                    ))}
+                </div>
+            )}
+
+            <div style={{ marginTop: '18px', textAlign: 'center' }}>
+                <button 
+                    onClick={() => onVideoClick(currentVid)}
+                    className="learn-more-btn"
+                >
+                    <span>LEARN MORE</span>
+                    <svg className="cursor-hand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 11V3.5C7 2.67157 7.67157 2 8.5 2C9.32843 2 10 2.67157 10 3.5V11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M10 10.5V5.5C10 4.67157 10.6716 4 11.5 4C12.3284 4 13 4.67157 13 5.5V10.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M13 10.5V7.5C13 6.67157 13.6716 6 14.5 6C15.3284 6 16 6.67157 16 7.5V11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M16 11.5V10.5C16 9.67157 16.6716 9 17.5 9C18.3284 9 19 9.67157 19 10.5V16C19 19.3137 16.3137 22 13 22H11C8.23858 22 6 19.7614 6 17V14.5C6 13.6716 6.67157 13 7.5 13C8.32843 13 9 13.6716 9 14.5V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    );
+}
+
 export default function Welcome({ settings, freeVideos }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
@@ -593,77 +707,43 @@ export default function Welcome({ settings, freeVideos }) {
             {/* Videos Section */}
             <section id="free-videos" className="landing-section">
                 <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <span className="badge-status badge-new section-tag">Video Library</span>
-                        <h2 className="landing-section-title">Video Masterclasses</h2>
-                        <p className="landing-section-subtitle">
-                            Explore clinical guides, surgical technique walkthroughs, and platform overviews.
+                    {/* Top Archive Pill Button */}
+                    <div className="video-archive-pill-wrapper">
+                        <Link href={route('videos.public')} className="archive-pill-btn">
+                            archive
+                        </Link>
+                    </div>
+
+                    {/* Section Header */}
+                    <div className="landing-section-header" style={{ marginBottom: '16px' }}>
+                        <h2 className="landing-section-title video-masterclasses-title">Video Masterclasses</h2>
+                        <p className="landing-section-subtitle video-masterclasses-subtitle">
+                            Explore clinical guides, surgical techniques, and practical tips& tricks
                         </p>
                     </div>
 
-                    <div className="video-grid free-video-grid">
-                        {freeVideos.map(vid => {
-                            const ytId = getYouTubeId(vid.video_path);
-                            const isLocked = false;
-
-                            return (
-                                <div key={vid.id} className="glass-panel video-card colorful-video-card">
-                                    <div 
-                                        onClick={() => handleVideoClick(vid)}
-                                        className="video-thumbnail free-video-thumb"
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        {ytId ? (
-                                            <img 
-                                                src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
-                                                alt={vid.title} 
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
-                                            />
-                                        ) : null}
-                                        <div className="thumb-overlay">
-                                            {isLocked ? (
-                                                <>
-                                                    <div className="play-button-glow" style={{ background: 'rgba(239, 68, 68, 0.25)', borderColor: '#ef4444' }}>
-                                                        <span className="play-icon" style={{ fontSize: '18px' }}>🔒</span>
-                                                    </div>
-                                                    <span className="play-label" style={{ color: '#fca5a5' }}>
-                                                        {!auth.user ? "Register to Unlock" : "Approval Required"}
-                                                    </span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="play-button-glow">
-                                                        <span className="play-icon">▶</span>
-                                                    </div>
-                                                    <span className="play-label">Watch Video</span>
-                                                </>
-                                            )}
-                                        </div>
-                                        <span className="video-duration">{formatDuration(vid.duration)}</span>
-                                    </div>
-
-                                    <div className="video-info free-video-info">
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                            <span className="video-tag badge-tag-glow">Video Guide</span>
-                                            {isLocked && (
-                                                <span style={{ fontSize: '11px', fontWeight: '700', color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
-                                                    Protected
-                                                </span>
-                                            )}
-                                        </div>
-                                        <h4 className="video-title">{vid.title}</h4>
-                                        <p className="video-desc">{vid.description}</p>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                    {/* Automatic Rolling Videos Badge */}
+                    <div className="auto-rolling-badge-wrapper">
+                        <span className="auto-rolling-badge">
+                            ** Automatic rolling videos
+                        </span>
                     </div>
 
-                    {/* More Videos Button */}
-                    <div style={{ textAlign: 'center', marginTop: '36px' }}>
-                        <Link href={route('videos.public')} className="btn btn-secondary hero-btn btn-gold-glow">
-                            🎬 More Videos →
-                        </Link>
+                    {/* Two Categories Side-by-Side Grid */}
+                    <div className="masterclasses-two-column-grid">
+                        {/* Category 1 Column */}
+                        <CategoryAutoRollingColumn 
+                            categoryTitle="Surgical approaches" 
+                            videos={freeVideos} 
+                            onVideoClick={handleVideoClick} 
+                        />
+
+                        {/* Category 2 Column */}
+                        <CategoryAutoRollingColumn 
+                            categoryTitle="Clinical lecture/ tips tricks" 
+                            videos={freeVideos} 
+                            onVideoClick={handleVideoClick} 
+                        />
                     </div>
                 </div>
             </section>

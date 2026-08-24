@@ -221,6 +221,21 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                         <div className="grid-responsive-2col-equal">
                             <div className="form-group">
                                 <label className="form-label">Video Category</label>
+                                {categories.length > 0 && (
+                                    <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                                        {categories.map(cat => (
+                                            <button 
+                                                key={cat.id} 
+                                                type="button"
+                                                className={`btn ${String(vidData.category_id) === String(cat.id) ? 'btn-primary' : 'btn-outline'}`}
+                                                style={{ padding: '4px 12px', fontSize: '12px', borderRadius: '14px' }}
+                                                onClick={() => setVidData('category_id', cat.id)}
+                                            >
+                                                📁 {cat.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                                 <select 
                                     className="form-control"
                                     value={vidData.category_id}
