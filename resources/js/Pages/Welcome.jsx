@@ -293,16 +293,6 @@ export default function Welcome({ settings, freeVideos }) {
                                 {getSetting('hero_subtitle')}
                             </p>
                         )}
-                        <div className="landing-hero-ctas" style={{ marginTop: '16px' }}>
-                            <button 
-                                type="button" 
-                                onClick={handleReferralClick} 
-                                className="btn btn-secondary hero-btn btn-gold-glow"
-                                style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', fontSize: '16px', fontWeight: 'bold' }}
-                            >
-                                📋 Refer a Patient
-                            </button>
-                        </div>
                     </>
                 ) : (
                     <>
@@ -315,23 +305,19 @@ export default function Welcome({ settings, freeVideos }) {
                         </p>
 
                         <div className="landing-hero-ctas">
-                            <button 
-                                type="button" 
-                                onClick={handleReferralClick} 
-                                className="btn btn-secondary hero-btn btn-gold-glow"
-                                style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', fontSize: '16px', fontWeight: 'bold' }}
-                            >
-                                📋 Refer a Patient
-                            </button>
-                            
                             {auth.user ? (
-                                <Link href={getDashboardRoute()} className="btn btn-outline hero-btn">
+                                <Link href={getDashboardRoute()} className="btn btn-primary hero-btn btn-glow">
                                     🚀 Go to Dashboard
                                 </Link>
                             ) : (
-                                <Link href={route('register')} className="btn btn-outline hero-btn">
-                                    🌟 BDS Doctor Registration
-                                </Link>
+                                <>
+                                    <Link href={route('register')} className="btn btn-primary hero-btn btn-glow">
+                                        🌟 BDS Doctor Registration
+                                    </Link>
+                                    <Link href={route('videos.public')} className="btn btn-outline hero-btn">
+                                        📁 View Archive
+                                    </Link>
+                                </>
                             )}
                         </div>
 
