@@ -21,6 +21,7 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
         description: '',
         video_url: '',
         duration: '',
+        is_free: false,
     });
 
     const handleVideoSubmit = (e) => {
@@ -280,6 +281,19 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                             </div>
                         </div>
 
+                        <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '15px' }}>
+                            <input 
+                                type="checkbox" 
+                                id="is_free"
+                                checked={vidData.is_free}
+                                onChange={e => setVidData('is_free', e.target.checked)}
+                                style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="is_free" style={{ margin: 0, cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}>
+                                ✓ Mark as Free Video (If unchecked, video is Premium)
+                            </label>
+                        </div>
+
                         <button 
                             type="submit" 
                             className="btn btn-primary" 
@@ -303,6 +317,7 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                     <th>Category</th>
                                     <th>YouTube Link</th>
                                     <th>Duration</th>
+                                    <th>Access Level</th>
                                     <th>Date Added</th>
                                 </tr>
                             </thead>
@@ -344,6 +359,17 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                                 </td>
                                                 <td>
                                                     {vid.duration ? `${Math.floor(vid.duration / 60)}m ${vid.duration % 60}s` : 'N/A'}
+                                                </td>
+                                                <td>
+                                                    {vid.is_free ? (
+                                                        <span className="badge-status badge-completed" style={{ fontSize: '11px', padding: '4px 10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                            ✓ Free Video
+                                                        </span>
+                                                    ) : (
+                                                        <span className="badge-status badge-booked" style={{ fontSize: '11px', padding: '4px 10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                            🔒 Premium
+                                                        </span>
+                                                    )}
                                                 </td>
                                                 <td>
                                                     {new Date(vid.created_at).toLocaleDateString()}

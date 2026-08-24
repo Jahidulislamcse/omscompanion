@@ -289,6 +289,7 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'video_url' => 'required|string',
             'duration' => 'nullable|integer|min:0',
+            'is_free' => 'nullable|boolean',
         ]);
 
         $video = Video::create([
@@ -298,12 +299,13 @@ class AdminController extends Controller
             'video_path' => $request->video_url,
             'storage_type' => 'youtube',
             'duration' => $request->duration,
-            'is_free' => true,
+            'is_free' => $request->boolean('is_free'),
         ]);
 
         // Notify members about new video
+        $typeLabel = $video->is_free ? 'Free' : 'Premium';
         $title = "New Video: {$video->title}";
-        $message = "New video added: \"{$video->title}\". Log in now to watch.";
+        $message = "New {$typeLabel} video added: \"{$video->title}\". Log in now to watch.";
         
         NotificationService::broadcastToMembers($title, $message);
 
