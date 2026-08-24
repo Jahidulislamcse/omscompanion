@@ -9,6 +9,7 @@ use App\Models\VideoCategory;
 use App\Models\Video;
 use App\Models\VideoAccessRequest;
 use App\Models\LandingSetting;
+use App\Models\TeamMember;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -345,9 +346,11 @@ class AdminController extends Controller
     public function pageContent()
     {
         $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
+        $teamMembers = TeamMember::orderBy('level', 'asc')->orderBy('order_index', 'asc')->get();
 
         return Inertia::render('Admin/PageContent', [
-            'settings' => $settings
+            'settings' => $settings,
+            'teamMembers' => $teamMembers,
         ]);
     }
 
@@ -373,6 +376,8 @@ class AdminController extends Controller
             'remove_login_image' => 'nullable|boolean',
             'login_side_title' => 'nullable|string|max:255',
             'login_side_subtitle' => 'nullable|string',
+            'about_title' => 'nullable|string|max:255',
+            'about_description' => 'nullable|string',
         ]);
 
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
@@ -442,7 +447,7 @@ class AdminController extends Controller
             if (!in_array($extension, $allowedExtensions)) {
                 return back()->withErrors(['login_side_image' => 'The login side image must be a valid image (jpg, png, gif, svg, webp).']);
             }
-            $filename = 'login_side_' . time() . '.' . $extension;
+            $filename = 'login_' . time() . '.' . $extension;
 
             $destinationPath = storage_path('app/public/login_images');
             if (!file_exists($destinationPath)) {
@@ -462,7 +467,6 @@ class AdminController extends Controller
         }
 
         $settingsData = $request->only([
-            'site_name',
             'hero_title',
             'hero_subtitle',
             'goal_1_title',
@@ -479,6 +483,8 @@ class AdminController extends Controller
             'footer_contact_phone',
             'footer_contact_email',
             'footer_facebook_url',
+            'about_title',
+            'about_description',
         ]);
 
         foreach ($settingsData as $key => $value) {
@@ -486,6 +492,89 @@ class AdminController extends Controller
         }
 
         return redirect()->back()->with('success', 'Landing page settings updated successfully.');
+    }
+
+    public function storeTeamMember(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'specialization' => 'nullable|string|max:255',
+            'designation' => 'nullable|string|max:255',
+            'level' => 'required|integer|min:1|max:5',
+            'order_index' => 'nullable|integer',
+            'image' => 'nullable|file|max:5120',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            $filename = 'team_' . time() . '_' . uniqid() . '.' . $extension;
+            $destinationPath = storage_path('app/public/team');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $imagePath = 'storage/team/' . $filename;
+        }
+
+        TeamMember::create([
+            'name' => $request->name,
+            'title' => $request->title,
+            'specialization' => $request->specialization,
+            'designation' => $request->designation,
+            'level' => $request->level,
+            'order_index' => $request->order_index ?? 0,
+            'image_path' => $imagePath,
+        ]);
+
+        return redirect()->back()->with('success', 'Team member added successfully.');
+    }
+
+    public function updateTeamMember(Request $request, TeamMember $teamMember)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'specialization' => 'nullable|string|max:255',
+            'designation' => 'nullable|string|max:255',
+            'level' => 'required|integer|min:1|max:5',
+            'order_index' => 'nullable|integer',
+            'image' => 'nullable|file|max:5120',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'title' => $request->title,
+            'specialization' => $request->specialization,
+            'designation' => $request->designation,
+            'level' => $request->level,
+            'order_index' => $request->order_index ?? 0,
+        ];
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            $filename = 'team_' . time() . '_' . uniqid() . '.' . $extension;
+            $destinationPath = storage_path('app/public/team');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $data['image_path'] = 'storage/team/' . $filename;
+        }
+
+        $teamMember->update($data);
+
+        return redirect()->back()->with('success', 'Team member updated successfully.');
+    }
+
+    public function destroyTeamMember(TeamMember $teamMember)
+    {
+        $teamMember->delete();
+
+        return redirect()->back()->with('success', 'Team member deleted successfully.');
     }
 
     public function profile()

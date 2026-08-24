@@ -6,6 +6,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\GuestReferralController;
 use App\Http\Controllers\VideoStreamingController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\AboutController;
 use App\Models\LandingSetting;
 use App\Models\Video;
 use App\Models\VideoCategory;
@@ -190,9 +191,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/videos/access-requests/{user}', [AdminController::class, 'updatePremiumAccess'])->name('admin.videos.access_requests.update');
     Route::get('/page-content', [AdminController::class, 'pageContent'])->name('admin.page_content');
     Route::post('/page-content', [AdminController::class, 'updatePageContent'])->name('admin.page_content.update');
+    Route::post('/team-members', [AdminController::class, 'storeTeamMember'])->name('admin.team.store');
+    Route::post('/team-members/{teamMember}', [AdminController::class, 'updateTeamMember'])->name('admin.team.update');
+    Route::delete('/team-members/{teamMember}', [AdminController::class, 'destroyTeamMember'])->name('admin.team.destroy');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
 });
+
+// Public About Us Route
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // Member Routes
 Route::middleware(['auth', 'member'])->prefix('member')->group(function () {

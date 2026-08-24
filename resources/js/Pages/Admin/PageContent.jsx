@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
-export default function PageContent({ settings }) {
+export default function PageContent({ settings = {}, teamMembers = [] }) {
     const { site_logo: currentLogo } = usePage().props;
     const [logoPreview, setLogoPreview] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
     const [loginPreview, setLoginPreview] = useState(null);
+
+    // Modal state for Team Member add/edit
+    const [teamModalOpen, setTeamModalOpen] = useState(false);
+    const [editingMember, setEditingMember] = useState(null);
+    const [memberImagePreview, setMemberImagePreview] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -33,6 +38,18 @@ export default function PageContent({ settings }) {
         login_side_subtitle: settings.login_side_subtitle || '',
         login_side_image: null,
         remove_login_image: false,
+        about_title: settings.about_title || 'About Us',
+        about_description: settings.about_description || '',
+    });
+
+    const memberForm = useForm({
+        name: '',
+        title: '',
+        specialization: '',
+        designation: '',
+        level: 2,
+        order_index: 0,
+        image: null,
     });
 
     const handleLogoChange = (e) => {
@@ -84,11 +101,78 @@ export default function PageContent({ settings }) {
         });
     };
 
+    const openAddMemberModal = () => {
+        setEditingMember(null);
+        setMemberImagePreview(null);
+        memberForm.setData({
+            name: '',
+            title: '',
+            specialization: '',
+            designation: '',
+            level: 2,
+            order_index: teamMembers.length + 1,
+            image: null,
+        });
+        setTeamModalOpen(true);
+    };
+
+    const openEditMemberModal = (member) => {
+        setEditingMember(member);
+        setMemberImagePreview(member.image_path ? `/${member.image_path}` : null);
+        memberForm.setData({
+            name: member.name || '',
+            title: member.title || '',
+            specialization: member.specialization || '',
+            designation: member.designation || '',
+            level: member.level || 2,
+            order_index: member.order_index || 0,
+            image: null,
+        });
+        setTeamModalOpen(true);
+    };
+
+    const handleMemberSubmit = (e) => {
+        e.preventDefault();
+        if (editingMember) {
+            memberForm.post(route('admin.team.update', editingMember.id), {
+                forceFormData: true,
+                onSuccess: () => {
+                    setTeamModalOpen(false);
+                    alert('Team member updated successfully!');
+                }
+            });
+        } else {
+            memberForm.post(route('admin.team.store'), {
+                forceFormData: true,
+                onSuccess: () => {
+                    setTeamModalOpen(false);
+                    alert('Team member added successfully!');
+                }
+            });
+        }
+    };
+
+    const handleDeleteMember = (member) => {
+        if (confirm(`Are you sure you want to delete ${member.name}?`)) {
+            router.delete(route('admin.team.destroy', member.id));
+        }
+    };
+
+    const getLevelName = (lvl) => {
+        switch (Number(lvl)) {
+            case 1: return 'Level 1: Founder (Top Center)';
+            case 2: return 'Level 2: Core Team (Row 2)';
+            case 3: return 'Level 3: Specialists (Row 3)';
+            case 4: return 'Level 4: Bottom Specialist';
+            default: return `Level ${lvl}`;
+        }
+    };
+
     return (
-        <AdminLayout title="Manage Landing Page & Branding">
+        <AdminLayout title="Manage Landing Page & About Us">
             <Head title="Site Branding & Content" />
 
-            <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto' }}>
                 {recentlySuccessful && (
                     <div className="glass-panel" style={{ borderLeft: '4px solid var(--color-success)', color: 'var(--color-success)', backgroundColor: 'var(--color-success-bg)', padding: '12px 20px', marginBottom: '20px' }}>
                         ✓ Settings updated successfully!
@@ -139,344 +223,103 @@ export default function PageContent({ settings }) {
                                 onChange={handleLogoChange}
                             />
                             {errors.site_logo && <span className="form-error">{errors.site_logo}</span>}
-                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                Uploading a logo will replace the text logo across the website, navigation bar, sidebars, and login pages.
-                            </p>
                         </div>
-
-                        {(currentLogo || logoPreview) && (
-                            <button 
-                                type="button" 
-                                className="btn btn-outline"
-                                style={{ marginTop: '10px', color: '#ef4444', borderColor: '#ef4444' }}
-                                onClick={handleRemoveLogo}
-                            >
-                                🗑️ Remove Custom Logo (Use Default OMSCOMPANION)
-                            </button>
-                        )}
                     </div>
 
-                    {/* Dynamic Hero Banner & Section Config */}
+                    {/* About Us Page Config Section */}
                     <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            🖼️ Dynamic Hero Banner & Section Config
+                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-teal)' }}>
+                            📖 About Us Page Configuration
                         </h3>
-                        
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Active Hero Banner Preview</label>
-                            <div style={{ padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-                                {bannerPreview ? (
-                                    <img src={bannerPreview} alt="Banner Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
-                                ) : (!data.remove_banner && settings.hero_banner) ? (
-                                    <img src={`${route('site.banner.stream')}?v=${settings.hero_banner_updated_at || Date.now()}`} alt="Hero Banner" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} />
-                                ) : (
-                                    <div style={{ padding: '30px', color: 'var(--text-muted)', fontSize: '14px' }}>
-                                        No custom banner image active. The default dynamic hero text section will display on the homepage.
-                                    </div>
-                                )}
-                            </div>
-                        </div>
 
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Upload Custom Dynamic Hero Banner Image (PNG, JPG, WebP)</label>
-                            <input 
-                                type="file" 
-                                className="form-control"
-                                accept="image/*"
-                                onChange={handleBannerChange}
-                            />
-                            {errors.hero_banner && <span className="form-error">{errors.hero_banner}</span>}
-                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                Uploading a banner image will display the dynamic hero banner on the top of the homepage.
-                            </p>
-                        </div>
-
-                        {((settings && settings.hero_banner && !data.remove_banner) || bannerPreview) && (
-                            <button 
-                                type="button" 
-                                className="btn btn-outline"
-                                style={{ marginBottom: '24px', color: '#ef4444', borderColor: '#ef4444' }}
-                                onClick={handleRemoveBanner}
-                            >
-                                🗑️ Remove Custom Hero Banner Image
-                            </button>
-                        )}
-
-                        <div className="form-group">
-                            <label className="form-label">Hero Section Title (Dynamic Text)</label>
+                        <div className="form-group" style={{ marginBottom: '18px' }}>
+                            <label className="form-label">About Page Title</label>
                             <input 
                                 type="text" 
                                 className="form-control"
-                                value={data.hero_title}
-                                onChange={e => setData('hero_title', e.target.value)}
-                                required
+                                value={data.about_title}
+                                onChange={e => setData('about_title', e.target.value)}
+                                placeholder="e.g. About Us"
                             />
-                            {errors.hero_title && <span className="form-error">{errors.hero_title}</span>}
+                            {errors.about_title && <span className="form-error">{errors.about_title}</span>}
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Hero Section Description (Dynamic Text)</label>
+                            <label className="form-label">About Page Description & Introduction</label>
                             <textarea 
                                 className="form-control"
-                                value={data.hero_subtitle}
-                                onChange={e => setData('hero_subtitle', e.target.value)}
-                                rows="3"
-                                required
+                                value={data.about_description}
+                                onChange={e => setData('about_description', e.target.value)}
+                                rows="6"
+                                placeholder="Enter full platform description for the /about page..."
                             />
-                            {errors.hero_subtitle && <span className="form-error">{errors.hero_subtitle}</span>}
+                            {errors.about_description && <span className="form-error">{errors.about_description}</span>}
                         </div>
                     </div>
 
-                    {/* Login Page Side Image & Text Config */}
+                    {/* Team Members Management */}
                     <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            🖼️ Login Page Side Image & Banner Config
-                        </h3>
-                        
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Active Login Side Image Preview</label>
-                            <div style={{ padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-                                {loginPreview ? (
-                                    <img src={loginPreview} alt="Login Side Preview" style={{ width: '100%', maxHeight: '220px', objectFit: 'cover', borderRadius: '6px' }} />
-                                ) : (!data.remove_login_image && settings.login_side_image) ? (
-                                    <img src={`${route('site.login_image.stream')}?v=${settings.login_side_image_updated_at || Date.now()}`} alt="Login Side Image" style={{ width: '100%', maxHeight: '220px', objectFit: 'cover', borderRadius: '6px' }} />
-                                ) : (
-                                    <div style={{ padding: '30px', color: 'var(--text-muted)', fontSize: '14px' }}>
-                                        No custom login image uploaded. Default themed side banner will display on the login page.
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Upload Custom Login Page Side Image (PNG, JPG, WebP)</label>
-                            <input 
-                                type="file" 
-                                className="form-control"
-                                accept="image/*"
-                                onChange={handleLoginImageChange}
-                            />
-                            {errors.login_side_image && <span className="form-error">{errors.login_side_image}</span>}
-                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                Uploading an image will render the side banner image beside the login form.
-                            </p>
-                        </div>
-
-                        {((settings && settings.login_side_image && !data.remove_login_image) || loginPreview) && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
+                            <h3 style={{ margin: 0, color: 'var(--accent-teal)' }}>
+                                👨‍⚕️ About Us Team Members ({teamMembers.length})
+                            </h3>
                             <button 
                                 type="button" 
-                                className="btn btn-outline"
-                                style={{ marginBottom: '24px', color: '#ef4444', borderColor: '#ef4444' }}
-                                onClick={handleRemoveLoginImage}
+                                onClick={openAddMemberModal} 
+                                className="btn btn-primary"
+                                style={{ padding: '6px 16px', fontSize: '13px' }}
                             >
-                                🗑️ Remove Custom Login Side Image
+                                ➕ Add Team Member
                             </button>
-                        )}
-
-                        <div className="form-group">
-                            <label className="form-label">Login Side Overlay Title</label>
-                            <input 
-                                type="text" 
-                                className="form-control"
-                                value={data.login_side_title}
-                                onChange={e => setData('login_side_title', e.target.value)}
-                                placeholder="e.g. Discover your next journey"
-                            />
-                            {errors.login_side_title && <span className="form-error">{errors.login_side_title}</span>}
                         </div>
 
-                        <div className="form-group">
-                            <label className="form-label">Login Side Overlay Subtitle / Description</label>
-                            <textarea 
-                                className="form-control"
-                                value={data.login_side_subtitle}
-                                onChange={e => setData('login_side_subtitle', e.target.value)}
-                                rows="3"
-                                placeholder="e.g. Explore ideas, stories, and experiences designed to inspire your everyday practice."
-                            />
-                            {errors.login_side_subtitle && <span className="form-error">{errors.login_side_subtitle}</span>}
-                        </div>
-                    </div>
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            📋 Chamber Goals & Mission Config
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                            {/* Goal 1 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #1</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_1_title}
-                                            onChange={e => setData('goal_1_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_1_title && <span className="form-error">{errors.goal_1_title}</span>}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            {teamMembers.length > 0 ? (
+                                teamMembers.map((member) => (
+                                    <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                            <div style={{ width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#0e7490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', overflow: 'hidden' }}>
+                                                {member.image_path ? (
+                                                    <img src={`/${member.image_path}`} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                ) : (
+                                                    (member.name || 'D').charAt(0)
+                                                )}
+                                            </div>
+                                            <div>
+                                                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{member.name}</h4>
+                                                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                    {member.title ? `${member.title} • ` : ''}{member.specialization || 'Specialist'} {member.designation ? `(${member.designation})` : ''}
+                                                </span>
+                                                <div style={{ fontSize: '11px', color: 'var(--accent-gold)', marginTop: '2px' }}>
+                                                    {getLevelName(member.level)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => openEditMemberModal(member)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '12px' }}
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => handleDeleteMember(member)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                            >
+                                                🗑️ Delete
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_1_desc}
-                                            onChange={e => setData('goal_1_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_1_desc && <span className="form-error">{errors.goal_1_desc}</span>}
-                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                    No team members added yet. Click "Add Team Member" to create one.
                                 </div>
-                            </div>
-
-                            {/* Goal 2 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #2</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_2_title}
-                                            onChange={e => setData('goal_2_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_2_title && <span className="form-error">{errors.goal_2_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_2_desc}
-                                            onChange={e => setData('goal_2_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_2_desc && <span className="form-error">{errors.goal_2_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Goal 3 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #3</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_3_title}
-                                            onChange={e => setData('goal_3_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_3_title && <span className="form-error">{errors.goal_3_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_3_desc}
-                                            onChange={e => setData('goal_3_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_3_desc && <span className="form-error">{errors.goal_3_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Goal 4 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #4</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_4_title}
-                                            onChange={e => setData('goal_4_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_4_title && <span className="form-error">{errors.goal_4_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_4_desc}
-                                            onChange={e => setData('goal_4_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_4_desc && <span className="form-error">{errors.goal_4_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Footer & Contact Info Config */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            📌 Footer & Contact Information Config
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            <div className="form-group">
-                                <label className="form-label">Office Location</label>
-                                <textarea 
-                                    className="form-control"
-                                    value={data.footer_office_location}
-                                    onChange={e => setData('footer_office_location', e.target.value)}
-                                    rows="2"
-                                    placeholder="e.g. House 12, Road 5, Dhanmondi, Dhaka, Bangladesh"
-                                />
-                                {errors.footer_office_location && <span className="form-error">{errors.footer_office_location}</span>}
-                            </div>
-
-                            <div className="grid-responsive-two-col" style={{ gap: '15px' }}>
-                                <div className="form-group">
-                                    <label className="form-label">Contact Phone Number</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control"
-                                        value={data.footer_contact_phone}
-                                        onChange={e => setData('footer_contact_phone', e.target.value)}
-                                        placeholder="e.g. +880 1712-345678"
-                                    />
-                                    {errors.footer_contact_phone && <span className="form-error">{errors.footer_contact_phone}</span>}
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-label">Contact Email Address</label>
-                                    <input 
-                                        type="email" 
-                                        className="form-control"
-                                        value={data.footer_contact_email}
-                                        onChange={e => setData('footer_contact_email', e.target.value)}
-                                        placeholder="e.g. info@omscompanion.com"
-                                    />
-                                    {errors.footer_contact_email && <span className="form-error">{errors.footer_contact_email}</span>}
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label className="form-label">Facebook Page Link / URL</label>
-                                <input 
-                                    type="url" 
-                                    className="form-control"
-                                    value={data.footer_facebook_url}
-                                    onChange={e => setData('footer_facebook_url', e.target.value)}
-                                    placeholder="e.g. https://facebook.com/omscompanion"
-                                />
-                                {errors.footer_facebook_url && <span className="form-error">{errors.footer_facebook_url}</span>}
-                            </div>
+                            )}
                         </div>
                     </div>
 
@@ -487,10 +330,125 @@ export default function PageContent({ settings }) {
                         style={{ width: '100%', padding: '15px', fontWeight: 'bold' }}
                         disabled={processing}
                     >
-                        {processing ? 'Saving Changes...' : 'Save Settings & Update Homepage'}
+                        {processing ? 'Saving Changes...' : 'Save Settings & Update Website'}
                     </button>
                 </form>
             </div>
+
+            {/* Team Member Add / Edit Modal */}
+            {teamModalOpen && (
+                <div className="modal-wrapper" onClick={() => setTeamModalOpen(false)}>
+                    <div className="glass-panel modal-card" style={{ maxWidth: '540px', width: '92%', padding: '28px' }} onClick={e => e.stopPropagation()}>
+                        <h3 style={{ marginTop: 0, marginBottom: '18px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+                            {editingMember ? '✏️ Edit Team Member' : '➕ Add New Team Member'}
+                        </h3>
+
+                        <form onSubmit={handleMemberSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div className="form-group">
+                                <label className="form-label">Full Name *</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control"
+                                    value={memberForm.data.name}
+                                    onChange={e => memberForm.setData('name', e.target.value)}
+                                    placeholder="e.g. DR SAJID HASAN"
+                                    required
+                                />
+                                {memberForm.errors.name && <span className="form-error">{memberForm.errors.name}</span>}
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Title / Position</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={memberForm.data.title}
+                                        onChange={e => memberForm.setData('title', e.target.value)}
+                                        placeholder="e.g. ASSOCIATE PROFESSOR"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Specialization</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={memberForm.data.specialization}
+                                        onChange={e => memberForm.setData('specialization', e.target.value)}
+                                        placeholder="e.g. ORAL & MAXILLOFACIAL SURGERY"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Designation / Role (Optional)</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={memberForm.data.designation}
+                                        onChange={e => memberForm.setData('designation', e.target.value)}
+                                        placeholder="e.g. FOUNDER"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Display Level Hierarchy *</label>
+                                    <select 
+                                        className="form-control"
+                                        value={memberForm.data.level}
+                                        onChange={e => memberForm.setData('level', e.target.value)}
+                                    >
+                                        <option value={1}>Level 1: Founder (Top Center)</option>
+                                        <option value={2}>Level 2: Core Team (Row 2)</option>
+                                        <option value={3}>Level 3: Specialists (Row 3)</option>
+                                        <option value={4}>Level 4: Bottom Specialist</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Profile Image / Photo</label>
+                                {memberImagePreview && (
+                                    <div style={{ marginBottom: '8px' }}>
+                                        <img src={memberImagePreview} alt="Preview" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
+                                    </div>
+                                )}
+                                <input 
+                                    type="file" 
+                                    className="form-control"
+                                    accept="image/*"
+                                    onChange={e => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            memberForm.setData('image', file);
+                                            setMemberImagePreview(URL.createObjectURL(file));
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => setTeamModalOpen(false)} 
+                                    className="btn btn-outline"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="btn btn-primary"
+                                    disabled={memberForm.processing}
+                                >
+                                    {memberForm.processing ? 'Saving...' : editingMember ? 'Update Member' : 'Save Member'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </AdminLayout>
     );
 }
