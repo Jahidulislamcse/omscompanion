@@ -56,7 +56,6 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
-                'new_guest_referral' => $request->session()->get('new_guest_referral'),
             ],
             'site_logo' => LandingSetting::where('key', 'site_logo')->value('value') 
                 ? route('site.logo.stream') . '?v=' . (LandingSetting::where('key', 'site_logo_updated_at')->value('value') ?: time())

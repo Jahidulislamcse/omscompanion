@@ -39,79 +39,6 @@ export default function Welcome({ settings, freeVideos }) {
         medical_condition: '',
     });
 
-    // Local Storage Guest Referral Tracking State
-    const [savedGuestCount, setSavedGuestCount] = useState(0);
-    const [trackedReferrals, setTrackedReferrals] = useState([]);
-    const [trackingLoading, setTrackingLoading] = useState(false);
-    const [searchPhoneInput, setSearchPhoneInput] = useState('');
-
-    const GUEST_STORAGE_KEY = 'oms_guest_referrals';
-
-    const getSavedGuestReferrals = () => {
-        try {
-            const stored = localStorage.getItem(GUEST_STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
-        } catch (e) {
-            console.error("Error reading guest referrals from localStorage", e);
-            return [];
-        }
-    };
-
-    const saveGuestReferral = (newRef) => {
-        try {
-            const current = getSavedGuestReferrals();
-            const exists = current.some(item => item.id === newRef.id);
-            if (!exists) {
-                const updated = [newRef, ...current];
-                localStorage.setItem(GUEST_STORAGE_KEY, JSON.stringify(updated));
-                return updated;
-            }
-            return current;
-        } catch (e) {
-            console.error("Error saving guest referral to localStorage", e);
-            return [];
-        }
-    };
-
-    useEffect(() => {
-        const list = getSavedGuestReferrals();
-        setSavedGuestCount(list.length);
-    }, [referralModalOpen]);
-
-    const fetchGuestReferralsStatus = async (phoneSearch = null) => {
-        setTrackingLoading(true);
-        try {
-            const saved = getSavedGuestReferrals();
-            const ids = phoneSearch ? [] : saved.map(item => item.id);
-            
-            const response = await fetch(route('guest.referral.status'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-                },
-                body: JSON.stringify({
-                    ids: ids,
-                    phone: phoneSearch ? phoneSearch.trim() : null
-                })
-            });
-            const data = await response.json();
-            const results = data.referrals || [];
-            setTrackedReferrals(results);
-
-            // If phone search returned results, auto-save them to localStorage for future visits
-            if (phoneSearch && results.length > 0) {
-                results.forEach(r => saveGuestReferral({ id: r.id, patient_name: r.patient_name, created_at: r.created_at }));
-                const updatedList = getSavedGuestReferrals();
-                setSavedGuestCount(updatedList.length);
-            }
-        } catch (err) {
-            console.error("Failed to fetch referral status", err);
-        } finally {
-            setTrackingLoading(false);
-        }
-    };
-
     // Interactive FAQ state
     const [openFaq, setOpenFaq] = useState(null);
 
@@ -161,18 +88,11 @@ export default function Welcome({ settings, freeVideos }) {
         e.preventDefault();
         postShopReferral(route('guest.referral.store'), {
             preserveScroll: true,
-            onSuccess: (page) => {
-                const newRef = page.props.flash?.new_guest_referral;
-                if (newRef) {
-                    saveGuestReferral(newRef);
-                    const updatedList = getSavedGuestReferrals();
-                    setSavedGuestCount(updatedList.length);
-                }
+            onSuccess: () => {
                 setReferralStep('success');
             }
         });
     };
-
 
     const formatDuration = (seconds) => {
         if (!seconds) return 'Preview';
@@ -1038,44 +958,6 @@ export default function Welcome({ settings, freeVideos }) {
                                         </div>
                                         <span style={{ fontSize: '20px', color: '#2563eb', fontWeight: 'bold' }}>→</span>
                                     </div>
-
-                                    {/* Option 3: Track My Sent Referrals */}
-                                    <div 
-                                        onClick={() => { 
-                                            setReferralStep('track_history'); 
-                                            fetchGuestReferralsStatus();
-                                        }}
-                                        style={{ 
-                                            padding: '16px 20px', 
-                                            borderRadius: '14px', 
-                                            cursor: 'pointer', 
-                                            border: '1.5px solid #0284c7',
-                                            backgroundColor: '#f0f9ff',
-                                            transition: 'all 0.2s ease',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justify: 'space-between',
-                                            gap: '14px'
-                                        }}
-                                    >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                                            <div style={{ fontSize: '28px', lineHeight: 1 }}>🔍</div>
-                                            <div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                    <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0369a1' }}>
-                                                        Track My Sent Referrals
-                                                    </h4>
-                                                    {savedGuestCount > 0 && (
-                                                        <span style={{ backgroundColor: '#0284c7', color: '#ffffff', fontSize: '11px', fontWeight: 'bold', padding: '2px 8px', borderRadius: '10px' }}>
-                                                            {savedGuestCount} Saved
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <span style={{ fontSize: '13px', color: '#0284c7', fontWeight: '500' }}>Check live referral status</span>
-                                            </div>
-                                        </div>
-                                        <span style={{ fontSize: '20px', color: '#0284c7', fontWeight: 'bold' }}>→</span>
-                                    </div>
                                 </div>
                             </div>
                         )}
@@ -1272,7 +1154,7 @@ export default function Welcome({ settings, freeVideos }) {
                                     Referral Submitted!
                                 </h4>
                                 <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.5', marginBottom: '24px' }}>
-                                    Thank you. Our clinical team will contact the patient soon. Your referral has been saved to your device for live tracking.
+                                    Thank you. Our clinical team will contact the patient soon.
                                 </p>
 
                                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
@@ -1284,122 +1166,13 @@ export default function Welcome({ settings, freeVideos }) {
                                         Refer Another Patient
                                     </button>
                                     <button 
-                                        onClick={() => { 
-                                            setReferralStep('track_history'); 
-                                            fetchGuestReferralsStatus();
-                                        }}
+                                        onClick={() => { setReferralModalOpen(false); resetShopForm(); }}
                                         className="btn btn-primary"
-                                        style={{ padding: '10px 28px', fontSize: '14px', fontWeight: '800', backgroundColor: '#0284c7', color: '#ffffff', border: 'none', borderRadius: '10px' }}
+                                        style={{ padding: '10px 28px', fontSize: '14px', fontWeight: '800', backgroundColor: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '10px' }}
                                     >
-                                        View Referral Status 🔍
+                                        Done
                                     </button>
                                 </div>
-                            </div>
-                        )}
-
-                        {/* STEP 4: TRACK MY SENT REFERRALS (LOCAL STORAGE HISTORY) */}
-                        {referralStep === 'track_history' && (
-                            <div>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <span style={{ fontSize: '22px' }}>🔍</span>
-                                        <h4 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#0369a1' }}>
-                                            My Sent Referrals
-                                        </h4>
-                                    </div>
-                                    <button 
-                                        onClick={() => setReferralStep('select_type')} 
-                                        style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline', fontWeight: '600' }}
-                                    >
-                                        ← Back to options
-                                    </button>
-                                </div>
-
-                                {trackingLoading ? (
-                                    <div style={{ textAlign: 'center', padding: '30px 0', color: '#64748b' }}>
-                                        <div style={{ fontSize: '28px', marginBottom: '8px' }}>⏳</div>
-                                        <p style={{ margin: 0, fontSize: '14px', fontWeight: '500' }}>Fetching live status updates...</p>
-                                    </div>
-                                ) : trackedReferrals.length > 0 ? (
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px', maxHeight: '50vh', overflowY: 'auto' }}>
-                                        {trackedReferrals.map((item) => (
-                                            <div 
-                                                key={item.id}
-                                                style={{ 
-                                                    backgroundColor: '#f8fafc', 
-                                                    borderRadius: '14px', 
-                                                    padding: '16px', 
-                                                    border: '1px solid #e2e8f0' 
-                                                }}
-                                            >
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                                                    <div>
-                                                        <h5 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
-                                                            👤 {item.patient_name}
-                                                        </h5>
-                                                        <span style={{ fontSize: '12px', color: '#64748b' }}>
-                                                            Submitted: {item.created_at}
-                                                        </span>
-                                                    </div>
-                                                    <span 
-                                                        style={{ 
-                                                            padding: '4px 10px', 
-                                                            borderRadius: '20px', 
-                                                            fontSize: '12px', 
-                                                            fontWeight: '800',
-                                                            backgroundColor: item.status === 'completed' ? '#dcfce7' : item.status === 'under_treatment' ? '#e0f2fe' : item.status === 'contacted' ? '#fef3c7' : '#f1f5f9',
-                                                            color: item.status === 'completed' ? '#15803d' : item.status === 'under_treatment' ? '#0369a1' : item.status === 'contacted' ? '#b45309' : '#475569'
-                                                        }}
-                                                    >
-                                                        {item.status === 'new' ? '⏳ Pending Review' : item.status === 'contacted' ? '📞 Contacted' : item.status === 'consultation_scheduled' ? '🩺 Scheduled' : item.status === 'under_treatment' ? '🏥 Under Treatment' : item.status === 'completed' ? '🟢 Completed' : item.status_label}
-                                                    </span>
-                                                </div>
-
-                                                {/* Latest Log / Note */}
-                                                {item.timelines && item.timelines.length > 0 && (
-                                                    <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px dashed #cbd5e1' }}>
-                                                        <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>
-                                                            Latest Update:
-                                                        </div>
-                                                        <div style={{ fontSize: '12px', color: '#334155', lineHeight: '1.4' }}>
-                                                            {item.timelines[0].notes || `Status: ${item.timelines[0].status_label}`}
-                                                        </div>
-                                                        <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
-                                                            {item.timelines[0].date}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div style={{ textAlign: 'center', padding: '24px 16px', backgroundColor: '#f8fafc', borderRadius: '14px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
-                                        <div style={{ fontSize: '36px', marginBottom: '8px' }}>🔍</div>
-                                        <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#64748b', fontWeight: '500' }}>
-                                            No saved referrals found in this browser cache.
-                                        </p>
-                                        <div style={{ fontSize: '13px', color: '#475569', marginBottom: '10px', fontWeight: '600' }}>
-                                            Look up by your phone number:
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '8px', maxWidth: '320px', margin: '0 auto' }}>
-                                            <input 
-                                                type="tel" 
-                                                placeholder="017XXXXXXXX"
-                                                value={searchPhoneInput}
-                                                onChange={e => setSearchPhoneInput(e.target.value)}
-                                                className="form-control"
-                                                style={{ fontSize: '13px', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', flex: 1, backgroundColor: '#ffffff', color: '#0f172a' }}
-                                            />
-                                            <button 
-                                                onClick={() => fetchGuestReferralsStatus(searchPhoneInput)}
-                                                className="btn btn-primary"
-                                                style={{ fontSize: '13px', padding: '8px 16px', borderRadius: '8px', backgroundColor: '#0284c7', border: 'none', color: '#ffffff', fontWeight: '700' }}
-                                            >
-                                                Search
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         )}
 
