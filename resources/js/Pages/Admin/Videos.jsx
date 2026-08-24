@@ -9,10 +9,8 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-export default function Videos({ categories = [], videos = [], accessRequests = [] }) {
-    const pendingCount = (accessRequests || []).filter(r => r.premium_access === 'pending').length;
-    const [activeTab, setActiveTab] = useState('requests'); // 1st tab by default ('requests')
-    const [requestFilter, setRequestFilter] = useState('all');
+export default function Videos({ categories = [], videos = [] }) {
+    const [activeTab, setActiveTab] = useState('upload'); // Default 1st tab ('upload')
 
     // Video Form
     const { data: vidData, setData: setVidData, post: postVid, processing: vidProcessing, errors: vidErrors, reset: resetVidForm } = useForm({
@@ -83,46 +81,12 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
         });
     };
 
-    const handleAccessRequestAction = (userId, status) => {
-        router.post(route('admin.videos.access_requests.update', userId), { status }, {
-            preserveScroll: true,
-            onSuccess: () => {
-                alert(`Access request ${status} successfully.`);
-            }
-        });
-    };
-
-    const filteredRequests = (accessRequests || []).filter(req => {
-        if (requestFilter === 'all') return true;
-        return req.premium_access === requestFilter;
-    });
-
     return (
-        <AdminLayout title="YouTube Video Library & Premium Access">
+        <AdminLayout title="YouTube Video Library Management">
             <Head title="YouTube Video Management" />
 
             {/* Sub navigation Tabs */}
             <div style={{ display: 'flex', gap: '15px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', flexWrap: 'wrap' }}>
-                <button 
-                    onClick={() => setActiveTab('requests')} 
-                    className={`btn ${activeTab === 'requests' ? 'btn-primary' : 'btn-outline'}`}
-                    style={{ position: 'relative' }}
-                >
-                    🔑 Premium Requests
-                    {pendingCount > 0 && (
-                        <span style={{ 
-                            marginLeft: '8px', 
-                            backgroundColor: 'var(--color-danger)', 
-                            color: '#fff', 
-                            borderRadius: '10px', 
-                            padding: '2px 7px', 
-                            fontSize: '11px', 
-                            fontWeight: 'bold' 
-                        }}>
-                            {pendingCount}
-                        </span>
-                    )}
-                </button>
                 <button 
                     onClick={() => setActiveTab('upload')} 
                     className={`btn ${activeTab === 'upload' ? 'btn-primary' : 'btn-outline'}`}
@@ -136,108 +100,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                     📋 View All Videos ({videos.length})
                 </button>
             </div>
-
-            {/* Tab 0: Access Requests Management */}
-            {activeTab === 'requests' && (
-                <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                        <div>
-                            <h3 style={{ margin: 0 }}>Member Premium Videos Access Requests</h3>
-                            <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                                Approve or reject member access to the entire Premium Video Library.
-                            </p>
-                        </div>
-                        <div style={{ width: '200px' }}>
-                            <select 
-                                className="form-control"
-                                value={requestFilter}
-                                onChange={e => setRequestFilter(e.target.value)}
-                            >
-                                <option value="all">All Request Statuses</option>
-                                <option value="pending">Pending Only</option>
-                                <option value="approved">Approved Only</option>
-                                <option value="rejected">Rejected Only</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="table-container">
-                        <table className="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Member Doctor</th>
-                                    <th>Clinic / Phone</th>
-                                    <th>Last Updated</th>
-                                    <th>Status</th>
-                                    <th style={{ textAlign: 'right' }}>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredRequests.length > 0 ? (
-                                    filteredRequests.map(user => {
-                                        const prefix = user.bds_registration_number ? 'Dr. ' : '';
-                                        return (
-                                            <tr key={user.id}>
-                                                <td>
-                                                    <div style={{ fontWeight: '700' }}>{prefix}{user.name || 'Member'}</div>
-                                                    <div style={{ fontSize: '11px', color: 'var(--accent-gold)' }}>ID: {user.member_id || 'N/A'}</div>
-                                                    {user.bds_registration_number && (
-                                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>BDS Reg: {user.bds_registration_number}</div>
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    <div style={{ fontWeight: '600' }}>{user.clinic_name || 'N/A'}</div>
-                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user.phone || 'N/A'}</div>
-                                                </td>
-                                                <td>
-                                                    {new Date(user.updated_at).toLocaleString()}
-                                                </td>
-                                                <td>
-                                                    {user.premium_access === 'approved' ? (
-                                                        <span className="badge-status badge-completed">Approved</span>
-                                                    ) : user.premium_access === 'rejected' ? (
-                                                        <span className="badge-status badge-not-proceeding">Rejected</span>
-                                                    ) : (
-                                                        <span className="badge-status badge-booked">Pending</span>
-                                                    )}
-                                                </td>
-                                                <td style={{ textAlign: 'right' }}>
-                                                    <div style={{ display: 'inline-flex', gap: '8px' }}>
-                                                        {user.premium_access !== 'approved' && (
-                                                            <button 
-                                                                onClick={() => handleAccessRequestAction(user.id, 'approved')}
-                                                                className="btn btn-primary"
-                                                                style={{ padding: '6px 12px', fontSize: '12px' }}
-                                                            >
-                                                                Approve Access
-                                                            </button>
-                                                        )}
-                                                        {user.premium_access !== 'rejected' && (
-                                                            <button 
-                                                                onClick={() => handleAccessRequestAction(user.id, 'rejected')}
-                                                                className="btn btn-danger"
-                                                                style={{ padding: '6px 12px', fontSize: '12px' }}
-                                                            >
-                                                                Reject
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
-                                ) : (
-                                    <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                                            No premium access requests found.
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            )}
 
             {/* Tab 1: Add YouTube Video Form */}
             {activeTab === 'upload' && (
