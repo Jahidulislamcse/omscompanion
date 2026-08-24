@@ -876,39 +876,136 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             </section>
 
-            {/* Access Blocked Modal */}
+            {/* Access Blocked / Registration Required Modal */}
             {accessBlockedReason && (
                 <div className="modal-wrapper" onClick={() => setAccessBlockedReason(null)}>
-                    <div className="glass-panel modal-card modal-card-colorful" style={{ maxWidth: '480px', padding: '32px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-                        <div style={{ fontSize: '48px', marginBottom: '16px' }}>
+                    <div 
+                        className="modal-card-colorful" 
+                        style={{ 
+                            maxWidth: '500px', 
+                            width: '92%',
+                            padding: '36px 28px', 
+                            textAlign: 'center',
+                            backgroundColor: '#0f172a',
+                            borderRadius: '20px',
+                            border: '1px solid rgba(245, 158, 11, 0.5)',
+                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.85), 0 0 25px rgba(245, 158, 11, 0.25)',
+                            position: 'relative'
+                        }} 
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <button 
+                            onClick={() => setAccessBlockedReason(null)}
+                            style={{
+                                position: 'absolute',
+                                top: '16px',
+                                right: '16px',
+                                background: 'transparent',
+                                border: 'none',
+                                color: '#94a3b8',
+                                fontSize: '18px',
+                                cursor: 'pointer',
+                                padding: '4px 8px'
+                            }}
+                        >
+                            ✕
+                        </button>
+
+                        <div style={{ 
+                            width: '72px', 
+                            height: '72px', 
+                            borderRadius: '50%', 
+                            backgroundColor: 'rgba(245, 158, 11, 0.15)', 
+                            border: '2px solid rgba(245, 158, 11, 0.4)',
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            margin: '0 auto 20px',
+                            fontSize: '36px'
+                        }}>
                             {accessBlockedReason === 'unauthenticated' ? '🔒' : '⏳'}
                         </div>
-                        <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '10px', color: 'var(--text-main)' }}>
+
+                        <h3 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '12px', color: '#ffffff', letterSpacing: '-0.3px' }}>
                             {accessBlockedReason === 'unauthenticated' ? 'Registration Required' : 'Approval Pending'}
                         </h3>
-                        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '24px' }}>
+                        
+                        <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '28px', maxWidth: '420px', margin: '0 auto 28px' }}>
                             {accessBlockedReason === 'unauthenticated'
                                 ? 'Clinical video masterclasses are strictly reserved for verified BDS Practitioners. Please register or login to your account to watch.'
                                 : 'Your BDS Doctor membership is currently pending admin approval. Access to full clinical video streams will unlock as soon as your account is approved.'
                             }
                         </p>
                         
-                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             {accessBlockedReason === 'unauthenticated' ? (
                                 <>
-                                    <Link href={route('register')} className="btn btn-primary hero-btn btn-glow">
+                                    <Link 
+                                        href={route('register')} 
+                                        style={{ 
+                                            backgroundColor: '#0d9488', 
+                                            color: '#ffffff', 
+                                            fontWeight: '700', 
+                                            fontSize: '14px',
+                                            padding: '12px 24px', 
+                                            borderRadius: '30px', 
+                                            textDecoration: 'none',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: '6px',
+                                            boxShadow: '0 4px 14px rgba(13, 148, 136, 0.4)'
+                                        }}
+                                    >
                                         🌟 Registration
                                     </Link>
-                                    <Link href={route('login')} className="btn btn-outline hero-btn">
+                                    <Link 
+                                        href={route('login')} 
+                                        style={{ 
+                                            backgroundColor: 'transparent', 
+                                            border: '2px solid #f59e0b', 
+                                            color: '#fbbf24', 
+                                            fontWeight: '700', 
+                                            fontSize: '14px',
+                                            padding: '10px 24px', 
+                                            borderRadius: '30px', 
+                                            textDecoration: 'none',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
                                         Login
                                     </Link>
                                 </>
                             ) : (
                                 <>
-                                    <Link href={getDashboardRoute()} className="btn btn-primary hero-btn btn-glow">
+                                    <Link 
+                                        href={getDashboardRoute()} 
+                                        style={{ 
+                                            backgroundColor: '#0d9488', 
+                                            color: '#ffffff', 
+                                            fontWeight: '700', 
+                                            fontSize: '14px',
+                                            padding: '12px 24px', 
+                                            borderRadius: '30px', 
+                                            textDecoration: 'none'
+                                        }}
+                                    >
                                         Go to Dashboard
                                     </Link>
-                                    <button onClick={() => setAccessBlockedReason(null)} className="btn btn-outline hero-btn">
+                                    <button 
+                                        onClick={() => setAccessBlockedReason(null)} 
+                                        style={{ 
+                                            backgroundColor: 'transparent', 
+                                            border: '2px solid rgba(255, 255, 255, 0.3)', 
+                                            color: '#ffffff', 
+                                            fontWeight: '700', 
+                                            fontSize: '14px',
+                                            padding: '10px 24px', 
+                                            borderRadius: '30px',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
                                         Close
                                     </button>
                                 </>
