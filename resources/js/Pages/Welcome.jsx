@@ -718,13 +718,6 @@ export default function Welcome({ settings, freeVideos }) {
                         </p>
                     </div>
 
-                    {/* Automatic Rolling Videos Badge */}
-                    <div className="auto-rolling-badge-wrapper">
-                        <span className="auto-rolling-badge">
-                            ** Automatic rolling videos
-                        </span>
-                    </div>
-
                     {/* Two Categories Side-by-Side Grid */}
                     <div className="masterclasses-two-column-grid">
                         {/* Category 1 Column */}
@@ -750,7 +743,11 @@ export default function Welcome({ settings, freeVideos }) {
             <section className="landing-section testimonials-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
-                        <span className="badge-status badge-approved section-tag">Doctor Reviews</span>
+                        <div className="doctors-review-pill-wrapper">
+                            <span className="doctors-review-pill-btn">
+                                Doctors review
+                            </span>
+                        </div>
                         <h2 className="landing-section-title">Trusted by BDS Practitioners</h2>
                         <p className="landing-section-subtitle">
                             Here is what practicing dentists across the network say about DentistChamber.
