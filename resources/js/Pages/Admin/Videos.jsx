@@ -10,7 +10,7 @@ export function getYouTubeId(url) {
 }
 
 export default function Videos({ categories = [], videos = [] }) {
-    const [activeTab, setActiveTab] = useState('upload'); // Default 1st tab ('upload')
+    const [activeTab, setActiveTab] = useState('list'); // Default 1st tab ('list')
 
     // Video Form
     const { data: vidData, setData: setVidData, post: postVid, processing: vidProcessing, errors: vidErrors, reset: resetVidForm } = useForm({
@@ -88,16 +88,16 @@ export default function Videos({ categories = [], videos = [] }) {
             {/* Sub navigation Tabs */}
             <div style={{ display: 'flex', gap: '15px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', flexWrap: 'wrap' }}>
                 <button 
-                    onClick={() => setActiveTab('upload')} 
-                    className={`btn ${activeTab === 'upload' ? 'btn-primary' : 'btn-outline'}`}
-                >
-                    🎥 Add YouTube Video
-                </button>
-                <button 
                     onClick={() => setActiveTab('list')} 
                     className={`btn ${activeTab === 'list' ? 'btn-primary' : 'btn-outline'}`}
                 >
                     📋 View All Videos ({videos.length})
+                </button>
+                <button 
+                    onClick={() => setActiveTab('upload')} 
+                    className={`btn ${activeTab === 'upload' ? 'btn-primary' : 'btn-outline'}`}
+                >
+                    🎥 Add YouTube Video
                 </button>
             </div>
 
