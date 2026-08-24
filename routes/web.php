@@ -134,8 +134,9 @@ Route::get('/site-login-image', function () {
     ]);
 })->name('site.login_image.stream');
 
-// Guest Medicine Shop Referral Submission Route
+// Guest Medicine Shop Referral Submission & Status Routes
 Route::post('/referrals/guest', [GuestReferralController::class, 'store'])->name('guest.referral.store');
+Route::post('/referrals/guest/status', [GuestReferralController::class, 'getStatus'])->name('guest.referral.status');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
