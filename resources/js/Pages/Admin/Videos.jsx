@@ -24,6 +24,55 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
         is_free: false,
     });
 
+    // Edit Video State
+    const [editingVideo, setEditingVideo] = useState(null);
+    const { data: editData, setData: setEditData, processing: editProcessing, errors: editErrors } = useForm({
+        category_id: '',
+        title: '',
+        description: '',
+        video_url: '',
+        duration: '',
+        is_free: false,
+    });
+
+    const openEditModal = (vid) => {
+        setEditingVideo(vid);
+        setEditData({
+            category_id: vid.category_id || '',
+            title: vid.title || '',
+            description: vid.description || '',
+            video_url: vid.video_path || '',
+            duration: vid.duration || '',
+            is_free: Boolean(vid.is_free),
+        });
+    };
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault();
+        if (!editingVideo) return;
+        router.post(route('admin.videos.update', editingVideo.id), {
+            _method: 'PUT',
+            ...editData,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setEditingVideo(null);
+                alert('Video updated successfully!');
+            }
+        });
+    };
+
+    const handleDeleteVideo = (vid) => {
+        if (confirm(`Are you sure you want to delete "${vid.title}"?`)) {
+            router.delete(route('admin.videos.destroy', vid.id), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    alert('Video deleted successfully!');
+                }
+            });
+        }
+    };
+
     const handleVideoSubmit = (e) => {
         e.preventDefault();
         postVid(route('admin.videos.store'), {
@@ -319,6 +368,7 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                     <th>Duration</th>
                                     <th>Access Level</th>
                                     <th>Date Added</th>
+                                    <th style={{ textAlign: 'right' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -374,18 +424,126 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                                 <td>
                                                     {new Date(vid.created_at).toLocaleDateString()}
                                                 </td>
+                                                <td style={{ textAlign: 'right' }}>
+                                                    <div style={{ display: 'inline-flex', gap: '8px' }}>
+                                                        <button 
+                                                            onClick={() => openEditModal(vid)}
+                                                            className="btn btn-outline"
+                                                            style={{ padding: '6px 12px', fontSize: '12px' }}
+                                                        >
+                                                            ✏️ Edit
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => handleDeleteVideo(vid)}
+                                                            className="btn btn-danger"
+                                                            style={{ padding: '6px 12px', fontSize: '12px' }}
+                                                        >
+                                                            🗑️ Delete
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         );
                                     })
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                                        <td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                                             No YouTube videos added yet.
                                         </td>
                                     </tr>
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Video Modal */}
+            {editingVideo && (
+                <div className="modal-wrapper" onClick={() => setEditingVideo(null)}>
+                    <div className="glass-panel modal-card" style={{ maxWidth: '650px', width: '90%', padding: '24px' }} onClick={e => e.stopPropagation()}>
+                        <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <h3 style={{ margin: 0 }}>✏️ Edit Video</h3>
+                            <button onClick={() => setEditingVideo(null)} className="btn btn-outline" style={{ padding: '4px 10px' }}>
+                                ✕
+                            </button>
+                        </div>
+                        <form onSubmit={handleEditSubmit}>
+                            <div className="form-group">
+                                <label className="form-label">Video Category</label>
+                                <select 
+                                    className="form-control"
+                                    value={editData.category_id}
+                                    onChange={e => setEditData('category_id', e.target.value)}
+                                    required
+                                >
+                                    <option value="">-- Choose Category --</option>
+                                    {categories.map(cat => (
+                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Video Title</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control"
+                                    value={editData.title}
+                                    onChange={e => setEditData('title', e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">YouTube Video URL</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control"
+                                    value={editData.video_url}
+                                    onChange={e => setEditData('video_url', e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="grid-responsive-2col-equal">
+                                <div className="form-group">
+                                    <label className="form-label">Description</label>
+                                    <textarea 
+                                        className="form-control"
+                                        rows="3"
+                                        value={editData.description}
+                                        onChange={e => setEditData('description', e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Duration (seconds)</label>
+                                    <input 
+                                        type="number"
+                                        className="form-control"
+                                        value={editData.duration}
+                                        onChange={e => setEditData('duration', e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '15px' }}>
+                                <input 
+                                    type="checkbox" 
+                                    id="edit_is_free"
+                                    checked={editData.is_free}
+                                    onChange={e => setEditData('is_free', e.target.checked)}
+                                    style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                                />
+                                <label htmlFor="edit_is_free" style={{ margin: 0, cursor: 'pointer', fontWeight: 'bold' }}>
+                                    ✓ Mark as Free Video (If unchecked, video is Premium)
+                                </label>
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px', marginTop: '24px', justifyContent: 'flex-end' }}>
+                                <button type="button" onClick={() => setEditingVideo(null)} className="btn btn-outline">
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary" disabled={editProcessing}>
+                                    {editProcessing ? 'Updating...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

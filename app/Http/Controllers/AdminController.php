@@ -312,6 +312,36 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Video uploaded successfully.');
     }
 
+    public function updateVideo(Request $request, Video $video)
+    {
+        $request->validate([
+            'category_id' => 'required|exists:video_categories,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'video_url' => 'required|string',
+            'duration' => 'nullable|integer|min:0',
+            'is_free' => 'nullable|boolean',
+        ]);
+
+        $video->update([
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'video_path' => $request->video_url,
+            'duration' => $request->duration,
+            'is_free' => $request->boolean('is_free'),
+        ]);
+
+        return redirect()->back()->with('success', 'Video updated successfully.');
+    }
+
+    public function destroyVideo(Video $video)
+    {
+        $video->delete();
+
+        return redirect()->back()->with('success', 'Video deleted successfully.');
+    }
+
     public function pageContent()
     {
         $settings = LandingSetting::all()->pluck('value', 'key')->toArray();

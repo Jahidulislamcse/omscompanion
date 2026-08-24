@@ -185,6 +185,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/videos', [AdminController::class, 'videos'])->name('admin.videos');
     Route::post('/videos/categories', [AdminController::class, 'storeCategory'])->name('admin.videos.category.store');
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('admin.videos.store');
+    Route::put('/videos/{video}', [AdminController::class, 'updateVideo'])->name('admin.videos.update');
+    Route::delete('/videos/{video}', [AdminController::class, 'destroyVideo'])->name('admin.videos.destroy');
     Route::post('/videos/access-requests/{user}', [AdminController::class, 'updatePremiumAccess'])->name('admin.videos.access_requests.update');
     Route::get('/page-content', [AdminController::class, 'pageContent'])->name('admin.page_content');
     Route::post('/page-content', [AdminController::class, 'updatePageContent'])->name('admin.page_content.update');
