@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
 export function getYouTubeId(url) {
@@ -10,14 +10,11 @@ export function getYouTubeId(url) {
 }
 
 export default function VideoLibrary({ categories = [] }) {
-    const { auth } = usePage().props;
-    const premiumAccess = auth.user.premium_access || 'none';
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
-    const [requesting, setRequesting] = useState(false);
 
-    // Get flat list of all videos with their category name
+    // Get flat list of all videos with category information
     const allVideos = (categories || []).reduce((acc, cat) => {
         if (cat && cat.videos) {
             const vidsWithCat = cat.videos.map(v => ({
@@ -29,7 +26,7 @@ export default function VideoLibrary({ categories = [] }) {
         return acc;
     }, []);
 
-    // Filter videos based on search, category and free vs premium status
+    // Filter videos based on search & active category
     const filteredVideos = allVideos.filter(vid => {
         const query = (searchTerm || '').toLowerCase();
         const matchesSearch = 
@@ -38,32 +35,25 @@ export default function VideoLibrary({ categories = [] }) {
             
         const matchesCategory = 
             activeCategoryFilter === 'all' || 
-            vid.category_id.toString() === activeCategoryFilter.toString();
+            (vid.category_id && vid.category_id.toString() === activeCategoryFilter.toString());
 
         return matchesSearch && matchesCategory;
     });
 
-    const freeVideos = filteredVideos.filter(v => v.is_free);
-    const premiumVideos = filteredVideos.filter(v => !v.is_free);
+    // Group filtered videos by category
+    const groupedCategories = (categories || []).map(cat => {
+        const catVideos = filteredVideos.filter(v => v.category_id === cat.id);
+        return {
+            ...cat,
+            videos: catVideos
+        };
+    }).filter(cat => activeCategoryFilter === 'all' ? cat.videos.length > 0 : cat.id.toString() === activeCategoryFilter.toString());
 
     const handleSelectVideo = (video) => {
-        if (!video.is_free && premiumAccess !== 'approved') {
-            alert('This is a premium video. Please request access from Admin.');
-            return;
-        }
         setSelectedVideo(video);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleRequestPremiumAccess = () => {
-        setRequesting(true);
-        router.post(route('member.videos.request_premium_access'), {}, {
-            preserveScroll: true,
-            onFinish: () => setRequesting(false)
-        });
-    };
-
-    // Format duration from seconds to MM:SS
     const formatDuration = (seconds) => {
         if (!seconds) return 'Video';
         const mins = Math.floor(seconds / 60);
@@ -73,12 +63,11 @@ export default function VideoLibrary({ categories = [] }) {
 
     const renderVideoCard = (video) => {
         const ytId = getYouTubeId(video.video_path);
-        const isUnlocked = video.is_free || premiumAccess === 'approved';
 
         return (
-            <div key={video.id} className="glass-panel video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div key={video.id} className="glass-panel video-card colorful-video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div 
-                    onClick={() => isUnlocked && handleSelectVideo(video)}
+                    onClick={() => handleSelectVideo(video)}
                     style={{ 
                         width: '100%', 
                         aspectRatio: '16/9', 
@@ -87,68 +76,42 @@ export default function VideoLibrary({ categories = [] }) {
                         flexDirection: 'column',
                         alignItems: 'center', 
                         justifyContent: 'center', 
-                        cursor: isUnlocked ? 'pointer' : 'default',
+                        cursor: 'pointer',
                         position: 'relative',
                         overflow: 'hidden'
                     }}
-                    className="video-thumbnail"
+                    className="video-thumbnail free-video-thumb"
                 >
                     {ytId ? (
                         <img 
                             src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
                             alt={video.title} 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: isUnlocked ? 1 : 0.3 }} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
                         />
                     ) : null}
 
-                    <div style={{ 
-                        position: 'absolute', 
-                        inset: 0, 
-                        backgroundColor: isUnlocked ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.7)', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        padding: '12px',
-                        textAlign: 'center'
-                    }}>
-                        {isUnlocked ? (
-                            <>
-                                <span style={{ fontSize: '42px', color: 'var(--accent-gold)', textShadow: '0 0 15px rgba(212, 175, 55, 0.6)' }}>▶</span>
-                                <span style={{ fontSize: '11px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', marginTop: '4px' }}>
-                                    Stream Video
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                <span style={{ fontSize: '32px' }}>🔒</span>
-                                <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 'bold', marginTop: '6px', textTransform: 'uppercase' }}>
-                                    Locked Premium
-                                </span>
-                            </>
-                        )}
+                    <div className="thumb-overlay">
+                        <div className="play-button-glow golden-play-button">
+                            <span className="play-icon">▶</span>
+                        </div>
+                        <span className="play-label" style={{ color: '#fff', fontWeight: '800' }}>
+                            Stream Video
+                        </span>
                     </div>
                     <span className="video-duration">{formatDuration(video.duration)}</span>
                 </div>
 
-                <div className="video-info" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', padding: '16px' }}>
+                <div className="video-info free-video-info" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', padding: '16px' }}>
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                            <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--accent-gold)', textTransform: 'uppercase' }}>
+                            <span className="video-tag badge-tag-glow" style={{ fontSize: '11px', fontWeight: 'bold' }}>
                                 {video.category_name}
                             </span>
-                            {video.is_free ? (
-                                <span className="badge-status badge-new" style={{ fontSize: '10px' }}>🔓 Free Preview</span>
-                            ) : (
-                                <span className={`badge-status ${premiumAccess === 'approved' ? 'badge-completed' : 'badge-treatment'}`} style={{ fontSize: '10px' }}>
-                                    {premiumAccess === 'approved' ? '🔓 Unlocked' : '🔒 Premium'}
-                                </span>
-                            )}
                         </div>
 
                         <h4 
-                            onClick={() => isUnlocked && handleSelectVideo(video)}
-                            style={{ fontSize: '16px', fontWeight: '700', cursor: isUnlocked ? 'pointer' : 'default', margin: '5px 0' }}
+                            onClick={() => handleSelectVideo(video)}
+                            style={{ fontSize: '16px', fontWeight: '700', cursor: 'pointer', margin: '5px 0' }}
                         >
                             {video.title}
                         </h4>
@@ -157,23 +120,13 @@ export default function VideoLibrary({ categories = [] }) {
                         </p>
                     </div>
 
-                    {isUnlocked ? (
-                        <button 
-                            onClick={() => handleSelectVideo(video)}
-                            className="btn btn-primary"
-                            style={{ width: '100%', fontSize: '13px', padding: '8px 12px' }}
-                        >
-                            ▶ Stream Now
-                        </button>
-                    ) : (
-                        <button 
-                            disabled
-                            className="btn btn-outline"
-                            style={{ width: '100%', fontSize: '12px', padding: '8px 12px', opacity: 0.6, cursor: 'not-allowed' }}
-                        >
-                            🔒 Locked Premium
-                        </button>
-                    )}
+                    <button 
+                        onClick={() => handleSelectVideo(video)}
+                        className="btn btn-primary"
+                        style={{ width: '100%', fontSize: '13px', padding: '8px 12px' }}
+                    >
+                        ▶ Watch Video
+                    </button>
                 </div>
             </div>
         );
@@ -229,128 +182,74 @@ export default function VideoLibrary({ categories = [] }) {
                 </div>
             )}
 
-            {/* Premium Access Status Banner */}
-            {premiumAccess !== 'approved' && (
-                <div className="glass-panel" style={{ 
-                    borderLeft: premiumAccess === 'pending' ? '4px solid var(--accent-gold)' : premiumAccess === 'rejected' ? '4px solid var(--color-danger)' : '4px solid var(--accent-teal)',
-                    marginBottom: '24px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                    gap: '16px',
-                    padding: '20px 24px'
-                }}>
-                    <div>
-                        <h3 style={{ margin: 0, fontSize: '16px' }}>
-                            {premiumAccess === 'pending' ? '⏳ Premium Access Request Pending' : premiumAccess === 'rejected' ? '❌ Premium Access Request Rejected' : '🔒 Unlock Premium Educational Videos'}
-                        </h3>
-                        <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                            {premiumAccess === 'pending' 
-                                ? 'Your request for unlocking all premium clinical video streams is currently under review by admin.' 
-                                : premiumAccess === 'rejected' 
-                                ? 'Your access request to premium clinical tutorials was rejected. You can re-submit the request.' 
-                                : 'Gain access to our entire library of professional clinical videos and guides by submitting a one-time request.'}
-                        </p>
-                    </div>
-                    <div>
-                        {premiumAccess === 'none' && (
-                            <button 
-                                onClick={handleRequestPremiumAccess}
-                                disabled={requesting}
-                                className="btn btn-primary"
-                                style={{ padding: '10px 20px', fontSize: '14px' }}
-                            >
-                                {requesting ? 'Requesting...' : '🔑 Request Premium Access'}
-                            </button>
-                        )}
-                        {premiumAccess === 'rejected' && (
-                            <button 
-                                onClick={handleRequestPremiumAccess}
-                                disabled={requesting}
-                                className="btn btn-secondary"
-                                style={{ padding: '10px 20px', fontSize: '14px' }}
-                            >
-                                {requesting ? 'Requesting...' : '🔄 Re-Request Access'}
-                            </button>
-                        )}
-                        {premiumAccess === 'pending' && (
-                            <button 
-                                disabled
-                                className="btn btn-outline"
-                                style={{ padding: '10px 20px', fontSize: '14px', opacity: 0.7, cursor: 'not-allowed' }}
-                            >
-                                ⏳ Pending Review
-                            </button>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* Search and Category Filters */}
-            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap', marginBottom: '24px' }}>
-                <div style={{ display: 'flex', gap: '15px', flexGrow: 1, maxWidth: '600px', flexWrap: 'wrap' }}>
+            {/* Search and Category Filter Bar */}
+            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap', marginBottom: '28px' }}>
+                <div style={{ display: 'flex', gap: '12px', flexGrow: 1, maxWidth: '650px', flexWrap: 'wrap', alignItems: 'center' }}>
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Search video by title or description..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
-                        style={{ flex: '1 1 200px' }}
+                        style={{ flex: '1 1 220px' }}
                     />
-                    <select
-                        className="form-control"
-                        style={{ flex: '1 1 160px', maxWidth: '100%' }}
-                        value={activeCategoryFilter}
-                        onChange={e => setActiveCategoryFilter(e.target.value)}
-                    >
-                        <option value="all">All Categories</option>
+                    
+                    {/* Category Filter Pills */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <button
+                            type="button"
+                            onClick={() => setActiveCategoryFilter('all')}
+                            className={`btn ${activeCategoryFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
+                            style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '20px' }}
+                        >
+                            All Categories
+                        </button>
                         {categories.map(cat => (
-                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            <button
+                                key={cat.id}
+                                type="button"
+                                onClick={() => setActiveCategoryFilter(cat.id.toString())}
+                                className={`btn ${activeCategoryFilter.toString() === cat.id.toString() ? 'btn-primary' : 'btn-outline'}`}
+                                style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '20px' }}
+                            >
+                                📁 {cat.name}
+                            </button>
                         ))}
-                    </select>
+                    </div>
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                    Found {filteredVideos.length} educational videos
+                    {filteredVideos.length} Videos Available
                 </div>
             </div>
 
-            {/* Free Videos Section */}
-            <div style={{ marginBottom: '40px' }}>
-                <h3 style={{ marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
-                    🔓 Free Preview Videos
-                </h3>
-                {freeVideos.length > 0 ? (
-                    <div className="video-grid">
-                        {freeVideos.map(video => renderVideoCard(video))}
-                    </div>
-                ) : (
-                    <div className="glass-panel" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                        No free preview videos found matching your filters.
-                    </div>
-                )}
-            </div>
+            {/* Videos Grouped By Category */}
+            {groupedCategories.length > 0 ? (
+                groupedCategories.map(cat => (
+                    <div key={cat.id} style={{ marginBottom: '40px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px', borderBottom: '2px solid var(--border-color)', paddingBottom: '10px' }}>
+                            <span style={{ fontSize: '20px' }}>📁</span>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: '1.3rem', color: 'var(--accent-teal)' }}>
+                                    {cat.name}
+                                </h3>
+                                {cat.description && (
+                                    <p style={{ margin: '2px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                                        {cat.description}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
 
-            {/* Premium Videos Section */}
-            <div>
-                <h3 style={{ marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    🔒 Premium Videos
-                    {premiumAccess === 'approved' && (
-                        <span className="badge-status badge-completed" style={{ fontSize: '11px', textTransform: 'uppercase' }}>
-                            Unlocked
-                        </span>
-                    )}
-                </h3>
-                {premiumVideos.length > 0 ? (
-                    <div className="video-grid">
-                        {premiumVideos.map(video => renderVideoCard(video))}
+                        <div className="video-grid">
+                            {cat.videos.map(video => renderVideoCard(video))}
+                        </div>
                     </div>
-                ) : (
-                    <div className="glass-panel" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                        No premium clinical videos found matching your filters.
-                    </div>
-                )}
-            </div>
+                ))
+            ) : (
+                <div className="glass-panel" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+                    No videos found matching your search or category filter.
+                </div>
+            )}
 
         </MemberLayout>
     );
