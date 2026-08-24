@@ -880,16 +880,16 @@ export default function Welcome({ settings, freeVideos }) {
 
             {/* REFERRAL SYSTEM MODAL (FOR GUEST USERS) */}
             {referralModalOpen && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999999, padding: '20px', boxSizing: 'border-box' }}>
-                    <div className="glass-panel" style={{ width: '100%', maxWidth: '520px', backgroundColor: '#0f172a', borderRadius: '20px', padding: '24px', color: '#ffffff', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', maxHeight: '90vh', overflowY: 'auto' }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999999, padding: '20px', boxSizing: 'border-box' }}>
+                    <div style={{ width: '100%', maxWidth: '480px', backgroundColor: '#ffffff', borderRadius: '20px', padding: '28px', color: '#0f172a', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', border: '1px solid #e2e8f0', maxHeight: '90vh', overflowY: 'auto' }}>
                         
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
-                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', color: '#f8fafc' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px' }}>
+                            <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
                                 📋 Refer a Patient
                             </h3>
                             <button 
                                 onClick={() => { setReferralModalOpen(false); resetShopForm(); }} 
-                                style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#94a3b8', fontSize: '16px', cursor: 'pointer', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                style={{ background: '#f1f5f9', border: 'none', color: '#64748b', fontSize: '16px', cursor: 'pointer', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}
                             >
                                 ✕
                             </button>
@@ -898,65 +898,65 @@ export default function Welcome({ settings, freeVideos }) {
                         {/* STEP 1: SELECT REFERRER TYPE */}
                         {referralStep === 'select_type' && (
                             <div>
-                                <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '16px', textAlign: 'center' }}>
-                                    Select who you are:
+                                <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px', textAlign: 'center', fontWeight: '500' }}>
+                                    Select your identity:
                                 </p>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-                                    {/* Option 1: BDS Doctor */}
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '14px' }}>
+                                    {/* Option 1: I'm BDS Doctor */}
                                     <div 
                                         onClick={() => { setReferralType('bds_doctor'); setReferralStep('bds_prompt'); }}
                                         style={{ 
-                                            padding: '16px 20px', 
-                                            borderRadius: '12px', 
+                                            padding: '18px 20px', 
+                                            borderRadius: '14px', 
                                             cursor: 'pointer', 
-                                            border: '1px solid rgba(16, 185, 129, 0.4)',
-                                            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                                            border: '1.5px solid #10b981',
+                                            backgroundColor: '#f0fdf4',
                                             transition: 'all 0.2s ease',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justify: 'space-between',
-                                            gap: '12px'
+                                            gap: '14px'
                                         }}
                                     >
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                             <div style={{ fontSize: '32px', lineHeight: 1 }}>🩺</div>
                                             <div>
-                                                <h4 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: 'bold', color: '#34d399' }}>
-                                                    BDS Registration Holder Doctor
+                                                <h4 style={{ margin: '0 0 2px 0', fontSize: '17px', fontWeight: '800', color: '#065f46' }}>
+                                                    I'm BDS Doctor
                                                 </h4>
-                                                <span style={{ fontSize: '13px', color: '#94a3b8' }}>For registered BDS Doctors</span>
+                                                <span style={{ fontSize: '13px', color: '#047857', fontWeight: '500' }}>Registered dental surgeon</span>
                                             </div>
                                         </div>
-                                        <span style={{ fontSize: '20px', color: '#34d399', fontWeight: 'bold' }}>→</span>
+                                        <span style={{ fontSize: '20px', color: '#10b981', fontWeight: 'bold' }}>→</span>
                                     </div>
 
-                                    {/* Option 2: Medicine Shop Keeper */}
+                                    {/* Option 2: I'm Pharmacy Owner/Staff */}
                                     <div 
                                         onClick={() => { setReferralType('medicine_shop'); setReferralStep('medicine_shop_form'); }}
                                         style={{ 
-                                            padding: '16px 20px', 
-                                            borderRadius: '12px', 
+                                            padding: '18px 20px', 
+                                            borderRadius: '14px', 
                                             cursor: 'pointer', 
-                                            border: '1px solid rgba(234, 179, 8, 0.4)',
-                                            background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                                            border: '1.5px solid #2563eb',
+                                            backgroundColor: '#eff6ff',
                                             transition: 'all 0.2s ease',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justify: 'space-between',
-                                            gap: '12px'
+                                            gap: '14px'
                                         }}
                                     >
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                             <div style={{ fontSize: '32px', lineHeight: 1 }}>💊</div>
                                             <div>
-                                                <h4 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: 'bold', color: '#fbbf24' }}>
-                                                    Medicine Shop Keeper
+                                                <h4 style={{ margin: '0 0 2px 0', fontSize: '17px', fontWeight: '800', color: '#1e40af' }}>
+                                                    I'm Pharmacy Owner/Staff
                                                 </h4>
-                                                <span style={{ fontSize: '13px', color: '#94a3b8' }}>For pharmacy & shop owners</span>
+                                                <span style={{ fontSize: '13px', color: '#1d4ed8', fontWeight: '500' }}>Medicine shop & pharmacy staff</span>
                                             </div>
                                         </div>
-                                        <span style={{ fontSize: '20px', color: '#fbbf24', fontWeight: 'bold' }}>→</span>
+                                        <span style={{ fontSize: '20px', color: '#2563eb', fontWeight: 'bold' }}>→</span>
                                     </div>
                                 </div>
                             </div>
@@ -965,36 +965,36 @@ export default function Welcome({ settings, freeVideos }) {
                         {/* STEP 2A: BDS DOCTOR PROMPT */}
                         {referralStep === 'bds_prompt' && (
                             <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                                <div style={{ fontSize: '48px', marginBottom: '12px' }}>🩺</div>
-                                <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: '#34d399', marginBottom: '10px' }}>
-                                    BDS Doctor Referral
+                                <div style={{ fontSize: '52px', marginBottom: '12px' }}>🩺</div>
+                                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#065f46', marginBottom: '10px' }}>
+                                    I'm BDS Doctor
                                 </h4>
-                                <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '20px' }}>
-                                    Please register or login to refer patients from your BDS doctor account.
+                                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.5', marginBottom: '24px' }}>
+                                    Please register or login to refer patients directly from your BDS doctor account panel.
                                 </p>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
                                     <Link 
                                         href={route('register')} 
-                                        className="btn btn-primary btn-glow"
-                                        style={{ padding: '12px', width: '100%', textAlign: 'center', fontWeight: 'bold' }}
+                                        className="btn btn-primary"
+                                        style={{ padding: '14px', width: '100%', textAlign: 'center', fontWeight: '800', backgroundColor: '#10b981', color: '#ffffff', borderRadius: '12px', border: 'none', fontSize: '15px' }}
                                     >
-                                        🌟 Register Account
+                                        🌟 Register BDS Account
                                     </Link>
                                     <Link 
                                         href={route('login')} 
                                         className="btn btn-outline"
-                                        style={{ padding: '12px', width: '100%', textAlign: 'center' }}
+                                        style={{ padding: '14px', width: '100%', textAlign: 'center', fontWeight: '700', borderRadius: '12px', border: '1px solid #cbd5e1', color: '#0f172a', fontSize: '15px' }}
                                     >
-                                        🔑 Login
+                                        🔑 Login to BDS Panel
                                     </Link>
                                 </div>
 
                                 <button 
                                     onClick={() => setReferralStep('select_type')} 
-                                    style={{ background: 'transparent', border: 'none', color: '#94a3b8', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline' }}
+                                    style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '14px', cursor: 'pointer', textDecoration: 'underline', fontWeight: '600' }}
                                 >
-                                    ← Back
+                                    ← Back to options
                                 </button>
                             </div>
                         )}
@@ -1003,35 +1003,35 @@ export default function Welcome({ settings, freeVideos }) {
                         {referralStep === 'medicine_shop_form' && (
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '22px' }}>💊</span>
-                                    <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold', color: '#fbbf24' }}>
-                                        Medicine Shop Referral
+                                    <span style={{ fontSize: '24px' }}>💊</span>
+                                    <h4 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#1e40af' }}>
+                                        Pharmacy / Medicine Shop Referral
                                     </h4>
                                 </div>
 
                                 <form onSubmit={handleShopReferralSubmit}>
                                     {/* Section 1: Medicine Shop Details */}
-                                    <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '12px', marginBottom: '14px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#fbbf24', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.5px' }}>
-                                            🏪 Your Details
+                                    <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '14px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
+                                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#2563eb', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>
+                                            🏪 Your Pharmacy / Shop Details
                                         </div>
                                         
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                                             <div>
-                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Shop Keeper Name *</label>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Your Name *</label>
                                                 <input 
                                                     type="text" 
                                                     className="form-control"
-                                                    placeholder="Your Name"
+                                                    placeholder="Your Full Name"
                                                     value={shopForm.shop_keeper_name}
                                                     onChange={e => setShopForm('shop_keeper_name', e.target.value)}
                                                     required
-                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                    style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                                 />
                                                 {shopErrors.shop_keeper_name && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_name}</span>}
                                             </div>
                                             <div>
-                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Phone Number *</label>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Phone Number *</label>
                                                 <input 
                                                     type="tel" 
                                                     className="form-control"
@@ -1039,49 +1039,49 @@ export default function Welcome({ settings, freeVideos }) {
                                                     value={shopForm.shop_keeper_phone}
                                                     onChange={e => setShopForm('shop_keeper_phone', e.target.value)}
                                                     required
-                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                    style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                                 />
                                                 {shopErrors.shop_keeper_phone && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_phone}</span>}
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Shop Address *</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Pharmacy / Shop Address *</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"
-                                                placeholder="Shop Location"
+                                                placeholder="Shop Name & Address"
                                                 value={shopForm.shop_keeper_address}
                                                 onChange={e => setShopForm('shop_keeper_address', e.target.value)}
                                                 required
-                                                style={{ width: '100%', boxSizing: 'border-box' }}
+                                                style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                             />
                                             {shopErrors.shop_keeper_address && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_address}</span>}
                                         </div>
                                     </div>
 
                                     {/* Section 2: Patient Details */}
-                                    <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '12px', marginBottom: '14px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#38bdf8', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.5px' }}>
+                                    <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '14px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
+                                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#0284c7', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>
                                             🩺 Patient Details
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                                             <div>
-                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Name *</label>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Name *</label>
                                                 <input 
                                                     type="text" 
                                                     className="form-control"
-                                                    placeholder="Patient Name"
+                                                    placeholder="Patient Full Name"
                                                     value={shopForm.patient_name}
                                                     onChange={e => setShopForm('patient_name', e.target.value)}
                                                     required
-                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                    style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                                 />
                                                 {shopErrors.patient_name && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_name}</span>}
                                             </div>
                                             <div>
-                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Phone *</label>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Phone *</label>
                                                 <input 
                                                     type="tel" 
                                                     className="form-control"
@@ -1089,14 +1089,14 @@ export default function Welcome({ settings, freeVideos }) {
                                                     value={shopForm.patient_phone}
                                                     onChange={e => setShopForm('patient_phone', e.target.value)}
                                                     required
-                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                    style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                                 />
                                                 {shopErrors.patient_phone && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_phone}</span>}
                                             </div>
                                         </div>
 
-                                        <div style={{ marginBottom: '10px' }}>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Address *</label>
+                                        <div style={{ marginBottom: '12px' }}>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Address *</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"
@@ -1104,40 +1104,40 @@ export default function Welcome({ settings, freeVideos }) {
                                                 value={shopForm.patient_address}
                                                 onChange={e => setShopForm('patient_address', e.target.value)}
                                                 required
-                                                style={{ width: '100%', boxSizing: 'border-box' }}
+                                                style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                             />
                                             {shopErrors.patient_address && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_address}</span>}
                                         </div>
 
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Problem / Condition *</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Problem / Condition *</label>
                                             <textarea 
                                                 className="form-control"
                                                 rows="2"
-                                                placeholder="Describe patient problem..."
+                                                placeholder="Describe patient dental condition..."
                                                 value={shopForm.medical_condition}
                                                 onChange={e => setShopForm('medical_condition', e.target.value)}
                                                 required
-                                                style={{ width: '100%', boxSizing: 'border-box' }}
+                                                style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                             />
                                             {shopErrors.medical_condition && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.medical_condition}</span>}
                                         </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
                                         <button 
                                             type="button" 
                                             onClick={() => setReferralStep('select_type')} 
                                             className="btn btn-outline"
-                                            style={{ fontSize: '13px', padding: '8px 14px' }}
+                                            style={{ fontSize: '14px', padding: '10px 18px', border: '1px solid #cbd5e1', color: '#475569', borderRadius: '10px' }}
                                         >
                                             ← Back
                                         </button>
                                         <button 
                                             type="submit" 
-                                            className="btn btn-secondary btn-gold-glow"
+                                            className="btn btn-primary"
                                             disabled={shopProcessing}
-                                            style={{ fontSize: '13px', padding: '8px 18px', fontWeight: 'bold' }}
+                                            style={{ fontSize: '14px', padding: '10px 24px', fontWeight: '800', backgroundColor: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '10px', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)' }}
                                         >
                                             {shopProcessing ? 'Submitting...' : 'Submit Referral 🚀'}
                                         </button>
@@ -1149,26 +1149,26 @@ export default function Welcome({ settings, freeVideos }) {
                         {/* STEP 3: SUCCESS CONFIRMATION */}
                         {referralStep === 'success' && (
                             <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                                <div style={{ fontSize: '48px', marginBottom: '12px' }}>🎉</div>
-                                <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: '#10b981', marginBottom: '8px' }}>
+                                <div style={{ fontSize: '52px', marginBottom: '12px' }}>🎉</div>
+                                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#10b981', marginBottom: '8px' }}>
                                     Referral Submitted!
                                 </h4>
-                                <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '20px' }}>
-                                    Thank you. Our team will contact the patient soon.
+                                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.5', marginBottom: '24px' }}>
+                                    Thank you. Our clinical team will contact the patient soon.
                                 </p>
 
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
                                     <button 
                                         onClick={() => { resetShopForm(); setReferralStep('select_type'); }}
                                         className="btn btn-outline"
-                                        style={{ padding: '8px 14px', fontSize: '13px' }}
+                                        style={{ padding: '10px 20px', fontSize: '14px', border: '1px solid #cbd5e1', color: '#475569', borderRadius: '10px' }}
                                     >
                                         Refer Another Patient
                                     </button>
                                     <button 
                                         onClick={() => { setReferralModalOpen(false); resetShopForm(); }}
                                         className="btn btn-primary"
-                                        style={{ padding: '8px 20px', fontSize: '13px', fontWeight: 'bold' }}
+                                        style={{ padding: '10px 28px', fontSize: '14px', fontWeight: '800', backgroundColor: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '10px' }}
                                     >
                                         Done
                                     </button>
