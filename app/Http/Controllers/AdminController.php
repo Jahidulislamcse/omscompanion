@@ -11,6 +11,7 @@ use App\Models\VideoAccessRequest;
 use App\Models\LandingSetting;
 use App\Models\TeamMember;
 use App\Models\Service;
+use App\Models\ContactMessage;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -659,5 +660,28 @@ class AdminController extends Controller
         $user->update($updateData);
 
         return redirect()->back()->with('success', 'Admin profile updated successfully.');
+    }
+
+    public function messages()
+    {
+        $messages = ContactMessage::orderBy('created_at', 'desc')->get();
+
+        return Inertia::render('Admin/Messages', [
+            'messages' => $messages
+        ]);
+    }
+
+    public function markMessageRead(ContactMessage $message)
+    {
+        $message->update(['is_read' => !$message->is_read]);
+
+        return redirect()->back()->with('success', 'Message status updated.');
+    }
+
+    public function destroyMessage(ContactMessage $message)
+    {
+        $message->delete();
+
+        return redirect()->back()->with('success', 'Message deleted successfully.');
     }
 }

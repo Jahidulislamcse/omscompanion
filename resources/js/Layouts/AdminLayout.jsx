@@ -99,6 +99,15 @@ export default function AdminLayout({ children, title }) {
                             </li>
                             <li>
                                 <Link 
+                                    href={route('admin.messages')} 
+                                    className={`sidebar-link ${isCurrent('/admin/messages') ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>📩</span> Contact Messages
+                                </Link>
+                            </li>
+                            <li>
+                                <Link 
                                     href={route('admin.profile')} 
                                     className={`sidebar-link ${isCurrent('/admin/profile') ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}

@@ -8,6 +8,7 @@ use App\Http\Controllers\VideoStreamingController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\ContactController;
 use App\Models\LandingSetting;
 use App\Models\Video;
 use App\Models\VideoCategory;
@@ -198,6 +199,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/services', [AdminController::class, 'storeService'])->name('admin.services.store');
     Route::put('/services/{service}', [AdminController::class, 'updateService'])->name('admin.services.update');
     Route::delete('/services/{service}', [AdminController::class, 'destroyService'])->name('admin.services.destroy');
+    Route::get('/messages', [AdminController::class, 'messages'])->name('admin.messages');
+    Route::post('/messages/{message}/read', [AdminController::class, 'markMessageRead'])->name('admin.messages.read');
+    Route::delete('/messages/{message}', [AdminController::class, 'destroyMessage'])->name('admin.messages.destroy');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
 });
@@ -205,6 +209,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 // Public Pages Routes
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Member Routes
 Route::middleware(['auth', 'member'])->prefix('member')->group(function () {
