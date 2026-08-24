@@ -9,7 +9,7 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick }) {
+function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, onLearnMoreClick }) {
     const categoryVideos = useMemo(() => {
         if (!videos || videos.length === 0) return [];
 
@@ -107,7 +107,7 @@ function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick })
 
             <div style={{ marginTop: '18px', textAlign: 'center' }}>
                 <button 
-                    onClick={() => onVideoClick(currentVid)}
+                    onClick={() => onLearnMoreClick(currentVid)}
                     className="learn-more-btn"
                 >
                     <span>LEARN MORE</span>
@@ -248,19 +248,15 @@ export default function Welcome({ settings, freeVideos }) {
     };
 
     const handleVideoClick = (video) => {
-        if (video.is_free) {
-            setActiveVideo(video);
-            return;
-        }
+        setActiveVideo(video);
+    };
+
+    const handleLearnMoreClick = (video) => {
         if (!auth.user) {
             setAccessBlockedReason('unauthenticated');
-            return;
+        } else {
+            router.visit(route('videos.public'));
         }
-        if (auth.user.role !== 'admin' && auth.user.status !== 'approved') {
-            setAccessBlockedReason('unapproved');
-            return;
-        }
-        setActiveVideo(video);
     };
 
     // Filtered videos based on tab selection
@@ -736,6 +732,7 @@ export default function Welcome({ settings, freeVideos }) {
                             categoryTitle="Surgical approaches" 
                             videos={freeVideos} 
                             onVideoClick={handleVideoClick} 
+                            onLearnMoreClick={handleLearnMoreClick}
                         />
 
                         {/* Category 2 Column */}
@@ -743,6 +740,7 @@ export default function Welcome({ settings, freeVideos }) {
                             categoryTitle="Clinical lecture/ tips tricks" 
                             videos={freeVideos} 
                             onVideoClick={handleVideoClick} 
+                            onLearnMoreClick={handleLearnMoreClick}
                         />
                     </div>
                 </div>
