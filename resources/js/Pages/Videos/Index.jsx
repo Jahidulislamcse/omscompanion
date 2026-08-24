@@ -138,7 +138,11 @@ export default function Index({ categories, videos, settings = {} }) {
             <main className="landing-section" style={{ paddingTop: '40px', paddingBottom: '30px', flex: '1 0 auto' }}>
                 <div className="landing-section-container">
                     <div className="landing-section-header" style={{ marginBottom: '28px' }}>
-                        <span className="badge-status badge-new section-tag">Video Library</span>
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Video Library
+                            </span>
+                        </div>
                         <h1 className="landing-section-title">Clinical Video Masterclasses</h1>
                         <p className="landing-section-subtitle">
                             Explore clinical guides, surgical approaches, and practical tips & tricks for BDS Practitioners.

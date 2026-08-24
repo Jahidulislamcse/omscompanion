@@ -497,7 +497,11 @@ export default function Welcome({ settings, freeVideos }) {
             <section id="benefits" className="landing-section benefits-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
-                        <span className="badge-status badge-approved section-tag">✨ Member Advantages</span>
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Member Advantages
+                            </span>
+                        </div>
                         <h2 className="landing-section-title">Benefit of Membership</h2>
                         <p className="landing-section-subtitle">
                             Explore how joining {site_name || 'DentistChamber'} empowers BDS Doctors with surgical video archives, online consultations, transparent referral tracking, and professional training.
@@ -625,7 +629,11 @@ export default function Welcome({ settings, freeVideos }) {
             <section id="status-pipeline" className="landing-section pipeline-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
-                        <span className="badge-status badge-completed section-tag">Live Status Pipeline</span>
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Live Status Pipeline
+                            </span>
+                        </div>
                         <h2 className="landing-section-title">Transparent Patient Referral Workflow</h2>
                         <p className="landing-section-subtitle">
                             Track every stage of your patient's referral journey live with automatic milestone status updates.
@@ -778,7 +786,11 @@ export default function Welcome({ settings, freeVideos }) {
             <section id="news" className="landing-section news-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
-                        <span className="badge-status badge-new section-tag">📰 Latest Updates</span>
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Latest Updates
+                            </span>
+                        </div>
                         <h2 className="landing-section-title">Clinical News & Professional Training</h2>
                         <p className="landing-section-subtitle">
                             Stay updated with recent surgical case studies, workshop schedules, and professional training announcements for BDS Doctors.
@@ -841,7 +853,11 @@ export default function Welcome({ settings, freeVideos }) {
             <section id="faq" className="landing-section faq-section">
                 <div className="landing-section-container">
                     <div className="landing-section-header">
-                        <span className="badge-status badge-pending section-tag">Common Questions</span>
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Common Questions
+                            </span>
+                        </div>
                         <h2 className="landing-section-title">Frequently Asked Questions</h2>
                         <p className="landing-section-subtitle">
                             Got questions about joining or sending referrals? We have answers.
