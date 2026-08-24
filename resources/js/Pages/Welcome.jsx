@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link, Head, usePage } from '@inertiajs/react';
+import { Link, Head, usePage, useForm, router } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export function getYouTubeId(url) {
@@ -15,6 +15,29 @@ export default function Welcome({ settings, freeVideos }) {
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | 'unapproved' | null
     const [simStep, setSimStep] = useState(3); // 1: Submitted, 2: Contacted, 3: Treatment, 4: Completed
     const [videoFilter, setVideoFilter] = useState('all');
+
+    // Referral System Modal State
+    const [referralModalOpen, setReferralModalOpen] = useState(false);
+    const [referralStep, setReferralStep] = useState('select_type'); // 'select_type' | 'bds_prompt' | 'medicine_shop_form' | 'success'
+    const [referralType, setReferralType] = useState(null); // 'bds_doctor' | 'medicine_shop'
+
+    // Form for Medicine Shop Keeper Referral
+    const { 
+        data: shopForm, 
+        setData: setShopForm, 
+        post: postShopReferral, 
+        processing: shopProcessing, 
+        errors: shopErrors, 
+        reset: resetShopForm 
+    } = useForm({
+        shop_keeper_name: '',
+        shop_keeper_phone: '',
+        shop_keeper_address: '',
+        patient_name: '',
+        patient_phone: '',
+        patient_address: '',
+        medical_condition: '',
+    });
 
     // Interactive FAQ state
     const [openFaq, setOpenFaq] = useState(null);
@@ -44,6 +67,31 @@ export default function Welcome({ settings, freeVideos }) {
     const getDashboardRoute = () => {
         if (!auth.user) return '#';
         return auth.user.role === 'admin' ? route('admin.dashboard') : route('member.dashboard');
+    };
+
+    const handleReferralClick = (e) => {
+        if (e) e.preventDefault();
+        setMobileNavOpen(false);
+        if (auth.user) {
+            if (auth.user.role === 'admin') {
+                router.visit(route('admin.referrals'));
+            } else {
+                router.visit(route('member.referrals'));
+            }
+        } else {
+            setReferralModalOpen(true);
+            setReferralStep('select_type');
+        }
+    };
+
+    const handleShopReferralSubmit = (e) => {
+        e.preventDefault();
+        postShopReferral(route('guest.referral.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setReferralStep('success');
+            }
+        });
     };
 
     const formatDuration = (seconds) => {
@@ -86,7 +134,6 @@ export default function Welcome({ settings, freeVideos }) {
     };
 
     const handleVideoClick = (video) => {
-        // Free preview videos require no login
         if (video.is_free) {
             setActiveVideo(video);
             return;
@@ -117,7 +164,11 @@ export default function Welcome({ settings, freeVideos }) {
     // FAQ Items
     const faqs = [
         {
-            q: "Who can register as a member on DentistChamber?",
+            q: "Who can refer patients on DentistChamber?",
+            a: "Both verified BDS Registration Holder Doctors and Medicine Shop Keepers can refer patients. BDS Doctors refer via their member panel with full case tracking, while Medicine Shop Keepers can quickly submit patient details directly using our online referral modal."
+        },
+        {
+            q: "Who can register as a BDS member on DentistChamber?",
             a: "DentistChamber is dedicated specifically for verified BDS (Bachelor of Dental Surgery) Doctors and dental practitioners who wish to refer complex surgical or specialized cases, track live treatment progress, and access clinical video masterclasses."
         },
         {
@@ -199,6 +250,16 @@ export default function Welcome({ settings, freeVideos }) {
                     <Link href="/" className="nav-link-item active-nav-item" onClick={() => setMobileNavOpen(false)}>HOME</Link>
                     <Link href={route('videos.public')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ARCHIVE</Link>
                     
+                    {/* Prominent Refer a Patient Button */}
+                    <button 
+                        type="button"
+                        onClick={handleReferralClick} 
+                        className="btn btn-secondary nav-btn btn-gold-glow"
+                        style={{ marginRight: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                    >
+                        <span>📋</span> Refer a Patient
+                    </button>
+
                     {auth.user ? (
                         <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
                             Dashboard →
@@ -216,7 +277,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </nav>
             </header>
 
-            {/* Hero Section (Supports Dynamic Banner Image from Site Settings) */}
+            {/* Hero Section */}
             <section className="landing-hero hero-vibrant">
                 {settings && settings.hero_banner ? (
                     <>
@@ -232,6 +293,16 @@ export default function Welcome({ settings, freeVideos }) {
                                 {getSetting('hero_subtitle')}
                             </p>
                         )}
+                        <div className="landing-hero-ctas" style={{ marginTop: '16px' }}>
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick} 
+                                className="btn btn-secondary hero-btn btn-gold-glow"
+                                style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', fontSize: '15px', fontWeight: 'bold' }}
+                            >
+                                📋 Refer a Patient Now
+                            </button>
+                        </div>
                     </>
                 ) : (
                     <>
@@ -240,23 +311,27 @@ export default function Welcome({ settings, freeVideos }) {
                         </h1>
                         
                         <p className="landing-hero-desc">
-                            {getSetting('hero_subtitle', `${site_name || 'DentistChamber'} connects BDS Practitioners with automated patient referral pipelines, live status tracking logs, masterclass surgical streams, and verified digital certificates.`)}
+                            {getSetting('hero_subtitle', `${site_name || 'DentistChamber'} connects BDS Practitioners and Medicine Shop Keepers with automated patient referral pipelines, live status tracking logs, masterclass surgical streams, and verified digital certificates.`)}
                         </p>
 
                         <div className="landing-hero-ctas">
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick} 
+                                className="btn btn-secondary hero-btn btn-gold-glow"
+                                style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', fontSize: '15px', fontWeight: 'bold' }}
+                            >
+                                📋 Refer a Patient Now
+                            </button>
+                            
                             {auth.user ? (
-                                <Link href={getDashboardRoute()} className="btn btn-secondary hero-btn btn-gold-glow">
-                                    🚀 Go to Your Dashboard
+                                <Link href={getDashboardRoute()} className="btn btn-outline hero-btn">
+                                    🚀 Go to Dashboard
                                 </Link>
                             ) : (
-                                <>
-                                    <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
-                                        🌟 Registration
-                                    </Link>
-                                    <Link href={route('videos.public')} className="btn btn-outline hero-btn">
-                                        📁 View Archive
-                                    </Link>
-                                </>
+                                <Link href={route('register')} className="btn btn-outline hero-btn">
+                                    🌟 BDS Doctor Registration
+                                </Link>
                             )}
                         </div>
 
@@ -279,10 +354,10 @@ export default function Welcome({ settings, freeVideos }) {
                             </div>
 
                             <div className="glass-panel stat-ticker-card stat-indigo">
-                                <div className="stat-icon-wrapper">⚡</div>
+                                <div className="stat-icon-wrapper">💊</div>
                                 <div className="stat-ticker-info">
-                                    <span className="stat-ticker-num">99.8%</span>
-                                    <span className="stat-ticker-label">Live Status Precision</span>
+                                    <span className="stat-ticker-num">200+</span>
+                                    <span className="stat-ticker-label">Partner Medicine Shops</span>
                                 </div>
                             </div>
 
@@ -296,6 +371,65 @@ export default function Welcome({ settings, freeVideos }) {
                         </div>
                     </>
                 )}
+            </section>
+
+            {/* DUAL REFERRAL SYSTEM HUB SECTION */}
+            <section id="referral-system" className="landing-section" style={{ paddingTop: '20px', paddingBottom: '40px' }}>
+                <div className="landing-section-container">
+                    <div className="glass-panel" style={{ padding: '32px', borderRadius: '20px', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4)' }}>
+                        <div className="landing-section-header" style={{ marginBottom: '24px' }}>
+                            <span className="badge-status badge-completed section-tag">✨ Dual Referral Hub</span>
+                            <h2 className="landing-section-title" style={{ fontSize: '28px' }}>Patient Referral System</h2>
+                            <p className="landing-section-subtitle">
+                                Connecting both **BDS Registration Holder Doctors** and **Medicine Shop Keepers** directly to our specialist dental and maxillofacial care pipeline.
+                            </p>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '20px' }}>
+                            {/* Card 1: BDS Doctor */}
+                            <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(16, 185, 129, 0.3)', backgroundColor: 'rgba(16, 185, 129, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                                        <span style={{ fontSize: '32px' }}>🩺</span>
+                                        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold', color: '#34d399' }}>BDS Registration Holder Doctor</h3>
+                                    </div>
+                                    <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '16px' }}>
+                                        Refer surgical, impaction, or complex oral cases directly from your BDS Member Dashboard. Track live milestone timeline updates and manage referral outcomes.
+                                    </p>
+                                </div>
+                                <button 
+                                    type="button" 
+                                    onClick={handleReferralClick}
+                                    className="btn btn-primary btn-glow"
+                                    style={{ width: '100%', padding: '12px', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer' }}
+                                >
+                                    Refer as BDS Doctor →
+                                </button>
+                            </div>
+
+                            {/* Card 2: Medicine Shop Keeper */}
+                            <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(234, 179, 8, 0.3)', backgroundColor: 'rgba(234, 179, 8, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                                        <span style={{ fontSize: '32px' }}>💊</span>
+                                        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold', color: '#fbbf24' }}>Medicine Shop Keeper</h3>
+                                    </div>
+                                    <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '16px' }}>
+                                        Are you a pharmacy or medicine shop owner? Submit patient details directly via our instant pop-up referral form with zero account setup required.
+                                    </p>
+                                </div>
+                                <button 
+                                    type="button" 
+                                    onClick={handleReferralClick}
+                                    className="btn btn-secondary btn-gold-glow"
+                                    style={{ width: '100%', padding: '12px', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer' }}
+                                >
+                                    Refer as Medicine Shop →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             {/* Benefits of Membership Section */}
@@ -366,9 +500,14 @@ export default function Welcome({ settings, freeVideos }) {
                                 </div>
                                 <h3 className="benefit-title">Don’t lose your patient through referral</h3>
                             </div>
-                            <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick} 
+                                className="benefit-action-btn btn-gold-glow"
+                                style={{ cursor: 'pointer', border: 'none' }}
+                            >
                                 Referral Page 📋
-                            </Link>
+                            </button>
                         </div>
 
                         {/* Benefit 5 */}
@@ -408,9 +547,14 @@ export default function Welcome({ settings, freeVideos }) {
                                 </div>
                                 <h3 className="benefit-title">Participate in Maxillofacial surgery cases as a team</h3>
                             </div>
-                            <Link href={auth.user ? route('member.referrals') : route('register')} className="benefit-action-btn btn-gold-glow">
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick} 
+                                className="benefit-action-btn btn-gold-glow"
+                                style={{ cursor: 'pointer', border: 'none' }}
+                            >
                                 Referral Page 📋
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -424,7 +568,6 @@ export default function Welcome({ settings, freeVideos }) {
                         <h2 className="landing-section-title">Transparent Patient Referral Workflow</h2>
                         <p className="landing-section-subtitle">
                             Track every stage of your patient's referral journey live with automatic milestone status updates.
-
                         </p>
                     </div>
 
@@ -447,7 +590,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <div className="step-num-badge">1</div>
                                 <span className="badge-status badge-new">1. Submitted</span>
                                 <h4 className="step-box-title">Referral Logged</h4>
-                                <p className="step-box-desc">Case details, urgency, and clinical notes logged by BDS Doctor.</p>
+                                <p className="step-box-desc">Case details, urgency, and clinical notes logged by BDS Doctor / Shop Keeper.</p>
                             </div>
 
                             <div 
@@ -486,10 +629,10 @@ export default function Welcome({ settings, freeVideos }) {
                             <span className="note-icon">💡</span>
                             <div>
                                 <strong>Stage {simStep} Detail: </strong>
-                                {simStep === 1 && "Case submitted directly from chamber dashboard. Urgency level set to High."}
+                                {simStep === 1 && "Case submitted directly from chamber dashboard / referral form. Urgency level set to High."}
                                 {simStep === 2 && "Patient contacted within 2 hours. Consultation scheduled for tomorrow morning."}
                                 {simStep === 3 && "Patient currently undergoing procedure under specialist care."}
-                                {simStep === 4 && "Procedure successfully completed. Final report and updates sent back to referring BDS Doctor."}
+                                {simStep === 4 && "Procedure successfully completed. Final report and updates sent back to referring referrer."}
                             </div>
                         </div>
                     </div>
@@ -704,7 +847,7 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             </section>
 
-            {/* Access Blocked Modal (Unauthenticated or Unapproved) */}
+            {/* Access Blocked Modal */}
             {accessBlockedReason && (
                 <div className="modal-wrapper" onClick={() => setAccessBlockedReason(null)}>
                     <div className="glass-panel modal-card modal-card-colorful" style={{ maxWidth: '480px', padding: '32px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
@@ -784,28 +927,336 @@ export default function Welcome({ settings, freeVideos }) {
                 </div>
             )}
 
+            {/* REFERRAL SYSTEM MODAL (FOR GUEST USERS) */}
+            {referralModalOpen && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999999, padding: '20px', boxSizing: 'border-box' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '580px', backgroundColor: '#0f172a', borderRadius: '20px', padding: '28px', color: '#ffffff', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', maxHeight: '90vh', overflowY: 'auto' }}>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '14px' }}>
+                            <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', color: '#f8fafc' }}>
+                                📋 Refer a Patient to Specialist Care
+                            </h3>
+                            <button 
+                                onClick={() => { setReferralModalOpen(false); resetShopForm(); }} 
+                                style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#94a3b8', fontSize: '18px', cursor: 'pointer', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* STEP 1: SELECT REFERRER TYPE */}
+                        {referralStep === 'select_type' && (
+                            <div>
+                                <p style={{ color: '#cbd5e1', fontSize: '14px', marginBottom: '20px', lineHeight: '1.5' }}>
+                                    Welcome! Please select your referrer identity to proceed with referring a patient:
+                                </p>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+                                    {/* Option 1: BDS Doctor */}
+                                    <div 
+                                        onClick={() => { setReferralType('bds_doctor'); setReferralStep('bds_prompt'); }}
+                                        style={{ 
+                                            padding: '20px', 
+                                            borderRadius: '14px', 
+                                            cursor: 'pointer', 
+                                            border: '1px solid rgba(16, 185, 129, 0.4)',
+                                            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                                            transition: 'all 0.2s ease',
+                                            display: 'flex',
+                                            alignItems: 'flex-start',
+                                            gap: '16px'
+                                        }}
+                                    >
+                                        <div style={{ fontSize: '36px', lineHeight: 1 }}>🩺</div>
+                                        <div>
+                                            <h4 style={{ margin: '0 0 6px 0', fontSize: '16px', fontWeight: 'bold', color: '#34d399' }}>
+                                                BDS Registration Holder Doctor
+                                            </h4>
+                                            <p style={{ margin: 0, fontSize: '13px', color: '#cbd5e1', lineHeight: '1.4' }}>
+                                                I am a verified BDS Doctor. I want to refer complex dental & surgical cases, track live treatment progress, and manage referrals via the BDS Panel.
+                                            </p>
+                                            <span style={{ display: 'inline-block', marginTop: '10px', fontSize: '12px', fontWeight: 'bold', color: '#34d399' }}>
+                                                Proceed to BDS Panel →
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Option 2: Medicine Shop Keeper */}
+                                    <div 
+                                        onClick={() => { setReferralType('medicine_shop'); setReferralStep('medicine_shop_form'); }}
+                                        style={{ 
+                                            padding: '20px', 
+                                            borderRadius: '14px', 
+                                            cursor: 'pointer', 
+                                            border: '1px solid rgba(234, 179, 8, 0.4)',
+                                            background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                                            transition: 'all 0.2s ease',
+                                            display: 'flex',
+                                            alignItems: 'flex-start',
+                                            gap: '16px'
+                                        }}
+                                    >
+                                        <div style={{ fontSize: '36px', lineHeight: 1 }}>💊</div>
+                                        <div>
+                                            <h4 style={{ margin: '0 0 6px 0', fontSize: '16px', fontWeight: 'bold', color: '#fbbf24' }}>
+                                                Medicine Shop Keeper
+                                            </h4>
+                                            <p style={{ margin: 0, fontSize: '13px', color: '#cbd5e1', lineHeight: '1.4' }}>
+                                                I am a pharmacy / medicine shop keeper. Open our quick referral form to send patient details directly to our specialist clinical team.
+                                            </p>
+                                            <span style={{ display: 'inline-block', marginTop: '10px', fontSize: '12px', fontWeight: 'bold', color: '#fbbf24' }}>
+                                                Open Quick Referral Form →
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 2A: BDS DOCTOR PROMPT */}
+                        {referralStep === 'bds_prompt' && (
+                            <div style={{ textAlign: 'center', padding: '10px 0' }}>
+                                <div style={{ fontSize: '52px', marginBottom: '12px' }}>🩺</div>
+                                <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: '#34d399', marginBottom: '10px' }}>
+                                    BDS Doctor Referral Panel
+                                </h4>
+                                <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '24px' }}>
+                                    To refer patients as a BDS Registration holder doctor, please register or login to your verified account. You will get access to live status tracking, treatment logs, and clinical archives.
+                                </p>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+                                    <Link 
+                                        href={route('register')} 
+                                        className="btn btn-primary btn-glow"
+                                        style={{ padding: '12px', width: '100%', textAlign: 'center', fontWeight: 'bold' }}
+                                    >
+                                        🌟 Register New BDS Account
+                                    </Link>
+                                    <Link 
+                                        href={route('login')} 
+                                        className="btn btn-outline"
+                                        style={{ padding: '12px', width: '100%', textAlign: 'center' }}
+                                    >
+                                        🔑 Login to BDS Panel
+                                    </Link>
+                                </div>
+
+                                <button 
+                                    onClick={() => setReferralStep('select_type')} 
+                                    style={{ background: 'transparent', border: 'none', color: '#94a3b8', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline' }}
+                                >
+                                    ← Back to identity selection
+                                </button>
+                            </div>
+                        )}
+
+                        {/* STEP 2B: MEDICINE SHOP KEEPER FORM */}
+                        {referralStep === 'medicine_shop_form' && (
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <span style={{ fontSize: '24px' }}>💊</span>
+                                    <h4 style={{ margin: 0, fontSize: '17px', fontWeight: 'bold', color: '#fbbf24' }}>
+                                        Medicine Shop Keeper Referral Form
+                                    </h4>
+                                </div>
+
+                                <form onSubmit={handleShopReferralSubmit}>
+                                    {/* Section 1: Medicine Shop Details */}
+                                    <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '12px', marginBottom: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                        <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#fbbf24', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>
+                                            🏪 Medicine Shop Details
+                                        </div>
+                                        
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Shop Keeper Name *</label>
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control"
+                                                    placeholder="e.g. Abul Kalam"
+                                                    value={shopForm.shop_keeper_name}
+                                                    onChange={e => setShopForm('shop_keeper_name', e.target.value)}
+                                                    required
+                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                />
+                                                {shopErrors.shop_keeper_name && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_name}</span>}
+                                            </div>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Phone Number *</label>
+                                                <input 
+                                                    type="tel" 
+                                                    className="form-control"
+                                                    placeholder="017XXXXXXXX"
+                                                    value={shopForm.shop_keeper_phone}
+                                                    onChange={e => setShopForm('shop_keeper_phone', e.target.value)}
+                                                    required
+                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                />
+                                                {shopErrors.shop_keeper_phone && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_phone}</span>}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Shop Address *</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control"
+                                                placeholder="e.g. Central Pharmacy, Main Road, Dhaka"
+                                                value={shopForm.shop_keeper_address}
+                                                onChange={e => setShopForm('shop_keeper_address', e.target.value)}
+                                                required
+                                                style={{ width: '100%', boxSizing: 'border-box' }}
+                                            />
+                                            {shopErrors.shop_keeper_address && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_address}</span>}
+                                        </div>
+                                    </div>
+
+                                    {/* Section 2: Patient Details */}
+                                    <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '12px', marginBottom: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                        <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#38bdf8', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>
+                                            🩺 Patient Details
+                                        </div>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Name *</label>
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control"
+                                                    placeholder="e.g. Rafiqul Islam"
+                                                    value={shopForm.patient_name}
+                                                    onChange={e => setShopForm('patient_name', e.target.value)}
+                                                    required
+                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                />
+                                                {shopErrors.patient_name && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_name}</span>}
+                                            </div>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Phone *</label>
+                                                <input 
+                                                    type="tel" 
+                                                    className="form-control"
+                                                    placeholder="018XXXXXXXX"
+                                                    value={shopForm.patient_phone}
+                                                    onChange={e => setShopForm('patient_phone', e.target.value)}
+                                                    required
+                                                    style={{ width: '100%', boxSizing: 'border-box' }}
+                                                />
+                                                {shopErrors.patient_phone && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_phone}</span>}
+                                            </div>
+                                        </div>
+
+                                        <div style={{ marginBottom: '12px' }}>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Address *</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control"
+                                                placeholder="e.g. House 12, Road 4, Dhanmondi, Dhaka"
+                                                value={shopForm.patient_address}
+                                                onChange={e => setShopForm('patient_address', e.target.value)}
+                                                required
+                                                style={{ width: '100%', boxSizing: 'border-box' }}
+                                            />
+                                            {shopErrors.patient_address && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_address}</span>}
+                                        </div>
+
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '4px' }}>Patient Medical Condition / Problem *</label>
+                                            <textarea 
+                                                className="form-control"
+                                                rows="3"
+                                                placeholder="Describe the dental issue (e.g. severe swelling, molar impaction pain, trauma)..."
+                                                value={shopForm.medical_condition}
+                                                onChange={e => setShopForm('medical_condition', e.target.value)}
+                                                required
+                                                style={{ width: '100%', boxSizing: 'border-box' }}
+                                            />
+                                            {shopErrors.medical_condition && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.medical_condition}</span>}
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setReferralStep('select_type')} 
+                                            className="btn btn-outline"
+                                            style={{ fontSize: '13px', padding: '10px 16px' }}
+                                        >
+                                            ← Back
+                                        </button>
+                                        <button 
+                                            type="submit" 
+                                            className="btn btn-secondary btn-gold-glow"
+                                            disabled={shopProcessing}
+                                            style={{ fontSize: '14px', padding: '10px 20px', fontWeight: 'bold' }}
+                                        >
+                                            {shopProcessing ? 'Submitting...' : 'Submit Patient Referral 🚀'}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        )}
+
+                        {/* STEP 3: SUCCESS CONFIRMATION */}
+                        {referralStep === 'success' && (
+                            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+                                <div style={{ fontSize: '56px', marginBottom: '12px' }}>🎉</div>
+                                <h4 style={{ fontSize: '20px', fontWeight: 'bold', color: '#10b981', marginBottom: '10px' }}>
+                                    Referral Submitted Successfully!
+                                </h4>
+                                <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '24px' }}>
+                                    Thank you for referring your patient to DentistChamber. Our clinical team will review the case and contact the patient directly. The referral is now registered on the admin portal.
+                                </p>
+
+                                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                                    <button 
+                                        onClick={() => { resetShopForm(); setReferralStep('select_type'); }}
+                                        className="btn btn-outline"
+                                        style={{ padding: '10px 18px', fontSize: '13px' }}
+                                    >
+                                        Submit Another Referral
+                                    </button>
+                                    <button 
+                                        onClick={() => { setReferralModalOpen(false); resetShopForm(); }}
+                                        className="btn btn-primary"
+                                        style={{ padding: '10px 24px', fontSize: '13px', fontWeight: 'bold' }}
+                                    >
+                                        Done
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+            )}
+
             {/* Call To Action Banner */}
             <section className="cta-banner-section">
                 <div className="landing-section-container">
                     <div className="glass-panel cta-banner-card">
                         <h2 className="cta-title">Ready to Elevate Your Dental Referral Network?</h2>
                         <p className="cta-desc">
-                            Join hundreds of BDS Doctors using {site_name || 'DentistChamber'} for transparent referral tracking, clinical video masterclasses, and verified digital certificates.
+                            Join hundreds of BDS Doctors and partner Medicine Shop Keepers using {site_name || 'DentistChamber'} for transparent referral tracking and specialist dental care.
                         </p>
                         <div className="cta-buttons">
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick}
+                                className="btn btn-secondary hero-btn btn-gold-glow"
+                                style={{ cursor: 'pointer' }}
+                            >
+                                📋 Refer a Patient
+                            </button>
+                            
                             {auth.user ? (
-                                <Link href={getDashboardRoute()} className="btn btn-secondary hero-btn btn-gold-glow">
+                                <Link href={getDashboardRoute()} className="btn btn-outline hero-btn">
                                     Open Your Dashboard
                                 </Link>
                             ) : (
-                                <>
-                                    <Link href={route('register')} className="btn btn-secondary hero-btn btn-gold-glow">
-                                        Registration
-                                    </Link>
-                                    <Link href={route('login')} className="btn btn-outline hero-btn">
-                                        Member Login
-                                    </Link>
-                                </>
+                                <Link href={route('register')} className="btn btn-outline hero-btn">
+                                    BDS Doctor Registration
+                                </Link>
                             )}
                         </div>
                     </div>
@@ -823,7 +1274,7 @@ export default function Welcome({ settings, freeVideos }) {
                                 <ApplicationLogo />
                             </Link>
                             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6' }}>
-                                OMSCOMPANION connects BDS Practitioners with automated patient referral pipelines, live status tracking, and surgical masterclasses.
+                                OMSCOMPANION connects BDS Practitioners and Medicine Shop Keepers with automated patient referral pipelines and specialist dental care.
                             </p>
                         </div>
 
@@ -881,7 +1332,7 @@ export default function Welcome({ settings, freeVideos }) {
                     </div>
 
                     <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px', textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
-                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
+                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved. BDS Practitioner & Partner Referral Network.
                     </div>
                 </div>
             </footer>

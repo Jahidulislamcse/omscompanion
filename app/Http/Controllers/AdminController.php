@@ -164,21 +164,23 @@ class AdminController extends Controller
                 'changed_by' => Auth::id(),
             ]);
 
-            // Notify referring member
+            // Notify referring member if exists
             $member = $referral->member;
-            $statusLabels = [
-                'new' => 'New Referral',
-                'contacted' => 'Contacted',
-                'appointment_booked' => 'Appointment Booked',
-                'under_treatment' => 'Under Treatment',
-                'completed' => 'Completed',
-                'not_proceeding' => 'Not Proceeding'
-            ];
+            if ($member) {
+                $statusLabels = [
+                    'new' => 'New Referral',
+                    'contacted' => 'Contacted',
+                    'appointment_booked' => 'Appointment Booked',
+                    'under_treatment' => 'Under Treatment',
+                    'completed' => 'Completed',
+                    'not_proceeding' => 'Not Proceeding'
+                ];
 
-            $subject = "Referral Status Update: {$referral->patient_name}";
-            $message = "Patient {$referral->patient_name} status updated to \"{$statusLabels[$newStatus]}\"." . ($request->notes ? " Note: {$request->notes}" : "");
-            
-            NotificationService::send($member, $subject, $message, 'both');
+                $subject = "Referral Status Update: {$referral->patient_name}";
+                $message = "Patient {$referral->patient_name} status updated to \"{$statusLabels[$newStatus]}\"." . ($request->notes ? " Note: {$request->notes}" : "");
+                
+                NotificationService::send($member, $subject, $message, 'both');
+            }
         }
 
         return redirect()->back()->with('success', 'Patient referral status updated.');
@@ -203,10 +205,12 @@ class AdminController extends Controller
         if ($oldStatus !== $newStatus && $newStatus === 'paid') {
             // Notify member of commission paid
             $member = $referral->member;
-            $subject = "Commission Paid: {$referral->patient_name}";
-            $message = "Commission payment of \${$amount} for patient {$referral->patient_name} has been processed.";
-            
-            NotificationService::send($member, $subject, $message, 'both');
+            if ($member) {
+                $subject = "Commission Paid: {$referral->patient_name}";
+                $message = "Commission payment of \${$amount} for patient {$referral->patient_name} has been processed.";
+                
+                NotificationService::send($member, $subject, $message, 'both');
+            }
         }
 
         return redirect()->back()->with('success', 'Commission settings updated successfully.');

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\GuestReferralController;
 use App\Http\Controllers\VideoStreamingController;
 use App\Http\Controllers\CertificateController;
 use App\Models\LandingSetting;
@@ -132,6 +133,9 @@ Route::get('/site-login-image', function () {
         'Expires' => '0',
     ]);
 })->name('site.login_image.stream');
+
+// Guest Medicine Shop Referral Submission Route
+Route::post('/referrals/guest', [GuestReferralController::class, 'store'])->name('guest.referral.store');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
