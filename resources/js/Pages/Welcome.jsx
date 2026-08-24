@@ -82,7 +82,7 @@ export default function Welcome({ settings, freeVideos }) {
         setTrackingLoading(true);
         try {
             const saved = getSavedGuestReferrals();
-            const ids = saved.map(item => item.id);
+            const ids = phoneSearch ? [] : saved.map(item => item.id);
             
             const response = await fetch(route('guest.referral.status'), {
                 method: 'POST',
@@ -92,11 +92,19 @@ export default function Welcome({ settings, freeVideos }) {
                 },
                 body: JSON.stringify({
                     ids: ids,
-                    phone: phoneSearch
+                    phone: phoneSearch ? phoneSearch.trim() : null
                 })
             });
             const data = await response.json();
-            setTrackedReferrals(data.referrals || []);
+            const results = data.referrals || [];
+            setTrackedReferrals(results);
+
+            // If phone search returned results, auto-save them to localStorage for future visits
+            if (phoneSearch && results.length > 0) {
+                results.forEach(r => saveGuestReferral({ id: r.id, patient_name: r.patient_name, created_at: r.created_at }));
+                const updatedList = getSavedGuestReferrals();
+                setSavedGuestCount(updatedList.length);
+            }
         } catch (err) {
             console.error("Failed to fetch referral status", err);
         } finally {

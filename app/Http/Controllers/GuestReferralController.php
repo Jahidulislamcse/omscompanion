@@ -78,10 +78,16 @@ class GuestReferralController extends Controller
 
         $query = PatientReferral::where('referrer_type', 'medicine_shop');
 
-        if ($request->filled('ids') && count($request->ids) > 0) {
+        if ($request->filled('phone')) {
+            $phone = trim($request->phone);
+            $query->where(function($q) use ($phone) {
+                $q->where('referrer_phone', $phone)
+                  ->orWhere('referrer_phone', 'like', "%{$phone}%")
+                  ->orWhere('phone', $phone)
+                  ->orWhere('phone', 'like', "%{$phone}%");
+            });
+        } elseif ($request->filled('ids') && count($request->ids) > 0) {
             $query->whereIn('id', $request->ids);
-        } elseif ($request->filled('phone')) {
-            $query->where('referrer_phone', $request->phone);
         } else {
             return response()->json(['referrals' => []]);
         }
