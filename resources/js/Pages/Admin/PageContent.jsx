@@ -3,7 +3,7 @@ import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
-export default function PageContent({ settings = {}, teamMembers = [] }) {
+export default function PageContent({ settings = {}, teamMembers = [], services = [] }) {
     const { site_logo: currentLogo } = usePage().props;
     const [logoPreview, setLogoPreview] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
@@ -13,6 +13,10 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
     const [teamModalOpen, setTeamModalOpen] = useState(false);
     const [editingMember, setEditingMember] = useState(null);
     const [memberImagePreview, setMemberImagePreview] = useState(null);
+
+    // Modal state for Services item add/edit
+    const [serviceModalOpen, setServiceModalOpen] = useState(false);
+    const [editingService, setEditingService] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -40,6 +44,7 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
         remove_login_image: false,
         about_title: settings.about_title || 'About Us',
         about_description: settings.about_description || '',
+        services_subtitle: settings.services_subtitle || '',
     });
 
     const memberForm = useForm({
@@ -50,6 +55,13 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
         level: 2,
         order_index: 0,
         image: null,
+    });
+
+    const serviceForm = useForm({
+        prefix: 'MANAGEMENT OF',
+        title: '',
+        description: '',
+        order_index: 0,
     });
 
     const handleLogoChange = (e) => {
@@ -101,6 +113,7 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
         });
     };
 
+    // Team Member Handlers
     const openAddMemberModal = () => {
         setEditingMember(null);
         setMemberImagePreview(null);
@@ -158,6 +171,54 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
         }
     };
 
+    // Service Handlers
+    const openAddServiceModal = () => {
+        setEditingService(null);
+        serviceForm.setData({
+            prefix: 'MANAGEMENT OF',
+            title: '',
+            description: '',
+            order_index: services.length + 1,
+        });
+        setServiceModalOpen(true);
+    };
+
+    const openEditServiceModal = (srv) => {
+        setEditingService(srv);
+        serviceForm.setData({
+            prefix: srv.prefix || '',
+            title: srv.title || '',
+            description: srv.description || '',
+            order_index: srv.order_index || 0,
+        });
+        setServiceModalOpen(true);
+    };
+
+    const handleServiceSubmit = (e) => {
+        e.preventDefault();
+        if (editingService) {
+            serviceForm.put(route('admin.services.update', editingService.id), {
+                onSuccess: () => {
+                    setServiceModalOpen(false);
+                    alert('Service updated successfully!');
+                }
+            });
+        } else {
+            serviceForm.post(route('admin.services.store'), {
+                onSuccess: () => {
+                    setServiceModalOpen(false);
+                    alert('Service added successfully!');
+                }
+            });
+        }
+    };
+
+    const handleDeleteService = (srv) => {
+        if (confirm(`Are you sure you want to delete service "${srv.title}"?`)) {
+            router.delete(route('admin.services.destroy', srv.id));
+        }
+    };
+
     const getLevelName = (lvl) => {
         switch (Number(lvl)) {
             case 1: return 'Level 1: Founder (Top Center)';
@@ -169,7 +230,7 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
     };
 
     return (
-        <AdminLayout title="Manage Landing Page & Content">
+        <AdminLayout title="Manage Landing Page, About & Services">
             <Head title="Site Branding & Content" />
 
             <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -223,9 +284,6 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
                                 onChange={handleLogoChange}
                             />
                             {errors.site_logo && <span className="form-error">{errors.site_logo}</span>}
-                            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                Uploading a logo will replace the text logo across the website, navigation bar, sidebars, and login pages.
-                            </p>
                         </div>
 
                         {(currentLogo || logoPreview) && (
@@ -574,7 +632,7 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
                                 className="form-control"
                                 value={data.about_description}
                                 onChange={e => setData('about_description', e.target.value)}
-                                rows="6"
+                                rows="5"
                                 placeholder="Enter full platform description for the /about page..."
                             />
                             {errors.about_description && <span className="form-error">{errors.about_description}</span>}
@@ -647,6 +705,76 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
                         </div>
                     </div>
 
+                    {/* Services Page Config & Items Section */}
+                    <div className="glass-panel">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
+                            <h3 style={{ margin: 0, color: 'var(--accent-teal)' }}>
+                                🛠️ Services Page Config & Items ({services.length})
+                            </h3>
+                            <button 
+                                type="button" 
+                                onClick={openAddServiceModal} 
+                                className="btn btn-primary"
+                                style={{ padding: '6px 16px', fontSize: '13px' }}
+                            >
+                                ➕ Add Service Item
+                            </button>
+                        </div>
+
+                        <div className="form-group" style={{ marginBottom: '20px' }}>
+                            <label className="form-label">Services Page Intro Subtitle</label>
+                            <textarea 
+                                className="form-control"
+                                value={data.services_subtitle}
+                                onChange={e => setData('services_subtitle', e.target.value)}
+                                rows="3"
+                                placeholder="Enter introduction subtitle paragraph for /services page..."
+                            />
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
+                            {services.length > 0 ? (
+                                services.map(srv => (
+                                    <div key={srv.id} style={{ padding: '14px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                        <div>
+                                            {srv.prefix && (
+                                                <span style={{ fontSize: '10px', fontWeight: 'bold', color: 'var(--accent-teal)', display: 'block', marginBottom: '2px' }}>
+                                                    {srv.prefix}
+                                                </span>
+                                            )}
+                                            <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '800', textTransform: 'uppercase' }}>
+                                                {srv.title}
+                                            </h4>
+                                        </div>
+
+                                        <div style={{ display: 'flex', gap: '8px', marginTop: '12px', justifyContent: 'flex-end' }}>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => openEditServiceModal(srv)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '11px' }}
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => handleDeleteService(srv)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '11px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                            >
+                                                🗑️ Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                    No services added yet. Click "Add Service Item" to create one.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Submit Button */}
                     <button 
                         type="submit" 
@@ -678,7 +806,6 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
                                     placeholder="e.g. DR SAJID HASAN"
                                     required
                                 />
-                                {memberForm.errors.name && <span className="form-error">{memberForm.errors.name}</span>}
                             </div>
 
                             <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
@@ -767,6 +894,71 @@ export default function PageContent({ settings = {}, teamMembers = [] }) {
                                     disabled={memberForm.processing}
                                 >
                                     {memberForm.processing ? 'Saving...' : editingMember ? 'Update Member' : 'Save Member'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Service Add / Edit Modal */}
+            {serviceModalOpen && (
+                <div className="modal-wrapper" onClick={() => setServiceModalOpen(false)}>
+                    <div className="glass-panel modal-card" style={{ maxWidth: '500px', width: '92%', padding: '28px' }} onClick={e => e.stopPropagation()}>
+                        <h3 style={{ marginTop: 0, marginBottom: '18px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+                            {editingService ? '✏️ Edit Service Item' : '➕ Add New Service Item'}
+                        </h3>
+
+                        <form onSubmit={handleServiceSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div className="form-group">
+                                <label className="form-label">Service Top Prefix (e.g. MANAGEMENT OF, SURGICAL, GTR &)</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control"
+                                    value={serviceForm.data.prefix}
+                                    onChange={e => serviceForm.setData('prefix', e.target.value)}
+                                    placeholder="e.g. MANAGEMENT OF"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Service Main Title *</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control"
+                                    value={serviceForm.data.title}
+                                    onChange={e => serviceForm.setData('title', e.target.value)}
+                                    placeholder="e.g. JAW CYSTS"
+                                    required
+                                />
+                                {serviceForm.errors.title && <span className="form-error">{serviceForm.errors.title}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Optional Short Description</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={serviceForm.data.description}
+                                    onChange={e => serviceForm.setData('description', e.target.value)}
+                                    rows="2"
+                                    placeholder="Enter optional description..."
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => setServiceModalOpen(false)} 
+                                    className="btn btn-outline"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="btn btn-primary"
+                                    disabled={serviceForm.processing}
+                                >
+                                    {serviceForm.processing ? 'Saving...' : editingService ? 'Update Service' : 'Save Service'}
                                 </button>
                             </div>
                         </form>

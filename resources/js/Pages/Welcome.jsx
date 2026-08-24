@@ -359,6 +359,7 @@ export default function Welcome({ settings, freeVideos }) {
                     <Link href="/" className="nav-link-item active-nav-item" onClick={() => setMobileNavOpen(false)}>HOME</Link>
                     <Link href={route('videos.public')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ARCHIVE</Link>
                     <Link href={route('about')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>ABOUT</Link>
+                    <Link href={route('services')} className="nav-link-item" onClick={() => setMobileNavOpen(false)}>SERVICES</Link>
                     
                     {/* Single Refer a Patient Button */}
                     <button 

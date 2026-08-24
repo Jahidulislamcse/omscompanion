@@ -10,6 +10,7 @@ use App\Models\Video;
 use App\Models\VideoAccessRequest;
 use App\Models\LandingSetting;
 use App\Models\TeamMember;
+use App\Models\Service;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -347,10 +348,12 @@ class AdminController extends Controller
     {
         $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
         $teamMembers = TeamMember::orderBy('level', 'asc')->orderBy('order_index', 'asc')->get();
+        $services = Service::orderBy('order_index', 'asc')->orderBy('id', 'asc')->get();
 
         return Inertia::render('Admin/PageContent', [
             'settings' => $settings,
             'teamMembers' => $teamMembers,
+            'services' => $services,
         ]);
     }
 
@@ -378,6 +381,7 @@ class AdminController extends Controller
             'login_side_subtitle' => 'nullable|string',
             'about_title' => 'nullable|string|max:255',
             'about_description' => 'nullable|string',
+            'services_subtitle' => 'nullable|string',
         ]);
 
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
@@ -485,6 +489,7 @@ class AdminController extends Controller
             'footer_facebook_url',
             'about_title',
             'about_description',
+            'services_subtitle',
         ]);
 
         foreach ($settingsData as $key => $value) {
@@ -492,6 +497,51 @@ class AdminController extends Controller
         }
 
         return redirect()->back()->with('success', 'Landing page settings updated successfully.');
+    }
+
+    public function storeService(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'prefix' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'order_index' => 'nullable|integer',
+        ]);
+
+        Service::create([
+            'title' => strtoupper($request->title),
+            'prefix' => $request->prefix ? strtoupper($request->prefix) : null,
+            'description' => $request->description,
+            'order_index' => $request->order_index ?? 0,
+        ]);
+
+        return redirect()->back()->with('success', 'Service item added successfully.');
+    }
+
+    public function updateService(Request $request, Service $service)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'prefix' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'order_index' => 'nullable|integer',
+        ]);
+
+        $service->update([
+            'title' => strtoupper($request->title),
+            'prefix' => $request->prefix ? strtoupper($request->prefix) : null,
+            'description' => $request->description,
+            'order_index' => $request->order_index ?? 0,
+        ]);
+
+        return redirect()->back()->with('success', 'Service item updated successfully.');
+    }
+
+    public function destroyService(Service $service)
+    {
+        $service->delete();
+
+        return redirect()->back()->with('success', 'Service item deleted successfully.');
     }
 
     public function storeTeamMember(Request $request)
