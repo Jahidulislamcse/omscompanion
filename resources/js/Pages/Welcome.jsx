@@ -373,27 +373,45 @@ export default function Welcome({ settings, freeVideos }) {
                 )}
             </section>
 
-            {/* SINGLE REFERRAL SYSTEM BANNER SECTION */}
-            <section id="referral-system" className="landing-section" style={{ paddingTop: '20px', paddingBottom: '40px' }}>
+            {/* SIMPLE REFERRAL SYSTEM CARD WITH LIGHT BACKGROUND */}
+            <section id="referral-system" className="landing-section" style={{ paddingTop: '30px', paddingBottom: '40px' }}>
                 <div className="landing-section-container">
-                    <div className="glass-panel" style={{ padding: '36px 28px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%)', border: '1px solid rgba(255, 255, 255, 0.12)', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4)', textAlign: 'center' }}>
-                        
-                        <span className="badge-status badge-completed section-tag" style={{ marginBottom: '14px', display: 'inline-block' }}>✨ Referral Network</span>
-                        <h2 className="landing-section-title" style={{ fontSize: '30px', marginBottom: '12px' }}>
+                    <div 
+                        style={{ 
+                            backgroundColor: '#ffffff', 
+                            borderRadius: '20px', 
+                            padding: '40px 24px', 
+                            border: '1px solid #e2e8f0', 
+                            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.03)', 
+                            textAlign: 'center',
+                            maxWidth: '650px',
+                            margin: '0 auto'
+                        }}
+                    >
+                        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: '0 0 24px 0', letterSpacing: '-0.5px' }}>
                             Patient Referral System
                         </h2>
-                        <p className="landing-section-subtitle" style={{ maxWidth: '700px', margin: '0 auto 28px auto', fontSize: '15px', color: '#cbd5e1', lineHeight: '1.6' }}>
-                            Are you a **BDS Registration Holder Doctor** or a **Medicine Shop Keeper**? Refer your dental and maxillofacial patients directly to our specialist clinical team with live milestone tracking.
-                        </p>
 
                         <div>
                             <button 
                                 type="button" 
                                 onClick={handleReferralClick}
-                                className="btn btn-secondary btn-gold-glow"
-                                style={{ padding: '14px 32px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}
+                                style={{ 
+                                    backgroundColor: '#2563eb', 
+                                    color: '#ffffff', 
+                                    padding: '16px 38px', 
+                                    fontSize: '17px', 
+                                    fontWeight: 'bold', 
+                                    borderRadius: '12px', 
+                                    border: 'none', 
+                                    cursor: 'pointer',
+                                    boxShadow: '0 10px 20px -3px rgba(37, 99, 235, 0.35)',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '10px'
+                                }}
                             >
-                                📋 Refer a Patient
+                                <span>📋</span> Refer a Patient
                             </button>
                         </div>
                     </div>
