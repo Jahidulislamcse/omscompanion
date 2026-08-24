@@ -26,8 +26,8 @@ Route::get('/', function () {
         ['description' => 'Clinical lectures, guides, and practical tips & tricks.']
     );
 
-    // Ensure free videos exist for Surgical approaches category
-    if (Video::where('category_id', $surgicalCat->id)->where('is_free', true)->count() === 0) {
+    // Ensure videos exist for Surgical approaches category
+    if (Video::where('category_id', $surgicalCat->id)->count() === 0) {
         Video::create([
             'category_id' => $surgicalCat->id,
             'title' => "EUROPE'S BIGGEST AIRPLANE GRAVEYARD",
@@ -39,8 +39,8 @@ Route::get('/', function () {
         ]);
     }
 
-    // Ensure free videos exist for Clinical lecture/ tips tricks category
-    if (Video::where('category_id', $clinicalCat->id)->where('is_free', true)->count() === 0) {
+    // Ensure videos exist for Clinical lecture/ tips tricks category
+    if (Video::where('category_id', $clinicalCat->id)->count() === 0) {
         Video::create([
             'category_id' => $clinicalCat->id,
             'title' => 'IMPERIAL AIRWAYS LONDON - Clinical Tips',
@@ -52,7 +52,7 @@ Route::get('/', function () {
         ]);
     }
 
-    $dbFreeVideos = Video::with('category')->where('is_free', true)->orderBy('created_at', 'desc')->get()->map(function ($video) {
+    $dbFreeVideos = Video::with('category')->orderBy('created_at', 'desc')->get()->map(function ($video) {
         return [
             'id' => $video->id,
             'title' => $video->title,
@@ -60,7 +60,6 @@ Route::get('/', function () {
             'duration' => $video->duration,
             'storage_type' => $video->storage_type,
             'video_path' => $video->video_path,
-            'is_free' => true,
             'category_id' => $video->category_id,
             'category_name' => $video->category ? $video->category->name : 'General',
         ];

@@ -14,12 +14,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
     const [activeTab, setActiveTab] = useState(pendingCount > 0 ? 'requests' : 'upload'); // 'requests', 'upload', 'categories', 'list'
     const [requestFilter, setRequestFilter] = useState('all');
 
-    // Category Form
-    const { data: catData, setData: setCatData, post: postCat, processing: catProcessing, errors: catErrors, reset: resetCatForm } = useForm({
-        name: '',
-        description: '',
-    });
-
     // Video Form
     const { data: vidData, setData: setVidData, post: postVid, processing: vidProcessing, errors: vidErrors, reset: resetVidForm } = useForm({
         category_id: '',
@@ -27,18 +21,7 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
         description: '',
         video_url: '',
         duration: '',
-        is_free: false,
     });
-
-    const handleCategorySubmit = (e) => {
-        e.preventDefault();
-        postCat(route('admin.videos.category.store'), {
-            onSuccess: () => {
-                resetCatForm();
-                alert('Category created successfully!');
-            }
-        });
-    };
 
     const handleVideoSubmit = (e) => {
         e.preventDefault();
@@ -95,12 +78,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                     className={`btn ${activeTab === 'upload' ? 'btn-primary' : 'btn-outline'}`}
                 >
                     🎥 Add YouTube Video
-                </button>
-                <button 
-                    onClick={() => setActiveTab('categories')} 
-                    className={`btn ${activeTab === 'categories' ? 'btn-primary' : 'btn-outline'}`}
-                >
-                    📁 Manage Categories
                 </button>
                 <button 
                     onClick={() => setActiveTab('list')} 
@@ -303,19 +280,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                             </div>
                         </div>
 
-                        <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '15px' }}>
-                            <input 
-                                type="checkbox" 
-                                id="is_free"
-                                checked={vidData.is_free}
-                                onChange={e => setVidData('is_free', e.target.checked)}
-                                style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                            />
-                            <label htmlFor="is_free" style={{ margin: 0, cursor: 'pointer', fontWeight: 'bold' }}>
-                                Free Preview Video (Display publicly on landing page)
-                            </label>
-                        </div>
-
                         <button 
                             type="submit" 
                             className="btn btn-primary" 
@@ -325,80 +289,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                             {vidProcessing ? 'Saving Video & Broadcasting Notifications...' : 'Save YouTube Video'}
                         </button>
                     </form>
-                </div>
-            )}
-
-            {/* Tab 2: Manage Categories Form */}
-            {activeTab === 'categories' && (
-                <div className="grid-responsive-form-history">
-                    {/* Add Category Form */}
-                    <div className="glass-panel" style={{ height: 'fit-content' }}>
-                        <h3 style={{ marginBottom: '20px' }}>Create Category</h3>
-                        <form onSubmit={handleCategorySubmit}>
-                            <div className="form-group">
-                                <label className="form-label">Category Name</label>
-                                <input 
-                                    type="text" 
-                                    className="form-control" 
-                                    value={catData.name}
-                                    onChange={e => setCatData('name', e.target.value)}
-                                    required
-                                />
-                                {catErrors.name && <span className="form-error">{catErrors.name}</span>}
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Description</label>
-                                <textarea 
-                                    className="form-control" 
-                                    value={catData.description}
-                                    onChange={e => setCatData('description', e.target.value)}
-                                    rows="3"
-                                />
-                                {catErrors.description && <span className="form-error">{catErrors.description}</span>}
-                            </div>
-                            <button 
-                                type="submit" 
-                                className="btn btn-secondary" 
-                                style={{ width: '100%', marginTop: '10px' }}
-                                disabled={catProcessing}
-                            >
-                                {catProcessing ? 'Creating...' : 'Create Category'}
-                            </button>
-                        </form>
-                    </div>
-
-                    {/* Category List */}
-                    <div className="glass-panel">
-                        <h3 style={{ marginBottom: '20px' }}>Existing Video Categories</h3>
-                        <div className="table-container">
-                            <table className="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Video Count</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {categories.length > 0 ? (
-                                        categories.map(cat => (
-                                            <tr key={cat.id}>
-                                                <td style={{ fontWeight: '700' }}>{cat.name}</td>
-                                                <td>{cat.description || 'No description'}</td>
-                                                <td>{cat.videos ? cat.videos.length : 0} Videos</td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="3" style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
-                                                No categories defined.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             )}
 
@@ -413,7 +303,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                     <th>Category</th>
                                     <th>YouTube Link</th>
                                     <th>Duration</th>
-                                    <th>Access Level</th>
                                     <th>Date Added</th>
                                 </tr>
                             </thead>
@@ -455,11 +344,6 @@ export default function Videos({ categories = [], videos = [], accessRequests = 
                                                 </td>
                                                 <td>
                                                     {vid.duration ? `${Math.floor(vid.duration / 60)}m ${vid.duration % 60}s` : 'N/A'}
-                                                </td>
-                                                <td>
-                                                    <span className={`badge-status ${vid.is_free ? 'badge-new' : 'badge-under-treatment'}`} style={{ fontSize: '11px', display: 'inline-block', padding: '4px 8px' }}>
-                                                        {vid.is_free ? '🔓 Free Preview' : '🔒 Premium'}
-                                                    </span>
                                                 </td>
                                                 <td>
                                                     {new Date(vid.created_at).toLocaleDateString()}

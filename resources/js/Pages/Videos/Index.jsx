@@ -77,29 +77,8 @@ export default function Index({ categories, videos, settings = {} }) {
     };
 
     const handleVideoClick = (video) => {
-        // Free preview videos require no login
-        if (video.is_free) {
-            setActiveVideo(video);
-            return;
-        }
-
-        // Protected videos require auth & admin approval
-        if (!auth.user) {
-            setAccessBlockedReason('unauthenticated');
-            return;
-        }
-
-        if (auth.user.role !== 'admin' && auth.user.status !== 'approved') {
-            setAccessBlockedReason('unapproved');
-            return;
-        }
-
         setActiveVideo(video);
     };
-
-    // Separate free videos and protected videos
-    const freeVideos = useMemo(() => videos.filter(v => v.is_free), [videos]);
-    const protectedVideos = useMemo(() => videos.filter(v => !v.is_free), [videos]);
 
     return (
         <div className="landing-wrapper page-colorful-theme">
@@ -162,181 +141,50 @@ export default function Index({ categories, videos, settings = {} }) {
                         <span className="badge-status badge-new section-tag">Video Library</span>
                         <h1 className="landing-section-title">Clinical Video Masterclasses</h1>
                         <p className="landing-section-subtitle">
-                            Explore open preview guides as well as exclusive surgical walkthroughs for BDS Practitioners.
+                            Explore clinical guides, surgical approaches, and practical tips & tricks for BDS Practitioners.
                         </p>
                     </div>
 
-                    {/* SECTION 1: Free Access Videos (No Login Required) */}
-                    {freeVideos.length > 0 && (
-                        <div style={{ marginBottom: '40px' }}>
-                            <div className="section-sub-header-row">
-                                <span className="badge-status badge-completed">🎥 Free Preview Streams</span>
-                                <h3 className="sub-header-title">
-                                    Open Access Videos <span className="sub-header-note">(No login required)</span>
-                                </h3>
-                            </div>
+                    <div className="video-grid free-video-grid">
+                        {videos.map(vid => {
+                            const ytId = getYouTubeId(vid.video_path);
 
-                            <div className="video-grid free-video-grid">
-                                {freeVideos.map(vid => {
-                                    const ytId = getYouTubeId(vid.video_path);
+                            return (
+                                <div key={vid.id} className="glass-panel video-card colorful-video-card">
+                                    <div 
+                                        onClick={() => handleVideoClick(vid)}
+                                        className="video-thumbnail free-video-thumb"
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        {ytId ? (
+                                            <img 
+                                                src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
+                                                alt={vid.title} 
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
+                                            />
+                                        ) : null}
 
-                                    return (
-                                        <div key={vid.id} className="glass-panel video-card colorful-video-card">
-                                            <div 
-                                                onClick={() => handleVideoClick(vid)}
-                                                className="video-thumbnail free-video-thumb"
-                                                style={{ cursor: 'pointer' }}
-                                            >
-                                                {ytId ? (
-                                                    <img 
-                                                        src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
-                                                        alt={vid.title} 
-                                                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
-                                                    />
-                                                ) : null}
-
-                                                <div className="thumb-overlay">
-                                                    <div className="play-button-glow">
-                                                        <span className="play-icon">▶</span>
-                                                    </div>
-                                                    <span className="play-label">Watch Free Video</span>
-                                                </div>
-                                                <span className="video-duration">{formatDuration(vid.duration)}</span>
+                                        <div className="thumb-overlay">
+                                            <div className="play-button-glow">
+                                                <span className="play-icon">▶</span>
                                             </div>
-
-                                            <div className="video-info free-video-info">
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                                    <span className="video-tag badge-tag-glow">
-                                                        Free Access
-                                                    </span>
-                                                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
-                                                        Public
-                                                    </span>
-                                                </div>
-                                                <h4 className="video-title">{vid.title}</h4>
-                                                <p className="video-desc">{vid.description}</p>
-                                            </div>
+                                            <span className="play-label">Watch Video</span>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
+                                        <span className="video-duration">{formatDuration(vid.duration)}</span>
+                                    </div>
 
-                    {/* SECTION 2: Member Exclusive Masterclasses (Protected) */}
-                    <div>
-                        <div className="section-sub-header-row">
-                            <span className="badge-status badge-new">🔒 Member Exclusive</span>
-                            <h3 className="sub-header-title">
-                                BDS Practitioner Masterclasses <span className="sub-header-note">(Requires Registration & Admin Approval)</span>
-                            </h3>
-                        </div>
-
-                        {/* Lock Access Status Alert Banner for Unauthenticated or Unapproved Users */}
-                        {(!auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved')) && (
-                            <div className="glass-panel" style={{
-                                marginBottom: '28px',
-                                padding: '16px 24px',
-                                borderLeft: '4px solid #f59e0b',
-                                background: 'rgba(245, 158, 11, 0.08)',
-                                borderRadius: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                gap: '15px',
-                                flexWrap: 'wrap'
-                            }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <span style={{ fontSize: '24px' }}>🔒</span>
-                                    <div>
-                                        <strong style={{ color: 'var(--text-main)', fontSize: '15px' }}>
-                                            {!auth.user ? "Registration Required for Exclusive Masterclasses" : "BDS Membership Approval Pending"}
-                                        </strong>
-                                        <p style={{ margin: '2px 0 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                                            {!auth.user 
-                                                ? "Registration and login are required to play clinical member masterclass streams." 
-                                                : "Your BDS membership is awaiting admin approval. Full video access will unlock once approved."}
-                                        </p>
+                                    <div className="video-info free-video-info">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                            <span className="video-tag badge-tag-glow">
+                                                {vid.category_name || 'Masterclass'}
+                                            </span>
+                                        </div>
+                                        <h4 className="video-title">{vid.title}</h4>
+                                        <p className="video-desc">{vid.description}</p>
                                     </div>
                                 </div>
-
-                                {!auth.user ? (
-                                    <div style={{ display: 'flex', gap: '10px' }}>
-                                        <Link href={route('register')} className="btn btn-primary nav-btn btn-glow">
-                                            Registration
-                                        </Link>
-                                        <Link href={route('login')} className="btn btn-outline nav-btn">
-                                            Login
-                                        </Link>
-                                    </div>
-                                ) : (
-                                    <Link href={getDashboardRoute()} className="btn btn-secondary nav-btn">
-                                        Check Status in Dashboard
-                                    </Link>
-                                )}
-                            </div>
-                        )}
-
-                        <div className="video-grid free-video-grid">
-                            {protectedVideos.map(vid => {
-                                const ytId = getYouTubeId(vid.video_path);
-                                const isLocked = !auth.user || (auth.user && auth.user.role !== 'admin' && auth.user.status !== 'approved');
-
-                                return (
-                                    <div key={vid.id} className="glass-panel video-card colorful-video-card">
-                                        <div 
-                                            onClick={() => handleVideoClick(vid)}
-                                            className="video-thumbnail free-video-thumb"
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            {ytId ? (
-                                                <img 
-                                                    src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
-                                                    alt={vid.title} 
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
-                                                />
-                                            ) : null}
-
-                                            <div className="thumb-overlay">
-                                                {isLocked ? (
-                                                    <>
-                                                        <div className="play-button-glow" style={{ background: 'rgba(239, 68, 68, 0.25)', borderColor: '#ef4444' }}>
-                                                            <span className="play-icon" style={{ fontSize: '18px' }}>🔒</span>
-                                                        </div>
-                                                        <span className="play-label" style={{ color: '#fca5a5' }}>
-                                                            {!auth.user ? "Register to Unlock" : "Approval Required"}
-                                                        </span>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <div className="play-button-glow">
-                                                            <span className="play-icon">▶</span>
-                                                        </div>
-                                                        <span className="play-label">Watch Full Masterclass</span>
-                                                    </>
-                                                )}
-                                            </div>
-                                            <span className="video-duration">{formatDuration(vid.duration)}</span>
-                                        </div>
-
-                                        <div className="video-info free-video-info">
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                                <span className="video-tag badge-tag-glow">
-                                                    {vid.category_name || 'Masterclass'}
-                                                </span>
-                                                {isLocked && (
-                                                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>
-                                                        Protected
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <h4 className="video-title">{vid.title}</h4>
-                                            <p className="video-desc">{vid.description}</p>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
             </main>
