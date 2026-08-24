@@ -2966,3 +2966,41 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-muted);
 }
 
+/* Button Bump Animation */
+@keyframes bumpPulse {
+    0% {
+        transform: scale(1);
+    }
+    14% {
+        transform: scale(1.08);
+    }
+    28% {
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.08);
+    }
+    70% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn-bump-animated {
+    animation: bumpPulse 2.5s infinite ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-bump-animated:hover {
+    animation-play-state: paused;
+    transform: scale(1.12) translateY(-2px);
+    box-shadow: 0 15px 30px -4px rgba(37, 99, 235, 0.5);
+}
+

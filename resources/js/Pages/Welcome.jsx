@@ -373,48 +373,27 @@ export default function Welcome({ settings, freeVideos }) {
                 )}
             </section>
 
-            {/* SIMPLE REFERRAL SYSTEM CARD WITH LIGHT BACKGROUND */}
-            <section id="referral-system" className="landing-section" style={{ paddingTop: '30px', paddingBottom: '40px' }}>
-                <div className="landing-section-container">
-                    <div 
+            {/* ONLY A BIG REFERRAL BUTTON WITH BUMP ANIMATION */}
+            <section id="referral-system" className="landing-section" style={{ paddingTop: '36px', paddingBottom: '36px', textAlign: 'center' }}>
+                <div className="landing-section-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <button 
+                        type="button" 
+                        onClick={handleReferralClick}
+                        className="btn btn-primary btn-bump-animated"
                         style={{ 
-                            backgroundColor: '#ffffff', 
-                            borderRadius: '20px', 
-                            padding: '40px 24px', 
-                            border: '1px solid #e2e8f0', 
-                            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.03)', 
-                            textAlign: 'center',
-                            maxWidth: '650px',
-                            margin: '0 auto'
+                            backgroundColor: '#2563eb', 
+                            color: '#ffffff', 
+                            padding: '20px 52px', 
+                            fontSize: '20px', 
+                            fontWeight: '800', 
+                            borderRadius: '16px', 
+                            border: 'none', 
+                            boxShadow: '0 12px 25px -4px rgba(37, 99, 235, 0.45)',
+                            letterSpacing: '0.5px'
                         }}
                     >
-                        <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', margin: '0 0 24px 0', letterSpacing: '-0.5px' }}>
-                            Patient Referral System
-                        </h2>
-
-                        <div>
-                            <button 
-                                type="button" 
-                                onClick={handleReferralClick}
-                                style={{ 
-                                    backgroundColor: '#2563eb', 
-                                    color: '#ffffff', 
-                                    padding: '16px 38px', 
-                                    fontSize: '17px', 
-                                    fontWeight: 'bold', 
-                                    borderRadius: '12px', 
-                                    border: 'none', 
-                                    cursor: 'pointer',
-                                    boxShadow: '0 10px 20px -3px rgba(37, 99, 235, 0.35)',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '10px'
-                                }}
-                            >
-                                <span>📋</span> Refer a Patient
-                            </button>
-                        </div>
-                    </div>
+                        <span style={{ fontSize: '24px' }}>📋</span> Refer a Patient
+                    </button>
                 </div>
             </section>
 
