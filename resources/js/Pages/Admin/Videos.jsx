@@ -11,7 +11,7 @@ export function getYouTubeId(url) {
 
 export default function Videos({ categories = [], videos = [], accessRequests = [] }) {
     const pendingCount = (accessRequests || []).filter(r => r.premium_access === 'pending').length;
-    const [activeTab, setActiveTab] = useState(pendingCount > 0 ? 'requests' : 'upload'); // 'requests', 'upload', 'categories', 'list'
+    const [activeTab, setActiveTab] = useState('requests'); // 1st tab by default ('requests')
     const [requestFilter, setRequestFilter] = useState('all');
 
     // Video Form
