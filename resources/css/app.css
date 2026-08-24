@@ -3049,8 +3049,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #0f172a;
     font-size: 18px;
     font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    text-decoration: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
