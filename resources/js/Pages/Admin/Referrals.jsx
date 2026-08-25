@@ -131,99 +131,143 @@ export default function Referrals({ referrals }) {
             {/* Filter Panel */}
             <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
                 
-                {/* Referrer Type Pill Tabs */}
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '18px' }}>
-                    <button
-                        type="button"
-                        onClick={() => setTypeFilter('all')}
-                        className={`btn ${typeFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                        style={{ padding: '8px 16px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700' }}
-                    >
-                        All Referrals
-                        <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '11px', background: typeFilter === 'all' ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.1)' }}>
-                            {referrals.length}
-                        </span>
-                    </button>
+                {/* Top Row: Referrer Type Tabs & Search */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
+                    
+                    {/* Referrer Type Pill Tabs */}
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <button
+                            type="button"
+                            onClick={() => setTypeFilter('all')}
+                            style={{
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                fontSize: '13px',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                border: '1px solid',
+                                borderColor: typeFilter === 'all' ? '#0284c7' : 'var(--border-color)',
+                                backgroundColor: typeFilter === 'all' ? '#0284c7' : 'rgba(255, 255, 255, 0.05)',
+                                color: typeFilter === 'all' ? '#ffffff' : 'var(--text-main)',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            All Referrals
+                            <span style={{ 
+                                padding: '2px 8px', 
+                                borderRadius: '10px', 
+                                fontSize: '11px', 
+                                fontWeight: '800',
+                                backgroundColor: typeFilter === 'all' ? 'rgba(255,255,255,0.25)' : 'rgba(255, 255, 255, 0.1)',
+                                color: typeFilter === 'all' ? '#ffffff' : 'var(--text-muted)'
+                            }}>
+                                {referrals.length}
+                            </span>
+                        </button>
 
-                    <button
-                        type="button"
-                        onClick={() => setTypeFilter('bds_doctor')}
-                        className={`btn ${typeFilter === 'bds_doctor' ? 'btn-primary' : 'btn-outline'}`}
-                        style={{ 
-                            padding: '8px 16px', 
-                            fontSize: '13px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: '8px', 
-                            fontWeight: '700',
-                            borderColor: typeFilter === 'bds_doctor' ? 'var(--accent-teal)' : 'rgba(13, 148, 136, 0.4)',
-                            color: typeFilter === 'bds_doctor' ? '#fff' : 'var(--accent-teal)',
-                            backgroundColor: typeFilter === 'bds_doctor' ? 'var(--accent-teal)' : 'transparent'
-                        }}
-                    >
-                        🩺 Referral by BDS Doctors
-                        <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '11px', background: typeFilter === 'bds_doctor' ? 'rgba(255,255,255,0.25)' : 'rgba(13, 148, 136, 0.15)' }}>
-                            {doctorReferralsCount}
-                        </span>
-                    </button>
+                        <button
+                            type="button"
+                            onClick={() => setTypeFilter('bds_doctor')}
+                            style={{
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                fontSize: '13px',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                border: '1px solid',
+                                borderColor: typeFilter === 'bds_doctor' ? '#0d9488' : 'rgba(13, 148, 136, 0.4)',
+                                backgroundColor: typeFilter === 'bds_doctor' ? '#0d9488' : 'rgba(13, 148, 136, 0.1)',
+                                color: typeFilter === 'bds_doctor' ? '#ffffff' : '#2dd4bf',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            🩺 Referral by BDS Doctors
+                            <span style={{ 
+                                padding: '2px 8px', 
+                                borderRadius: '10px', 
+                                fontSize: '11px', 
+                                fontWeight: '800',
+                                backgroundColor: typeFilter === 'bds_doctor' ? 'rgba(255,255,255,0.25)' : 'rgba(13, 148, 136, 0.25)',
+                                color: typeFilter === 'bds_doctor' ? '#ffffff' : '#2dd4bf'
+                            }}>
+                                {doctorReferralsCount}
+                            </span>
+                        </button>
 
-                    <button
-                        type="button"
-                        onClick={() => setTypeFilter('medicine_shop')}
-                        className={`btn ${typeFilter === 'medicine_shop' ? 'btn-primary' : 'btn-outline'}`}
-                        style={{ 
-                            padding: '8px 16px', 
-                            fontSize: '13px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: '8px', 
-                            fontWeight: '700',
-                            borderColor: typeFilter === 'medicine_shop' ? '#f59e0b' : 'rgba(245, 158, 11, 0.5)',
-                            color: typeFilter === 'medicine_shop' ? '#fff' : '#f59e0b',
-                            backgroundColor: typeFilter === 'medicine_shop' ? '#f59e0b' : 'transparent'
-                        }}
-                    >
-                        💊 Referral by Medicine Shop Keeper
-                        <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '11px', background: typeFilter === 'medicine_shop' ? 'rgba(255,255,255,0.25)' : 'rgba(245, 158, 11, 0.15)' }}>
-                            {shopReferralsCount}
-                        </span>
-                    </button>
+                        <button
+                            type="button"
+                            onClick={() => setTypeFilter('medicine_shop')}
+                            style={{
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                fontSize: '13px',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                border: '1px solid',
+                                borderColor: typeFilter === 'medicine_shop' ? '#d97706' : 'rgba(245, 158, 11, 0.4)',
+                                backgroundColor: typeFilter === 'medicine_shop' ? '#d97706' : 'rgba(245, 158, 11, 0.1)',
+                                color: typeFilter === 'medicine_shop' ? '#ffffff' : '#fbbf24',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            💊 Referral by Medicine Shop Keeper
+                            <span style={{ 
+                                padding: '2px 8px', 
+                                borderRadius: '10px', 
+                                fontSize: '11px', 
+                                fontWeight: '800',
+                                backgroundColor: typeFilter === 'medicine_shop' ? 'rgba(255,255,255,0.25)' : 'rgba(245, 158, 11, 0.25)',
+                                color: typeFilter === 'medicine_shop' ? '#ffffff' : '#fbbf24'
+                            }}>
+                                {shopReferralsCount}
+                            </span>
+                        </button>
+                    </div>
+
+                    {/* Search Input */}
+                    <div style={{ minWidth: '260px', flex: '1 1 260px', maxWidth: '400px' }}>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search patient, doctor, shop keeper or phone..."
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', width: '100%', marginBottom: '12px' }}>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search patient, doctor, shop keeper or phone..."
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                        style={{ gridColumn: 'span 1 / -1' }}
-                    />
-                    <select
-                        className="form-control"
-                        value={typeFilter}
-                        onChange={e => setTypeFilter(e.target.value)}
-                    >
-                        <option value="all">All Referrer Types ({referrals.length})</option>
-                        <option value="bds_doctor">🩺 BDS Doctor Members ({doctorReferralsCount})</option>
-                        <option value="medicine_shop">💊 Medicine Shop Keepers ({shopReferralsCount})</option>
-                    </select>
-                    <select
-                        className="form-control"
-                        value={statusFilter}
-                        onChange={e => setStatusFilter(e.target.value)}
-                    >
-                        <option value="all">All Case Statuses</option>
-                        <option value="new">New Referral</option>
-                        <option value="contacted">Contacted</option>
-                        <option value="appointment_booked">Appointment Booked</option>
-                        <option value="under_treatment">Under Treatment</option>
-                        <option value="completed">Completed</option>
-                        <option value="not_proceeding">Not Proceeding</option>
-                    </select>
-                </div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)', textAlign: 'right' }}>
-                    Showing {filteredReferrals.length} of {referrals.length} patient cases
+                {/* Bottom Bar: Case Status Filter & Results Count */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600' }}>Case Status:</span>
+                        <select
+                            className="form-control"
+                            value={statusFilter}
+                            onChange={e => setStatusFilter(e.target.value)}
+                            style={{ width: 'auto', minWidth: '180px', padding: '6px 12px', fontSize: '13px' }}
+                        >
+                            <option value="all">All Case Statuses</option>
+                            <option value="new">New Referral</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="appointment_booked">Appointment Booked</option>
+                            <option value="under_treatment">Under Treatment</option>
+                            <option value="completed">Completed</option>
+                            <option value="not_proceeding">Not Proceeding</option>
+                        </select>
+                    </div>
+
+                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>
+                        Showing <span style={{ color: 'var(--accent-teal)' }}>{filteredReferrals.length}</span> of {referrals.length} patient cases
+                    </div>
                 </div>
             </div>
 
