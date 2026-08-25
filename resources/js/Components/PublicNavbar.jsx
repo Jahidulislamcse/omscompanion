@@ -50,35 +50,35 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                     className={`nav-link-item ${activePage === 'home' ? 'active-nav-item' : ''}`} 
                     onClick={() => setMobileNavOpen(false)}
                 >
-                    HOME
+                    Home
                 </Link>
                 <Link 
                     href={route('videos.public')} 
                     className={`nav-link-item ${activePage === 'archive' ? 'active-nav-item' : ''}`} 
                     onClick={() => setMobileNavOpen(false)}
                 >
-                    ARCHIVE
+                    Archive
                 </Link>
                 <Link 
                     href={route('about')} 
                     className={`nav-link-item ${activePage === 'about' ? 'active-nav-item' : ''}`} 
                     onClick={() => setMobileNavOpen(false)}
                 >
-                    ABOUT
+                    About
                 </Link>
                 <Link 
                     href={route('services')} 
                     className={`nav-link-item ${activePage === 'services' ? 'active-nav-item' : ''}`} 
                     onClick={() => setMobileNavOpen(false)}
                 >
-                    SERVICES
+                    Services
                 </Link>
                 <Link 
                     href={route('contact')} 
                     className={`nav-link-item ${activePage === 'contact' ? 'active-nav-item' : ''}`} 
                     onClick={() => setMobileNavOpen(false)}
                 >
-                    CONTACT
+                    Contact
                 </Link>
                 
                 {/* Refer a Patient Button */}
