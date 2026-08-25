@@ -74,6 +74,9 @@ class AdminController extends Controller
     public function members()
     {
         $members = User::where('role', 'member')
+            ->with(['referrals' => function($q) {
+                $q->orderBy('created_at', 'desc');
+            }])
             ->orderByRaw("FIELD(status, 'pending', 'approved', 'rejected')")
             ->orderBy('created_at', 'desc')
             ->get();
