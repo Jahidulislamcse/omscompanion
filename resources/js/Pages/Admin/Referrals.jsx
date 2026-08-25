@@ -56,6 +56,10 @@ export default function Referrals({ referrals }) {
         });
     };
 
+    // Counts for tabs
+    const doctorReferralsCount = referrals.filter(ref => !(ref.referrer_type === 'medicine_shop' || (!ref.member_id && !ref.member))).length;
+    const shopReferralsCount = referrals.filter(ref => ref.referrer_type === 'medicine_shop' || (!ref.member_id && !ref.member)).length;
+
     // Filter referrals
     const filteredReferrals = referrals.filter(ref => {
         const query = searchTerm.toLowerCase();
@@ -125,7 +129,67 @@ export default function Referrals({ referrals }) {
             <Head title="Patient Referrals" />
 
             {/* Filter Panel */}
-            <div className="glass-panel" style={{ padding: '16px', marginBottom: '20px' }}>
+            <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
+                
+                {/* Referrer Type Pill Tabs */}
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '18px' }}>
+                    <button
+                        type="button"
+                        onClick={() => setTypeFilter('all')}
+                        className={`btn ${typeFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
+                        style={{ padding: '8px 16px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700' }}
+                    >
+                        All Referrals
+                        <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '11px', background: typeFilter === 'all' ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.1)' }}>
+                            {referrals.length}
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setTypeFilter('bds_doctor')}
+                        className={`btn ${typeFilter === 'bds_doctor' ? 'btn-primary' : 'btn-outline'}`}
+                        style={{ 
+                            padding: '8px 16px', 
+                            fontSize: '13px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '8px', 
+                            fontWeight: '700',
+                            borderColor: typeFilter === 'bds_doctor' ? 'var(--accent-teal)' : 'rgba(13, 148, 136, 0.4)',
+                            color: typeFilter === 'bds_doctor' ? '#fff' : 'var(--accent-teal)',
+                            backgroundColor: typeFilter === 'bds_doctor' ? 'var(--accent-teal)' : 'transparent'
+                        }}
+                    >
+                        🩺 Referral by BDS Doctors
+                        <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '11px', background: typeFilter === 'bds_doctor' ? 'rgba(255,255,255,0.25)' : 'rgba(13, 148, 136, 0.15)' }}>
+                            {doctorReferralsCount}
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setTypeFilter('medicine_shop')}
+                        className={`btn ${typeFilter === 'medicine_shop' ? 'btn-primary' : 'btn-outline'}`}
+                        style={{ 
+                            padding: '8px 16px', 
+                            fontSize: '13px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '8px', 
+                            fontWeight: '700',
+                            borderColor: typeFilter === 'medicine_shop' ? '#f59e0b' : 'rgba(245, 158, 11, 0.5)',
+                            color: typeFilter === 'medicine_shop' ? '#fff' : '#f59e0b',
+                            backgroundColor: typeFilter === 'medicine_shop' ? '#f59e0b' : 'transparent'
+                        }}
+                    >
+                        💊 Referral by Medicine Shop Keeper
+                        <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '11px', background: typeFilter === 'medicine_shop' ? 'rgba(255,255,255,0.25)' : 'rgba(245, 158, 11, 0.15)' }}>
+                            {shopReferralsCount}
+                        </span>
+                    </button>
+                </div>
+
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', width: '100%', marginBottom: '12px' }}>
                     <input
                         type="text"
@@ -140,9 +204,9 @@ export default function Referrals({ referrals }) {
                         value={typeFilter}
                         onChange={e => setTypeFilter(e.target.value)}
                     >
-                        <option value="all">All Referrer Types</option>
-                        <option value="bds_doctor">🩺 BDS Doctor Members</option>
-                        <option value="medicine_shop">💊 Medicine Shop Keepers</option>
+                        <option value="all">All Referrer Types ({referrals.length})</option>
+                        <option value="bds_doctor">🩺 BDS Doctor Members ({doctorReferralsCount})</option>
+                        <option value="medicine_shop">💊 Medicine Shop Keepers ({shopReferralsCount})</option>
                     </select>
                     <select
                         className="form-control"
