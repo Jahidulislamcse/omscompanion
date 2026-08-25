@@ -4,7 +4,6 @@ import AdminLayout from '@/Layouts/AdminLayout';
 
 export default function Members({ members = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [typeFilter, setTypeFilter] = useState('all'); // 'all', 'doctors', 'storekeepers'
     const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'pending', 'approved', 'rejected'
     
     // Modal state for viewing member referral records
@@ -22,7 +21,7 @@ export default function Members({ members = [] }) {
         }
     };
 
-    // Filter members based on search, type, and status
+    // Filter members based on search and status
     const filteredMembers = (members || []).filter(member => {
         const query = searchTerm.toLowerCase();
         const matchesSearch = 
@@ -32,16 +31,10 @@ export default function Members({ members = [] }) {
             (member.bds_registration_number && member.bds_registration_number.toLowerCase().includes(query)) ||
             (member.clinic_name && member.clinic_name.toLowerCase().includes(query)) ||
             (member.member_id && member.member_id.toLowerCase().includes(query));
-            
-        const isDoctor = !!member.bds_registration_number;
-        const matchesType = 
-            typeFilter === 'all' || 
-            (typeFilter === 'doctors' && isDoctor) || 
-            (typeFilter === 'storekeepers' && !isDoctor);
 
         const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
 
-        return matchesSearch && matchesType && matchesStatus;
+        return matchesSearch && matchesStatus;
     });
 
     const getStatusBadge = (status) => {
@@ -102,30 +95,20 @@ export default function Members({ members = [] }) {
 
             {/* Filter Panel */}
             <div className="glass-panel" style={{ padding: '16px', marginBottom: '20px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px', width: '100%', marginBottom: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '12px', width: '100%', marginBottom: '12px', alignItems: 'center' }}>
                     <input
                         type="text"
                         className="form-control"
                         placeholder="Search by name, email, clinic, BDS reg or member ID..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
-                        style={{ gridColumn: 'span 1 / -1' }}
                     />
                     
                     <select 
                         className="form-control"
-                        value={typeFilter}
-                        onChange={e => setTypeFilter(e.target.value)}
-                    >
-                        <option value="all">All Member Types</option>
-                        <option value="doctors">👨‍⚕️ BDS Doctors</option>
-                        <option value="storekeepers">🏪 Storekeepers</option>
-                    </select>
-
-                    <select 
-                        className="form-control"
                         value={statusFilter}
                         onChange={e => setStatusFilter(e.target.value)}
+                        style={{ minWidth: '160px' }}
                     >
                         <option value="all">All Statuses</option>
                         <option value="pending">Pending</option>
