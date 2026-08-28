@@ -28,8 +28,6 @@ export default function Referrals({ referrals, members = [] }) {
                clinic.includes(query);
     });
 
-    const selectedMemberObj = members.find(m => String(m.id) === String(addData.member_id));
-
     const { data: addData, setData: setAddData, post: postAdd, processing: addProcessing, errors: addErrors, reset: resetAddForm } = useForm({
         member_id: '',
         patient_name: '',
@@ -41,6 +39,8 @@ export default function Referrals({ referrals, members = [] }) {
         commission_status: 'none',
         additional_notes: '',
     });
+
+    const selectedMemberObj = (members || []).find(m => m && addData && addData.member_id && String(m.id) === String(addData.member_id));
 
     const handleAddSubmit = (e) => {
         e.preventDefault();
