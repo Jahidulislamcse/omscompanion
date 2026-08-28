@@ -9,6 +9,23 @@ export default function Referrals({ referrals, members = [] }) {
 
     // Add Patient Referral Modal State
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [memberSearchQuery, setMemberSearchQuery] = useState('');
+
+    const filteredMembersForAssignment = members.filter(m => {
+        const query = memberSearchQuery.toLowerCase();
+        const name = (m.name || '').toLowerCase();
+        const memberId = (m.member_id || '').toLowerCase();
+        const phone = (m.phone || '').toLowerCase();
+        const bdsReg = (m.bds_registration_number || '').toLowerCase();
+        const clinic = (m.clinic_name || '').toLowerCase();
+
+        return name.includes(query) || 
+               memberId.includes(query) || 
+               phone.includes(query) || 
+               bdsReg.includes(query) || 
+               clinic.includes(query);
+    });
+
     const { data: addData, setData: setAddData, post: postAdd, processing: addProcessing, errors: addErrors, reset: resetAddForm } = useForm({
         member_id: '',
         patient_name: '',
@@ -26,6 +43,7 @@ export default function Referrals({ referrals, members = [] }) {
         postAdd(route('admin.referrals.store'), {
             onSuccess: () => {
                 setIsAddModalOpen(false);
+                setMemberSearchQuery('');
                 resetAddForm();
             }
         });
@@ -643,11 +661,23 @@ export default function Referrals({ referrals, members = [] }) {
                         </div>
                         
                         <form onSubmit={handleAddSubmit}>
-                            {/* Member Assignment Selection */}
+                            {/* Member Assignment Selection with Search */}
                             <div className="form-group" style={{ marginBottom: '16px' }}>
                                 <label className="form-label" style={{ fontWeight: '700', display: 'block', marginBottom: '6px' }}>
                                     Referring Member / Doctor (Optional Assignment)
                                 </label>
+                                
+                                <div style={{ marginBottom: '8px' }}>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="🔍 Search member by Member ID, Name, Phone, or BDS Reg..."
+                                        value={memberSearchQuery}
+                                        onChange={e => setMemberSearchQuery(e.target.value)}
+                                        style={{ fontSize: '13px', padding: '9px 12px', borderRadius: '8px' }}
+                                    />
+                                </div>
+
                                 <select 
                                     className="form-control"
                                     value={addData.member_id}
@@ -655,15 +685,20 @@ export default function Referrals({ referrals, members = [] }) {
                                     style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
                                 >
                                     <option value="">-- None / Guest / Direct Referral --</option>
-                                    {members.map(m => (
+                                    {filteredMembersForAssignment.map(m => (
                                         <option key={m.id} value={m.id}>
-                                            {m.bds_registration_number ? 'Dr. ' : ''}{m.name} ({m.member_id || 'ID: ' + m.id}) {m.clinic_name ? `- ${m.clinic_name}` : ''}
+                                            {m.bds_registration_number ? 'Dr. ' : ''}{m.name} | ID: {m.member_id || m.id} | Phone: {m.phone || 'N/A'} {m.clinic_name ? `(${m.clinic_name})` : ''}
                                         </option>
                                     ))}
                                 </select>
+                                {memberSearchQuery && filteredMembersForAssignment.length === 0 && (
+                                    <div style={{ color: '#eab308', fontSize: '12px', marginTop: '4px' }}>
+                                        No member found matching "{memberSearchQuery}"
+                                    </div>
+                                )}
                                 {addErrors.member_id && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.member_id}</div>}
                                 <small style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-                                    Assigning a member will connect this case to their account and send them an automated notification.
+                                    Search and select the referring member to connect this case to their account.
                                 </small>
                             </div>
 
