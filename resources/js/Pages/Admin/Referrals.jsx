@@ -10,9 +10,11 @@ export default function Referrals({ referrals, members = [] }) {
     // Add Patient Referral Modal State
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [memberSearchQuery, setMemberSearchQuery] = useState('');
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     const filteredMembersForAssignment = members.filter(m => {
-        const query = memberSearchQuery.toLowerCase();
+        const query = memberSearchQuery.toLowerCase().trim();
+        if (!query) return true;
         const name = (m.name || '').toLowerCase();
         const memberId = (m.member_id || '').toLowerCase();
         const phone = (m.phone || '').toLowerCase();
@@ -25,6 +27,8 @@ export default function Referrals({ referrals, members = [] }) {
                bdsReg.includes(query) || 
                clinic.includes(query);
     });
+
+    const selectedMemberObj = members.find(m => String(m.id) === String(addData.member_id));
 
     const { data: addData, setData: setAddData, post: postAdd, processing: addProcessing, errors: addErrors, reset: resetAddForm } = useForm({
         member_id: '',
@@ -44,6 +48,7 @@ export default function Referrals({ referrals, members = [] }) {
             onSuccess: () => {
                 setIsAddModalOpen(false);
                 setMemberSearchQuery('');
+                setIsSearchFocused(false);
                 resetAddForm();
             }
         });
@@ -661,44 +666,140 @@ export default function Referrals({ referrals, members = [] }) {
                         </div>
                         
                         <form onSubmit={handleAddSubmit}>
-                            {/* Member Assignment Selection with Search */}
+                            {/* Member Assignment Selection with Instant Auto-complete */}
                             <div className="form-group" style={{ marginBottom: '16px' }}>
                                 <label className="form-label" style={{ fontWeight: '700', display: 'block', marginBottom: '6px' }}>
                                     Referring Member / Doctor (Optional Assignment)
                                 </label>
                                 
-                                <div style={{ marginBottom: '8px' }}>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="🔍 Search member by Member ID, Name, Phone, or BDS Reg..."
-                                        value={memberSearchQuery}
-                                        onChange={e => setMemberSearchQuery(e.target.value)}
-                                        style={{ fontSize: '13px', padding: '9px 12px', borderRadius: '8px' }}
-                                    />
-                                </div>
+                                {selectedMemberObj ? (
+                                    /* Selected Member Card Display */
+                                    <div style={{ 
+                                        padding: '12px 16px', 
+                                        backgroundColor: 'rgba(13, 148, 136, 0.1)', 
+                                        border: '1px solid rgba(13, 148, 136, 0.4)', 
+                                        borderRadius: '8px', 
+                                        display: 'flex', 
+                                        justify: 'space-between', 
+                                        alignItems: 'center',
+                                        gap: '12px'
+                                    }}>
+                                        <div>
+                                            <div style={{ fontWeight: '700', fontSize: '14px', color: 'var(--text-main)' }}>
+                                                ✓ {selectedMemberObj.bds_registration_number ? 'Dr. ' : ''}{selectedMemberObj.name}
+                                            </div>
+                                            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                                <span>🆔 {selectedMemberObj.member_id || 'ID: ' + selectedMemberObj.id}</span>
+                                                <span>📞 {selectedMemberObj.phone || 'N/A'}</span>
+                                                {selectedMemberObj.clinic_name && <span>🏥 {selectedMemberObj.clinic_name}</span>}
+                                            </div>
+                                        </div>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => { setAddData('member_id', ''); setMemberSearchQuery(''); setIsSearchFocused(true); }} 
+                                            className="btn btn-outline" 
+                                            style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer', borderRadius: '6px' }}
+                                        >
+                                            ✕ Change
+                                        </button>
+                                    </div>
+                                ) : (
+                                    /* Instant Search Input & Results Container */
+                                    <div style={{ position: 'relative' }}>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="🔍 Type Member ID, Name, Phone, or BDS Reg..."
+                                            value={memberSearchQuery}
+                                            onChange={e => setMemberSearchQuery(e.target.value)}
+                                            onFocus={() => setIsSearchFocused(true)}
+                                            style={{ fontSize: '13px', padding: '10px 14px', borderRadius: '8px' }}
+                                        />
 
-                                <select 
-                                    className="form-control"
-                                    value={addData.member_id}
-                                    onChange={e => setAddData('member_id', e.target.value)}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
-                                >
-                                    <option value="">-- None / Guest / Direct Referral --</option>
-                                    {filteredMembersForAssignment.map(m => (
-                                        <option key={m.id} value={m.id}>
-                                            {m.bds_registration_number ? 'Dr. ' : ''}{m.name} | ID: {m.member_id || m.id} | Phone: {m.phone || 'N/A'} {m.clinic_name ? `(${m.clinic_name})` : ''}
-                                        </option>
-                                    ))}
-                                </select>
-                                {memberSearchQuery && filteredMembersForAssignment.length === 0 && (
-                                    <div style={{ color: '#eab308', fontSize: '12px', marginTop: '4px' }}>
-                                        No member found matching "{memberSearchQuery}"
+                                        {/* Instant Search Results Dropdown List */}
+                                        {(memberSearchQuery.trim().length > 0 || isSearchFocused) && (
+                                            <div style={{
+                                                position: 'relative',
+                                                maxHeight: '220px',
+                                                overflowY: 'auto',
+                                                backgroundColor: 'var(--bg-card, #ffffff)',
+                                                border: '1px solid var(--border-color, #cbd5e1)',
+                                                borderRadius: '8px',
+                                                marginTop: '6px',
+                                                boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                                                zIndex: 10
+                                            }}>
+                                                {/* Option for Direct / Guest Referral */}
+                                                <div 
+                                                    onClick={() => { setAddData('member_id', ''); setMemberSearchQuery(''); setIsSearchFocused(false); }}
+                                                    style={{ 
+                                                        padding: '10px 14px', 
+                                                        cursor: 'pointer', 
+                                                        borderBottom: '1px solid var(--border-color, #e2e8f0)',
+                                                        fontSize: '13px',
+                                                        color: 'var(--text-muted, #64748b)',
+                                                        backgroundColor: addData.member_id === '' ? 'rgba(0,0,0,0.03)' : 'transparent'
+                                                    }}
+                                                >
+                                                    🚫 <em>-- Direct / Guest Referral (No Member Assigned) --</em>
+                                                </div>
+
+                                                {filteredMembersForAssignment.length > 0 ? (
+                                                    filteredMembersForAssignment.map(m => (
+                                                        <div
+                                                            key={m.id}
+                                                            onClick={() => {
+                                                                setAddData('member_id', m.id);
+                                                                setMemberSearchQuery('');
+                                                                setIsSearchFocused(false);
+                                                            }}
+                                                            style={{
+                                                                padding: '10px 14px',
+                                                                cursor: 'pointer',
+                                                                borderBottom: '1px solid var(--border-color, #e2e8f0)',
+                                                                transition: 'background-color 0.15s ease',
+                                                                display: 'flex',
+                                                                justify: 'space-between',
+                                                                alignItems: 'center',
+                                                                gap: '10px'
+                                                            }}
+                                                            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(13, 148, 136, 0.1)'}
+                                                            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                                                        >
+                                                            <div>
+                                                                <div style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text-main, #0f172a)' }}>
+                                                                    {m.bds_registration_number ? 'Dr. ' : ''}{m.name}
+                                                                </div>
+                                                                <div style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)', marginTop: '2px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                                                    <span>📞 {m.phone || 'N/A'}</span>
+                                                                    {m.clinic_name && <span>🏥 {m.clinic_name}</span>}
+                                                                </div>
+                                                            </div>
+                                                            <span style={{ 
+                                                                fontSize: '11px', 
+                                                                fontWeight: '700', 
+                                                                padding: '3px 8px', 
+                                                                borderRadius: '6px', 
+                                                                backgroundColor: 'rgba(13, 148, 136, 0.15)', 
+                                                                color: '#0d9488' 
+                                                            }}>
+                                                                ID: {m.member_id || m.id}
+                                                            </span>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div style={{ padding: '12px 14px', fontSize: '13px', color: '#eab308' }}>
+                                                        No members match "{memberSearchQuery}"
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
+
                                 {addErrors.member_id && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.member_id}</div>}
                                 <small style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-                                    Search and select the referring member to connect this case to their account.
+                                    Type to instantly filter member list by ID, Name, or Phone, then click to assign.
                                 </small>
                             </div>
 
