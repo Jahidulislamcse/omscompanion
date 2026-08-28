@@ -129,6 +129,7 @@ class MemberController extends Controller
 
         // Send notifications to member
         $member = Auth::user();
+        $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
         $subject = "Referral Submitted";
         $message = "Patient referral for {$referral->patient_name} successfully submitted.";
         
