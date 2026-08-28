@@ -2,10 +2,34 @@ import React, { useState } from 'react';
 import { Head, router, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 
-export default function Referrals({ referrals }) {
+export default function Referrals({ referrals, members = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [typeFilter, setTypeFilter] = useState('all');
+
+    // Add Patient Referral Modal State
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const { data: addData, setData: setAddData, post: postAdd, processing: addProcessing, errors: addErrors, reset: resetAddForm } = useForm({
+        member_id: '',
+        patient_name: '',
+        phone: '',
+        patient_address: '',
+        medical_condition: '',
+        urgency_level: 'medium',
+        commission_amount: 0,
+        commission_status: 'none',
+        additional_notes: '',
+    });
+
+    const handleAddSubmit = (e) => {
+        e.preventDefault();
+        postAdd(route('admin.referrals.store'), {
+            onSuccess: () => {
+                setIsAddModalOpen(false);
+                resetAddForm();
+            }
+        });
+    };
     
     // Status Modal State
     const [activeReferralForStatus, setActiveReferralForStatus] = useState(null);
@@ -127,6 +151,22 @@ export default function Referrals({ referrals }) {
     return (
         <AdminLayout title="Patient Referrals & Case Status">
             <Head title="Patient Referrals" />
+
+            {/* Top Action Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+                <div>
+                    <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '700' }}>Patient Referrals</h2>
+                    <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '13px' }}>Manage patient cases, assign referring doctors/members, and track case timelines.</p>
+                </div>
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => setIsAddModalOpen(true)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 18px', fontWeight: '700', borderRadius: '8px' }}
+                >
+                    <span style={{ fontSize: '16px', lineHeight: 1 }}>+</span> Add New Patient Referral
+                </button>
+            </div>
 
             {/* Filter Panel */}
             <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
@@ -557,6 +597,166 @@ export default function Referrals({ referrals }) {
                                 <button type="button" onClick={() => setActiveReferralForCommission(null)} className="btn btn-outline">Cancel</button>
                                 <button type="submit" className="btn btn-secondary" disabled={commProcessing}>
                                     {commProcessing ? 'Saving...' : 'Save Settings'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal: Add New Patient Referral & Assign Member */}
+            {isAddModalOpen && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.65)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 99999, padding: '20px', boxSizing: 'border-box' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: 'var(--bg-main)', margin: 'auto', borderRadius: '12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '14px' }}>
+                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700' }}>Add New Patient Referral</h3>
+                            <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn btn-outline" style={{ padding: '4px 10px', cursor: 'pointer' }}>✕</button>
+                        </div>
+                        
+                        <form onSubmit={handleAddSubmit}>
+                            {/* Member Assignment Selection */}
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" style={{ fontWeight: '700', display: 'block', marginBottom: '6px' }}>
+                                    Referring Member / Doctor (Optional Assignment)
+                                </label>
+                                <select 
+                                    className="form-control"
+                                    value={addData.member_id}
+                                    onChange={e => setAddData('member_id', e.target.value)}
+                                    style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
+                                >
+                                    <option value="">-- None / Guest / Direct Referral --</option>
+                                    {members.map(m => (
+                                        <option key={m.id} value={m.id}>
+                                            {m.bds_registration_number ? 'Dr. ' : ''}{m.name} ({m.member_id || 'ID: ' + m.id}) {m.clinic_name ? `- ${m.clinic_name}` : ''}
+                                        </option>
+                                    ))}
+                                </select>
+                                {addErrors.member_id && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.member_id}</div>}
+                                <small style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                                    Assigning a member will connect this case to their account and send them an automated notification.
+                                </small>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                {/* Patient Name */}
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Patient Name *</label>
+                                    <input 
+                                        type="text"
+                                        className="form-control"
+                                        value={addData.patient_name}
+                                        onChange={e => setAddData('patient_name', e.target.value)}
+                                        required
+                                        placeholder="e.g. John Doe"
+                                    />
+                                    {addErrors.patient_name && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.patient_name}</div>}
+                                </div>
+
+                                {/* Patient Phone */}
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Patient Phone *</label>
+                                    <input 
+                                        type="text"
+                                        className="form-control"
+                                        value={addData.phone}
+                                        onChange={e => setAddData('phone', e.target.value)}
+                                        required
+                                        placeholder="e.g. +8801700000000"
+                                    />
+                                    {addErrors.phone && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.phone}</div>}
+                                </div>
+                            </div>
+
+                            {/* Patient Address */}
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Patient Address</label>
+                                <input 
+                                    type="text"
+                                    className="form-control"
+                                    value={addData.patient_address}
+                                    onChange={e => setAddData('patient_address', e.target.value)}
+                                    placeholder="Enter patient location / address"
+                                />
+                                {addErrors.patient_address && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.patient_address}</div>}
+                            </div>
+
+                            {/* Medical Condition & Urgency */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Medical Condition / Chief Complaint *</label>
+                                    <input 
+                                        type="text"
+                                        className="form-control"
+                                        value={addData.medical_condition}
+                                        onChange={e => setAddData('medical_condition', e.target.value)}
+                                        required
+                                        placeholder="e.g. Impacted Wisdom Tooth / Facial Trauma"
+                                    />
+                                    {addErrors.medical_condition && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.medical_condition}</div>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Urgency Level *</label>
+                                    <select 
+                                        className="form-control"
+                                        value={addData.urgency_level}
+                                        onChange={e => setAddData('urgency_level', e.target.value)}
+                                        required
+                                    >
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="critical">Critical</option>
+                                    </select>
+                                    {addErrors.urgency_level && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{addErrors.urgency_level}</div>}
+                                </div>
+                            </div>
+
+                            {/* Commission Amount & Status */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Commission Amount</label>
+                                    <input 
+                                        type="number"
+                                        step="0.01"
+                                        className="form-control"
+                                        value={addData.commission_amount}
+                                        onChange={e => setAddData('commission_amount', e.target.value)}
+                                        min="0"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Commission Status</label>
+                                    <select 
+                                        className="form-control"
+                                        value={addData.commission_status}
+                                        onChange={e => setAddData('commission_status', e.target.value)}
+                                    >
+                                        <option value="none">None</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="paid">Paid</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Additional Notes */}
+                            <div className="form-group" style={{ marginBottom: '20px' }}>
+                                <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Additional Notes</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={addData.additional_notes}
+                                    onChange={e => setAddData('additional_notes', e.target.value)}
+                                    rows="3"
+                                    placeholder="Any additional instructions or clinical observations..."
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+                                <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn btn-outline">Cancel</button>
+                                <button type="submit" className="btn btn-primary" disabled={addProcessing}>
+                                    {addProcessing ? 'Submitting...' : 'Submit Patient Referral'}
                                 </button>
                             </div>
                         </form>

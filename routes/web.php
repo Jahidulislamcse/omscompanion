@@ -183,6 +183,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/members/{user}/approve', [AdminController::class, 'approveMember'])->name('admin.members.approve');
     Route::post('/members/{user}/reject', [AdminController::class, 'rejectMember'])->name('admin.members.reject');
     Route::get('/referrals', [AdminController::class, 'referrals'])->name('admin.referrals');
+    Route::post('/referrals', [AdminController::class, 'storeReferral'])->name('admin.referrals.store');
     Route::post('/referrals/{referral}/status', [AdminController::class, 'updateReferralStatus'])->name('admin.referrals.status');
     Route::post('/referrals/{referral}/commission', [AdminController::class, 'updateCommission'])->name('admin.referrals.commission');
     Route::get('/videos', [AdminController::class, 'videos'])->name('admin.videos');

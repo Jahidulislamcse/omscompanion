@@ -142,9 +142,69 @@ class AdminController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $members = User::where('role', 'member')
+            ->where('status', 'approved')
+            ->select('id', 'name', 'member_id', 'bds_registration_number', 'phone', 'clinic_name')
+            ->orderBy('name', 'asc')
+            ->get();
+
         return Inertia::render('Admin/Referrals', [
-            'referrals' => $referrals
+            'referrals' => $referrals,
+            'members' => $members,
         ]);
+    }
+
+    public function storeReferral(Request $request)
+    {
+        $request->validate([
+            'patient_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'patient_address' => 'nullable|string',
+            'medical_condition' => 'required|string',
+            'urgency_level' => 'required|in:low,medium,high,critical',
+            'member_id' => 'nullable|exists:users,id',
+            'additional_notes' => 'nullable|string',
+            'commission_amount' => 'nullable|numeric|min:0',
+            'commission_status' => 'nullable|in:none,pending,paid',
+        ]);
+
+        $memberId = $request->member_id ? $request->member_id : null;
+        $referrerType = $memberId ? 'doctor' : 'guest';
+
+        $referral = PatientReferral::create([
+            'member_id' => $memberId,
+            'referrer_type' => $referrerType,
+            'patient_name' => $request->patient_name,
+            'phone' => $request->phone,
+            'patient_address' => $request->patient_address,
+            'medical_condition' => $request->medical_condition,
+            'urgency_level' => $request->urgency_level,
+            'status' => 'new',
+            'additional_notes' => $request->additional_notes,
+            'commission_amount' => $request->commission_amount ?? 0,
+            'commission_status' => $request->commission_status ?? 'none',
+        ]);
+
+        // Create initial timeline entry
+        PatientStatusTimeline::create([
+            'referral_id' => $referral->id,
+            'status' => 'new',
+            'notes' => 'Referral created by Admin' . ($memberId ? ' and assigned to member.' : '.'),
+            'changed_by' => Auth::id(),
+        ]);
+
+        // If assigned to a member, send notification to that member
+        if ($memberId) {
+            $member = User::find($memberId);
+            if ($member) {
+                $prefix = !empty($member->bds_registration_number) ? 'Dr. ' : '';
+                $subject = "New Patient Referral Assigned";
+                $message = "A new patient referral for {$referral->patient_name} has been submitted and assigned to your account by Admin.";
+                NotificationService::send($member, $subject, $message, 'both');
+            }
+        }
+
+        return redirect()->back()->with('success', 'Patient referral created successfully.');
     }
 
     public function updateReferralStatus(Request $request, PatientReferral $referral)
