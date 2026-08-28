@@ -34,6 +34,7 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
         footer_contact_phone: settings.footer_contact_phone || '',
         footer_contact_email: settings.footer_contact_email || '',
         footer_facebook_url: settings.footer_facebook_url || '',
+        whatsapp_number: settings.whatsapp_number || '+8801700000000',
         site_logo: null,
         remove_logo: false,
         hero_banner: null,
@@ -582,16 +583,31 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Contact Email Address</label>
+                                    <label className="form-label">WhatsApp Number (Floating Bumping Widget)</label>
                                     <input 
-                                        type="email" 
+                                        type="text" 
                                         className="form-control"
-                                        value={data.footer_contact_email}
-                                        onChange={e => setData('footer_contact_email', e.target.value)}
-                                        placeholder="e.g. info@omscompanion.com"
+                                        value={data.whatsapp_number}
+                                        onChange={e => setData('whatsapp_number', e.target.value)}
+                                        placeholder="e.g. +8801700000000"
                                     />
-                                    {errors.footer_contact_email && <span className="form-error">{errors.footer_contact_email}</span>}
+                                    {errors.whatsapp_number && <span className="form-error">{errors.whatsapp_number}</span>}
+                                    <small style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '2px', display: 'block' }}>
+                                        Floating bumping WhatsApp button on front pages will direct chat to this number.
+                                    </small>
                                 </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Contact Email Address</label>
+                                <input 
+                                    type="email" 
+                                    className="form-control"
+                                    value={data.footer_contact_email}
+                                    onChange={e => setData('footer_contact_email', e.target.value)}
+                                    placeholder="e.g. info@omscompanion.com"
+                                />
+                                {errors.footer_contact_email && <span className="form-error">{errors.footer_contact_email}</span>}
                             </div>
 
                             <div className="form-group">

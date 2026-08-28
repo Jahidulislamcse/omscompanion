@@ -446,6 +446,7 @@ class AdminController extends Controller
             'about_title' => 'nullable|string|max:255',
             'about_description' => 'nullable|string',
             'services_subtitle' => 'nullable|string',
+            'whatsapp_number' => 'nullable|string|max:50',
         ]);
 
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
@@ -551,6 +552,7 @@ class AdminController extends Controller
             'footer_contact_phone',
             'footer_contact_email',
             'footer_facebook_url',
+            'whatsapp_number',
             'about_title',
             'about_description',
             'services_subtitle',

@@ -3195,4 +3195,79 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.15) rotate(-5deg);
 }
 
+/* ==========================================================================
+   Bumping Floating WhatsApp Widget
+   ========================================================================== */
+@keyframes whatsapp-bump {
+    0% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    }
+    25% {
+        transform: scale(1.12) translateY(-6px);
+        box-shadow: 0 8px 24px rgba(37, 211, 102, 0.65);
+    }
+    45% {
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 6px 18px rgba(37, 211, 102, 0.5);
+    }
+    65% {
+        transform: scale(1.1) translateY(-4px);
+        box-shadow: 0 8px 22px rgba(37, 211, 102, 0.6);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    }
+}
+
+.whatsapp-float-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    z-index: 99999;
+    cursor: pointer;
+    text-decoration: none;
+    animation: whatsapp-bump 2.4s infinite ease-in-out;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.whatsapp-float-btn:hover {
+    background-color: #20ba5a;
+    transform: scale(1.18);
+    animation-play-state: paused;
+}
+
+.whatsapp-tooltip {
+    position: absolute;
+    right: 70px;
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    pointer-events: none;
+}
+
+.whatsapp-float-btn:hover .whatsapp-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+
 

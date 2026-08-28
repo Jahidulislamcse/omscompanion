@@ -66,6 +66,7 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'login_side_title' => LandingSetting::where('key', 'login_side_title')->value('value') ?: 'Discover your next journey',
             'login_side_subtitle' => LandingSetting::where('key', 'login_side_subtitle')->value('value') ?: 'Explore ideas, stories, and experiences designed to inspire your everyday practice.',
+            'whatsapp_number' => LandingSetting::where('key', 'whatsapp_number')->value('value') ?: '+8801700000000',
         ];
     }
 }
