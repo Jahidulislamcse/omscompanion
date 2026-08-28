@@ -152,19 +152,48 @@ export default function Referrals({ referrals, members = [] }) {
         <AdminLayout title="Patient Referrals & Case Status">
             <Head title="Patient Referrals" />
 
-            {/* Top Action Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+            {/* Quick Action Hero Banner Card */}
+            <div className="glass-panel" style={{ 
+                padding: '24px 28px', 
+                marginBottom: '24px', 
+                display: 'flex', 
+                justify: 'space-between', 
+                alignItems: 'center', 
+                flexWrap: 'wrap', 
+                gap: '16px',
+                backgroundColor: 'var(--bg-card, #ffffff)',
+                border: '1px solid var(--border-color, #e2e8f0)',
+                borderRadius: '12px',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.04)'
+            }}>
                 <div>
-                    <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '700' }}>Patient Referrals</h2>
-                    <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '13px' }}>Manage patient cases, assign referring doctors/members, and track case timelines.</p>
+                    <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: 'var(--text-main, #0f172a)' }}>
+                        Submit a Patient Referral
+                    </h2>
+                    <p style={{ margin: '6px 0 0', color: 'var(--text-muted, #64748b)', fontSize: '14px' }}>
+                        Send patient cases to OMS COMPANION and track case progress in real-time.
+                    </p>
                 </div>
                 <button
                     type="button"
                     className="btn btn-primary"
                     onClick={() => setIsAddModalOpen(true)}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 18px', fontWeight: '700', borderRadius: '8px' }}
+                    style={{ 
+                        padding: '12px 24px', 
+                        fontSize: '15px', 
+                        fontWeight: '700', 
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        gap: '8px', 
+                        borderRadius: '8px',
+                        backgroundColor: '#164e63',
+                        color: '#ffffff',
+                        border: 'none',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(22, 78, 99, 0.3)'
+                    }}
                 >
-                    <span style={{ fontSize: '16px', lineHeight: 1 }}>+</span> Add New Patient Referral
+                    <span style={{ fontSize: '16px', fontWeight: '900' }}>+</span> Refer a New Patient
                 </button>
             </div>
 
