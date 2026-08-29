@@ -3280,6 +3280,158 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.05);
 }
 
+/* ==========================================================================
+   Mobile Responsiveness for Services & About Pages
+   ========================================================================== */
+.page-top-pill-badge {
+    display: inline-block;
+    border: 1.5px solid #334155;
+    border-radius: 50px;
+    padding: 6px 36px;
+    margin-bottom: 28px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.page-top-pill-text {
+    text-transform: lowercase;
+    font-size: 24px;
+    font-weight: 500;
+    color: #0f172a;
+    letter-spacing: 0.5px;
+    text-decoration: underline;
+}
+
+.purple-banner-box {
+    border: 3px solid #7c3aed;
+    border-radius: 12px;
+    padding: 24px 28px;
+    max-width: 920px;
+    margin: 0 auto 50px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+}
+
+.purple-banner-text {
+    font-size: 17px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    white-space: pre-line;
+}
+
+.services-responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 45px 30px;
+    justify-content: center;
+    align-items: start;
+    padding: 10px;
+}
+
+.service-circle-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #0f172a;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    margin-bottom: 14px;
+    background-color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.service-prefix-text {
+    font-size: 11px;
+    font-weight: 800;
+    color: #0891b2;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.service-title-text {
+    font-size: 18px;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.2px;
+    margin: 0;
+    text-transform: uppercase;
+    line-height: 1.25;
+    max-width: 260px;
+}
+
+/* Mobile Screens Adjustments (max-width: 640px) */
+@media (max-width: 640px) {
+    .page-top-pill-badge {
+        padding: 4px 20px;
+        margin-bottom: 16px;
+    }
+
+    .page-top-pill-text {
+        font-size: 16px;
+    }
+
+    .purple-banner-box {
+        border-width: 2px;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 30px;
+    }
+
+    .purple-banner-text {
+        font-size: 12.5px;
+        line-height: 1.45;
+        letter-spacing: 0.1px;
+    }
+
+    .services-responsive-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px 12px;
+        padding: 4px;
+    }
+
+    .service-circle-img {
+        width: 110px;
+        height: 110px;
+        border-width: 3px;
+        margin-bottom: 8px;
+    }
+
+    .service-prefix-text {
+        font-size: 9.5px;
+        margin-bottom: 2px;
+    }
+
+    .service-title-text {
+        font-size: 12.5px;
+        line-height: 1.2;
+        max-width: 140px;
+    }
+
+    .team-avatar-responsive-l1 {
+        width: 110px !important;
+        height: 110px !important;
+    }
+    .team-avatar-responsive-l2 {
+        width: 85px !important;
+        height: 85px !important;
+    }
+    .team-card-responsive {
+        max-width: 130px !important;
+    }
+}
+
+
 
 
 

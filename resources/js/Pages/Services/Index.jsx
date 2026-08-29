@@ -40,52 +40,22 @@ export default function Index({ settings = {}, services = [] }) {
                     
                     {/* Top Services Outline Pill Badge */}
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                        <div style={{ display: 'inline-block', border: '1.5px solid #334155', borderRadius: '50px', padding: '6px 36px', marginBottom: '28px', backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                            <span style={{ textTransform: 'lowercase', fontSize: '24px', fontWeight: '500', color: '#0f172a', letterSpacing: '0.5px', textDecoration: 'underline' }}>
+                        <div className="page-top-pill-badge">
+                            <span className="page-top-pill-text">
                                 services
                             </span>
                         </div>
 
                         {/* Top Subtitle Text Box (Styled like screenshot with bold box outline) */}
-                        <div 
-                            style={{ 
-                                border: '3px solid #7c3aed', 
-                                borderRadius: '12px', 
-                                padding: '24px 28px', 
-                                maxWidth: '920px', 
-                                margin: '0 auto 50px',
-                                backgroundColor: '#ffffff',
-                                boxShadow: '0 8px 24px rgba(124, 58, 237, 0.08)'
-                            }}
-                        >
-                            <h2 
-                                style={{ 
-                                    fontSize: '17px', 
-                                    fontWeight: '800', 
-                                    color: '#0f172a', 
-                                    lineHeight: '1.55', 
-                                    textAlign: 'center', 
-                                    margin: 0,
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0.2px'
-                                }}
-                            >
+                        <div className="purple-banner-box">
+                            <h2 className="purple-banner-text">
                                 {servicesSubtitle}
                             </h2>
                         </div>
                     </div>
 
                     {/* Circular Image Services Grid (Matching user screenshot) */}
-                    <div 
-                        style={{ 
-                            display: 'grid', 
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                            gap: '45px 30px',
-                            justifyContent: 'center',
-                            alignItems: 'start',
-                            padding: '10px'
-                        }}
-                    >
+                    <div className="services-responsive-grid">
                         {(services || []).map((srv, idx) => {
                             const hasImage = Boolean(srv.image_path);
                             const imageSrc = hasImage ? '/' + srv.image_path : null;
@@ -105,24 +75,7 @@ export default function Index({ settings = {}, services = [] }) {
                                     className="service-card-item"
                                 >
                                     {/* Circular Image Badge */}
-                                    <div 
-                                        style={{ 
-                                            width: '180px', 
-                                            height: '180px', 
-                                            borderRadius: '50%', 
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            border: '4px solid #0f172a',
-                                            boxShadow: '0 8px 20px rgba(0,0,0,0.12)',
-                                            marginBottom: '14px',
-                                            backgroundColor: '#f1f5f9',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            transition: 'all 0.3s ease'
-                                        }}
-                                        className="service-circle-img"
-                                    >
+                                    <div className="service-circle-img">
                                         {hasImage ? (
                                             <img 
                                                 src={imageSrc} 
@@ -130,7 +83,7 @@ export default function Index({ settings = {}, services = [] }) {
                                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                                 onError={(e) => {
                                                     e.target.style.display = 'none';
-                                                    e.target.nextSibling.style.display = 'flex';
+                                                    if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
                                                 }}
                                             />
                                         ) : null}
@@ -145,7 +98,7 @@ export default function Index({ settings = {}, services = [] }) {
                                                 justifyContent: 'center',
                                                 background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
                                                 color: '#38bdf8',
-                                                fontSize: '54px'
+                                                fontSize: '36px'
                                             }}
                                         >
                                             🩺
@@ -154,34 +107,13 @@ export default function Index({ settings = {}, services = [] }) {
 
                                     {/* Prefix Tag in Cyan/Teal */}
                                     {srv.prefix && (
-                                        <span 
-                                            style={{ 
-                                                fontSize: '11px', 
-                                                fontWeight: '800', 
-                                                color: '#0891b2', 
-                                                letterSpacing: '0.6px', 
-                                                textTransform: 'uppercase', 
-                                                marginBottom: '3px',
-                                                display: 'block'
-                                            }}
-                                        >
+                                        <span className="service-prefix-text">
                                             {srv.prefix}
                                         </span>
                                     )}
 
                                     {/* Main Service Title in Bold Uppercase */}
-                                    <h3 
-                                        style={{ 
-                                            fontSize: '18px', 
-                                            fontWeight: '900', 
-                                            color: '#0f172a', 
-                                            letterSpacing: '-0.2px', 
-                                            margin: 0, 
-                                            textTransform: 'uppercase', 
-                                            lineHeight: '1.25',
-                                            maxWidth: '260px'
-                                        }}
-                                    >
+                                    <h3 className="service-title-text">
                                         {srv.title}
                                     </h3>
                                 </div>

@@ -46,9 +46,12 @@ OMS Companion — Connecting Expertise, Enhancing Practice.`);
         const initial = (member.name || 'D').replace(/^(DR|DR\.)\s*/i, '').charAt(0) || 'D';
         const isDefaultLandscape = member.image_path && member.image_path.includes('default_landscape');
 
+        const avatarClass = size >= 150 ? 'team-avatar-responsive-l1' : 'team-avatar-responsive-l2';
+
         return (
-            <div key={member.id} className="team-member-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', maxWidth: `${size + 70}px` }}>
+            <div key={member.id} className="team-member-card team-card-responsive" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', maxWidth: `${size + 70}px` }}>
                 <div 
+                    className={avatarClass}
                     style={{ 
                         width: `${size}px`, 
                         height: `${size}px`, 
@@ -125,37 +128,15 @@ OMS Companion — Connecting Expertise, Enhancing Practice.`);
                     
                     {/* About Us Heading & Description (Styled same as Services page) */}
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                        <div style={{ display: 'inline-block', border: '1.5px solid #334155', borderRadius: '50px', padding: '6px 36px', marginBottom: '28px', backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                            <span style={{ textTransform: 'lowercase', fontSize: '24px', fontWeight: '500', color: '#0f172a', letterSpacing: '0.5px', textDecoration: 'underline' }}>
+                        <div className="page-top-pill-badge">
+                            <span className="page-top-pill-text">
                                 about us
                             </span>
                         </div>
 
                         {/* Description Box with purple border box outline matching Services page */}
-                        <div 
-                            style={{ 
-                                border: '3px solid #7c3aed', 
-                                borderRadius: '12px', 
-                                padding: '24px 28px', 
-                                maxWidth: '920px', 
-                                margin: '0 auto 50px',
-                                backgroundColor: '#ffffff',
-                                boxShadow: '0 8px 24px rgba(124, 58, 237, 0.08)'
-                            }}
-                        >
-                            <h2 
-                                style={{ 
-                                    fontSize: '17px', 
-                                    fontWeight: '800', 
-                                    color: '#0f172a', 
-                                    lineHeight: '1.65', 
-                                    textAlign: 'center', 
-                                    margin: 0,
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0.2px',
-                                    whiteSpace: 'pre-line'
-                                }}
-                            >
+                        <div className="purple-banner-box">
+                            <h2 className="purple-banner-text">
                                 {aboutDesc}
                             </h2>
                         </div>
