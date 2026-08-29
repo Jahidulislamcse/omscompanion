@@ -123,14 +123,41 @@ OMS Companion — Connecting Expertise, Enhancing Practice.`);
             <main style={{ padding: '60px 20px 80px', flex: '1 0 auto' }}>
                 <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
                     
-                    {/* About Us Heading & Description */}
-                    <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 60px' }}>
-                        <h1 style={{ fontSize: '2.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '24px', letterSpacing: '-0.5px' }}>
-                            {aboutTitle}
-                        </h1>
+                    {/* About Us Heading & Description (Styled same as Services page) */}
+                    <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                        <div style={{ display: 'inline-block', border: '1.5px solid #334155', borderRadius: '50px', padding: '6px 36px', marginBottom: '28px', backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                            <span style={{ textTransform: 'lowercase', fontSize: '24px', fontWeight: '500', color: '#0f172a', letterSpacing: '0.5px', textDecoration: 'underline' }}>
+                                about us
+                            </span>
+                        </div>
 
-                        <div style={{ fontSize: '15px', color: '#334155', lineHeight: '1.8', whiteSpace: 'pre-line' }}>
-                            {aboutDesc}
+                        {/* Description Box with purple border box outline matching Services page */}
+                        <div 
+                            style={{ 
+                                border: '3px solid #7c3aed', 
+                                borderRadius: '12px', 
+                                padding: '24px 28px', 
+                                maxWidth: '920px', 
+                                margin: '0 auto 50px',
+                                backgroundColor: '#ffffff',
+                                boxShadow: '0 8px 24px rgba(124, 58, 237, 0.08)'
+                            }}
+                        >
+                            <h2 
+                                style={{ 
+                                    fontSize: '17px', 
+                                    fontWeight: '800', 
+                                    color: '#0f172a', 
+                                    lineHeight: '1.65', 
+                                    textAlign: 'center', 
+                                    margin: 0,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.2px',
+                                    whiteSpace: 'pre-line'
+                                }}
+                            >
+                                {aboutDesc}
+                            </h2>
                         </div>
                     </div>
 
