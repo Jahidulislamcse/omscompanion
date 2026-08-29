@@ -572,12 +572,27 @@ class AdminController extends Controller
             'prefix' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'order_index' => 'nullable|integer',
+            'image' => 'nullable|file|max:5120',
         ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            $filename = 'service_' . time() . '_' . uniqid() . '.' . $extension;
+            $destinationPath = storage_path('app/public/services');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $imagePath = 'storage/services/' . $filename;
+        }
 
         Service::create([
             'title' => strtoupper($request->title),
             'prefix' => $request->prefix ? strtoupper($request->prefix) : null,
             'description' => $request->description,
+            'image_path' => $imagePath,
             'order_index' => $request->order_index ?? 0,
         ]);
 
@@ -591,12 +606,31 @@ class AdminController extends Controller
             'prefix' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'order_index' => 'nullable|integer',
+            'image' => 'nullable|file|max:5120',
+            'remove_image' => 'nullable|boolean',
         ]);
+
+        $imagePath = $service->image_path;
+
+        if ($request->boolean('remove_image')) {
+            $imagePath = null;
+        } elseif ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'png');
+            $filename = 'service_' . time() . '_' . uniqid() . '.' . $extension;
+            $destinationPath = storage_path('app/public/services');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $imagePath = 'storage/services/' . $filename;
+        }
 
         $service->update([
             'title' => strtoupper($request->title),
             'prefix' => $request->prefix ? strtoupper($request->prefix) : null,
             'description' => $request->description,
+            'image_path' => $imagePath,
             'order_index' => $request->order_index ?? 0,
         ]);
 

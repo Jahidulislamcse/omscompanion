@@ -17,6 +17,7 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     // Modal state for Services item add/edit
     const [serviceModalOpen, setServiceModalOpen] = useState(false);
     const [editingService, setEditingService] = useState(null);
+    const [serviceImagePreview, setServiceImagePreview] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -63,6 +64,8 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
         title: '',
         description: '',
         order_index: 0,
+        image: null,
+        remove_image: false,
     });
 
     const handleLogoChange = (e) => {
@@ -175,22 +178,28 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     // Service Handlers
     const openAddServiceModal = () => {
         setEditingService(null);
+        setServiceImagePreview(null);
         serviceForm.setData({
             prefix: 'MANAGEMENT OF',
             title: '',
             description: '',
             order_index: services.length + 1,
+            image: null,
+            remove_image: false,
         });
         setServiceModalOpen(true);
     };
 
     const openEditServiceModal = (srv) => {
         setEditingService(srv);
+        setServiceImagePreview(srv.image_path ? '/' + srv.image_path : null);
         serviceForm.setData({
             prefix: srv.prefix || '',
             title: srv.title || '',
             description: srv.description || '',
             order_index: srv.order_index || 0,
+            image: null,
+            remove_image: false,
         });
         setServiceModalOpen(true);
     };
@@ -198,7 +207,7 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     const handleServiceSubmit = (e) => {
         e.preventDefault();
         if (editingService) {
-            serviceForm.put(route('admin.services.update', editingService.id), {
+            serviceForm.post(route('admin.services.update_post', editingService.id), {
                 onSuccess: () => {
                     setServiceModalOpen(false);
                     alert('Service updated successfully!');
@@ -751,24 +760,33 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
                             {services.length > 0 ? (
                                 services.map(srv => (
-                                    <div key={srv.id} style={{ padding: '14px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                        <div>
-                                            {srv.prefix && (
-                                                <span style={{ fontSize: '10px', fontWeight: 'bold', color: 'var(--accent-teal)', display: 'block', marginBottom: '2px' }}>
-                                                    {srv.prefix}
-                                                </span>
+                                    <div key={srv.id} style={{ padding: '14px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            {srv.image_path ? (
+                                                <img src={'/' + srv.image_path} alt={srv.title} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-teal)' }} />
+                                            ) : (
+                                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#0d9488' }}>
+                                                    🩺
+                                                </div>
                                             )}
-                                            <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '800', textTransform: 'uppercase' }}>
-                                                {srv.title}
-                                            </h4>
+                                            <div>
+                                                {srv.prefix && (
+                                                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: 'var(--accent-teal)', display: 'block', marginBottom: '2px' }}>
+                                                        {srv.prefix}
+                                                    </span>
+                                                )}
+                                                <h4 style={{ margin: 0, fontSize: '13px', fontWeight: '800', textTransform: 'uppercase' }}>
+                                                    {srv.title}
+                                                </h4>
+                                            </div>
                                         </div>
 
-                                        <div style={{ display: 'flex', gap: '8px', marginTop: '12px', justifyContent: 'flex-end' }}>
+                                        <div style={{ display: 'flex', gap: '6px' }}>
                                             <button 
                                                 type="button" 
                                                 onClick={() => openEditServiceModal(srv)} 
                                                 className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '11px' }}
+                                                style={{ padding: '4px 8px', fontSize: '11px' }}
                                             >
                                                 ✏️ Edit
                                             </button>
@@ -776,9 +794,9 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                                 type="button" 
                                                 onClick={() => handleDeleteService(srv)} 
                                                 className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '11px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                                style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
                                             >
-                                                🗑️ Delete
+                                                🗑️
                                             </button>
                                         </div>
                                     </div>
@@ -958,6 +976,38 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                     onChange={e => serviceForm.setData('description', e.target.value)}
                                     rows="2"
                                     placeholder="Enter optional description..."
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Service Image (Circular Badge Display)</label>
+                                {serviceImagePreview && (
+                                    <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <img src={serviceImagePreview} alt="Preview" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-teal)' }} />
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline"
+                                            style={{ padding: '4px 8px', fontSize: '11px', color: '#ef4444', borderColor: 'rgba(239,68,68,0.4)' }}
+                                            onClick={() => {
+                                                serviceForm.setData(d => ({ ...d, image: null, remove_image: true }));
+                                                setServiceImagePreview(null);
+                                            }}
+                                        >
+                                            Remove Image
+                                        </button>
+                                    </div>
+                                )}
+                                <input 
+                                    type="file" 
+                                    className="form-control"
+                                    accept="image/*"
+                                    onChange={e => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            serviceForm.setData(d => ({ ...d, image: file, remove_image: false }));
+                                            setServiceImagePreview(URL.createObjectURL(file));
+                                        }
+                                    }}
                                 />
                             </div>
 

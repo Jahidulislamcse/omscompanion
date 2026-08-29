@@ -3269,5 +3269,17 @@ h1, h2, h3, h4, h5, h6 {
     visibility: visible;
 }
 
+/* Service Card Hover Animations */
+.service-card-item:hover {
+    transform: translateY(-6px);
+}
+
+.service-card-item:hover .service-circle-img {
+    border-color: #0891b2 !important;
+    box-shadow: 0 12px 28px rgba(8, 145, 178, 0.25) !important;
+    transform: scale(1.05);
+}
+
+
 
 

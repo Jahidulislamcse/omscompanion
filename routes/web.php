@@ -160,6 +160,25 @@ Route::get('/site-login-image', function () {
     ]);
 })->name('site.login_image.stream');
 
+// Service Image Stream Route (Bypasses cPanel symlink issues)
+Route::get('/service-image/{service}', function (\App\Models\Service $service) {
+    if (!$service->image_path) {
+        abort(404);
+    }
+    $filename = basename($service->image_path);
+    $filePath = storage_path('app/public/services/' . $filename);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/png';
+    return response()->file($filePath, [
+        'Content-Type' => $mimeType,
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        'Pragma' => 'no-cache',
+        'Expires' => '0',
+    ]);
+})->name('service.image.stream');
+
 // Guest Medicine Shop Referral Submission Route
 Route::post('/referrals/guest', [GuestReferralController::class, 'store'])->name('guest.referral.store');
 
@@ -199,6 +218,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/team-members/{teamMember}', [AdminController::class, 'destroyTeamMember'])->name('admin.team.destroy');
     Route::post('/services', [AdminController::class, 'storeService'])->name('admin.services.store');
     Route::put('/services/{service}', [AdminController::class, 'updateService'])->name('admin.services.update');
+    Route::post('/services/{service}', [AdminController::class, 'updateService'])->name('admin.services.update_post');
     Route::delete('/services/{service}', [AdminController::class, 'destroyService'])->name('admin.services.destroy');
     Route::get('/messages', [AdminController::class, 'messages'])->name('admin.messages');
     Route::post('/messages/{message}/read', [AdminController::class, 'markMessageRead'])->name('admin.messages.read');

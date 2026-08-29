@@ -13,6 +13,7 @@ class Service extends Model
         'prefix',
         'title',
         'description',
+        'image_path',
         'order_index',
     ];
 }
