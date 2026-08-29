@@ -4,7 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'DentistChamber') }}</title>
+        <title inertia>{{ config('app.name', 'OMSCOMPANION') }}</title>
+
+        <!-- Dynamic Favicon using Site Logo -->
+        <link rel="icon" type="image/png" href="{{ route('site.logo.stream') }}">
+        <link rel="shortcut icon" href="{{ route('site.logo.stream') }}">
+        <link rel="apple-touch-icon" href="{{ route('site.logo.stream') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
