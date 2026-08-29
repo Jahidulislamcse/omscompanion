@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import PasswordInput from '@/Components/PasswordInput';
 
 export default function Profile({ user }) {
     const [successMsg, setSuccessMsg] = useState('');
@@ -93,10 +94,8 @@ export default function Profile({ user }) {
                         <div className="grid-responsive-two-col" style={{ gap: '15px' }}>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="password">New Password</label>
-                                <input 
-                                    type="password"
+                                <PasswordInput 
                                     id="password"
-                                    className="form-control"
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
                                     placeholder="••••••••"
@@ -106,10 +105,8 @@ export default function Profile({ user }) {
 
                             <div className="form-group">
                                 <label className="form-label" htmlFor="password_confirmation">Confirm New Password</label>
-                                <input 
-                                    type="password"
+                                <PasswordInput 
                                     id="password_confirmation"
-                                    className="form-control"
                                     value={data.password_confirmation}
                                     onChange={e => setData('password_confirmation', e.target.value)}
                                     placeholder="••••••••"

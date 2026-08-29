@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import PasswordInput from '@/Components/PasswordInput';
 
 export default function Login() {
     const { site_name, login_side_image, login_side_title, login_side_subtitle } = usePage().props;
@@ -87,10 +88,8 @@ export default function Login() {
                                 <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '13px', marginBottom: '4px' }}>
                                     Password
                                 </label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     id="password"
-                                    className="form-control"
                                     placeholder="Enter your password"
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}

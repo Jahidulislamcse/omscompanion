@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import PasswordInput from '@/Components/PasswordInput';
 
 export default function Register() {
     const { site_name } = usePage().props;
@@ -166,10 +167,8 @@ export default function Register() {
                         <div className="grid-2col-fixed-row" style={{ marginBottom: '14px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Password</label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     id="password"
-                                    className="form-control"
                                     placeholder="Password"
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
@@ -181,10 +180,8 @@ export default function Register() {
 
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="password_confirmation" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Confirm Password</label>
-                                <input
-                                    type="password"
+                                <PasswordInput
                                     id="password_confirmation"
-                                    className="form-control"
                                     placeholder="Confirm"
                                     value={data.password_confirmation}
                                     onChange={e => setData('password_confirmation', e.target.value)}
