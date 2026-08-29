@@ -1899,11 +1899,11 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
 }
 
-/* Floating Back-to-Top Button */
+/* Floating Back-to-Top Button (Positioned above WhatsApp widget) */
 .floating-back-to-top {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: 96px;
+    right: 32px;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -1914,7 +1914,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
-    z-index: 99;
+    z-index: 99999;
     transition: var(--transition-smooth);
     display: flex;
     align-items: center;
@@ -2267,11 +2267,11 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .floating-back-to-top {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         font-size: 16px;
-        bottom: 15px;
-        right: 15px;
+        bottom: 78px;
+        right: 23px;
     }
 }
 
@@ -3428,6 +3428,17 @@ h1, h2, h3, h4, h5, h6 {
     }
     .team-card-responsive {
         max-width: 130px !important;
+    }
+
+    .whatsapp-float-btn {
+        width: 52px;
+        height: 52px;
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .whatsapp-tooltip {
+        right: 60px;
     }
 }
 
