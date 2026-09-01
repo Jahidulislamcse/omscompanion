@@ -168,22 +168,8 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     </span>
                 </div>
 
-                {/* Content Info (Category Tag, Title, Short Description) */}
-                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                        {/* Category Tag */}
-                        <span style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                            color: 'var(--text-muted)',
-                            padding: '3px 10px',
-                            borderRadius: '20px',
-                            fontSize: '11px',
-                            fontWeight: '600'
-                        }}>
-                            📁 {video.category_name || 'General'}
-                        </span>
-                    </div>
-
+                {/* Content Info (Title, Short Description) */}
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px', justifyContent: 'center' }}>
                     {/* Title */}
                     <h3 
                         className="video-list-title"
@@ -275,10 +261,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
 
                 <div className="video-info free-video-info" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', padding: '16px' }}>
                     <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                            <span className="video-tag badge-tag-glow" style={{ fontSize: '11px', fontWeight: 'bold' }}>
-                                📁 {video.category_name || 'Masterclass'}
-                            </span>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '8px' }}>
                             {isFree ? (
                                 <span className="video-badge-free">
                                     🔓 FREE
