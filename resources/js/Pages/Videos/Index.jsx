@@ -84,6 +84,30 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
         });
     }, [videos, searchTerm, activeCategoryFilter, activeAccessFilter]);
 
+    // Group filtered videos by category into separate sections
+    const groupedCategories = useMemo(() => {
+        if (categories && categories.length > 0) {
+            return categories.map(cat => {
+                const catVideos = filteredVideos.filter(v => v.category_id === cat.id);
+                return {
+                    ...cat,
+                    videos: catVideos
+                };
+            }).filter(cat => activeCategoryFilter === 'all' ? cat.videos.length > 0 : cat.id.toString() === activeCategoryFilter.toString());
+        }
+
+        // Fallback grouping by category_name property if categories prop is empty
+        const groups = {};
+        filteredVideos.forEach(v => {
+            const catName = v.category_name || 'General Masterclasses';
+            if (!groups[catName]) {
+                groups[catName] = { id: v.category_id || catName, name: catName, videos: [] };
+            }
+            groups[catName].videos.push(v);
+        });
+        return Object.values(groups);
+    }, [categories, filteredVideos, activeCategoryFilter]);
+
     // Render Video Item in List Manner
     const renderVideoListItem = (video) => {
         const ytId = getYouTubeId(video.video_path);
@@ -334,12 +358,12 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                             Clinical Videos & Masterclasses
                         </h1>
                         <p className="landing-section-subtitle video-masterclasses-subtitle" style={{ maxWidth: '650px', margin: '0 auto' }}>
-                            Explore surgical guides, clinical lectures, and practical tips & tricks for BDS practitioners.
+                            Explore surgical guides, clinical lectures, and practical tips & tricks for BDS practitioners grouped by category.
                         </p>
                     </div>
 
                     {/* Search, Filter & Layout Toolbar */}
-                    <div className="glass-panel" style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', flexWrap: 'wrap', marginBottom: '24px', borderRadius: '16px' }}>
+                    <div className="glass-panel" style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', flexWrap: 'wrap', marginBottom: '32px', borderRadius: '16px' }}>
                         {/* Search Bar */}
                         <div style={{ flex: '1 1 260px', minWidth: '220px' }}>
                             <input
@@ -432,19 +456,70 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         </div>
                     </div>
 
-                    {/* Main Videos Container */}
-                    {filteredVideos.length > 0 ? (
-                        viewLayout === 'list' ? (
-                            /* LIST MANNER DISPLAY */
-                            <div className="video-list-container">
-                                {filteredVideos.map(video => renderVideoListItem(video))}
+                    {/* Videos Grouped Into Category Sections */}
+                    {groupedCategories.length > 0 ? (
+                        groupedCategories.map(cat => (
+                            <div key={cat.id} className="category-section" style={{ marginBottom: '40px' }}>
+                                {/* Category Header */}
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'space-between',
+                                    marginBottom: '18px', 
+                                    borderBottom: '2px solid var(--border-color)', 
+                                    paddingBottom: '12px' 
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div style={{ 
+                                            width: '40px', 
+                                            height: '40px', 
+                                            borderRadius: '10px', 
+                                            backgroundColor: 'rgba(13, 148, 136, 0.15)', 
+                                            border: '1px solid rgba(13, 148, 136, 0.3)',
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            fontSize: '20px'
+                                        }}>
+                                            📁
+                                        </div>
+                                        <div>
+                                            <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '700', color: 'var(--accent-teal)' }}>
+                                                {cat.name}
+                                            </h2>
+                                            {cat.description && (
+                                                <p style={{ margin: '2px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                                                    {cat.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <span style={{ 
+                                        fontSize: '12px', 
+                                        fontWeight: '700', 
+                                        backgroundColor: 'rgba(255,255,255,0.08)', 
+                                        color: 'var(--text-muted)', 
+                                        padding: '4px 12px', 
+                                        borderRadius: '20px' 
+                                    }}>
+                                        {cat.videos.length} {cat.videos.length === 1 ? 'Video' : 'Videos'}
+                                    </span>
+                                </div>
+
+                                {/* Category Videos Display */}
+                                {viewLayout === 'list' ? (
+                                    /* LIST MANNER DISPLAY */
+                                    <div className="video-list-container">
+                                        {cat.videos.map(video => renderVideoListItem(video))}
+                                    </div>
+                                ) : (
+                                    /* GRID MANNER DISPLAY */
+                                    <div className="video-grid">
+                                        {cat.videos.map(video => renderVideoCard(video))}
+                                    </div>
+                                )}
                             </div>
-                        ) : (
-                            /* GRID MANNER DISPLAY */
-                            <div className="video-grid">
-                                {filteredVideos.map(video => renderVideoCard(video))}
-                            </div>
-                        )
+                        ))
                     ) : (
                         <div className="glass-panel" style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)', borderRadius: '16px' }}>
                             <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔍</div>
