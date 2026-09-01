@@ -10,130 +10,17 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, onLearnMoreClick }) {
-    const categoryVideos = useMemo(() => {
-        if (!videos || videos.length === 0) return [];
-
-        const targetCat = categoryTitle.toLowerCase();
-        let matches = videos.filter(v => {
-            const cName = (v.category_name || '').toLowerCase();
-            return (cName.includes('surgical') && targetCat.includes('surgical')) ||
-                   (cName.includes('clinical') && targetCat.includes('clinical')) ||
-                   cName === targetCat || targetCat.includes(cName);
-        });
-
-        if (matches.length === 0) {
-            if (targetCat.includes('surgical')) {
-                matches = videos.filter(v => 
-                    (v.title || '').toLowerCase().includes('surgical') || 
-                    (v.description || '').toLowerCase().includes('surgical') ||
-                    (v.title || '').toLowerCase().includes('airplane') ||
-                    (v.title || '').toLowerCase().includes('molar')
-                );
-            } else {
-                matches = videos.filter(v => 
-                    (v.title || '').toLowerCase().includes('clinical') || 
-                    (v.description || '').toLowerCase().includes('clinical') ||
-                    (v.title || '').toLowerCase().includes('imperial') ||
-                    (v.title || '').toLowerCase().includes('lecture')
-                );
-            }
-        }
-
-        return matches.length > 0 ? matches : videos;
-    }, [videos, categoryTitle]);
-
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    useEffect(() => {
-        if (categoryVideos.length <= 1) return;
-        const interval = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % categoryVideos.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [categoryVideos]);
-
-    if (categoryVideos.length === 0) return null;
-
-    const currentVid = categoryVideos[currentIndex % categoryVideos.length];
-    const ytId = getYouTubeId(currentVid.video_path);
-
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <h3 className="category-column-title">{categoryTitle}</h3>
-
-            <div className="rolling-video-card" style={{ width: '100%', cursor: 'pointer' }} onClick={() => onVideoClick(currentVid)}>
-                {ytId ? (
-                    <img 
-                        src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
-                        alt={currentVid.title} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
-                    />
-                ) : (
-                    <div style={{ width: '100%', height: '100%', background: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', textAlign: 'center' }}>
-                        <span style={{ color: '#fff', fontSize: '15px', fontWeight: 'bold' }}>{currentVid.title}</span>
-                    </div>
-                )}
-
-                <div className="thumb-overlay">
-                    <div className="play-button-glow golden-play-button">
-                        <span className="play-icon">▶</span>
-                    </div>
-                    <span className="play-label" style={{ fontWeight: '800', letterSpacing: '0.5px', color: '#ffffff' }}>WATCH VIDEO</span>
-                </div>
-
-                <span className="video-duration" style={{ position: 'absolute', bottom: '12px', right: '12px', background: 'rgba(0,0,0,0.85)', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold', color: '#ffffff' }}>
-                    Preview
-                </span>
-            </div>
-
-            {categoryVideos.length > 1 && (
-                <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
-                    {categoryVideos.map((_, idx) => (
-                        <span 
-                            key={idx}
-                            onClick={() => setCurrentIndex(idx)}
-                            style={{
-                                width: idx === currentIndex ? '20px' : '8px',
-                                height: '8px',
-                                borderRadius: '4px',
-                                backgroundColor: idx === currentIndex ? '#0d9488' : 'rgba(15, 23, 42, 0.25)',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s ease'
-                            }}
-                        />
-                    ))}
-                </div>
-            )}
-
-            <div style={{ marginTop: '18px', textAlign: 'center' }}>
-                <button 
-                    onClick={() => onLearnMoreClick(currentVid)}
-                    className="learn-more-btn"
-                >
-                    <span>LEARN MORE</span>
-                    <svg className="cursor-hand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 11V3.5C7 2.67157 7.67157 2 8.5 2C9.32843 2 10 2.67157 10 3.5V11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M10 10.5V5.5C10 4.67157 10.6716 4 11.5 4C12.3284 4 13 4.67157 13 5.5V10.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M13 10.5V7.5C13 6.67157 13.6716 6 14.5 6C15.3284 6 16 6.67157 16 7.5V11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M16 11.5V10.5C16 9.67157 16.6716 9 17.5 9C18.3284 9 19 9.67157 19 10.5V16C19 19.3137 22 13 22H11C8.23858 22 6 19.7614 6 17V14.5C6 13.6716 6.67157 13 7.5 13C8.32843 13 9 13.6716 9 14.5V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    );
-}
-
 export default function Index({ categories = [], videos = [], settings = {} }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | null
     const [showScrollTop, setShowScrollTop] = useState(false);
-    const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-    // Filter states for Logged-In Category-based view
+    // Search and filter states
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
+    const [activeAccessFilter, setActiveAccessFilter] = useState('all'); // 'all' | 'free' | 'premium'
+    const [viewLayout, setViewLayout] = useState('list'); // Default to list manner
 
     const getSetting = (key, defaultValue = '') => {
         return (settings && settings[key]) ? settings[key] : defaultValue;
@@ -156,7 +43,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
     };
 
     const getDashboardRoute = () => {
-        if (!auth.user) return '#';
+        if (!auth || !auth.user) return '#';
         return auth.user.role === 'admin' ? route('admin.dashboard') : route('member.dashboard');
     };
 
@@ -168,18 +55,14 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
     };
 
     const handleVideoClick = (video) => {
-        setActiveVideo(video);
-    };
-
-    const handleLearnMoreClick = (video) => {
-        if (!auth.user) {
+        if (!video.is_free && (!auth || !auth.user)) {
             setAccessBlockedReason('unauthenticated');
         } else {
             setActiveVideo(video);
         }
     };
 
-    // Filter videos for logged-in category based view
+    // Filter videos based on search, category, and access status
     const filteredVideos = useMemo(() => {
         return (videos || []).filter(vid => {
             const query = (searchTerm || '').toLowerCase();
@@ -191,39 +74,163 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                 activeCategoryFilter === 'all' || 
                 (vid.category_id && vid.category_id.toString() === activeCategoryFilter.toString());
 
-            return matchesSearch && matchesCategory;
+            const isFree = Boolean(vid.is_free);
+            const matchesAccess = 
+                activeAccessFilter === 'all' ||
+                (activeAccessFilter === 'free' && isFree) ||
+                (activeAccessFilter === 'premium' && !isFree);
+
+            return matchesSearch && matchesCategory && matchesAccess;
         });
-    }, [videos, searchTerm, activeCategoryFilter]);
+    }, [videos, searchTerm, activeCategoryFilter, activeAccessFilter]);
 
-    // Group filtered videos by category for logged-in view
-    const groupedCategories = useMemo(() => {
-        if (categories && categories.length > 0) {
-            return categories.map(cat => {
-                const catVideos = filteredVideos.filter(v => v.category_id === cat.id);
-                return {
-                    ...cat,
-                    videos: catVideos
-                };
-            }).filter(cat => activeCategoryFilter === 'all' ? cat.videos.length > 0 : cat.id.toString() === activeCategoryFilter.toString());
-        }
-
-        // Fallback grouping by category_name property if categories prop is empty
-        const groups = {};
-        filteredVideos.forEach(v => {
-            const catName = v.category_name || 'General Masterclasses';
-            if (!groups[catName]) {
-                groups[catName] = { id: v.category_id || catName, name: catName, videos: [] };
-            }
-            groups[catName].videos.push(v);
-        });
-        return Object.values(groups);
-    }, [categories, filteredVideos, activeCategoryFilter]);
-
-    const renderVideoCard = (video) => {
+    // Render Video Item in List Manner
+    const renderVideoListItem = (video) => {
         const ytId = getYouTubeId(video.video_path);
+        const isFree = Boolean(video.is_free);
 
         return (
-            <div key={video.id} className="glass-panel video-card colorful-video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div 
+                key={video.id} 
+                className="glass-panel video-list-item"
+                style={{
+                    display: 'flex',
+                    gap: '20px',
+                    padding: '18px',
+                    borderRadius: '16px',
+                    alignItems: 'center',
+                    transition: 'all 0.3s ease',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginBottom: '14px'
+                }}
+            >
+                {/* Preview / Thumbnail */}
+                <div 
+                    onClick={() => handleVideoClick(video)}
+                    style={{
+                        flexShrink: 0,
+                        width: '240px',
+                        aspectRatio: '16/9',
+                        backgroundColor: '#0a1215',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        position: 'relative',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)'
+                    }}
+                    className="video-thumbnail-list free-video-thumb"
+                >
+                    {ytId ? (
+                        <img 
+                            src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
+                            alt={video.title} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
+                        />
+                    ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '13px', padding: '10px', textAlign: 'center' }}>
+                            {video.title}
+                        </div>
+                    )}
+
+                    <div className="thumb-overlay" style={{ borderRadius: '12px' }}>
+                        <div className="play-button-glow golden-play-button" style={{ width: '42px', height: '42px', fontSize: '16px' }}>
+                            <span className="play-icon">▶</span>
+                        </div>
+                    </div>
+
+                    <span className="video-duration" style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.85)', padding: '3px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>
+                        {formatDuration(video.duration)}
+                    </span>
+                </div>
+
+                {/* Content Info (Category Tag, Free/Premium, Title, Short Description) */}
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {/* Free / Premium Badge */}
+                        {isFree ? (
+                            <span className="video-badge-free">
+                                🔓 FREE
+                            </span>
+                        ) : (
+                            <span className="video-badge-premium">
+                                👑 PREMIUM
+                            </span>
+                        )}
+
+                        {/* Category Tag */}
+                        <span style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                            color: 'var(--text-muted)',
+                            padding: '3px 10px',
+                            borderRadius: '20px',
+                            fontSize: '11px',
+                            fontWeight: '600'
+                        }}>
+                            📁 {video.category_name || 'General'}
+                        </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 
+                        onClick={() => handleVideoClick(video)}
+                        className="video-list-title"
+                        style={{ 
+                            fontSize: '17px', 
+                            fontWeight: '700', 
+                            cursor: 'pointer', 
+                            margin: 0,
+                            lineHeight: '1.3'
+                        }}
+                    >
+                        {video.title}
+                    </h3>
+
+                    {/* Short Description */}
+                    <p style={{ 
+                        fontSize: '13px', 
+                        color: 'var(--text-muted)', 
+                        margin: 0,
+                        lineHeight: '1.5',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                    }}>
+                        {video.description || 'No detailed description available.'}
+                    </p>
+                </div>
+
+                {/* Watch Action Button */}
+                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }} className="video-list-action">
+                    <button 
+                        onClick={() => handleVideoClick(video)}
+                        className={`btn ${isFree ? 'btn-primary' : 'btn-secondary btn-gold-glow'}`}
+                        style={{ 
+                            padding: '10px 18px', 
+                            fontSize: '13px', 
+                            fontWeight: '700',
+                            borderRadius: '10px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+                        {isFree ? '▶ Watch Free Video' : '🔒 Watch Premium Video'}
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    // Render Video Card in Grid Manner
+    const renderVideoCard = (video) => {
+        const ytId = getYouTubeId(video.video_path);
+        const isFree = Boolean(video.is_free);
+
+        return (
+            <div key={video.id} className="glass-panel video-card colorful-video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: '16px', overflow: 'hidden' }}>
                 <div 
                     onClick={() => handleVideoClick(video)}
                     style={{ 
@@ -263,13 +270,22 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                             <span className="video-tag badge-tag-glow" style={{ fontSize: '11px', fontWeight: 'bold' }}>
-                                {video.category_name || 'Masterclass'}
+                                📁 {video.category_name || 'Masterclass'}
                             </span>
+                            {isFree ? (
+                                <span className="video-badge-free">
+                                    🔓 FREE
+                                </span>
+                            ) : (
+                                <span className="video-badge-premium">
+                                    👑 PREMIUM
+                                </span>
+                            )}
                         </div>
 
                         <h4 
                             onClick={() => handleVideoClick(video)}
-                            style={{ fontSize: '16px', fontWeight: '700', cursor: 'pointer', margin: '5px 0' }}
+                            style={{ fontSize: '16px', fontWeight: '700', cursor: 'pointer', margin: '5px 0', lineHeight: '1.3' }}
                         >
                             {video.title}
                         </h4>
@@ -280,10 +296,10 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
 
                     <button 
                         onClick={() => handleVideoClick(video)}
-                        className="btn btn-primary"
-                        style={{ width: '100%', fontSize: '13px', padding: '8px 12px' }}
+                        className={`btn ${isFree ? 'btn-primary' : 'btn-secondary btn-gold-glow'}`}
+                        style={{ width: '100%', fontSize: '13px', padding: '8px 12px', fontWeight: '700' }}
                     >
-                        ▶ Watch Video
+                        {isFree ? '▶ Watch Free Video' : '🔒 Watch Premium Video'}
                     </button>
                 </div>
             </div>
@@ -304,124 +320,143 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
             <PublicNavbar activePage="archive" />
 
             {/* Main Content Area */}
-            <main className="landing-section" style={{ paddingTop: '40px', paddingBottom: '30px', flex: '1 0 auto' }}>
+            <main className="landing-section" style={{ paddingTop: '40px', paddingBottom: '40px', flex: '1 0 auto' }}>
                 <div className="landing-section-container">
                     
-                    {/* UNAUTHENTICATED VIEW: Same 2-Column Auto Rolling Carousel Layout as Home */}
-                    {!auth.user ? (
-                        <div>
-                            {/* Top Archive Pill Button */}
-                            <div className="video-archive-pill-wrapper">
-                                <Link href={route('videos.public')} className="archive-pill-btn">
-                                    archive
-                                </Link>
-                            </div>
+                    {/* Page Section Header */}
+                    <div className="landing-section-header" style={{ marginBottom: '28px', textAlign: 'center' }}>
+                        <div className="video-archive-pill-wrapper" style={{ marginBottom: '10px' }}>
+                            <Link href={route('videos.public')} className="archive-pill-btn">
+                                Clinical Archive
+                            </Link>
+                        </div>
+                        <h1 className="landing-section-title video-masterclasses-title" style={{ fontSize: '2.2rem', marginBottom: '8px' }}>
+                            Clinical Videos & Masterclasses
+                        </h1>
+                        <p className="landing-section-subtitle video-masterclasses-subtitle" style={{ maxWidth: '650px', margin: '0 auto' }}>
+                            Explore surgical guides, clinical lectures, and practical tips & tricks for BDS practitioners.
+                        </p>
+                    </div>
 
-                            {/* Section Header */}
-                            <div className="landing-section-header" style={{ marginBottom: '16px' }}>
-                                <h2 className="landing-section-title video-masterclasses-title">Video Masterclasses</h2>
-                                <p className="landing-section-subtitle video-masterclasses-subtitle">
-                                    Explore clinical guides, surgical techniques, and practical tips& tricks
-                                </p>
-                            </div>
+                    {/* Search, Filter & Layout Toolbar */}
+                    <div className="glass-panel" style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', flexWrap: 'wrap', marginBottom: '24px', borderRadius: '16px' }}>
+                        {/* Search Bar */}
+                        <div style={{ flex: '1 1 260px', minWidth: '220px' }}>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="🔍 Search by title or keyword..."
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                                style={{ width: '100%' }}
+                            />
+                        </div>
 
-                            {/* Two Categories Side-by-Side Grid */}
-                            <div className="masterclasses-two-column-grid">
-                                {/* Category 1 Column */}
-                                <CategoryAutoRollingColumn 
-                                    categoryTitle="Surgical approaches" 
-                                    videos={videos} 
-                                    onVideoClick={handleVideoClick} 
-                                    onLearnMoreClick={handleLearnMoreClick}
-                                />
+                        {/* Access Filter Pills (All / Free / Premium) */}
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <button
+                                type="button"
+                                onClick={() => setActiveAccessFilter('all')}
+                                className={`btn ${activeAccessFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
+                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
+                            >
+                                All Access
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setActiveAccessFilter('free')}
+                                className={`btn ${activeAccessFilter === 'free' ? 'btn-primary' : 'btn-outline'}`}
+                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
+                            >
+                                🔓 Free Only
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setActiveAccessFilter('premium')}
+                                className={`btn ${activeAccessFilter === 'premium' ? 'btn-secondary btn-gold-glow' : 'btn-outline'}`}
+                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
+                            >
+                                👑 Premium Only
+                            </button>
+                        </div>
 
-                                {/* Category 2 Column */}
-                                <CategoryAutoRollingColumn 
-                                    categoryTitle="Clinical lecture/ tips tricks" 
-                                    videos={videos} 
-                                    onVideoClick={handleVideoClick} 
-                                    onLearnMoreClick={handleLearnMoreClick}
-                                />
+                        {/* Category Filter Pills */}
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <button
+                                type="button"
+                                onClick={() => setActiveCategoryFilter('all')}
+                                className={`btn ${activeCategoryFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
+                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
+                            >
+                                All Categories
+                            </button>
+                            {(categories || []).map(cat => (
+                                <button
+                                    key={cat.id}
+                                    type="button"
+                                    onClick={() => setActiveCategoryFilter(cat.id.toString())}
+                                    className={`btn ${activeCategoryFilter.toString() === cat.id.toString() ? 'btn-primary' : 'btn-outline'}`}
+                                    style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
+                                >
+                                    📁 {cat.name}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* View Manner Switcher & Results Count */}
+                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginLeft: 'auto' }}>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)' }}>
+                                {filteredVideos.length} Videos
+                            </span>
+
+                            <div style={{ display: 'flex', gap: '4px', backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px', borderRadius: '8px' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setViewLayout('list')}
+                                    className={`btn ${viewLayout === 'list' ? 'btn-primary' : 'btn-outline'}`}
+                                    style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
+                                    title="List View"
+                                >
+                                    ☰ List
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setViewLayout('grid')}
+                                    className={`btn ${viewLayout === 'grid' ? 'btn-primary' : 'btn-outline'}`}
+                                    style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
+                                    title="Grid View"
+                                >
+                                    ⣿ Grid
+                                </button>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Main Videos Container */}
+                    {filteredVideos.length > 0 ? (
+                        viewLayout === 'list' ? (
+                            /* LIST MANNER DISPLAY */
+                            <div className="video-list-container">
+                                {filteredVideos.map(video => renderVideoListItem(video))}
+                            </div>
+                        ) : (
+                            /* GRID MANNER DISPLAY */
+                            <div className="video-grid">
+                                {filteredVideos.map(video => renderVideoCard(video))}
+                            </div>
+                        )
                     ) : (
-                        /* LOGGED IN VIEW: Category-Based Full Video Library */
-                        <div>
-                            <div className="landing-section-header" style={{ marginBottom: '24px' }}>
-                                <h1 className="landing-section-title video-masterclasses-title">Clinical Video Library</h1>
-                                <p className="landing-section-subtitle video-masterclasses-subtitle">
-                                    Browse clinical guides, surgical approaches, and practical tips & tricks grouped by category.
-                                </p>
-                            </div>
-
-                            {/* Search and Category Filter Bar */}
-                            <div className="glass-panel" style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', flexWrap: 'wrap', marginBottom: '28px' }}>
-                                <div style={{ display: 'flex', gap: '12px', flexGrow: 1, maxWidth: '650px', flexWrap: 'wrap', alignItems: 'center' }}>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Search video by title or description..."
-                                        value={searchTerm}
-                                        onChange={e => setSearchTerm(e.target.value)}
-                                        style={{ flex: '1 1 220px' }}
-                                    />
-                                    
-                                    {/* Category Filter Pills */}
-                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                        <button
-                                            type="button"
-                                            onClick={() => setActiveCategoryFilter('all')}
-                                            className={`btn ${activeCategoryFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                                            style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '20px' }}
-                                        >
-                                            All Categories
-                                        </button>
-                                        {(categories || []).map(cat => (
-                                            <button
-                                                key={cat.id}
-                                                type="button"
-                                                onClick={() => setActiveCategoryFilter(cat.id.toString())}
-                                                className={`btn ${activeCategoryFilter.toString() === cat.id.toString() ? 'btn-primary' : 'btn-outline'}`}
-                                                style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '20px' }}
-                                            >
-                                                📁 {cat.name}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                                    {filteredVideos.length} Videos Available
-                                </div>
-                            </div>
-
-                            {/* Videos Grouped By Category */}
-                            {groupedCategories.length > 0 ? (
-                                groupedCategories.map(cat => (
-                                    <div key={cat.id} style={{ marginBottom: '40px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px', borderBottom: '2px solid var(--border-color)', paddingBottom: '10px' }}>
-                                            <span style={{ fontSize: '20px' }}>📁</span>
-                                            <div>
-                                                <h3 style={{ margin: 0, fontSize: '1.3rem', color: 'var(--accent-teal)' }}>
-                                                    {cat.name}
-                                                </h3>
-                                                {cat.description && (
-                                                    <p style={{ margin: '2px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                                                        {cat.description}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <div className="video-grid">
-                                            {cat.videos.map(video => renderVideoCard(video))}
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="glass-panel" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
-                                    No videos found matching your search or category filter.
-                                </div>
-                            )}
+                        <div className="glass-panel" style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)', borderRadius: '16px' }}>
+                            <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔍</div>
+                            <h3 style={{ fontSize: '18px', marginBottom: '6px' }}>No videos found</h3>
+                            <p style={{ fontSize: '14px', margin: 0 }}>Try clearing your search query or choosing another category/access filter.</p>
+                            <button 
+                                onClick={() => { setSearchTerm(''); setActiveCategoryFilter('all'); setActiveAccessFilter('all'); }} 
+                                className="btn btn-outline" 
+                                style={{ marginTop: '16px', fontSize: '13px' }}
+                            >
+                                Reset Filters
+                            </button>
                         </div>
                     )}
 
@@ -483,7 +518,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         </h3>
                         
                         <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '28px', maxWidth: '420px', margin: '0 auto 28px' }}>
-                            Clinical video masterclasses are strictly reserved for verified BDS Practitioners. Please register or login to your account to watch.
+                            Premium clinical video masterclasses are strictly reserved for verified BDS Practitioners. Please register or login to your account to watch.
                         </p>
                         
                         <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -533,7 +568,14 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                 <div className="modal-wrapper" onClick={() => setActiveVideo(null)}>
                     <div className="glass-panel modal-card modal-card-colorful" style={{ maxWidth: '800px', width: '90%', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
                         <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', backgroundColor: '#0f172a' }}>
-                            <h3 style={{ margin: 0, color: '#fff', fontSize: '18px' }}>🎥 {activeVideo.title}</h3>
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <h3 style={{ margin: 0, color: '#fff', fontSize: '18px' }}>🎥 {activeVideo.title}</h3>
+                                {activeVideo.is_free ? (
+                                    <span className="video-badge-free">🔓 FREE</span>
+                                ) : (
+                                    <span className="video-badge-premium">👑 PREMIUM</span>
+                                )}
+                            </div>
                             <button onClick={() => setActiveVideo(null)} className="btn btn-outline" style={{ padding: '4px 10px', color: '#fff' }}>
                                 Close ✕
                             </button>
@@ -580,7 +622,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                             Join hundreds of BDS Doctors using {site_name || 'DentistChamber'} for transparent referral tracking, clinical video masterclasses, and verified digital certificates.
                         </p>
                         <div className="cta-buttons">
-                            {auth.user ? (
+                            {auth && auth.user ? (
                                 <Link href={getDashboardRoute()} className="btn btn-secondary hero-btn btn-gold-glow">
                                     Open Your Dashboard
                                 </Link>
