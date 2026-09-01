@@ -653,24 +653,55 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
     .video-list-item {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 14px;
-        padding: 14px;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        padding: 12px !important;
+        border-radius: 12px !important;
     }
     
     .video-thumbnail-list {
-        width: 100% !important;
+        width: 130px !important;
+        flex-shrink: 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .video-list-title {
+        font-size: 14px !important;
+        line-height: 1.3 !important;
+    }
+
+    .video-badge-free, .video-badge-premium {
+        font-size: 9px !important;
+        padding: 2px 7px !important;
     }
 
     .video-list-action {
-        width: 100%;
-        justify-content: stretch !important;
+        width: auto !important;
+        margin-top: 4px !important;
+        justify-content: flex-start !important;
     }
 
     .video-list-action .btn {
-        width: 100%;
-        justify-content: center;
+        width: auto !important;
+        padding: 6px 12px !important;
+        font-size: 11px !important;
+        border-radius: 6px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-list-item {
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .video-thumbnail-list {
+        width: 110px !important;
+    }
+
+    .video-list-title {
+        font-size: 13px !important;
     }
 }
 
