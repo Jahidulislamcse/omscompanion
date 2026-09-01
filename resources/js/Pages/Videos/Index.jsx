@@ -168,20 +168,9 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     </span>
                 </div>
 
-                {/* Content Info (Free/Premium Badge, Category Tag, Title, Short Description) */}
+                {/* Content Info (Category Tag, Title, Short Description) */}
                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                        {/* Free / Premium Badge */}
-                        {isFree ? (
-                            <span className="video-badge-free">
-                                🔓 FREE
-                            </span>
-                        ) : (
-                            <span className="video-badge-premium">
-                                👑 PREMIUM
-                            </span>
-                        )}
-
                         {/* Category Tag */}
                         <span style={{
                             backgroundColor: 'rgba(255, 255, 255, 0.08)',
@@ -221,6 +210,19 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     }}>
                         {video.description || 'No detailed description available.'}
                     </p>
+                </div>
+
+                {/* Right Side: Free / Premium Tag */}
+                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }} className="video-list-action">
+                    {isFree ? (
+                        <span className="video-badge-free" style={{ padding: '6px 16px', fontSize: '12px' }}>
+                            🔓 FREE
+                        </span>
+                    ) : (
+                        <span className="video-badge-premium" style={{ padding: '6px 16px', fontSize: '12px' }}>
+                            👑 PREMIUM
+                        </span>
+                    )}
                 </div>
             </div>
         );
