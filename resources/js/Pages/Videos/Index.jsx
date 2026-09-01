@@ -171,17 +171,6 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                 {/* Content Info (Category Tag, Free/Premium, Title, Short Description) */}
                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                        {/* Free / Premium Badge */}
-                        {isFree ? (
-                            <span className="video-badge-free">
-                                🔓 FREE
-                            </span>
-                        ) : (
-                            <span className="video-badge-premium">
-                                👑 PREMIUM
-                            </span>
-                        )}
-
                         {/* Category Tag */}
                         <span style={{
                             backgroundColor: 'rgba(255, 255, 255, 0.08)',
@@ -296,15 +285,6 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                             <span className="video-tag badge-tag-glow" style={{ fontSize: '11px', fontWeight: 'bold' }}>
                                 📁 {video.category_name || 'Masterclass'}
                             </span>
-                            {isFree ? (
-                                <span className="video-badge-free">
-                                    🔓 FREE
-                                </span>
-                            ) : (
-                                <span className="video-badge-premium">
-                                    👑 PREMIUM
-                                </span>
-                            )}
                         </div>
 
                         <h4 
