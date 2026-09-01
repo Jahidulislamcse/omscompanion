@@ -117,6 +117,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
             <div 
                 key={video.id} 
                 className="glass-panel video-list-item"
+                onClick={() => handleVideoClick(video)}
                 style={{
                     display: 'flex',
                     gap: '20px',
@@ -126,12 +127,12 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     transition: 'all 0.3s ease',
                     position: 'relative',
                     overflow: 'hidden',
-                    marginBottom: '14px'
+                    marginBottom: '14px',
+                    cursor: 'pointer'
                 }}
             >
                 {/* Preview / Thumbnail */}
                 <div 
-                    onClick={() => handleVideoClick(video)}
                     style={{
                         flexShrink: 0,
                         width: '240px',
@@ -140,7 +141,6 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         borderRadius: '12px',
                         overflow: 'hidden',
                         position: 'relative',
-                        cursor: 'pointer',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)'
                     }}
                     className="video-thumbnail-list free-video-thumb"
@@ -168,9 +168,20 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     </span>
                 </div>
 
-                {/* Content Info (Category Tag, Free/Premium, Title, Short Description) */}
+                {/* Content Info (Free/Premium Badge, Category Tag, Title, Short Description) */}
                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {/* Free / Premium Badge */}
+                        {isFree ? (
+                            <span className="video-badge-free">
+                                🔓 FREE
+                            </span>
+                        ) : (
+                            <span className="video-badge-premium">
+                                👑 PREMIUM
+                            </span>
+                        )}
+
                         {/* Category Tag */}
                         <span style={{
                             backgroundColor: 'rgba(255, 255, 255, 0.08)',
@@ -186,12 +197,10 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
 
                     {/* Title */}
                     <h3 
-                        onClick={() => handleVideoClick(video)}
                         className="video-list-title"
                         style={{ 
                             fontSize: '17px', 
                             fontWeight: '700', 
-                            cursor: 'pointer', 
                             margin: 0,
                             lineHeight: '1.3'
                         }}
@@ -213,26 +222,6 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         {video.description || 'No detailed description available.'}
                     </p>
                 </div>
-
-                {/* Watch Action Button */}
-                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }} className="video-list-action">
-                    <button 
-                        onClick={() => handleVideoClick(video)}
-                        className={`btn ${isFree ? 'btn-primary' : 'btn-secondary btn-gold-glow'}`}
-                        style={{ 
-                            padding: '10px 18px', 
-                            fontSize: '13px', 
-                            fontWeight: '700',
-                            borderRadius: '10px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            whiteSpace: 'nowrap'
-                        }}
-                    >
-                        {isFree ? '▶ Watch Free Video' : '🔒 Watch Premium Video'}
-                    </button>
-                </div>
             </div>
         );
     };
@@ -243,9 +232,13 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
         const isFree = Boolean(video.is_free);
 
         return (
-            <div key={video.id} className="glass-panel video-card colorful-video-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: '16px', overflow: 'hidden' }}>
+            <div 
+                key={video.id} 
+                onClick={() => handleVideoClick(video)}
+                className="glass-panel video-card colorful-video-card" 
+                style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: '16px', overflow: 'hidden', cursor: 'pointer' }}
+            >
                 <div 
-                    onClick={() => handleVideoClick(video)}
                     style={{ 
                         width: '100%', 
                         aspectRatio: '16/9', 
@@ -254,7 +247,6 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         flexDirection: 'column',
                         alignItems: 'center', 
                         justifyContent: 'center', 
-                        cursor: 'pointer',
                         position: 'relative',
                         overflow: 'hidden'
                     }}
@@ -285,26 +277,26 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                             <span className="video-tag badge-tag-glow" style={{ fontSize: '11px', fontWeight: 'bold' }}>
                                 📁 {video.category_name || 'Masterclass'}
                             </span>
+                            {isFree ? (
+                                <span className="video-badge-free">
+                                    🔓 FREE
+                                </span>
+                            ) : (
+                                <span className="video-badge-premium">
+                                    👑 PREMIUM
+                                </span>
+                            )}
                         </div>
 
                         <h4 
-                            onClick={() => handleVideoClick(video)}
-                            style={{ fontSize: '16px', fontWeight: '700', cursor: 'pointer', margin: '5px 0', lineHeight: '1.3' }}
+                            style={{ fontSize: '16px', fontWeight: '700', margin: '5px 0', lineHeight: '1.3' }}
                         >
                             {video.title}
                         </h4>
-                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', margin: '4px 0 12px' }}>
+                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', margin: '4px 0 0' }}>
                             {video.description || 'No description available.'}
                         </p>
                     </div>
-
-                    <button 
-                        onClick={() => handleVideoClick(video)}
-                        className={`btn ${isFree ? 'btn-primary' : 'btn-secondary btn-gold-glow'}`}
-                        style={{ width: '100%', fontSize: '13px', padding: '8px 12px', fontWeight: '700' }}
-                    >
-                        {isFree ? '▶ Watch Free Video' : '🔒 Watch Premium Video'}
-                    </button>
                 </div>
             </div>
         );
