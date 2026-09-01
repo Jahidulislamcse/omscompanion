@@ -311,7 +311,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                 Clinical Archive
                             </Link>
                         </div>
-                        <h1 className="landing-section-title video-masterclasses-title" style={{ fontSize: '2.2rem', marginBottom: '8px' }}>
+                        <h1 className="landing-section-title video-masterclasses-title" style={{ marginBottom: '8px' }}>
                             Clinical Videos & Masterclasses
                         </h1>
                         <p className="landing-section-subtitle video-masterclasses-subtitle" style={{ maxWidth: '650px', margin: '0 auto' }}>
@@ -441,11 +441,11 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                             📁
                                         </div>
                                         <div>
-                                            <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: '700', color: 'var(--accent-teal)' }}>
+                                            <h2 className="category-section-title" style={{ margin: 0, fontWeight: '700', color: 'var(--accent-teal)' }}>
                                                 {cat.name}
                                             </h2>
                                             {cat.description && (
-                                                <p style={{ margin: '2px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                                                <p className="category-section-desc" style={{ margin: '2px 0 0', color: 'var(--text-muted)' }}>
                                                     {cat.description}
                                                 </p>
                                             )}
