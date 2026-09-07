@@ -568,7 +568,7 @@ export default function Welcome({ settings, freeVideos }) {
                             <div>
                                 <div className="benefit-card-header">
                                     <div className="benefit-icon-wrapper">🤝</div>
-                                    <span className="benefit-tag">Multidisciplinary</span>
+                                    <span className="benefit-tag">Multidisciplinary Team</span>
                                 </div>
                                 <h3 className="benefit-title">Participate in Maxillofacial surgery cases as a team</h3>
                             </div>

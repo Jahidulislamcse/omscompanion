@@ -2976,12 +2976,19 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     overflow: hidden;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .benefit-card {
     background: var(--bg-card);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .benefit-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
 }
 
 .benefit-card-header {
@@ -2992,14 +2999,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .benefit-icon-wrapper {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    box-shadow: var(--shadow-sm);
+    font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: var(--transition-smooth);
 }
 
@@ -3009,24 +3016,30 @@ h1, h2, h3, h4, h5, h6 {
 
 .benefit-tag {
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 4px 10px;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
     border-radius: 999px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 .benefit-title {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 800;
-    color: var(--text-main);
+    color: #0f172a;
     margin-bottom: 8px;
     line-height: 1.35;
+    letter-spacing: -0.2px;
+}
+
+[data-theme="dark"] .benefit-title {
+    color: #f8fafc;
 }
 
 .benefit-desc {
     font-size: 14px;
-    color: var(--text-muted);
+    color: #475569;
     line-height: 1.6;
     margin-bottom: 24px;
 }
@@ -3038,9 +3051,9 @@ h1, h2, h3, h4, h5, h6 {
     gap: 8px;
     width: 100%;
     padding: 12px 18px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 700;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
     font-family: var(--font-primary);
     transition: all 0.25s ease;
     text-align: center;
@@ -3053,94 +3066,100 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-2px);
 }
 
-/* Color Variant Glow Themes */
+/* Color Variant Glow Themes with Enhanced Contrast & Icons */
 .card-glow-cyan {
-    border-top: 4px solid #06b6d4;
+    border-top: 4px solid #0891b2;
 }
 .card-glow-cyan .benefit-icon-wrapper {
-    background: rgba(6, 182, 212, 0.12);
-    color: #06b6d4;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    border: 1.5px solid #38bdf8;
 }
 .card-glow-cyan .benefit-tag {
-    background: rgba(6, 182, 212, 0.1);
-    color: #0284c7;
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #7dd3fc;
 }
 
 .card-glow-emerald {
-    border-top: 4px solid #10b981;
+    border-top: 4px solid #059669;
 }
 .card-glow-emerald .benefit-icon-wrapper {
-    background: rgba(16, 185, 129, 0.12);
-    color: #10b981;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border: 1.5px solid #4ade80;
 }
 .card-glow-emerald .benefit-tag {
-    background: rgba(16, 185, 129, 0.1);
-    color: #059669;
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
 }
 
 .card-glow-gold {
-    border-top: 4px solid #25D366;
+    border-top: 4px solid #16a34a;
 }
 .card-glow-gold .benefit-icon-wrapper {
-    background: rgba(37, 211, 102, 0.12);
-    color: #25D366;
+    background: linear-gradient(135deg, #dcfce7 0%, #86efac 100%);
+    border: 1.5px solid #22c55e;
 }
 .card-glow-gold .benefit-tag {
-    background: rgba(37, 211, 102, 0.1);
-    color: #16a34a;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #4ade80;
 }
 .btn-whatsapp {
-    background: linear-gradient(135deg, #25D366, #128C7E);
+    background: linear-gradient(135deg, #16a34a, #059669);
     color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.4);
 }
 .btn-whatsapp:hover {
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.6);
 }
 
 .card-glow-indigo {
-    border-top: 4px solid #6366f1;
+    border-top: 4px solid #4f46e5;
 }
 .card-glow-indigo .benefit-icon-wrapper {
-    background: rgba(99, 102, 241, 0.12);
-    color: #6366f1;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    border: 1.5px solid #818cf8;
 }
 .card-glow-indigo .benefit-tag {
-    background: rgba(99, 102, 241, 0.1);
-    color: #4f46e5;
+    background: #e0e7ff;
+    color: #3730a3;
+    border: 1px solid #a5b4fc;
 }
 
 .card-glow-rose {
-    border-top: 4px solid #f43f5e;
+    border-top: 4px solid #e11d48;
 }
 .card-glow-rose .benefit-icon-wrapper {
-    background: rgba(244, 63, 94, 0.12);
-    color: #f43f5e;
+    background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    border: 1.5px solid #fb7185;
 }
 .card-glow-rose .benefit-tag {
-    background: rgba(244, 63, 94, 0.1);
-    color: #e11d48;
+    background: #ffe4e6;
+    color: #9f1239;
+    border: 1px solid #fda4af;
 }
 .btn-rose-glow {
-    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    background: linear-gradient(135deg, #e11d48, #be123c);
     color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4);
 }
 .btn-rose-glow:hover {
-    box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
+    box-shadow: 0 6px 20px rgba(225, 29, 72, 0.6);
     transform: translateY(-2px);
 }
 
 .card-glow-amber {
-    border-top: 4px solid #f59e0b;
+    border-top: 4px solid #d97706;
 }
 .card-glow-amber .benefit-icon-wrapper {
-    background: rgba(245, 158, 11, 0.12);
-    color: #f59e0b;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1.5px solid #fbbf24;
 }
 .card-glow-amber .benefit-tag {
-    background: rgba(245, 158, 11, 0.1);
-    color: #d97706;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde047;
 }
 
 /* News Section Cards */
