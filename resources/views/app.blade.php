@@ -16,8 +16,8 @@
         <!-- Schema.org JSON-LD Structured Data for Google Search -->
         <script type="application/ld+json">
         {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
+          "@@context": "https://schema.org",
+          "@@type": "WebSite",
           "name": "omscompanion.com",
           "alternateName": "oms clinical hub & patient management platform",
           "url": "https://www.omscompanion.com/",
