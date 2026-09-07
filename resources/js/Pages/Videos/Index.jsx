@@ -84,14 +84,16 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
         });
     }, [videos, searchTerm, activeCategoryFilter, activeAccessFilter]);
 
-    // Group filtered videos by category into separate sections
+    // Group filtered videos by category into separate sections (Free videos first, then Premium)
     const groupedCategories = useMemo(() => {
         if (categories && categories.length > 0) {
             return categories.map(cat => {
                 const catVideos = filteredVideos.filter(v => v.category_id === cat.id);
+                // Sort videos: free videos first, then premium
+                const sortedVideos = [...catVideos].sort((a, b) => (b.is_free ? 1 : 0) - (a.is_free ? 1 : 0));
                 return {
                     ...cat,
-                    videos: catVideos
+                    videos: sortedVideos
                 };
             }).filter(cat => activeCategoryFilter === 'all' ? cat.videos.length > 0 : cat.id.toString() === activeCategoryFilter.toString());
         }
@@ -105,7 +107,11 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
             }
             groups[catName].videos.push(v);
         });
-        return Object.values(groups);
+
+        return Object.values(groups).map(cat => ({
+            ...cat,
+            videos: [...cat.videos].sort((a, b) => (b.is_free ? 1 : 0) - (a.is_free ? 1 : 0))
+        }));
     }, [categories, filteredVideos, activeCategoryFilter]);
 
     // Render Video Item in List Manner
@@ -120,28 +126,28 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                 onClick={() => handleVideoClick(video)}
                 style={{
                     display: 'flex',
-                    gap: '20px',
-                    padding: '18px',
-                    borderRadius: '16px',
+                    gap: '14px',
+                    padding: '10px 14px',
+                    borderRadius: '12px',
                     alignItems: 'center',
                     transition: 'all 0.3s ease',
                     position: 'relative',
                     overflow: 'hidden',
-                    marginBottom: '14px',
+                    marginBottom: '10px',
                     cursor: 'pointer'
                 }}
             >
-                {/* Preview / Thumbnail */}
+                {/* Reduced Preview / Thumbnail */}
                 <div 
                     style={{
                         flexShrink: 0,
-                        width: '180px',
+                        width: '120px',
                         aspectRatio: '16/9',
                         backgroundColor: '#0a1215',
-                        borderRadius: '12px',
+                        borderRadius: '8px',
                         overflow: 'hidden',
                         position: 'relative',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)'
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)'
                     }}
                     className="video-thumbnail-list free-video-thumb"
                 >
@@ -152,29 +158,29 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                             style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
                         />
                     ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '13px', padding: '10px', textAlign: 'center' }}>
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '10px', padding: '4px', textAlign: 'center' }}>
                             {video.title}
                         </div>
                     )}
 
-                    <div className="thumb-overlay" style={{ borderRadius: '12px' }}>
-                        <div className="play-button-glow golden-play-button" style={{ width: '42px', height: '42px', fontSize: '16px' }}>
-                            <span className="play-icon">▶</span>
+                    <div className="thumb-overlay" style={{ borderRadius: '8px' }}>
+                        <div className="play-button-glow golden-play-button" style={{ width: '30px', height: '30px' }}>
+                            <span className="play-icon" style={{ fontSize: '12px' }}>▶</span>
                         </div>
                     </div>
 
-                    <span className="video-duration" style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.85)', padding: '3px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>
+                    <span className="video-duration" style={{ position: 'absolute', bottom: '4px', right: '4px', background: 'rgba(0,0,0,0.85)', padding: '2px 5px', borderRadius: '4px', fontSize: '10px', fontWeight: '700', color: '#ffffff' }}>
                         {formatDuration(video.duration)}
                     </span>
                 </div>
 
                 {/* Content Info (Title, Short Description) */}
-                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px', justifyContent: 'center' }}>
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '4px', justifyContent: 'center' }}>
                     {/* Title */}
                     <h3 
                         className="video-list-title"
                         style={{ 
-                            fontSize: '17px', 
+                            fontSize: '14px', 
                             fontWeight: '700', 
                             margin: 0,
                             lineHeight: '1.3'
@@ -185,10 +191,10 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
 
                     {/* Short Description */}
                     <p style={{ 
-                        fontSize: '13px', 
+                        fontSize: '12px', 
                         color: 'var(--text-muted)', 
                         margin: 0,
-                        lineHeight: '1.5',
+                        lineHeight: '1.4',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
@@ -201,11 +207,11 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                 {/* Right Side: Free / Premium Tag */}
                 <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }} className="video-list-action">
                     {isFree ? (
-                        <span className="video-badge-free" style={{ padding: '6px 16px', fontSize: '12px' }}>
+                        <span className="video-badge-free" style={{ padding: '4px 10px', fontSize: '11px' }}>
                             🔓 FREE
                         </span>
                     ) : (
-                        <span className="video-badge-premium" style={{ padding: '6px 16px', fontSize: '12px' }}>
+                        <span className="video-badge-premium" style={{ padding: '4px 10px', fontSize: '11px' }}>
                             👑 PREMIUM
                         </span>
                     )}
@@ -417,43 +423,56 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     {groupedCategories.length > 0 ? (
                         <div className="masterclasses-two-column-grid">
                             {groupedCategories.map(cat => (
-                                <div key={cat.id} className="category-section" style={{ marginBottom: '40px' }}>
+                                <div 
+                                    key={cat.id} 
+                                    className="glass-panel category-section-card" 
+                                    style={{ 
+                                        padding: '24px', 
+                                        borderRadius: '20px', 
+                                        marginBottom: '24px', 
+                                        display: 'flex', 
+                                        flexDirection: 'column',
+                                        border: '1px solid var(--border-color)',
+                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+                                        height: '100%'
+                                    }}
+                                >
                                     {/* Category Header */}
                                     <div style={{ 
                                         display: 'flex', 
                                         alignItems: 'center', 
                                         justifyContent: 'space-between',
                                         marginBottom: '18px', 
-                                        borderBottom: '2px solid var(--border-color)', 
+                                        borderBottom: '2px solid var(--accent-teal)', 
                                         paddingBottom: '12px' 
                                     }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                             <div style={{ 
-                                                width: '40px', 
-                                                height: '40px', 
+                                                width: '38px', 
+                                                height: '38px', 
                                                 borderRadius: '10px', 
                                                 backgroundColor: 'rgba(13, 148, 136, 0.15)', 
                                                 border: '1px solid rgba(13, 148, 136, 0.3)',
                                                 display: 'flex', 
                                                 alignItems: 'center', 
                                                 justifyContent: 'center',
-                                                fontSize: '20px'
+                                                fontSize: '18px'
                                             }}>
                                                 📁
                                             </div>
                                             <div>
-                                                <h2 className="category-section-title" style={{ margin: 0, fontWeight: '700', color: 'var(--accent-teal)' }}>
+                                                <h2 className="category-section-title" style={{ margin: 0, fontWeight: '800', color: 'var(--accent-teal)', fontSize: '18px' }}>
                                                     {cat.name}
                                                 </h2>
                                                 {cat.description && (
-                                                    <p className="category-section-desc" style={{ margin: '2px 0 0', color: 'var(--text-muted)' }}>
+                                                    <p className="category-section-desc" style={{ margin: '2px 0 0', color: 'var(--text-muted)', fontSize: '12px' }}>
                                                         {cat.description}
                                                     </p>
                                                 )}
                                             </div>
                                         </div>
                                         <span style={{ 
-                                            fontSize: '12px', 
+                                            fontSize: '11px', 
                                             fontWeight: '700', 
                                             backgroundColor: 'rgba(255,255,255,0.08)', 
                                             color: 'var(--text-muted)', 
@@ -467,12 +486,12 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                     {/* Category Videos Display */}
                                     {viewLayout === 'list' ? (
                                         /* LIST MANNER DISPLAY */
-                                        <div className="video-list-container">
+                                        <div className="video-list-container" style={{ flex: 1 }}>
                                             {cat.videos.map(video => renderVideoListItem(video))}
                                         </div>
                                     ) : (
                                         /* GRID MANNER DISPLAY */
-                                        <div className="video-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+                                        <div className="video-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1 }}>
                                             {cat.videos.map(video => renderVideoCard(video))}
                                         </div>
                                     )}
