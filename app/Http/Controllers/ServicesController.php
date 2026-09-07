@@ -19,7 +19,7 @@ class ServicesController extends Controller
         $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
 
         if (empty($settings['services_subtitle'])) {
-            $settings['services_subtitle'] = "The OMS Companion team is a group of highly skilled specialists in Oral & Maxillofacial Surgery, Oral Medicine, Reconstructive Surgery, and Oncology, working collaboratively to deliver the highest standard of care and achieve optimal outcomes for a wide range of oral and maxillofacial diseases";
+            $settings['services_subtitle'] = "The OMS Companion team is a group of highly skilled specialists working collaboratively to deliver the highest standard of care and achieve optimal outcomes for a wide range of oral and maxillofacial diseases";
         }
 
         $services = Service::orderBy('order_index', 'asc')->orderBy('id', 'asc')->get();

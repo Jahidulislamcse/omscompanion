@@ -29,12 +29,10 @@ export default function Index({ settings = {}, teamMembers = [] }) {
         return (settings && settings[key]) ? settings[key] : defaultValue;
     };
 
-    const aboutTitle = getSetting('about_title', 'About Us');
-    const aboutDesc = getSetting('about_description', `OMS Companion is a professional platform connecting Oral & Maxillofacial Surgeons, Oral Medicine specialists, and Oncologists to provide coordinated, expert care for patients with complex oral and maxillofacial conditions.
+    const aboutTitle = getSetting('about_title', 'About us');
+    const aboutDesc = getSetting('about_description', `OMS Companion connects Oral & Maxillofacial Surgeons, Oral Medicine specialists, Oncologists and other relavent specialists to enable expert collaboration, timely referral, accurate diagnosis, and comprehensive patient care.
 
-We promote specialist collaboration, timely referral, accurate diagnosis, and comprehensive treatment planning—helping dental surgeons manage more patients with greater confidence and better outcomes.
-
-OMS Companion — Connecting Expertise, Enhancing Practice.`);
+OMS Companion — Connecting Expertise, Enhancing Practice`);
 
     // Group team members by level (1: Founder, 2: Row 2, 3: Row 3, 4: Bottom Center)
     const level1 = (teamMembers || []).filter(m => Number(m.level) === 1);
@@ -130,7 +128,7 @@ OMS Companion — Connecting Expertise, Enhancing Practice.`);
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                         <div className="page-top-pill-badge">
                             <span className="page-top-pill-text">
-                                about us
+                                About us
                             </span>
                         </div>
 

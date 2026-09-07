@@ -20,10 +20,10 @@ class AboutController extends Controller
         $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
 
         if (empty($settings['about_title'])) {
-            $settings['about_title'] = 'About Us';
+            $settings['about_title'] = 'About us';
         }
         if (empty($settings['about_description'])) {
-            $settings['about_description'] = "OMS Companion is a professional platform connecting Oral & Maxillofacial Surgeons, Oral Medicine specialists, and Oncologists to provide coordinated, expert care for patients with complex oral and maxillofacial conditions.\n\nWe promote specialist collaboration, timely referral, accurate diagnosis, and comprehensive treatment planning—helping dental surgeons manage more patients with greater confidence and better outcomes.\n\nOMS Companion — Connecting Expertise, Enhancing Practice.";
+            $settings['about_description'] = "OMS Companion connects Oral & Maxillofacial Surgeons, Oral Medicine specialists, Oncologists and other relavent specialists to enable expert collaboration, timely referral, accurate diagnosis, and comprehensive patient care.\n\nOMS Companion — Connecting Expertise, Enhancing Practice";
         }
 
         $teamMembers = TeamMember::orderBy('level', 'asc')->orderBy('order_index', 'asc')->get();

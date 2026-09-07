@@ -24,7 +24,7 @@ export default function Index({ settings = {}, services = [] }) {
         return (settings && settings[key]) ? settings[key] : defaultValue;
     };
 
-    const defaultServicesText = "THE OMS COMPANION TEAM BRINGS TOGETHER HIGHLY SKILLED SPECIALISTS IN ORAL & MAXILLOFACIAL SURGERY, ORAL MEDICINE, RECONSTRUCTIVE SURGERY, AND ONCOLOGY, WORKING COLLABORATIVELY TO DELIVER EXPERT, COMPREHENSIVE CARE AND OPTIMAL OUTCOMES FOR ORAL AND MAXILLOFACIAL DISEASES.";
+    const defaultServicesText = "The OMS Companion team is a group of highly skilled specialists working collaboratively to deliver the highest standard of care and achieve optimal outcomes for a wide range of oral and maxillofacial diseases";
     const servicesSubtitle = getSetting('services_subtitle', defaultServicesText);
 
     return (
@@ -42,7 +42,7 @@ export default function Index({ settings = {}, services = [] }) {
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                         <div className="page-top-pill-badge">
                             <span className="page-top-pill-text">
-                                services
+                                Services
                             </span>
                         </div>
 
