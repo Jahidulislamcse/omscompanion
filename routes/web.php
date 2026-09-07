@@ -76,10 +76,50 @@ Route::get('/', function () {
         ];
     })->toArray();
 
+    // Ensure default doctor reviews exist
+    if (\App\Models\Review::count() === 0) {
+        \App\Models\Review::create([
+            'quote' => 'DentistChamber transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.',
+            'name' => 'Dr. Farhana Yasmin, BDS',
+            'role' => 'General Dental Practitioner',
+            'location' => 'Dhaka',
+            'rating' => 5,
+            'tag' => 'Verified Member',
+            'order_index' => 1,
+            'is_published' => true,
+        ]);
+        \App\Models\Review::create([
+            'quote' => 'The clinical video library is top-notch! The surgical walkthroughs are extremely detailed and high definition. A fantastic hub for BDS doctors.',
+            'name' => 'Dr. Tanvir Hossain, BDS',
+            'role' => 'Dental Surgeon',
+            'location' => 'Chittagong',
+            'rating' => 5,
+            'tag' => 'Clinical Practitioner',
+            'order_index' => 2,
+            'is_published' => true,
+        ]);
+        \App\Models\Review::create([
+            'quote' => 'Generating verified digital certificates and tracking case logs seamlessly makes DentistChamber an indispensable tool for modern dental practices.',
+            'name' => 'Dr. Noshin Tarannum, BDS',
+            'role' => 'Orthodontics Fellow',
+            'location' => 'Sylhet',
+            'rating' => 5,
+            'tag' => 'Network Partner',
+            'order_index' => 3,
+            'is_published' => true,
+        ]);
+    }
+
+    $reviews = \App\Models\Review::where('is_published', true)
+        ->orderBy('order_index', 'asc')
+        ->orderBy('id', 'desc')
+        ->get();
+
     return Inertia::render('Welcome', [
         'settings' => $settings,
         'freeVideos' => $dbFreeVideos,
         'categories' => $categories,
+        'reviews' => $reviews,
     ]);
 })->name('home');
 
@@ -221,6 +261,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/services/{service}', [AdminController::class, 'updateService'])->name('admin.services.update');
     Route::post('/services/{service}', [AdminController::class, 'updateService'])->name('admin.services.update_post');
     Route::delete('/services/{service}', [AdminController::class, 'destroyService'])->name('admin.services.destroy');
+    Route::post('/reviews', [AdminController::class, 'storeReview'])->name('admin.reviews.store');
+    Route::put('/reviews/{review}', [AdminController::class, 'updateReview'])->name('admin.reviews.update');
+    Route::post('/reviews/{review}', [AdminController::class, 'updateReview'])->name('admin.reviews.update_post');
+    Route::delete('/reviews/{review}', [AdminController::class, 'destroyReview'])->name('admin.reviews.destroy');
+    Route::post('/reviews/{review}/toggle', [AdminController::class, 'toggleReviewPublish'])->name('admin.reviews.toggle');
     Route::get('/messages', [AdminController::class, 'messages'])->name('admin.messages');
     Route::post('/messages/{message}/read', [AdminController::class, 'markMessageRead'])->name('admin.messages.read');
     Route::delete('/messages/{message}', [AdminController::class, 'destroyMessage'])->name('admin.messages.destroy');

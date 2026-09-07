@@ -124,7 +124,7 @@ function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, o
     );
 }
 
-export default function Welcome({ settings, freeVideos }) {
+export default function Welcome({ settings, freeVideos, reviews = [] }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | 'unapproved' | null
@@ -295,33 +295,38 @@ export default function Welcome({ settings, freeVideos }) {
         }
     ];
 
-    // Testimonials
-    const testimonials = [
-        {
-            quote: "DentistChamber transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.",
-            name: "Dr. Farhana Yasmin, BDS",
-            role: "General Dental Practitioner",
-            location: "Dhaka",
-            rating: 5,
-            tag: "Verified Member"
-        },
-        {
-            quote: "The clinical video library is top-notch! The surgical walkthroughs are extremely detailed and high definition. A fantastic hub for BDS doctors.",
-            name: "Dr. Tanvir Hossain, BDS",
-            role: "Dental Surgeon",
-            location: "Chittagong",
-            rating: 5,
-            tag: "Clinical Practitioner"
-        },
-        {
-            quote: "Generating verified digital certificates and tracking case logs seamlessly makes DentistChamber an indispensable tool for modern dental practices.",
-            name: "Dr. Noshin Tarannum, BDS",
-            role: "Orthodontics Fellow",
-            location: "Sylhet",
-            rating: 5,
-            tag: "Network Partner"
+    // Testimonials resolution (dynamic from props, fallback to defaults)
+    const activeTestimonials = useMemo(() => {
+        if (reviews && reviews.length > 0) {
+            return reviews;
         }
-    ];
+        return [
+            {
+                quote: "DentistChamber transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.",
+                name: "Dr. Farhana Yasmin, BDS",
+                role: "General Dental Practitioner",
+                location: "Dhaka",
+                rating: 5,
+                tag: "Verified Member"
+            },
+            {
+                quote: "The clinical video library is top-notch! The surgical walkthroughs are extremely detailed and high definition. A fantastic hub for BDS doctors.",
+                name: "Dr. Tanvir Hossain, BDS",
+                role: "Dental Surgeon",
+                location: "Chittagong",
+                rating: 5,
+                tag: "Clinical Practitioner"
+            },
+            {
+                quote: "Generating verified digital certificates and tracking case logs seamlessly makes DentistChamber an indispensable tool for modern dental practices.",
+                name: "Dr. Noshin Tarannum, BDS",
+                role: "Orthodontics Fellow",
+                location: "Sylhet",
+                rating: 5,
+                tag: "Network Partner"
+            }
+        ];
+    }, [reviews]);
 
     return (
         <div className="landing-wrapper page-colorful-theme">
@@ -593,7 +598,7 @@ export default function Welcome({ settings, freeVideos }) {
                     {/* Top Archive Pill Button */}
                     <div className="video-archive-pill-wrapper">
                         <Link href={route('videos.public')} className="archive-pill-btn">
-                            archive
+                            Archive
                         </Link>
                     </div>
 
@@ -642,21 +647,27 @@ export default function Welcome({ settings, freeVideos }) {
                     </div>
 
                     <div className="dashboard-grid testimonials-grid">
-                        {testimonials.map((t, idx) => (
-                            <div key={idx} className="glass-panel testimonial-card">
-                                <div className="testimonial-stars">
-                                    {'★'.repeat(t.rating)}
-                                </div>
-                                <p className="testimonial-quote">"{t.quote}"</p>
-                                <div className="testimonial-author">
-                                    <div className="author-avatar">{t.name.charAt(4)}</div>
-                                    <div>
-                                        <h5 className="author-name">{t.name}</h5>
-                                        <span className="author-role">{t.role} • {t.location}</span>
+                        {activeTestimonials.map((t, idx) => {
+                            const cleanName = (t.name || '').replace(/^(Dr\.|Prof\.|Mr\.|Mrs\.|Ms\.)\s*/i, '').trim();
+                            const avatarChar = cleanName ? cleanName.charAt(0).toUpperCase() : 'D';
+                            return (
+                                <div key={t.id || idx} className="glass-panel testimonial-card">
+                                    <div className="testimonial-stars">
+                                        {'★'.repeat(t.rating || 5)}
+                                    </div>
+                                    <p className="testimonial-quote">"{t.quote}"</p>
+                                    <div className="testimonial-author">
+                                        <div className="author-avatar">{avatarChar}</div>
+                                        <div>
+                                            <h5 className="author-name">{t.name}</h5>
+                                            <span className="author-role">
+                                                {t.role}{t.location ? ` • ${t.location}` : ''}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>

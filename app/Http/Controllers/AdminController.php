@@ -11,6 +11,7 @@ use App\Models\VideoAccessRequest;
 use App\Models\LandingSetting;
 use App\Models\TeamMember;
 use App\Models\Service;
+use App\Models\Review;
 use App\Models\ContactMessage;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -413,11 +414,13 @@ class AdminController extends Controller
         $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
         $teamMembers = TeamMember::orderBy('level', 'asc')->orderBy('order_index', 'asc')->get();
         $services = Service::orderBy('order_index', 'asc')->orderBy('id', 'asc')->get();
+        $reviews = Review::orderBy('order_index', 'asc')->orderBy('id', 'desc')->get();
 
         return Inertia::render('Admin/PageContent', [
             'settings' => $settings,
             'teamMembers' => $teamMembers,
             'services' => $services,
+            'reviews' => $reviews,
         ]);
     }
 
@@ -782,5 +785,75 @@ class AdminController extends Controller
         $message->delete();
 
         return redirect()->back()->with('success', 'Message deleted successfully.');
+    }
+
+    public function storeReview(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'quote' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'tag' => 'nullable|string|max:255',
+            'order_index' => 'nullable|integer',
+            'is_published' => 'nullable|boolean',
+        ]);
+
+        Review::create([
+            'name' => $request->name,
+            'role' => $request->role,
+            'location' => $request->location,
+            'quote' => $request->quote,
+            'rating' => $request->rating ?? 5,
+            'tag' => $request->tag,
+            'order_index' => $request->order_index ?? 0,
+            'is_published' => $request->boolean('is_published', true),
+        ]);
+
+        return redirect()->back()->with('success', 'Doctor review added successfully.');
+    }
+
+    public function updateReview(Request $request, Review $review)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'quote' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'tag' => 'nullable|string|max:255',
+            'order_index' => 'nullable|integer',
+            'is_published' => 'nullable|boolean',
+        ]);
+
+        $review->update([
+            'name' => $request->name,
+            'role' => $request->role,
+            'location' => $request->location,
+            'quote' => $request->quote,
+            'rating' => $request->rating ?? 5,
+            'tag' => $request->tag,
+            'order_index' => $request->order_index ?? 0,
+            'is_published' => $request->has('is_published') ? $request->boolean('is_published') : $review->is_published,
+        ]);
+
+        return redirect()->back()->with('success', 'Doctor review updated successfully.');
+    }
+
+    public function destroyReview(Review $review)
+    {
+        $review->delete();
+
+        return redirect()->back()->with('success', 'Doctor review deleted successfully.');
+    }
+
+    public function toggleReviewPublish(Review $review)
+    {
+        $review->update([
+            'is_published' => !$review->is_published,
+        ]);
+
+        return redirect()->back()->with('success', 'Review publish status updated.');
     }
 }

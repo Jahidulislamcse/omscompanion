@@ -3,7 +3,7 @@ import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
-export default function PageContent({ settings = {}, teamMembers = [], services = [] }) {
+export default function PageContent({ settings = {}, teamMembers = [], services = [], reviews = [] }) {
     const { site_logo: currentLogo } = usePage().props;
     const [logoPreview, setLogoPreview] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
@@ -18,6 +18,10 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     const [serviceModalOpen, setServiceModalOpen] = useState(false);
     const [editingService, setEditingService] = useState(null);
     const [serviceImagePreview, setServiceImagePreview] = useState(null);
+
+    // Modal state for Doctor Reviews add/edit
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    const [editingReview, setEditingReview] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -227,6 +231,76 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
         if (confirm(`Are you sure you want to delete service "${srv.title}"?`)) {
             router.delete(route('admin.services.destroy', srv.id));
         }
+    };
+
+    const reviewForm = useForm({
+        name: '',
+        role: '',
+        location: '',
+        quote: '',
+        rating: 5,
+        tag: 'Verified Member',
+        order_index: 0,
+        is_published: true,
+    });
+
+    const openAddReviewModal = () => {
+        setEditingReview(null);
+        reviewForm.setData({
+            name: '',
+            role: '',
+            location: '',
+            quote: '',
+            rating: 5,
+            tag: 'Verified Member',
+            order_index: reviews.length + 1,
+            is_published: true,
+        });
+        setReviewModalOpen(true);
+    };
+
+    const openEditReviewModal = (rev) => {
+        setEditingReview(rev);
+        reviewForm.setData({
+            name: rev.name || '',
+            role: rev.role || '',
+            location: rev.location || '',
+            quote: rev.quote || '',
+            rating: rev.rating || 5,
+            tag: rev.tag || '',
+            order_index: rev.order_index || 0,
+            is_published: rev.is_published !== false,
+        });
+        setReviewModalOpen(true);
+    };
+
+    const handleReviewSubmit = (e) => {
+        e.preventDefault();
+        if (editingReview) {
+            reviewForm.post(route('admin.reviews.update_post', editingReview.id), {
+                onSuccess: () => {
+                    setReviewModalOpen(false);
+                    alert('Doctor review updated successfully!');
+                }
+            });
+        } else {
+            reviewForm.post(route('admin.reviews.store'), {
+                onSuccess: () => {
+                    setReviewModalOpen(false);
+                    alert('Doctor review added successfully!');
+                }
+            });
+        }
+    };
+
+    const handleDeleteReview = (rev) => {
+        if (confirm(`Are you sure you want to delete review by "${rev.name}"?`)) {
+            router.delete(route('admin.reviews.destroy', rev.id));
+        }
+    };
+
+    const handleToggleReviewPublish = (rev) => {
+        router.post(route('admin.reviews.toggle', rev.id));
     };
 
     const getLevelName = (lvl) => {
@@ -809,6 +883,86 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                         </div>
                     </div>
 
+                    {/* Doctor Reviews / Testimonials Management Section */}
+                    <div className="glass-panel">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)' }}>
+                                ⭐ Doctor Reviews / Testimonials Management
+                            </h3>
+                            <button 
+                                type="button" 
+                                onClick={openAddReviewModal} 
+                                className="btn btn-primary" 
+                                style={{ fontSize: '13px', padding: '6px 14px' }}
+                            >
+                                + Add New Doctor Review
+                            </button>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            {reviews.length > 0 ? (
+                                reviews.map(rev => (
+                                    <div key={rev.id} style={{ padding: '16px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                                <span style={{ color: '#f59e0b', fontSize: '14px' }}>{'★'.repeat(rev.rating)}</span>
+                                                <span style={{ fontWeight: '800', fontSize: '14px' }}>{rev.name}</span>
+                                                {rev.tag && (
+                                                    <span style={{ fontSize: '10px', background: 'rgba(13, 148, 136, 0.2)', color: '#0d9488', border: '1px solid rgba(13, 148, 136, 0.4)', padding: '2px 8px', borderRadius: '12px', fontWeight: 'bold' }}>
+                                                        {rev.tag}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p style={{ margin: '0 0 6px 0', fontSize: '13px', color: 'var(--text-secondary, #cbd5e1)', fontStyle: 'italic' }}>
+                                                "{rev.quote}"
+                                            </p>
+                                            <span style={{ fontSize: '11px', color: 'var(--text-muted, #94a3b8)' }}>
+                                                {rev.role} {rev.location ? `• ${rev.location}` : ''}
+                                            </span>
+                                        </div>
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleToggleReviewPublish(rev)}
+                                                className="btn btn-outline"
+                                                style={{
+                                                    padding: '4px 10px',
+                                                    fontSize: '11px',
+                                                    borderColor: rev.is_published ? 'rgba(16, 185, 129, 0.5)' : 'rgba(239, 68, 68, 0.5)',
+                                                    color: rev.is_published ? '#10b981' : '#ef4444',
+                                                    backgroundColor: rev.is_published ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                                }}
+                                            >
+                                                {rev.is_published ? '✓ Published' : '🚫 Hidden'}
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => openEditReviewModal(rev)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '11px' }}
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => handleDeleteReview(rev)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '11px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                    No reviews found. Click "+ Add New Doctor Review" to create your first review.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Submit Button */}
                     <button 
                         type="submit" 
@@ -1025,6 +1179,138 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                     disabled={serviceForm.processing}
                                 >
                                     {serviceForm.processing ? 'Saving...' : editingService ? 'Update Service' : 'Save Service'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Add / Edit Doctor Review Modal */}
+            {reviewModalOpen && (
+                <div className="modal-wrapper" onClick={() => setReviewModalOpen(false)}>
+                    <div className="glass-panel modal-card" style={{ maxWidth: '600px', width: '92%', padding: '28px' }} onClick={e => e.stopPropagation()}>
+                        <h3 style={{ marginTop: 0, marginBottom: '18px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', color: 'var(--accent-gold)' }}>
+                            {editingReview ? '✏️ Edit Doctor Review' : '⭐ Add New Doctor Review'}
+                        </h3>
+
+                        <form onSubmit={handleReviewSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Doctor Name *</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={reviewForm.data.name}
+                                        onChange={e => reviewForm.setData('name', e.target.value)}
+                                        placeholder="e.g. Dr. Farhana Yasmin, BDS"
+                                        required
+                                    />
+                                    {reviewForm.errors.name && <span className="form-error">{reviewForm.errors.name}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Tag Badge (Optional)</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={reviewForm.data.tag}
+                                        onChange={e => reviewForm.setData('tag', e.target.value)}
+                                        placeholder="e.g. Verified Member"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Specialization / Role</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={reviewForm.data.role}
+                                        onChange={e => reviewForm.setData('role', e.target.value)}
+                                        placeholder="e.g. General Dental Practitioner"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Location / Chamber City</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={reviewForm.data.location}
+                                        onChange={e => reviewForm.setData('location', e.target.value)}
+                                        placeholder="e.g. Dhaka"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Star Rating (1 to 5) *</label>
+                                    <select 
+                                        className="form-control"
+                                        value={reviewForm.data.rating}
+                                        onChange={e => reviewForm.setData('rating', Number(e.target.value))}
+                                    >
+                                        <option value={5}>5 Stars (★★★★★)</option>
+                                        <option value={4}>4 Stars (★★★★☆)</option>
+                                        <option value={3}>3 Stars (★★★☆☆)</option>
+                                        <option value={2}>2 Stars (★★☆☆☆)</option>
+                                        <option value={1}>1 Star (★☆☆☆☆)</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Display Order</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control"
+                                        value={reviewForm.data.order_index}
+                                        onChange={e => reviewForm.setData('order_index', Number(e.target.value))}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Review Quote / Content *</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={reviewForm.data.quote}
+                                    onChange={e => reviewForm.setData('quote', e.target.value)}
+                                    rows="3"
+                                    placeholder="Write doctor's feedback/review text..."
+                                    required
+                                />
+                                {reviewForm.errors.quote && <span className="form-error">{reviewForm.errors.quote}</span>}
+                            </div>
+
+                            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input 
+                                    type="checkbox" 
+                                    id="review_is_published"
+                                    checked={reviewForm.data.is_published}
+                                    onChange={e => reviewForm.setData('is_published', e.target.checked)}
+                                />
+                                <label htmlFor="review_is_published" className="form-label" style={{ margin: 0, cursor: 'pointer' }}>
+                                    Publish on website landing page immediately
+                                </label>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => setReviewModalOpen(false)} 
+                                    className="btn btn-outline"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="btn btn-primary"
+                                    disabled={reviewForm.processing}
+                                >
+                                    {reviewForm.processing ? 'Saving...' : editingReview ? 'Update Review' : 'Save Review'}
                                 </button>
                             </div>
                         </form>
