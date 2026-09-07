@@ -10,193 +10,6 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-// Subcomponent for side-by-side category boxes on desktop view
-function CategoryColumnBox({ category, onVideoClick }) {
-    const videos = category.videos || [];
-    const [activeRollIndex, setActiveRollIndex] = useState(0);
-
-    useEffect(() => {
-        if (videos.length <= 1) return;
-        const timer = setInterval(() => {
-            setActiveRollIndex(prev => (prev + 1) % videos.length);
-        }, 4000);
-        return () => clearInterval(timer);
-    }, [videos.length]);
-
-    const featuredVideo = videos[activeRollIndex] || videos[0];
-    const featuredYtId = featuredVideo ? getYouTubeId(featuredVideo.video_path) : '';
-
-    return (
-        <div 
-            className="glass-panel" 
-            style={{
-                borderRadius: '20px',
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-                border: '1px solid var(--border-color)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
-            }}
-        >
-            {/* Category Title Header with Underline */}
-            <div style={{ textAlign: 'center', paddingBottom: '12px', borderBottom: '2px solid var(--border-color)' }}>
-                <h2 style={{
-                    fontSize: '20px',
-                    fontWeight: '800',
-                    margin: 0,
-                    color: 'var(--text-primary)',
-                    letterSpacing: '-0.3px'
-                }}>
-                    {category.name}
-                </h2>
-            </div>
-
-            {/* Dynamic Auto-Rolling Featured Video Card */}
-            {featuredVideo ? (
-                <div 
-                    onClick={() => onVideoClick(featuredVideo)}
-                    style={{
-                        position: 'relative',
-                        aspectRatio: '16/9',
-                        backgroundColor: '#0a1215',
-                        borderRadius: '14px',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
-                        border: '1px solid rgba(255,255,255,0.1)'
-                    }}
-                >
-                    {featuredYtId ? (
-                        <img 
-                            src={`https://img.youtube.com/vi/${featuredYtId}/hqdefault.jpg`} 
-                            alt={featuredVideo.title}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
-                    ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', padding: '16px', textAlign: 'center', fontWeight: '600' }}>
-                            {featuredVideo.title}
-                        </div>
-                    )}
-
-                    <div className="thumb-overlay">
-                        <div className="play-button-glow golden-play-button">
-                            <span className="play-icon">▶</span>
-                        </div>
-                        <span className="play-label" style={{ color: '#fff', fontWeight: '700', fontSize: '13px' }}>
-                            {featuredVideo.title}
-                        </span>
-                    </div>
-
-                    <div style={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        zIndex: 3
-                    }}>
-                        {featuredVideo.is_free ? (
-                            <span className="video-badge-free" style={{ fontSize: '11px', padding: '4px 10px' }}>
-                                🔓 FREE
-                            </span>
-                        ) : (
-                            <span className="video-badge-premium" style={{ fontSize: '11px', padding: '4px 10px' }}>
-                                👑 PREMIUM
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Carousel Indicator Dots */}
-                    {videos.length > 1 && (
-                        <div style={{
-                            position: 'absolute',
-                            bottom: '10px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            display: 'flex',
-                            gap: '6px',
-                            zIndex: 4,
-                            backgroundColor: 'rgba(0,0,0,0.6)',
-                            padding: '4px 8px',
-                            borderRadius: '12px'
-                        }}>
-                            {videos.map((v, idx) => (
-                                <span 
-                                    key={v.id || idx}
-                                    onClick={(e) => { e.stopPropagation(); setActiveRollIndex(idx); }}
-                                    style={{
-                                        width: idx === activeRollIndex ? '16px' : '6px',
-                                        height: '6px',
-                                        borderRadius: '3px',
-                                        backgroundColor: idx === activeRollIndex ? '#0d9488' : 'rgba(255,255,255,0.4)',
-                                        transition: 'all 0.3s ease',
-                                        cursor: 'pointer'
-                                    }}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            ) : null}
-
-            {/* Bullet Point List of Category Videos */}
-            <div style={{ flex: 1 }}>
-                <ul style={{
-                    listStyleType: 'disc',
-                    paddingLeft: '22px',
-                    margin: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px'
-                }}>
-                    {videos.map((vid) => {
-                        const isFree = Boolean(vid.is_free);
-                        return (
-                            <li 
-                                key={vid.id}
-                                onClick={() => onVideoClick(vid)}
-                                style={{
-                                    cursor: 'pointer',
-                                    fontSize: '14px',
-                                    fontWeight: '500',
-                                    lineHeight: '1.4',
-                                    transition: 'all 0.2s ease'
-                                }}
-                            >
-                                <span style={{ color: 'var(--text-primary)', marginRight: '6px' }}>
-                                    {vid.title}
-                                </span>
-                                <span style={{ color: 'var(--text-muted)', marginRight: '6px' }}>
-                                    ------
-                                </span>
-                                <span style={{
-                                    fontWeight: '700',
-                                    fontSize: '13px',
-                                    color: isFree ? '#0d9488' : '#f43f5e'
-                                }}>
-                                    {isFree ? 'free' : 'Premium'}
-                                </span>
-                            </li>
-                        );
-                    })}
-                </ul>
-            </div>
-
-            {/* Bottom Explanatory Note */}
-            <div style={{
-                fontSize: '11px',
-                color: 'var(--text-muted)',
-                fontStyle: 'italic',
-                textAlign: 'center',
-                paddingTop: '12px',
-                borderTop: '1px dashed var(--border-color)',
-                lineHeight: '1.4'
-            }}>
-                (**dynamic, automatic rolling, if click to premium videos then go to the registration page, if already registrated then video plays)
-            </div>
-        </div>
-    );
-}
-
 export default function Index({ categories = [], videos = [], settings = {} }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
@@ -207,7 +20,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
     const [activeAccessFilter, setActiveAccessFilter] = useState('all'); // 'all' | 'free' | 'premium'
-    const [viewLayout, setViewLayout] = useState('side_by_side'); // Default to side-by-side category boxes manner
+    const [viewLayout, setViewLayout] = useState('list'); // Default to list view layout
 
     const getSetting = (key, defaultValue = '') => {
         return (settings && settings[key]) ? settings[key] : defaultValue;
@@ -322,7 +135,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                 <div 
                     style={{
                         flexShrink: 0,
-                        width: '240px',
+                        width: '180px',
                         aspectRatio: '16/9',
                         backgroundColor: '#0a1215',
                         borderRadius: '12px',
@@ -580,15 +393,6 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                             <div style={{ display: 'flex', gap: '4px', backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px', borderRadius: '8px' }}>
                                 <button
                                     type="button"
-                                    onClick={() => setViewLayout('side_by_side')}
-                                    className={`btn ${viewLayout === 'side_by_side' ? 'btn-primary' : 'btn-outline'}`}
-                                    style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
-                                    title="Side-by-Side Category Boxes"
-                                >
-                                    ☵ Side-by-Side
-                                </button>
-                                <button
-                                    type="button"
                                     onClick={() => setViewLayout('list')}
                                     className={`btn ${viewLayout === 'list' ? 'btn-primary' : 'btn-outline'}`}
                                     style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
@@ -609,21 +413,10 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         </div>
                     </div>
 
-                    {/* Videos Grouped Into Category Sections */}
+                    {/* Videos Grouped Into Category Sections (Rendered Side-by-Side on Desktop View) */}
                     {groupedCategories.length > 0 ? (
-                        viewLayout === 'side_by_side' ? (
-                            /* SIDE BY SIDE CATEGORY BOXES */
-                            <div className="masterclasses-two-column-grid">
-                                {groupedCategories.map(cat => (
-                                    <CategoryColumnBox 
-                                        key={cat.id} 
-                                        category={cat} 
-                                        onVideoClick={handleVideoClick} 
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            groupedCategories.map(cat => (
+                        <div className="masterclasses-two-column-grid">
+                            {groupedCategories.map(cat => (
                                 <div key={cat.id} className="category-section" style={{ marginBottom: '40px' }}>
                                     {/* Category Header */}
                                     <div style={{ 
@@ -679,13 +472,13 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                         </div>
                                     ) : (
                                         /* GRID MANNER DISPLAY */
-                                        <div className="video-grid">
+                                        <div className="video-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
                                             {cat.videos.map(video => renderVideoCard(video))}
                                         </div>
                                     )}
                                 </div>
-                            ))
-                        )
+                            ))}
+                        </div>
                     ) : (
                         <div className="glass-panel" style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)', borderRadius: '16px' }}>
                             <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔍</div>
