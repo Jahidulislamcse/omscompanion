@@ -884,107 +884,79 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                     </div>
 
                     {/* Doctor Reviews / Testimonials Management Section */}
-                    <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                            <h3 style={{ margin: 0, color: '#38bdf8', fontSize: '20px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{ color: '#f59e0b', fontSize: '22px' }}>★</span> Doctor Reviews / Testimonials Management
+                    <div className="glass-panel">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)' }}>
+                                ⭐ Doctor Reviews / Testimonials
                             </h3>
                             <button 
                                 type="button" 
                                 onClick={openAddReviewModal} 
-                                className="btn"
-                                style={{ backgroundColor: '#0891b2', color: '#ffffff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '700', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s ease' }}
+                                className="btn btn-primary" 
+                                style={{ padding: '6px 16px', fontSize: '13px' }}
                             >
-                                + Add New Doctor Review
+                                ➕ Add Review
                             </button>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {reviews.length > 0 ? (
                                 reviews.map(rev => (
-                                    <div key={rev.id} style={{ padding: '20px', backgroundColor: 'rgba(15, 23, 42, 0.5)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                        {/* Top Header Row with Stars, Name, Tag & Action Buttons */}
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                                                <span style={{ color: '#f59e0b', fontSize: '16px', letterSpacing: '2px' }}>{'★'.repeat(rev.rating)}</span>
-                                                <span style={{ color: '#ffffff', fontWeight: '800', fontSize: '17px' }}>{rev.name}</span>
+                                    <div key={rev.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', gap: '14px' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{rev.name}</h4>
+                                                <span style={{ color: '#f59e0b', fontSize: '13px' }}>{'★'.repeat(rev.rating)}</span>
                                                 {rev.tag && (
-                                                    <span style={{ fontSize: '12px', backgroundColor: 'rgba(20, 184, 166, 0.1)', color: '#14b8a6', border: '1px solid rgba(20, 184, 166, 0.4)', padding: '3px 12px', borderRadius: '20px', fontWeight: '600' }}>
-                                                        {rev.tag}
+                                                    <span style={{ fontSize: '11px', color: 'var(--accent-teal)' }}>
+                                                        ({rev.tag})
                                                     </span>
                                                 )}
                                             </div>
-
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleToggleReviewPublish(rev)}
-                                                    style={{
-                                                        padding: '6px 16px',
-                                                        fontSize: '13px',
-                                                        fontWeight: '700',
-                                                        borderRadius: '6px',
-                                                        border: rev.is_published ? '1px solid #10b981' : '1px solid #ef4444',
-                                                        color: rev.is_published ? '#34d399' : '#f87171',
-                                                        backgroundColor: rev.is_published ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    {rev.is_published ? '✓ Published' : '🚫 Hidden'}
-                                                </button>
-
-                                                <button 
-                                                    type="button" 
-                                                    onClick={() => openEditReviewModal(rev)} 
-                                                    style={{
-                                                        padding: '6px 16px',
-                                                        fontSize: '13px',
-                                                        fontWeight: '700',
-                                                        borderRadius: '6px',
-                                                        border: '1px solid rgba(255, 255, 255, 0.15)',
-                                                        color: '#ffffff',
-                                                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '6px',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>/</span> Edit
-                                                </button>
-
-                                                <button 
-                                                    type="button" 
-                                                    onClick={() => handleDeleteReview(rev)} 
-                                                    style={{
-                                                        padding: '6px 12px',
-                                                        fontSize: '14px',
-                                                        borderRadius: '6px',
-                                                        border: '1px solid rgba(239, 68, 68, 0.3)',
-                                                        color: '#ef4444',
-                                                        backgroundColor: 'rgba(239, 68, 68, 0.05)',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    🗑️
-                                                </button>
-                                            </div>
+                                            <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                                                "{rev.quote}"
+                                            </p>
+                                            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                {rev.role}{rev.location ? ` • ${rev.location}` : ''}
+                                            </span>
                                         </div>
 
-                                        {/* Quote Text */}
-                                        <p style={{ margin: 0, fontSize: '15px', color: '#e2e8f0', fontStyle: 'italic', lineHeight: '1.6' }}>
-                                            "{rev.quote}"
-                                        </p>
-
-                                        {/* Author Role & Location Subtitle */}
-                                        <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '500' }}>
-                                            {rev.role}{rev.location ? ` • ${rev.location}` : ''}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleToggleReviewPublish(rev)}
+                                                className="btn btn-outline"
+                                                style={{
+                                                    padding: '4px 10px',
+                                                    fontSize: '11px',
+                                                    color: rev.is_published ? '#10b981' : 'var(--text-muted)',
+                                                    borderColor: rev.is_published ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-color)',
+                                                }}
+                                            >
+                                                {rev.is_published ? '✓ Published' : 'Hidden'}
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => openEditReviewModal(rev)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '12px' }}
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => handleDeleteReview(rev)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                            >
+                                                🗑️ Delete
+                                            </button>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div style={{ textAlign: 'center', padding: '24px', color: '#94a3b8' }}>
-                                    No reviews found. Click "+ Add New Doctor Review" to create your first review.
+                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                    No reviews added yet. Click "+ Add Review" to create one.
                                 </div>
                             )}
                         </div>
