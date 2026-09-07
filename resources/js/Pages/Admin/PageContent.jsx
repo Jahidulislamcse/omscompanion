@@ -27,6 +27,57 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     const [newsModalOpen, setNewsModalOpen] = useState(false);
     const [editingNews, setEditingNews] = useState(null);
 
+    // Section Toggle State
+    const [openSections, setOpenSections] = useState({
+        branding: true,
+        hero: true,
+        login: false,
+        goals: false,
+        about: false,
+        team: true,
+        services: true,
+        reviews: true,
+        news: true,
+        footer: false,
+    });
+
+    const toggleSection = (sectionKey) => {
+        setOpenSections(prev => ({
+            ...prev,
+            [sectionKey]: !prev[sectionKey]
+        }));
+    };
+
+    const expandAllSections = () => {
+        setOpenSections({
+            branding: true,
+            hero: true,
+            login: true,
+            goals: true,
+            about: true,
+            team: true,
+            services: true,
+            reviews: true,
+            news: true,
+            footer: true,
+        });
+    };
+
+    const collapseAllSections = () => {
+        setOpenSections({
+            branding: false,
+            hero: false,
+            login: false,
+            goals: false,
+            about: false,
+            team: false,
+            services: false,
+            reviews: false,
+            news: false,
+            footer: false,
+        });
+    };
+
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
         hero_title: settings.hero_title || '',
@@ -404,717 +455,1012 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                {/* Section Toggle & Quick Navigation Control Bar */}
+                <div className="glass-panel" style={{ marginBottom: '25px', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '14px', border: '1px solid rgba(13, 148, 136, 0.3)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                        <div>
+                            <h2 style={{ fontSize: '17px', fontWeight: '800', margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                ⚡ Page Content Sections & Quick Navigation
+                            </h2>
+                            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                Click section headers or quick navigation pills below to toggle sections.
+                            </span>
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                                type="button"
+                                className="btn btn-outline"
+                                style={{ padding: '6px 14px', fontSize: '12px', borderColor: 'var(--accent-teal)' }}
+                                onClick={expandAllSections}
+                            >
+                                📖 Expand All
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-outline"
+                                style={{ padding: '6px 14px', fontSize: '12px' }}
+                                onClick={collapseAllSections}
+                            >
+                                📁 Collapse All
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Quick Jump & Toggle Pills */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', paddingTop: '10px', borderTop: '1px solid var(--border-color)' }}>
+                        {[
+                            { key: 'branding', label: '🖼️ Logo & Branding' },
+                            { key: 'hero', label: '🌟 Homepage Hero' },
+                            { key: 'login', label: '🔐 Login Banner' },
+                            { key: 'goals', label: '🎯 Goal Cards' },
+                            { key: 'about', label: '📖 About Us' },
+                            { key: 'team', label: `👨‍⚕️ Team (${teamMembers.length})` },
+                            { key: 'services', label: `🛠️ Services (${services.length})` },
+                            { key: 'reviews', label: `⭐ Reviews (${reviews.length})` },
+                            { key: 'news', label: `📰 News (${newsItems.length})` },
+                            { key: 'footer', label: '📌 Footer' },
+                        ].map(sec => {
+                            const isOpen = openSections[sec.key];
+                            return (
+                                <button
+                                    key={sec.key}
+                                    type="button"
+                                    onClick={() => {
+                                        if (!isOpen) {
+                                            setOpenSections(prev => ({ ...prev, [sec.key]: true }));
+                                        }
+                                        setTimeout(() => {
+                                            const el = document.getElementById(`section-${sec.key}`);
+                                            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }, 50);
+                                    }}
+                                    style={{
+                                        padding: '5px 12px',
+                                        borderRadius: '20px',
+                                        fontSize: '12px',
+                                        fontWeight: isOpen ? 'bold' : 'normal',
+                                        cursor: 'pointer',
+                                        border: '1px solid',
+                                        borderColor: isOpen ? 'var(--accent-teal, #0d9488)' : 'var(--border-color)',
+                                        backgroundColor: isOpen ? 'rgba(13, 148, 136, 0.15)' : 'rgba(255,255,255,0.03)',
+                                        color: isOpen ? 'var(--accent-teal, #0d9488)' : 'var(--text-secondary)',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                >
+                                    {sec.label} {isOpen ? '▲' : '▼'}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     
                     {/* Site Branding / Logo Section */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            🖼️ Site Logo & Branding
-                        </h3>
+                    <div className="glass-panel" id="section-branding">
+                        <div 
+                            onClick={() => toggleSection('branding')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.branding ? '12px' : '0', 
+                                borderBottom: openSections.branding ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.branding ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                🖼️ Site Logo & Branding
+                            </h3>
+                            <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                {openSections.branding ? '▲ Collapse' : '▼ Expand'}
+                            </span>
+                        </div>
                         
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Site Brand Title / Name</label>
-                            <input 
-                                type="text" 
-                                className="form-control"
-                                value={data.site_name}
-                                onChange={e => setData('site_name', e.target.value)}
-                                placeholder="e.g. OMSCOMPANION"
-                            />
-                            {errors.site_name && <span className="form-error">{errors.site_name}</span>}
-                        </div>
+                        {openSections.branding && (
+                            <>
+                                <div className="form-group" style={{ marginBottom: '20px' }}>
+                                    <label className="form-label">Site Brand Title / Name</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={data.site_name}
+                                        onChange={e => setData('site_name', e.target.value)}
+                                        placeholder="e.g. OMSCOMPANION"
+                                    />
+                                    {errors.site_name && <span className="form-error">{errors.site_name}</span>}
+                                </div>
 
-                        <div className="form-group">
-                            <label className="form-label">Current Active Logo Preview</label>
-                            <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'inline-flex', alignItems: 'center', minWidth: '220px' }}>
-                                {logoPreview ? (
-                                    <img src={logoPreview} alt="Preview" style={{ maxHeight: '45px', objectFit: 'contain' }} />
-                                ) : data.remove_logo ? (
-                                    <div style={{ fontWeight: 800, fontSize: '18px' }}>
-                                        🦷 OMS<span style={{ color: 'var(--accent-gold, #f59e0b)' }}>COMPANION</span> (Default)
+                                <div className="form-group">
+                                    <label className="form-label">Current Active Logo Preview</label>
+                                    <div style={{ padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'inline-flex', alignItems: 'center', minWidth: '220px' }}>
+                                        {logoPreview ? (
+                                            <img src={logoPreview} alt="Preview" style={{ maxHeight: '45px', objectFit: 'contain' }} />
+                                        ) : data.remove_logo ? (
+                                            <div style={{ fontWeight: 800, fontSize: '18px' }}>
+                                                🦷 OMS<span style={{ color: 'var(--accent-gold, #f59e0b)' }}>COMPANION</span> (Default)
+                                            </div>
+                                        ) : (
+                                            <ApplicationLogo height="45px" />
+                                        )}
                                     </div>
-                                ) : (
-                                    <ApplicationLogo height="45px" />
+                                </div>
+
+                                <div className="form-group" style={{ marginTop: '15px' }}>
+                                    <label className="form-label">Upload Custom Site Logo (PNG, JPG, SVG, WebP)</label>
+                                    <input 
+                                        type="file" 
+                                        className="form-control"
+                                        accept="image/*"
+                                        onChange={handleLogoChange}
+                                    />
+                                    {errors.site_logo && <span className="form-error">{errors.site_logo}</span>}
+                                </div>
+
+                                {(currentLogo || logoPreview) && (
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-outline"
+                                        style={{ marginTop: '10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)' }}
+                                        onClick={handleRemoveLogo}
+                                    >
+                                        🗑️ Remove Custom Logo & Reset to Default Text Logo
+                                    </button>
                                 )}
-                            </div>
-                        </div>
-
-                        <div className="form-group" style={{ marginTop: '15px' }}>
-                            <label className="form-label">Upload Custom Site Logo (PNG, JPG, SVG, WebP)</label>
-                            <input 
-                                type="file" 
-                                className="form-control"
-                                accept="image/*"
-                                onChange={handleLogoChange}
-                            />
-                            {errors.site_logo && <span className="form-error">{errors.site_logo}</span>}
-                        </div>
-
-                        {(currentLogo || logoPreview) && (
-                            <button 
-                                type="button" 
-                                className="btn btn-outline"
-                                style={{ marginTop: '10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)' }}
-                                onClick={handleRemoveLogo}
-                            >
-                                🗑️ Remove Custom Logo & Reset to Default Text Logo
-                            </button>
+                            </>
                         )}
                     </div>
 
                     {/* Hero Section Banner & Text */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            🌟 Homepage Hero Banner & Text Configuration
-                        </h3>
-
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Homepage Hero Main Title</label>
-                            <input 
-                                type="text" 
-                                className="form-control"
-                                value={data.hero_title}
-                                onChange={e => setData('hero_title', e.target.value)}
-                                placeholder="e.g. Bridging Dental Practices with Live Referral Intelligence"
-                                required
-                            />
-                            {errors.hero_title && <span className="form-error">{errors.hero_title}</span>}
+                    <div className="glass-panel" id="section-hero">
+                        <div 
+                            onClick={() => toggleSection('hero')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.hero ? '12px' : '0', 
+                                borderBottom: openSections.hero ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.hero ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                🌟 Homepage Hero Banner & Text Configuration
+                            </h3>
+                            <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                {openSections.hero ? '▲ Collapse' : '▼ Expand'}
+                            </span>
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Homepage Hero Subtitle / Description</label>
-                            <textarea 
-                                className="form-control"
-                                value={data.hero_subtitle}
-                                onChange={e => setData('hero_subtitle', e.target.value)}
-                                rows="3"
-                                placeholder="Enter hero subtitle text..."
-                                required
-                            />
-                            {errors.hero_subtitle && <span className="form-error">{errors.hero_subtitle}</span>}
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">Hero Top Banner Image (Optional)</label>
-                            {bannerPreview ? (
-                                <div style={{ marginBottom: '10px' }}>
-                                    <img src={bannerPreview} alt="Banner Preview" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+                        {openSections.hero && (
+                            <>
+                                <div className="form-group" style={{ marginBottom: '20px' }}>
+                                    <label className="form-label">Homepage Hero Main Title</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={data.hero_title}
+                                        onChange={e => setData('hero_title', e.target.value)}
+                                        placeholder="e.g. Bridging Dental Practices with Live Referral Intelligence"
+                                        required
+                                    />
+                                    {errors.hero_title && <span className="form-error">{errors.hero_title}</span>}
                                 </div>
-                            ) : settings.hero_banner && !data.remove_banner ? (
-                                <div style={{ marginBottom: '10px' }}>
-                                    <img src={`${route('site.banner.stream')}?v=${settings.hero_banner_updated_at || 1}`} alt="Current Banner" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+
+                                <div className="form-group" style={{ marginBottom: '20px' }}>
+                                    <label className="form-label">Homepage Hero Subtitle / Description</label>
+                                    <textarea 
+                                        className="form-control"
+                                        value={data.hero_subtitle}
+                                        onChange={e => setData('hero_subtitle', e.target.value)}
+                                        rows="3"
+                                        placeholder="Enter hero subtitle text..."
+                                        required
+                                    />
+                                    {errors.hero_subtitle && <span className="form-error">{errors.hero_subtitle}</span>}
                                 </div>
-                            ) : null}
 
-                            <input 
-                                type="file" 
-                                className="form-control"
-                                accept="image/*"
-                                onChange={handleBannerChange}
-                            />
-                            {errors.hero_banner && <span className="form-error">{errors.hero_banner}</span>}
+                                <div className="form-group">
+                                    <label className="form-label">Hero Top Banner Image (Optional)</label>
+                                    {bannerPreview ? (
+                                        <div style={{ marginBottom: '10px' }}>
+                                            <img src={bannerPreview} alt="Banner Preview" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+                                        </div>
+                                    ) : settings.hero_banner && !data.remove_banner ? (
+                                        <div style={{ marginBottom: '10px' }}>
+                                            <img src={`${route('site.banner.stream')}?v=${settings.hero_banner_updated_at || 1}`} alt="Current Banner" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+                                        </div>
+                                    ) : null}
 
-                            {(settings.hero_banner || bannerPreview) && !data.remove_banner && (
-                                <button 
-                                    type="button" 
-                                    className="btn btn-outline"
-                                    style={{ marginTop: '10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)' }}
-                                    onClick={handleRemoveBanner}
-                                >
-                                    🗑️ Remove Hero Banner Image
-                                </button>
-                            )}
-                        </div>
+                                    <input 
+                                        type="file" 
+                                        className="form-control"
+                                        accept="image/*"
+                                        onChange={handleBannerChange}
+                                    />
+                                    {errors.hero_banner && <span className="form-error">{errors.hero_banner}</span>}
+
+                                    {(settings.hero_banner || bannerPreview) && !data.remove_banner && (
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-outline"
+                                            style={{ marginTop: '10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)' }}
+                                            onClick={handleRemoveBanner}
+                                        >
+                                            🗑️ Remove Hero Banner Image
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Login Page Side Image Configuration */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            🔐 Login Page Side Banner Image & Text Configuration
-                        </h3>
-
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Login Side Title</label>
-                            <input 
-                                type="text" 
-                                className="form-control"
-                                value={data.login_side_title}
-                                onChange={e => setData('login_side_title', e.target.value)}
-                                placeholder="e.g. Specialist Oral & Maxillofacial Network"
-                            />
+                    <div className="glass-panel" id="section-login">
+                        <div 
+                            onClick={() => toggleSection('login')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.login ? '12px' : '0', 
+                                borderBottom: openSections.login ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.login ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                🔐 Login Page Side Banner Image & Text Configuration
+                            </h3>
+                            <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                {openSections.login ? '▲ Collapse' : '▼ Expand'}
+                            </span>
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Login Side Subtitle</label>
-                            <textarea 
-                                className="form-control"
-                                value={data.login_side_subtitle}
-                                onChange={e => setData('login_side_subtitle', e.target.value)}
-                                rows="2"
-                                placeholder="Enter login side text..."
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">Login Side Image (Left Panel on /login)</label>
-                            {loginPreview ? (
-                                <div style={{ marginBottom: '10px' }}>
-                                    <img src={loginPreview} alt="Login Side Preview" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+                        {openSections.login && (
+                            <>
+                                <div className="form-group" style={{ marginBottom: '20px' }}>
+                                    <label className="form-label">Login Side Title</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={data.login_side_title}
+                                        onChange={e => setData('login_side_title', e.target.value)}
+                                        placeholder="e.g. Specialist Oral & Maxillofacial Network"
+                                    />
                                 </div>
-                            ) : settings.login_side_image && !data.remove_login_image ? (
-                                <div style={{ marginBottom: '10px' }}>
-                                    <img src={`${route('site.login_image.stream')}?v=${settings.login_side_image_updated_at || 1}`} alt="Current Login Side Image" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+
+                                <div className="form-group" style={{ marginBottom: '20px' }}>
+                                    <label className="form-label">Login Side Subtitle</label>
+                                    <textarea 
+                                        className="form-control"
+                                        value={data.login_side_subtitle}
+                                        onChange={e => setData('login_side_subtitle', e.target.value)}
+                                        rows="2"
+                                        placeholder="Enter login side text..."
+                                    />
                                 </div>
-                            ) : null}
 
-                            <input 
-                                type="file" 
-                                className="form-control"
-                                accept="image/*"
-                                onChange={handleLoginImageChange}
-                            />
-                            {errors.login_side_image && <span className="form-error">{errors.login_side_image}</span>}
+                                <div className="form-group">
+                                    <label className="form-label">Login Side Image (Left Panel on /login)</label>
+                                    {loginPreview ? (
+                                        <div style={{ marginBottom: '10px' }}>
+                                            <img src={loginPreview} alt="Login Side Preview" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+                                        </div>
+                                    ) : settings.login_side_image && !data.remove_login_image ? (
+                                        <div style={{ marginBottom: '10px' }}>
+                                            <img src={`${route('site.login_image.stream')}?v=${settings.login_side_image_updated_at || 1}`} alt="Current Login Side Image" style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'cover' }} />
+                                        </div>
+                                    ) : null}
 
-                            {(settings.login_side_image || loginPreview) && !data.remove_login_image && (
-                                <button 
-                                    type="button" 
-                                    className="btn btn-outline"
-                                    style={{ marginTop: '10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)' }}
-                                    onClick={handleRemoveLoginImage}
-                                >
-                                    🗑️ Remove Custom Login Side Image
-                                </button>
-                            )}
-                        </div>
+                                    <input 
+                                        type="file" 
+                                        className="form-control"
+                                        accept="image/*"
+                                        onChange={handleLoginImageChange}
+                                    />
+                                    {errors.login_side_image && <span className="form-error">{errors.login_side_image}</span>}
+
+                                    {(settings.login_side_image || loginPreview) && !data.remove_login_image && (
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-outline"
+                                            style={{ marginTop: '10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)' }}
+                                            onClick={handleRemoveLoginImage}
+                                        >
+                                            🗑️ Remove Custom Login Side Image
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Member Advantages / 4 Goals Section */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            🎯 Homepage Goal Cards (Member Advantages)
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            {/* Goal 1 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #1</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_1_title}
-                                            onChange={e => setData('goal_1_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_1_title && <span className="form-error">{errors.goal_1_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_1_desc}
-                                            onChange={e => setData('goal_1_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_1_desc && <span className="form-error">{errors.goal_1_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Goal 2 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #2</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_2_title}
-                                            onChange={e => setData('goal_2_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_2_title && <span className="form-error">{errors.goal_2_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_2_desc}
-                                            onChange={e => setData('goal_2_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_2_desc && <span className="form-error">{errors.goal_2_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Goal 3 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #3</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_3_title}
-                                            onChange={e => setData('goal_3_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_3_title && <span className="form-error">{errors.goal_3_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_3_desc}
-                                            onChange={e => setData('goal_3_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_3_desc && <span className="form-error">{errors.goal_3_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Goal 4 */}
-                            <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #4</div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Title</label>
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            value={data.goal_4_title}
-                                            onChange={e => setData('goal_4_title', e.target.value)}
-                                            required
-                                        />
-                                        {errors.goal_4_title && <span className="form-error">{errors.goal_4_title}</span>}
-                                    </div>
-                                    <div className="form-group" style={{ margin: 0 }}>
-                                        <label className="form-label">Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            value={data.goal_4_desc}
-                                            onChange={e => setData('goal_4_desc', e.target.value)}
-                                            rows="2"
-                                            required
-                                        />
-                                        {errors.goal_4_desc && <span className="form-error">{errors.goal_4_desc}</span>}
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="glass-panel" id="section-goals">
+                        <div 
+                            onClick={() => toggleSection('goals')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.goals ? '12px' : '0', 
+                                borderBottom: openSections.goals ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.goals ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                🎯 Homepage Goal Cards (Member Advantages)
+                            </h3>
+                            <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                {openSections.goals ? '▲ Collapse' : '▼ Expand'}
+                            </span>
                         </div>
-                    </div>
 
-                    {/* Footer & Contact Info Config */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-gold)' }}>
-                            📌 Footer & Contact Information Config
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            <div className="form-group">
-                                <label className="form-label">Office Location</label>
-                                <textarea 
-                                    className="form-control"
-                                    value={data.footer_office_location}
-                                    onChange={e => setData('footer_office_location', e.target.value)}
-                                    rows="2"
-                                    placeholder="e.g. House 12, Road 5, Dhanmondi, Dhaka, Bangladesh"
-                                />
-                                {errors.footer_office_location && <span className="form-error">{errors.footer_office_location}</span>}
-                            </div>
-
-                            <div className="grid-responsive-two-col" style={{ gap: '15px' }}>
-                                <div className="form-group">
-                                    <label className="form-label">Contact Phone Number</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control"
-                                        value={data.footer_contact_phone}
-                                        onChange={e => setData('footer_contact_phone', e.target.value)}
-                                        placeholder="e.g. +880 1712-345678"
-                                    />
-                                    {errors.footer_contact_phone && <span className="form-error">{errors.footer_contact_phone}</span>}
+                        {openSections.goals && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                {/* Goal 1 */}
+                                <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #1</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Title</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control" 
+                                                value={data.goal_1_title}
+                                                onChange={e => setData('goal_1_title', e.target.value)}
+                                                required
+                                            />
+                                            {errors.goal_1_title && <span className="form-error">{errors.goal_1_title}</span>}
+                                        </div>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Description</label>
+                                            <textarea 
+                                                className="form-control" 
+                                                value={data.goal_1_desc}
+                                                onChange={e => setData('goal_1_desc', e.target.value)}
+                                                rows="2"
+                                                required
+                                            />
+                                            {errors.goal_1_desc && <span className="form-error">{errors.goal_1_desc}</span>}
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label className="form-label">WhatsApp Number (Floating Bumping Widget)</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control"
-                                        value={data.whatsapp_number}
-                                        onChange={e => setData('whatsapp_number', e.target.value)}
-                                        placeholder="e.g. +8801700000000"
-                                    />
-                                    {errors.whatsapp_number && <span className="form-error">{errors.whatsapp_number}</span>}
-                                    <small style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '2px', display: 'block' }}>
-                                        Floating bumping WhatsApp button on front pages will direct chat to this number.
-                                    </small>
+                                {/* Goal 2 */}
+                                <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #2</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Title</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control" 
+                                                value={data.goal_2_title}
+                                                onChange={e => setData('goal_2_title', e.target.value)}
+                                                required
+                                            />
+                                            {errors.goal_2_title && <span className="form-error">{errors.goal_2_title}</span>}
+                                        </div>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Description</label>
+                                            <textarea 
+                                                className="form-control" 
+                                                value={data.goal_2_desc}
+                                                onChange={e => setData('goal_2_desc', e.target.value)}
+                                                rows="2"
+                                                required
+                                            />
+                                            {errors.goal_2_desc && <span className="form-error">{errors.goal_2_desc}</span>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Goal 3 */}
+                                <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #3</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Title</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control" 
+                                                value={data.goal_3_title}
+                                                onChange={e => setData('goal_3_title', e.target.value)}
+                                                required
+                                            />
+                                            {errors.goal_3_title && <span className="form-error">{errors.goal_3_title}</span>}
+                                        </div>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Description</label>
+                                            <textarea 
+                                                className="form-control" 
+                                                value={data.goal_3_desc}
+                                                onChange={e => setData('goal_3_desc', e.target.value)}
+                                                rows="2"
+                                                required
+                                            />
+                                            {errors.goal_3_desc && <span className="form-error">{errors.goal_3_desc}</span>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Goal 4 */}
+                                <div style={{ padding: '15px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--accent-teal)', marginBottom: '10px' }}>Goal Card #4</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Title</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control" 
+                                                value={data.goal_4_title}
+                                                onChange={e => setData('goal_4_title', e.target.value)}
+                                                required
+                                            />
+                                            {errors.goal_4_title && <span className="form-error">{errors.goal_4_title}</span>}
+                                        </div>
+                                        <div className="form-group" style={{ margin: 0 }}>
+                                            <label className="form-label">Description</label>
+                                            <textarea 
+                                                className="form-control" 
+                                                value={data.goal_4_desc}
+                                                onChange={e => setData('goal_4_desc', e.target.value)}
+                                                rows="2"
+                                                required
+                                            />
+                                            {errors.goal_4_desc && <span className="form-error">{errors.goal_4_desc}</span>}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className="form-group">
-                                <label className="form-label">Contact Email Address</label>
-                                <input 
-                                    type="email" 
-                                    className="form-control"
-                                    value={data.footer_contact_email}
-                                    onChange={e => setData('footer_contact_email', e.target.value)}
-                                    placeholder="e.g. info@omscompanion.com"
-                                />
-                                {errors.footer_contact_email && <span className="form-error">{errors.footer_contact_email}</span>}
-                            </div>
-
-                            <div className="form-group">
-                                <label className="form-label">Facebook Page Link / URL</label>
-                                <input 
-                                    type="url" 
-                                    className="form-control"
-                                    value={data.footer_facebook_url}
-                                    onChange={e => setData('footer_facebook_url', e.target.value)}
-                                    placeholder="e.g. https://facebook.com/omscompanion"
-                                />
-                                {errors.footer_facebook_url && <span className="form-error">{errors.footer_facebook_url}</span>}
-                            </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* About Us Page Config Section */}
-                    <div className="glass-panel">
-                        <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px', color: 'var(--accent-teal)' }}>
-                            📖 About Us Page Configuration
-                        </h3>
-
-                        <div className="form-group" style={{ marginBottom: '18px' }}>
-                            <label className="form-label">About Page Title</label>
-                            <input 
-                                type="text" 
-                                className="form-control"
-                                value={data.about_title}
-                                onChange={e => setData('about_title', e.target.value)}
-                                placeholder="e.g. About Us"
-                            />
-                            {errors.about_title && <span className="form-error">{errors.about_title}</span>}
+                    <div className="glass-panel" id="section-about">
+                        <div 
+                            onClick={() => toggleSection('about')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.about ? '12px' : '0', 
+                                borderBottom: openSections.about ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.about ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-teal)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                📖 About Us Page Configuration
+                            </h3>
+                            <span style={{ fontSize: '13px', color: 'var(--accent-teal)', fontWeight: 'bold' }}>
+                                {openSections.about ? '▲ Collapse' : '▼ Expand'}
+                            </span>
                         </div>
 
-                        <div className="form-group">
-                            <label className="form-label">About Page Description & Introduction</label>
-                            <textarea 
-                                className="form-control"
-                                value={data.about_description}
-                                onChange={e => setData('about_description', e.target.value)}
-                                rows="5"
-                                placeholder="Enter full platform description for the /about page..."
-                            />
-                            {errors.about_description && <span className="form-error">{errors.about_description}</span>}
-                        </div>
+                        {openSections.about && (
+                            <>
+                                <div className="form-group" style={{ marginBottom: '18px' }}>
+                                    <label className="form-label">About Page Title</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={data.about_title}
+                                        onChange={e => setData('about_title', e.target.value)}
+                                        placeholder="e.g. About Us"
+                                    />
+                                    {errors.about_title && <span className="form-error">{errors.about_title}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">About Page Description & Introduction</label>
+                                    <textarea 
+                                        className="form-control"
+                                        value={data.about_description}
+                                        onChange={e => setData('about_description', e.target.value)}
+                                        rows="5"
+                                        placeholder="Enter full platform description for the /about page..."
+                                    />
+                                    {errors.about_description && <span className="form-error">{errors.about_description}</span>}
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Team Members Management */}
-                    <div className="glass-panel">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, color: 'var(--accent-teal)' }}>
+                    <div className="glass-panel" id="section-team">
+                        <div 
+                            onClick={() => toggleSection('team')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.team ? '12px' : '0', 
+                                borderBottom: openSections.team ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.team ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-teal)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 👨‍⚕️ About Us Team Members ({teamMembers.length})
                             </h3>
-                            <button 
-                                type="button" 
-                                onClick={openAddMemberModal} 
-                                className="btn btn-primary"
-                                style={{ padding: '6px 16px', fontSize: '13px' }}
-                            >
-                                ➕ Add Team Member
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!openSections.team) setOpenSections(prev => ({ ...prev, team: true }));
+                                        openAddMemberModal();
+                                    }} 
+                                    className="btn btn-primary"
+                                    style={{ padding: '6px 16px', fontSize: '13px' }}
+                                >
+                                    ➕ Add Team Member
+                                </button>
+                                <span style={{ fontSize: '13px', color: 'var(--accent-teal)', fontWeight: 'bold' }}>
+                                    {openSections.team ? '▲ Collapse' : '▼ Expand'}
+                                </span>
+                            </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                            {teamMembers.length > 0 ? (
-                                teamMembers.map((member) => (
-                                    <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                                            <div style={{ width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#0e7490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', overflow: 'hidden' }}>
-                                                {member.image_path ? (
-                                                    <img src={`/${member.image_path}`} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                ) : (
-                                                    (member.name || 'D').charAt(0)
-                                                )}
-                                            </div>
-                                            <div>
-                                                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{member.name}</h4>
-                                                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                                    {member.title ? `${member.title} • ` : ''}{member.specialization || 'Specialist'} {member.designation ? `(${member.designation})` : ''}
-                                                </span>
-                                                <div style={{ fontSize: '11px', color: 'var(--accent-gold)', marginTop: '2px' }}>
-                                                    {getLevelName(member.level)}
+                        {openSections.team && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                                {teamMembers.length > 0 ? (
+                                    teamMembers.map((member) => (
+                                        <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                                <div style={{ width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#0e7490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', overflow: 'hidden' }}>
+                                                    {member.image_path ? (
+                                                        <img src={`/${member.image_path}`} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    ) : (
+                                                        (member.name || 'D').charAt(0)
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{member.name}</h4>
+                                                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                        {member.title ? `${member.title} • ` : ''}{member.specialization || 'Specialist'} {member.designation ? `(${member.designation})` : ''}
+                                                    </span>
+                                                    <div style={{ fontSize: '11px', color: 'var(--accent-gold)', marginTop: '2px' }}>
+                                                        {getLevelName(member.level)}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div style={{ display: 'flex', gap: '8px' }}>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => openEditMemberModal(member)} 
+                                                    className="btn btn-outline" 
+                                                    style={{ padding: '4px 10px', fontSize: '12px' }}
+                                                >
+                                                    ✏️ Edit
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => handleDeleteMember(member)} 
+                                                    className="btn btn-outline" 
+                                                    style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                                >
+                                                    🗑️ Delete
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '8px' }}>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => openEditMemberModal(member)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '12px' }}
-                                            >
-                                                ✏️ Edit
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => handleDeleteMember(member)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
-                                            >
-                                                🗑️ Delete
-                                            </button>
-                                        </div>
+                                    ))
+                                ) : (
+                                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                        No team members added yet. Click "Add Team Member" to create one.
                                     </div>
-                                ))
-                            ) : (
-                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
-                                    No team members added yet. Click "Add Team Member" to create one.
-                                </div>
-                            )}
-                        </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Services Page Config & Items Section */}
-                    <div className="glass-panel">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, color: 'var(--accent-teal)' }}>
+                    <div className="glass-panel" id="section-services">
+                        <div 
+                            onClick={() => toggleSection('services')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.services ? '12px' : '0', 
+                                borderBottom: openSections.services ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.services ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-teal)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 🛠️ Services Page Config & Items ({services.length})
                             </h3>
-                            <button 
-                                type="button" 
-                                onClick={openAddServiceModal} 
-                                className="btn btn-primary"
-                                style={{ padding: '6px 16px', fontSize: '13px' }}
-                            >
-                                ➕ Add Service Item
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!openSections.services) setOpenSections(prev => ({ ...prev, services: true }));
+                                        openAddServiceModal();
+                                    }} 
+                                    className="btn btn-primary"
+                                    style={{ padding: '6px 16px', fontSize: '13px' }}
+                                >
+                                    ➕ Add Service Item
+                                </button>
+                                <span style={{ fontSize: '13px', color: 'var(--accent-teal)', fontWeight: 'bold' }}>
+                                    {openSections.services ? '▲ Collapse' : '▼ Expand'}
+                                </span>
+                            </div>
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: '20px' }}>
-                            <label className="form-label">Services Page Intro Subtitle</label>
-                            <textarea 
-                                className="form-control"
-                                value={data.services_subtitle}
-                                onChange={e => setData('services_subtitle', e.target.value)}
-                                rows="3"
-                                placeholder="Enter introduction subtitle paragraph for /services page..."
-                            />
-                        </div>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
-                            {services.length > 0 ? (
-                                services.map(srv => (
-                                    <div key={srv.id} style={{ padding: '14px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            {srv.image_path ? (
-                                                <img src={'/' + srv.image_path} alt={srv.title} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-teal)' }} />
-                                            ) : (
-                                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#0d9488' }}>
-                                                    🩺
-                                                </div>
-                                            )}
-                                            <div>
-                                                {srv.prefix && (
-                                                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: 'var(--accent-teal)', display: 'block', marginBottom: '2px' }}>
-                                                        {srv.prefix}
-                                                    </span>
-                                                )}
-                                                <h4 style={{ margin: 0, fontSize: '13px', fontWeight: '800', textTransform: 'uppercase' }}>
-                                                    {srv.title}
-                                                </h4>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ display: 'flex', gap: '6px' }}>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => openEditServiceModal(srv)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 8px', fontSize: '11px' }}
-                                            >
-                                                ✏️ Edit
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => handleDeleteService(srv)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
-                                            >
-                                                🗑️
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
-                                    No services added yet. Click "Add Service Item" to create one.
+                        {openSections.services && (
+                            <>
+                                <div className="form-group" style={{ marginBottom: '20px' }}>
+                                    <label className="form-label">Services Page Intro Subtitle</label>
+                                    <textarea 
+                                        className="form-control"
+                                        value={data.services_subtitle}
+                                        onChange={e => setData('services_subtitle', e.target.value)}
+                                        rows="3"
+                                        placeholder="Enter introduction subtitle paragraph for /services page..."
+                                    />
                                 </div>
-                            )}
-                        </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
+                                    {services.length > 0 ? (
+                                        services.map(srv => (
+                                            <div key={srv.id} style={{ padding: '14px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                    {srv.image_path ? (
+                                                        <img src={'/' + srv.image_path} alt={srv.title} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-teal)' }} />
+                                                    ) : (
+                                                        <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#0d9488' }}>
+                                                            🩺
+                                                        </div>
+                                                    )}
+                                                    <div>
+                                                        {srv.prefix && (
+                                                            <span style={{ fontSize: '10px', fontWeight: 'bold', color: 'var(--accent-teal)', display: 'block', marginBottom: '2px' }}>
+                                                                {srv.prefix}
+                                                            </span>
+                                                        )}
+                                                        <h4 style={{ margin: 0, fontSize: '13px', fontWeight: '800', textTransform: 'uppercase' }}>
+                                                            {srv.title}
+                                                        </h4>
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ display: 'flex', gap: '6px' }}>
+                                                    <button 
+                                                        type="button" 
+                                                        onClick={() => openEditServiceModal(srv)} 
+                                                        className="btn btn-outline" 
+                                                        style={{ padding: '4px 8px', fontSize: '11px' }}
+                                                    >
+                                                        ✏️ Edit
+                                                    </button>
+                                                    <button 
+                                                        type="button" 
+                                                        onClick={() => handleDeleteService(srv)} 
+                                                        className="btn btn-outline" 
+                                                        style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                            No services added yet. Click "Add Service Item" to create one.
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Doctor Reviews / Testimonials Management Section */}
-                    <div className="glass-panel">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, color: 'var(--accent-gold)' }}>
-                                ⭐ Doctor Reviews / Testimonials
+                    <div className="glass-panel" id="section-reviews">
+                        <div 
+                            onClick={() => toggleSection('reviews')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.reviews ? '12px' : '0', 
+                                borderBottom: openSections.reviews ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.reviews ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                ⭐ Doctor Reviews / Testimonials ({reviews.length})
                             </h3>
-                            <button 
-                                type="button" 
-                                onClick={openAddReviewModal} 
-                                className="btn btn-primary" 
-                                style={{ padding: '6px 16px', fontSize: '13px' }}
-                            >
-                                ➕ Add Review
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!openSections.reviews) setOpenSections(prev => ({ ...prev, reviews: true }));
+                                        openAddReviewModal();
+                                    }} 
+                                    className="btn btn-primary" 
+                                    style={{ padding: '6px 16px', fontSize: '13px' }}
+                                >
+                                    ➕ Add Review
+                                </button>
+                                <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                    {openSections.reviews ? '▲ Collapse' : '▼ Expand'}
+                                </span>
+                            </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            {reviews.length > 0 ? (
-                                reviews.map(rev => (
-                                    <div key={rev.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', gap: '14px' }}>
-                                        <div style={{ flex: 1 }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{rev.name}</h4>
+                        {openSections.reviews && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {reviews.length > 0 ? (
+                                    reviews.map(rev => (
+                                        <div key={rev.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', gap: '14px' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{rev.name}</h4>
+                                                </div>
+                                                <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                                                    "{rev.quote}"
+                                                </p>
+                                                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                    {rev.role}{rev.location ? ` • ${rev.location}` : ''}
+                                                </span>
                                             </div>
-                                            <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
-                                                "{rev.quote}"
-                                            </p>
-                                            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                                {rev.role}{rev.location ? ` • ${rev.location}` : ''}
-                                            </span>
-                                        </div>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleToggleReviewPublish(rev)}
-                                                className="btn btn-outline"
-                                                style={{
-                                                    padding: '4px 10px',
-                                                    fontSize: '11px',
-                                                    color: rev.is_published ? '#10b981' : 'var(--text-muted)',
-                                                    borderColor: rev.is_published ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-color)',
-                                                }}
-                                            >
-                                                {rev.is_published ? '✓ Published' : 'Hidden'}
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => openEditReviewModal(rev)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '12px' }}
-                                            >
-                                                ✏️ Edit
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => handleDeleteReview(rev)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
-                                            >
-                                                🗑️ Delete
-                                            </button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleToggleReviewPublish(rev)}
+                                                    className="btn btn-outline"
+                                                    style={{
+                                                        padding: '4px 10px',
+                                                        fontSize: '11px',
+                                                        color: rev.is_published ? '#10b981' : 'var(--text-muted)',
+                                                        borderColor: rev.is_published ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-color)',
+                                                    }}
+                                                >
+                                                    {rev.is_published ? '✓ Published' : 'Hidden'}
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => openEditReviewModal(rev)} 
+                                                    className="btn btn-outline" 
+                                                    style={{ padding: '4px 10px', fontSize: '12px' }}
+                                                >
+                                                    ✏️ Edit
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => handleDeleteReview(rev)} 
+                                                    className="btn btn-outline" 
+                                                    style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                                >
+                                                    🗑️ Delete
+                                                </button>
+                                            </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                        No reviews added yet. Click "+ Add Review" to create one.
                                     </div>
-                                ))
-                            ) : (
-                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
-                                    No reviews added yet. Click "+ Add Review" to create one.
-                                </div>
-                            )}
-                        </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Clinical News & Professional Training Management Section */}
-                    <div className="glass-panel">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, color: 'var(--accent-gold)' }}>
-                                📰 Clinical News & Updates Management
+                    <div className="glass-panel" id="section-news">
+                        <div 
+                            onClick={() => toggleSection('news')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.news ? '12px' : '0', 
+                                borderBottom: openSections.news ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.news ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                📰 Clinical News & Updates Management ({newsItems.length})
                             </h3>
-                            <button 
-                                type="button" 
-                                onClick={openAddNewsModal} 
-                                className="btn btn-primary" 
-                                style={{ padding: '6px 16px', fontSize: '13px' }}
-                            >
-                                ➕ Add News / Training Item
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!openSections.news) setOpenSections(prev => ({ ...prev, news: true }));
+                                        openAddNewsModal();
+                                    }} 
+                                    className="btn btn-primary" 
+                                    style={{ padding: '6px 16px', fontSize: '13px' }}
+                                >
+                                    ➕ Add News / Training Item
+                                </button>
+                                <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                    {openSections.news ? '▲ Collapse' : '▼ Expand'}
+                                </span>
+                            </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            {newsItems.length > 0 ? (
-                                newsItems.map(item => (
-                                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', gap: '14px' }}>
-                                        <div style={{ flex: 1 }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                                <span style={{ fontSize: '11px', fontWeight: 'bold', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', border: '1px solid rgba(13, 148, 136, 0.3)' }}>
-                                                    {item.badge_text}
-                                                </span>
-                                                {item.sub_badge_text && (
-                                                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                                                        • {item.sub_badge_text}
+                        {openSections.news && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {newsItems.length > 0 ? (
+                                    newsItems.map(item => (
+                                        <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', gap: '14px' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                                    <span style={{ fontSize: '11px', fontWeight: 'bold', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', border: '1px solid rgba(13, 148, 136, 0.3)' }}>
+                                                        {item.badge_text}
                                                     </span>
-                                                )}
+                                                    {item.sub_badge_text && (
+                                                        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                                                            • {item.sub_badge_text}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <h4 style={{ margin: '4px 0', fontSize: '15px', fontWeight: '700' }}>{item.title}</h4>
+                                                <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                                    {item.description}
+                                                </p>
+                                                <span style={{ fontSize: '11px', color: 'var(--accent-teal)' }}>
+                                                    Button: "{item.button_text}" ({item.button_type})
+                                                </span>
                                             </div>
-                                            <h4 style={{ margin: '4px 0', fontSize: '15px', fontWeight: '700' }}>{item.title}</h4>
-                                            <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                                                {item.description}
-                                            </p>
-                                            <span style={{ fontSize: '11px', color: 'var(--accent-teal)' }}>
-                                                Button: "{item.button_text}" ({item.button_type})
-                                            </span>
-                                        </div>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleToggleNewsPublish(item)}
-                                                className="btn btn-outline"
-                                                style={{
-                                                    padding: '4px 10px',
-                                                    fontSize: '11px',
-                                                    color: item.is_published ? '#10b981' : 'var(--text-muted)',
-                                                    borderColor: item.is_published ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-color)',
-                                                }}
-                                            >
-                                                {item.is_published ? '✓ Published' : 'Hidden'}
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => openEditNewsModal(item)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '12px' }}
-                                            >
-                                                ✏️ Edit
-                                            </button>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => handleDeleteNews(item)} 
-                                                className="btn btn-outline" 
-                                                style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
-                                            >
-                                                🗑️ Delete
-                                            </button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleToggleNewsPublish(item)}
+                                                    className="btn btn-outline"
+                                                    style={{
+                                                        padding: '4px 10px',
+                                                        fontSize: '11px',
+                                                        color: item.is_published ? '#10b981' : 'var(--text-muted)',
+                                                        borderColor: item.is_published ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-color)',
+                                                    }}
+                                                >
+                                                    {item.is_published ? '✓ Published' : 'Hidden'}
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => openEditNewsModal(item)} 
+                                                    className="btn btn-outline" 
+                                                    style={{ padding: '4px 10px', fontSize: '12px' }}
+                                                >
+                                                    ✏️ Edit
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => handleDeleteNews(item)} 
+                                                    className="btn btn-outline" 
+                                                    style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                                >
+                                                    🗑️ Delete
+                                                </button>
+                                            </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                        No news or training items added yet. Click "+ Add News / Training Item" to create one.
                                     </div>
-                                ))
-                            ) : (
-                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
-                                    No news or training items added yet. Click "+ Add News / Training Item" to create one.
-                                </div>
-                            )}
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer & Contact Info Config Section */}
+                    <div className="glass-panel" id="section-footer">
+                        <div 
+                            onClick={() => toggleSection('footer')}
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                cursor: 'pointer',
+                                paddingBottom: openSections.footer ? '12px' : '0', 
+                                borderBottom: openSections.footer ? '1px solid var(--border-color)' : 'none', 
+                                marginBottom: openSections.footer ? '20px' : '0',
+                                userSelect: 'none'
+                            }}
+                        >
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                📌 Footer & Contact Information Config
+                            </h3>
+                            <span style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: 'bold' }}>
+                                {openSections.footer ? '▲ Collapse' : '▼ Expand'}
+                            </span>
                         </div>
+
+                        {openSections.footer && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Office Location</label>
+                                    <textarea 
+                                        className="form-control"
+                                        value={data.footer_office_location}
+                                        onChange={e => setData('footer_office_location', e.target.value)}
+                                        rows="2"
+                                        placeholder="e.g. House 12, Road 5, Dhanmondi, Dhaka, Bangladesh"
+                                    />
+                                    {errors.footer_office_location && <span className="form-error">{errors.footer_office_location}</span>}
+                                </div>
+
+                                <div className="grid-responsive-two-col" style={{ gap: '15px' }}>
+                                    <div className="form-group">
+                                        <label className="form-label">Contact Phone Number</label>
+                                        <input 
+                                            type="text" 
+                                            className="form-control"
+                                            value={data.footer_contact_phone}
+                                            onChange={e => setData('footer_contact_phone', e.target.value)}
+                                            placeholder="e.g. +880 1712-345678"
+                                        />
+                                        {errors.footer_contact_phone && <span className="form-error">{errors.footer_contact_phone}</span>}
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label">WhatsApp Number (Floating Bumping Widget)</label>
+                                        <input 
+                                            type="text" 
+                                            className="form-control"
+                                            value={data.whatsapp_number}
+                                            onChange={e => setData('whatsapp_number', e.target.value)}
+                                            placeholder="e.g. +8801700000000"
+                                        />
+                                        {errors.whatsapp_number && <span className="form-error">{errors.whatsapp_number}</span>}
+                                        <small style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '2px', display: 'block' }}>
+                                            Floating bumping WhatsApp button on front pages will direct chat to this number.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Contact Email Address</label>
+                                    <input 
+                                        type="email" 
+                                        className="form-control"
+                                        value={data.footer_contact_email}
+                                        onChange={e => setData('footer_contact_email', e.target.value)}
+                                        placeholder="e.g. info@omscompanion.com"
+                                    />
+                                    {errors.footer_contact_email && <span className="form-error">{errors.footer_contact_email}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Facebook Page Link / URL</label>
+                                    <input 
+                                        type="url" 
+                                        className="form-control"
+                                        value={data.footer_facebook_url}
+                                        onChange={e => setData('footer_facebook_url', e.target.value)}
+                                        placeholder="e.g. https://facebook.com/omscompanion"
+                                    />
+                                    {errors.footer_facebook_url && <span className="form-error">{errors.footer_facebook_url}</span>}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Submit Button */}
