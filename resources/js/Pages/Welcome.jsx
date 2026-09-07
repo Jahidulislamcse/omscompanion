@@ -274,24 +274,24 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     // FAQ Items
     const faqs = [
         {
-            q: "Who can refer patients on DentistChamber?",
-            a: "Both verified BDS Registration Holder Doctors and Medicine Shop Keepers can refer patients. BDS Doctors refer via their member panel with full case tracking, while Medicine Shop Keepers can quickly submit patient details directly using our online referral modal."
+            q: "What is OMS Companion?",
+            a: "OMS Companion is a professional learning and clinical support platform designed for dental surgeons, providing expert knowledge, surgical videos, clinical guidance, and a refferal system for complex patients to improve patient management and clinical practice"
         },
         {
-            q: "Who can register as a BDS member on DentistChamber?",
-            a: "DentistChamber is dedicated specifically for verified BDS (Bachelor of Dental Surgery) Doctors and dental practitioners who wish to refer complex surgical or specialized cases, track live treatment progress, and access clinical video masterclasses."
+            q: "Who can use OMS Companion?",
+            a: "OMS Companion is primarily designed for dental surgeons and healthcare professionals interested in Oral & Maxillofacial Surgery, Oral Medicine, oncology, and the management of complex oral and maxillofacial conditions."
         },
         {
-            q: "How does live case tracking work after submitting a referral?",
-            a: "Once a BDS member submits a patient referral, the system logs every milestone chronologically—from initial contact and consultation booking to active treatment and final completion. You can view real-time status updates directly from your member dashboard."
+            q: "Is OMS Companion worth the membership?",
+            a: "If you are serious about improving your clinical knowledge, expanding your surgical understanding, and managing patients with multidisciplinary team, OMS Companion can become a valuable part of your professional development."
         },
         {
-            q: "Are preview videos accessible without an account?",
-            a: "Yes! Preview videos on the landing page are open to everyone. However, approved BDS members gain full access to our premium high-definition surgical streams, masterclass tutorials, and downloadable educational guides."
+            q: "Are the contents suitable for beginners?",
+            a: "Yes. Content is designed to be educational and useful for dental surgeons at different stages of their careers, from those developing their surgical skills to experienced practitioners looking to expand their knowledge."
         },
         {
-            q: "How do digital membership certificates work?",
-            a: "Upon admin approval of your BDS membership, a customized high-resolution digital certificate with your clinic name and membership credentials is automatically generated and available for instant download in PDF format."
+            q: "Can I access OMS Companion from my mobile phone?",
+            a: "Yes. OMS Companion is designed to be accessible across devices, including smartphones, tablets, and computers, allowing you to learn conveniently from your clinic, home, or anywhere with an internet connection"
         }
     ];
 
@@ -786,9 +786,6 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             </span>
                         </div>
                         <h2 className="landing-section-title">Frequently Asked Questions</h2>
-                        <p className="landing-section-subtitle">
-                            Got questions about joining or sending referrals? We have answers.
-                        </p>
                     </div>
 
                     <div className="faq-accordion-list">
