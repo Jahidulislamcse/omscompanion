@@ -1010,65 +1010,55 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         {/* STEP 1: SELECT REFERRER TYPE */}
                         {referralStep === 'select_type' && (
                             <div>
-                                <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px', textAlign: 'center', fontWeight: '500' }}>
-                                    Select your identity:
+                                <p style={{ color: '#475569', fontSize: '15px', marginBottom: '22px', textAlign: 'center', fontWeight: '800', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+                                    SELECT YOUR IDENTITY
                                 </p>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '14px' }}>
-                                    {/* Option 1: I'm BDS Doctor */}
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+                                    {/* Option 1: I'm a Doctor */}
                                     <div 
                                         onClick={() => { setReferralType('bds_doctor'); setReferralStep('bds_prompt'); }}
                                         style={{ 
-                                            padding: '18px 20px', 
+                                            padding: '18px 24px', 
                                             borderRadius: '14px', 
                                             cursor: 'pointer', 
-                                            border: '1.5px solid #10b981',
-                                            backgroundColor: '#f0fdf4',
+                                            border: '1.5px solid #86efac',
+                                            backgroundColor: '#e6f4ea',
                                             transition: 'all 0.2s ease',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justify: 'space-between',
+                                            justifyContent: 'space-between',
                                             gap: '14px'
                                         }}
                                     >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                                            <div style={{ fontSize: '32px', lineHeight: 1 }}>🩺</div>
-                                            <div>
-                                                <h4 style={{ margin: '0 0 2px 0', fontSize: '17px', fontWeight: '800', color: '#065f46' }}>
-                                                    I'm BDS Doctor
-                                                </h4>
-                                                <span style={{ fontSize: '13px', color: '#047857', fontWeight: '500' }}>Registered dental surgeon</span>
-                                            </div>
+                                        <div>
+                                            <h4 style={{ margin: '0 0 4px 0', fontSize: '19px', fontWeight: '800', color: '#1e293b' }}>
+                                                I’m a Doctor
+                                            </h4>
+                                            <span style={{ fontSize: '13px', color: '#475569', fontWeight: '500' }}>
+                                                Registered doctor
+                                            </span>
                                         </div>
-                                        <span style={{ fontSize: '20px', color: '#10b981', fontWeight: 'bold' }}>→</span>
+                                        <span style={{ fontSize: '22px', color: '#10b981', fontWeight: 'bold' }}>→</span>
                                     </div>
 
-                                    {/* Option 2: I'm Pharmacy Owner/Staff */}
+                                    {/* Option 2: I'm not a Doctor */}
                                     <div 
                                         onClick={() => { setReferralType('medicine_shop'); setReferralStep('medicine_shop_form'); }}
                                         style={{ 
-                                            padding: '18px 20px', 
+                                            padding: '22px 24px', 
                                             borderRadius: '14px', 
                                             cursor: 'pointer', 
-                                            border: '1.5px solid #2563eb',
-                                            backgroundColor: '#eff6ff',
+                                            backgroundColor: '#e0e9fa',
                                             transition: 'all 0.2s ease',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justify: 'space-between',
-                                            gap: '14px'
+                                            justifyContent: 'center'
                                         }}
                                     >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                                            <div style={{ fontSize: '32px', lineHeight: 1 }}>💊</div>
-                                            <div>
-                                                <h4 style={{ margin: '0 0 2px 0', fontSize: '17px', fontWeight: '800', color: '#1e40af' }}>
-                                                    I'm Pharmacy Owner/Staff
-                                                </h4>
-                                                <span style={{ fontSize: '13px', color: '#1d4ed8', fontWeight: '500' }}>Medicine shop & pharmacy staff</span>
-                                            </div>
-                                        </div>
-                                        <span style={{ fontSize: '20px', color: '#2563eb', fontWeight: 'bold' }}>→</span>
+                                        <h4 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#1e293b' }}>
+                                            I’m not a Doctor
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -1079,7 +1069,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             <div style={{ textAlign: 'center', padding: '10px 0' }}>
                                 <div style={{ fontSize: '52px', marginBottom: '12px' }}>🩺</div>
                                 <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#065f46', marginBottom: '10px' }}>
-                                    I'm BDS Doctor
+                                    I’m a Doctor
                                 </h4>
                                 <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.5', marginBottom: '24px' }}>
                                     Please register or login to refer patients directly from your BDS doctor account panel.
