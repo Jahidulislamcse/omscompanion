@@ -27,25 +27,57 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     const [newsModalOpen, setNewsModalOpen] = useState(false);
     const [editingNews, setEditingNews] = useState(null);
 
-    // Section Toggle State
+    // Section Toggle State (Only 1 section active by default)
     const [openSections, setOpenSections] = useState({
         branding: true,
-        hero: true,
+        hero: false,
         login: false,
         goals: false,
         about: false,
-        team: true,
-        services: true,
-        reviews: true,
-        news: true,
+        team: false,
+        services: false,
+        reviews: false,
+        news: false,
         footer: false,
     });
 
     const toggleSection = (sectionKey) => {
-        setOpenSections(prev => ({
-            ...prev,
-            [sectionKey]: !prev[sectionKey]
-        }));
+        setOpenSections(prev => {
+            const isCurrentlyOpen = prev[sectionKey];
+            // Collapse all, then open selected if it wasn't already open
+            const newState = {
+                branding: false,
+                hero: false,
+                login: false,
+                goals: false,
+                about: false,
+                team: false,
+                services: false,
+                reviews: false,
+                news: false,
+                footer: false,
+            };
+            if (!isCurrentlyOpen) {
+                newState[sectionKey] = true;
+            }
+            return newState;
+        });
+    };
+
+    const openOnlySection = (sectionKey) => {
+        setOpenSections({
+            branding: false,
+            hero: false,
+            login: false,
+            goals: false,
+            about: false,
+            team: false,
+            services: false,
+            reviews: false,
+            news: false,
+            footer: false,
+            [sectionKey]: true
+        });
     };
 
     const expandAllSections = () => {
@@ -506,9 +538,7 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                     key={sec.key}
                                     type="button"
                                     onClick={() => {
-                                        if (!isOpen) {
-                                            setOpenSections(prev => ({ ...prev, [sec.key]: true }));
-                                        }
+                                        openOnlySection(sec.key);
                                         setTimeout(() => {
                                             const el = document.getElementById(`section-${sec.key}`);
                                             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
