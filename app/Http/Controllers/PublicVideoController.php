@@ -11,6 +11,16 @@ class PublicVideoController extends Controller
 {
     public function index()
     {
+        // Ensure default categories exist
+        VideoCategory::firstOrCreate(
+            ['name' => 'Surgical approaches'],
+            ['description' => 'Surgical techniques and approaches.']
+        );
+        VideoCategory::firstOrCreate(
+            ['name' => 'Clinical lecture/ tips tricks'],
+            ['description' => 'Clinical lectures, guides, and practical tips & tricks.']
+        );
+
         $categories = VideoCategory::with(['videos' => function ($q) {
             $q->orderBy('created_at', 'desc');
         }])->get();
