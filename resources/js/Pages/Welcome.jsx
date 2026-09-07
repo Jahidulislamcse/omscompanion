@@ -325,7 +325,12 @@ export default function Welcome({ settings, freeVideos }) {
 
     return (
         <div className="landing-wrapper page-colorful-theme">
-            <Head title={`${site_name || 'DentistChamber'} - BDS Referral & Clinical Hub`} />
+            <Head>
+                <title>{`${site_name || 'OMS COMPANION'} - oms clinical hub & patient management platform`}</title>
+                <meta name="description" content={`${site_name || 'OMS COMPANION'} empowers BDS Doctors with surgical video archives, online consultations, transparent management tracking, and professional Learning.`} />
+                <meta property="og:title" content={`${site_name || 'OMS COMPANION'} - oms clinical hub & patient management platform`} />
+                <meta property="og:description" content={`${site_name || 'OMS COMPANION'} empowers BDS Doctors with surgical video archives, online consultations, transparent management tracking, and professional Learning.`} />
+            </Head>
 
             {/* Vibrant Ambient Glow Blobs */}
             <div className="ambient-glow glow-cyan" />
@@ -453,7 +458,7 @@ export default function Welcome({ settings, freeVideos }) {
                         </div>
                         <h2 className="landing-section-title">Benefit of Membership</h2>
                         <p className="landing-section-subtitle">
-                            Explore how joining {site_name || 'DentistChamber'} empowers BDS Doctors with surgical video archives, online consultations, transparent referral tracking, and professional training.
+                            Explore how joining {site_name || 'OMS COMPANION'} empowers BDS Doctors with surgical video archives, online consultations, transparent management tracking, and professional Learning.
                         </p>
                     </div>
 
