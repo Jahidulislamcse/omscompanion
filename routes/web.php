@@ -110,7 +110,52 @@ Route::get('/', function () {
         ]);
     }
 
+    // Ensure default news & training items exist
+    if (\App\Models\NewsItem::count() === 0) {
+        \App\Models\NewsItem::create([
+            'badge_text' => 'Workshop',
+            'sub_badge_text' => 'Upcoming Training',
+            'title' => 'Advanced Maxillofacial Impaction & Surgical Masterclass',
+            'description' => 'Hands-on surgical training program focusing on complex 3rd molar impactions and piezosurgery techniques for general practitioners.',
+            'button_text' => 'View Related Masterclass Videos →',
+            'button_url' => '/videos',
+            'button_type' => 'outline',
+            'theme_color' => 'indigo',
+            'order_index' => 1,
+            'is_published' => true,
+        ]);
+        \App\Models\NewsItem::create([
+            'badge_text' => 'Clinical Guide',
+            'sub_badge_text' => 'Latest Guidelines',
+            'title' => 'Co-Morbid Patient Management Protocols in Minor Oral Surgery',
+            'description' => 'Updated clinical guidelines for treating medically compromised and diabetic patients safely in chamber setups.',
+            'button_text' => 'Explore Clinical Guides →',
+            'button_url' => '/videos',
+            'button_type' => 'outline',
+            'theme_color' => 'emerald',
+            'order_index' => 2,
+            'is_published' => true,
+        ]);
+        \App\Models\NewsItem::create([
+            'badge_text' => 'Consultation',
+            'sub_badge_text' => 'Live Support',
+            'title' => 'Online Consultation & Multidisciplinary Case Discussions',
+            'description' => 'BDS doctors can now directly request real-time expert opinions and surgical team collaboration via direct WhatsApp desk.',
+            'button_text' => 'Join WhatsApp Consultation 💬',
+            'button_url' => 'whatsapp',
+            'button_type' => 'whatsapp',
+            'theme_color' => 'cyan',
+            'order_index' => 3,
+            'is_published' => true,
+        ]);
+    }
+
     $reviews = \App\Models\Review::where('is_published', true)
+        ->orderBy('order_index', 'asc')
+        ->orderBy('id', 'desc')
+        ->get();
+
+    $newsItems = \App\Models\NewsItem::where('is_published', true)
         ->orderBy('order_index', 'asc')
         ->orderBy('id', 'desc')
         ->get();
@@ -120,6 +165,7 @@ Route::get('/', function () {
         'freeVideos' => $dbFreeVideos,
         'categories' => $categories,
         'reviews' => $reviews,
+        'newsItems' => $newsItems,
     ]);
 })->name('home');
 
@@ -266,6 +312,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/reviews/{review}', [AdminController::class, 'updateReview'])->name('admin.reviews.update_post');
     Route::delete('/reviews/{review}', [AdminController::class, 'destroyReview'])->name('admin.reviews.destroy');
     Route::post('/reviews/{review}/toggle', [AdminController::class, 'toggleReviewPublish'])->name('admin.reviews.toggle');
+    Route::post('/news-items', [AdminController::class, 'storeNewsItem'])->name('admin.news.store');
+    Route::put('/news-items/{newsItem}', [AdminController::class, 'updateNewsItem'])->name('admin.news.update');
+    Route::post('/news-items/{newsItem}', [AdminController::class, 'updateNewsItem'])->name('admin.news.update_post');
+    Route::delete('/news-items/{newsItem}', [AdminController::class, 'destroyNewsItem'])->name('admin.news.destroy');
+    Route::post('/news-items/{newsItem}/toggle', [AdminController::class, 'toggleNewsItemPublish'])->name('admin.news.toggle');
     Route::get('/messages', [AdminController::class, 'messages'])->name('admin.messages');
     Route::post('/messages/{message}/read', [AdminController::class, 'markMessageRead'])->name('admin.messages.read');
     Route::delete('/messages/{message}', [AdminController::class, 'destroyMessage'])->name('admin.messages.destroy');

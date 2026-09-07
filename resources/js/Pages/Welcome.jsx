@@ -124,7 +124,7 @@ function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, o
     );
 }
 
-export default function Welcome({ settings, freeVideos, reviews = [] }) {
+export default function Welcome({ settings, freeVideos, reviews = [], newsItems = [] }) {
     const { auth, site_name } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | 'unapproved' | null
@@ -327,6 +327,48 @@ export default function Welcome({ settings, freeVideos, reviews = [] }) {
             }
         ];
     }, [reviews]);
+
+    // Clinical News Items resolution (dynamic from props, fallback to defaults)
+    const activeNewsItems = useMemo(() => {
+        if (newsItems && newsItems.length > 0) {
+            return newsItems;
+        }
+        return [
+            {
+                id: 'default-1',
+                badge_text: 'Workshop',
+                sub_badge_text: 'Upcoming Training',
+                title: 'Advanced Maxillofacial Impaction & Surgical Masterclass',
+                description: 'Hands-on surgical training program focusing on complex 3rd molar impactions and piezosurgery techniques for general practitioners.',
+                button_text: 'View Related Masterclass Videos →',
+                button_url: '/videos',
+                button_type: 'outline',
+                theme_color: 'indigo',
+            },
+            {
+                id: 'default-2',
+                badge_text: 'Clinical Guide',
+                sub_badge_text: 'Latest Guidelines',
+                title: 'Co-Morbid Patient Management Protocols in Minor Oral Surgery',
+                description: 'Updated clinical guidelines for treating medically compromised and diabetic patients safely in chamber setups.',
+                button_text: 'Explore Clinical Guides →',
+                button_url: '/videos',
+                button_type: 'outline',
+                theme_color: 'emerald',
+            },
+            {
+                id: 'default-3',
+                badge_text: 'Consultation',
+                sub_badge_text: 'Live Support',
+                title: 'Online Consultation & Multidisciplinary Case Discussions',
+                description: 'BDS doctors can now directly request real-time expert opinions and surgical team collaboration via direct WhatsApp desk.',
+                button_text: 'Join WhatsApp Consultation 💬',
+                button_url: 'whatsapp',
+                button_type: 'whatsapp',
+                theme_color: 'cyan',
+            }
+        ];
+    }, [newsItems]);
 
     return (
         <div className="landing-wrapper page-colorful-theme">
@@ -688,53 +730,48 @@ export default function Welcome({ settings, freeVideos, reviews = [] }) {
                     </div>
 
                     <div className="news-grid">
-                        <div className="glass-panel news-card card-glow-indigo">
-                            <div className="news-meta">
-                                <span className="badge-status badge-new">Workshop</span>
-                                <span>Upcoming Training</span>
-                            </div>
-                            <h4 style={{ fontSize: '18px', fontWeight: '700' }}>Advanced Maxillofacial Impaction & Surgical Masterclass</h4>
-                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
-                                Hands-on surgical training program focusing on complex 3rd molar impactions and piezosurgery techniques for general practitioners.
-                            </p>
-                            <Link href={route('videos.public')} className="btn btn-outline" style={{ alignSelf: 'flex-start', marginTop: 'auto' }}>
-                                View Related Masterclass Videos →
-                            </Link>
-                        </div>
+                        {activeNewsItems.map((item, idx) => {
+                            const glowClass = item.theme_color ? `card-glow-${item.theme_color}` : (idx % 3 === 0 ? 'card-glow-indigo' : idx % 3 === 1 ? 'card-glow-emerald' : 'card-glow-cyan');
+                            const badgeStyleClass = idx % 3 === 0 ? 'badge-new' : idx % 3 === 1 ? 'badge-completed' : 'badge-approved';
 
-                        <div className="glass-panel news-card card-glow-emerald">
-                            <div className="news-meta">
-                                <span className="badge-status badge-completed">Clinical Guide</span>
-                                <span>Latest Guidelines</span>
-                            </div>
-                            <h4 style={{ fontSize: '18px', fontWeight: '700' }}>Co-Morbid Patient Management Protocols in Minor Oral Surgery</h4>
-                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
-                                Updated clinical guidelines for treating medically compromised and diabetic patients safely in chamber setups.
-                            </p>
-                            <Link href={route('videos.public')} className="btn btn-outline" style={{ alignSelf: 'flex-start', marginTop: 'auto' }}>
-                                Explore Clinical Guides →
-                            </Link>
-                        </div>
+                            const isWhatsApp = item.button_type === 'whatsapp' || item.button_url === 'whatsapp';
+                            const waNumber = (getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000';
+                            const targetUrl = isWhatsApp 
+                                ? `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hello OMSCOMPANION! Inquiry regarding: ${item.title}`)}`
+                                : (item.button_url || route('videos.public'));
 
-                        <div className="glass-panel news-card card-glow-cyan">
-                            <div className="news-meta">
-                                <span className="badge-status badge-approved">Consultation</span>
-                                <span>Live Support</span>
-                            </div>
-                            <h4 style={{ fontSize: '18px', fontWeight: '700' }}>Online Consultation & Multidisciplinary Case Discussions</h4>
-                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
-                                BDS doctors can now directly request real-time expert opinions and surgical team collaboration via direct WhatsApp desk.
-                            </p>
-                            <a 
-                                href={`https://wa.me/${(getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000'}?text=${encodeURIComponent('Hello OMSCOMPANION! I would like to join the Multidisciplinary Case Discussions.')}`}
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="btn btn-whatsapp" 
-                                style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
-                            >
-                                Join WhatsApp Consultation 💬
-                            </a>
-                        </div>
+                            return (
+                                <div key={item.id || idx} className={`glass-panel news-card ${glowClass}`}>
+                                    <div className="news-meta">
+                                        <span className={`badge-status ${badgeStyleClass}`}>{item.badge_text}</span>
+                                        {item.sub_badge_text && <span>{item.sub_badge_text}</span>}
+                                    </div>
+                                    <h4 style={{ fontSize: '18px', fontWeight: '700' }}>{item.title}</h4>
+                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                                        {item.description}
+                                    </p>
+                                    {isWhatsApp || targetUrl.startsWith('http') ? (
+                                        <a 
+                                            href={targetUrl}
+                                            target="_blank" 
+                                            rel="noopener noreferrer" 
+                                            className={`btn ${isWhatsApp ? 'btn-whatsapp' : 'btn-outline'}`}
+                                            style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
+                                        >
+                                            {item.button_text}
+                                        </a>
+                                    ) : (
+                                        <Link 
+                                            href={targetUrl.startsWith('/') ? targetUrl : route('videos.public')} 
+                                            className="btn btn-outline" 
+                                            style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
+                                        >
+                                            {item.button_text}
+                                        </Link>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

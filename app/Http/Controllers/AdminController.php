@@ -12,6 +12,7 @@ use App\Models\LandingSetting;
 use App\Models\TeamMember;
 use App\Models\Service;
 use App\Models\Review;
+use App\Models\NewsItem;
 use App\Models\ContactMessage;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -415,12 +416,14 @@ class AdminController extends Controller
         $teamMembers = TeamMember::orderBy('level', 'asc')->orderBy('order_index', 'asc')->get();
         $services = Service::orderBy('order_index', 'asc')->orderBy('id', 'asc')->get();
         $reviews = Review::orderBy('order_index', 'asc')->orderBy('id', 'desc')->get();
+        $newsItems = NewsItem::orderBy('order_index', 'asc')->orderBy('id', 'desc')->get();
 
         return Inertia::render('Admin/PageContent', [
             'settings' => $settings,
             'teamMembers' => $teamMembers,
             'services' => $services,
             'reviews' => $reviews,
+            'newsItems' => $newsItems,
         ]);
     }
 
@@ -855,5 +858,83 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Review publish status updated.');
+    }
+
+    public function storeNewsItem(Request $request)
+    {
+        $request->validate([
+            'badge_text' => 'required|string|max:255',
+            'sub_badge_text' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'button_text' => 'required|string|max:255',
+            'button_url' => 'nullable|string|max:255',
+            'button_type' => 'required|string|max:50',
+            'theme_color' => 'required|string|max:50',
+            'order_index' => 'nullable|integer',
+            'is_published' => 'nullable|boolean',
+        ]);
+
+        NewsItem::create([
+            'badge_text' => $request->badge_text,
+            'sub_badge_text' => $request->sub_badge_text,
+            'title' => $request->title,
+            'description' => $request->description,
+            'button_text' => $request->button_text,
+            'button_url' => $request->button_url,
+            'button_type' => $request->button_type ?? 'outline',
+            'theme_color' => $request->theme_color ?? 'indigo',
+            'order_index' => $request->order_index ?? 0,
+            'is_published' => $request->boolean('is_published', true),
+        ]);
+
+        return redirect()->back()->with('success', 'Clinical news & training item added successfully.');
+    }
+
+    public function updateNewsItem(Request $request, NewsItem $newsItem)
+    {
+        $request->validate([
+            'badge_text' => 'required|string|max:255',
+            'sub_badge_text' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'button_text' => 'required|string|max:255',
+            'button_url' => 'nullable|string|max:255',
+            'button_type' => 'required|string|max:50',
+            'theme_color' => 'required|string|max:50',
+            'order_index' => 'nullable|integer',
+            'is_published' => 'nullable|boolean',
+        ]);
+
+        $newsItem->update([
+            'badge_text' => $request->badge_text,
+            'sub_badge_text' => $request->sub_badge_text,
+            'title' => $request->title,
+            'description' => $request->description,
+            'button_text' => $request->button_text,
+            'button_url' => $request->button_url,
+            'button_type' => $request->button_type ?? 'outline',
+            'theme_color' => $request->theme_color ?? 'indigo',
+            'order_index' => $request->order_index ?? 0,
+            'is_published' => $request->has('is_published') ? $request->boolean('is_published') : $newsItem->is_published,
+        ]);
+
+        return redirect()->back()->with('success', 'Clinical news item updated successfully.');
+    }
+
+    public function destroyNewsItem(NewsItem $newsItem)
+    {
+        $newsItem->delete();
+
+        return redirect()->back()->with('success', 'Clinical news item deleted successfully.');
+    }
+
+    public function toggleNewsItemPublish(NewsItem $newsItem)
+    {
+        $newsItem->update([
+            'is_published' => !$newsItem->is_published,
+        ]);
+
+        return redirect()->back()->with('success', 'News item publish status updated.');
     }
 }

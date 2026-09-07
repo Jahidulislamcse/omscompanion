@@ -3,7 +3,7 @@ import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
-export default function PageContent({ settings = {}, teamMembers = [], services = [], reviews = [] }) {
+export default function PageContent({ settings = {}, teamMembers = [], services = [], reviews = [], newsItems = [] }) {
     const { site_logo: currentLogo } = usePage().props;
     const [logoPreview, setLogoPreview] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
@@ -22,6 +22,10 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
     // Modal state for Doctor Reviews add/edit
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [editingReview, setEditingReview] = useState(null);
+
+    // Modal state for Clinical News add/edit
+    const [newsModalOpen, setNewsModalOpen] = useState(false);
+    const [editingNews, setEditingNews] = useState(null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         site_name: settings.site_name || 'OMSCOMPANION',
@@ -301,6 +305,82 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
 
     const handleToggleReviewPublish = (rev) => {
         router.post(route('admin.reviews.toggle', rev.id));
+    };
+
+    const newsForm = useForm({
+        badge_text: '',
+        sub_badge_text: '',
+        title: '',
+        description: '',
+        button_text: 'View Details →',
+        button_url: '/videos',
+        button_type: 'outline',
+        theme_color: 'indigo',
+        order_index: 0,
+        is_published: true,
+    });
+
+    const openAddNewsModal = () => {
+        setEditingNews(null);
+        newsForm.setData({
+            badge_text: 'Workshop',
+            sub_badge_text: 'Upcoming Training',
+            title: '',
+            description: '',
+            button_text: 'View Related Masterclass Videos →',
+            button_url: '/videos',
+            button_type: 'outline',
+            theme_color: 'indigo',
+            order_index: newsItems.length + 1,
+            is_published: true,
+        });
+        setNewsModalOpen(true);
+    };
+
+    const openEditNewsModal = (news) => {
+        setEditingNews(news);
+        newsForm.setData({
+            badge_text: news.badge_text || '',
+            sub_badge_text: news.sub_badge_text || '',
+            title: news.title || '',
+            description: news.description || '',
+            button_text: news.button_text || 'View Details →',
+            button_url: news.button_url || '',
+            button_type: news.button_type || 'outline',
+            theme_color: news.theme_color || 'indigo',
+            order_index: news.order_index || 0,
+            is_published: news.is_published !== false,
+        });
+        setNewsModalOpen(true);
+    };
+
+    const handleNewsSubmit = (e) => {
+        e.preventDefault();
+        if (editingNews) {
+            newsForm.post(route('admin.news.update_post', editingNews.id), {
+                onSuccess: () => {
+                    setNewsModalOpen(false);
+                    alert('Clinical news item updated successfully!');
+                }
+            });
+        } else {
+            newsForm.post(route('admin.news.store'), {
+                onSuccess: () => {
+                    setNewsModalOpen(false);
+                    alert('Clinical news item added successfully!');
+                }
+            });
+        }
+    };
+
+    const handleDeleteNews = (news) => {
+        if (confirm(`Are you sure you want to delete news item "${news.title}"?`)) {
+            router.delete(route('admin.news.destroy', news.id));
+        }
+    };
+
+    const handleToggleNewsPublish = (news) => {
+        router.post(route('admin.news.toggle', news.id));
     };
 
     const getLevelName = (lvl) => {
@@ -956,6 +1036,87 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                         </div>
                     </div>
 
+                    {/* Clinical News & Professional Training Management Section */}
+                    <div className="glass-panel">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '20px' }}>
+                            <h3 style={{ margin: 0, color: 'var(--accent-gold)' }}>
+                                📰 Clinical News & Updates Management
+                            </h3>
+                            <button 
+                                type="button" 
+                                onClick={openAddNewsModal} 
+                                className="btn btn-primary" 
+                                style={{ padding: '6px 16px', fontSize: '13px' }}
+                            >
+                                ➕ Add News / Training Item
+                            </button>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {newsItems.length > 0 ? (
+                                newsItems.map(item => (
+                                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px', gap: '14px' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                                <span style={{ fontSize: '11px', fontWeight: 'bold', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', border: '1px solid rgba(13, 148, 136, 0.3)' }}>
+                                                    {item.badge_text}
+                                                </span>
+                                                {item.sub_badge_text && (
+                                                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                                                        • {item.sub_badge_text}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <h4 style={{ margin: '4px 0', fontSize: '15px', fontWeight: '700' }}>{item.title}</h4>
+                                            <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                                {item.description}
+                                            </p>
+                                            <span style={{ fontSize: '11px', color: 'var(--accent-teal)' }}>
+                                                Button: "{item.button_text}" ({item.button_type})
+                                            </span>
+                                        </div>
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleToggleNewsPublish(item)}
+                                                className="btn btn-outline"
+                                                style={{
+                                                    padding: '4px 10px',
+                                                    fontSize: '11px',
+                                                    color: item.is_published ? '#10b981' : 'var(--text-muted)',
+                                                    borderColor: item.is_published ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-color)',
+                                                }}
+                                            >
+                                                {item.is_published ? '✓ Published' : 'Hidden'}
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => openEditNewsModal(item)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '12px' }}
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => handleDeleteNews(item)} 
+                                                className="btn btn-outline" 
+                                                style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--color-danger, #ef4444)', borderColor: 'rgba(239,68,68,0.4)' }}
+                                            >
+                                                🗑️ Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                                    No news or training items added yet. Click "+ Add News / Training Item" to create one.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Submit Button */}
                     <button 
                         type="submit" 
@@ -1304,6 +1465,154 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                     disabled={reviewForm.processing}
                                 >
                                     {reviewForm.processing ? 'Saving...' : editingReview ? 'Update Review' : 'Save Review'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Add / Edit Clinical News Item Modal */}
+            {newsModalOpen && (
+                <div className="modal-wrapper" onClick={() => setNewsModalOpen(false)}>
+                    <div className="glass-panel modal-card" style={{ maxWidth: '600px', width: '92%', padding: '28px' }} onClick={e => e.stopPropagation()}>
+                        <h3 style={{ marginTop: 0, marginBottom: '18px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', color: 'var(--accent-gold)' }}>
+                            {editingNews ? '✏️ Edit News & Training Card' : '📰 Add New News & Training Card'}
+                        </h3>
+
+                        <form onSubmit={handleNewsSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Category Badge Text *</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={newsForm.data.badge_text}
+                                        onChange={e => newsForm.setData('badge_text', e.target.value)}
+                                        placeholder="e.g. Workshop or Clinical Guide"
+                                        required
+                                    />
+                                    {newsForm.errors.badge_text && <span className="form-error">{newsForm.errors.badge_text}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Secondary Sub-badge (Optional)</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={newsForm.data.sub_badge_text}
+                                        onChange={e => newsForm.setData('sub_badge_text', e.target.value)}
+                                        placeholder="e.g. Upcoming Training or Live Support"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Main Card Title *</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control"
+                                    value={newsForm.data.title}
+                                    onChange={e => newsForm.setData('title', e.target.value)}
+                                    placeholder="e.g. Advanced Maxillofacial Impaction & Surgical Masterclass"
+                                    required
+                                />
+                                {newsForm.errors.title && <span className="form-error">{newsForm.errors.title}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Description Paragraph *</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={newsForm.data.description}
+                                    onChange={e => newsForm.setData('description', e.target.value)}
+                                    rows="3"
+                                    placeholder="Write card description text..."
+                                    required
+                                />
+                                {newsForm.errors.description && <span className="form-error">{newsForm.errors.description}</span>}
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Button Label Text *</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={newsForm.data.button_text}
+                                        onChange={e => newsForm.setData('button_text', e.target.value)}
+                                        placeholder="e.g. View Related Masterclass Videos →"
+                                        required
+                                    />
+                                    {newsForm.errors.button_text && <span className="form-error">{newsForm.errors.button_text}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Button Target Link / URL</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        value={newsForm.data.button_url}
+                                        onChange={e => newsForm.setData('button_url', e.target.value)}
+                                        placeholder="e.g. /videos or whatsapp"
+                                    />
+                                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                                        Use <b>/videos</b> for Videos page, or <b>whatsapp</b> for WhatsApp link.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="grid-responsive-two-col" style={{ gap: '14px' }}>
+                                <div className="form-group">
+                                    <label className="form-label">Button Style Type</label>
+                                    <select 
+                                        className="form-control"
+                                        value={newsForm.data.button_type}
+                                        onChange={e => newsForm.setData('button_type', e.target.value)}
+                                    >
+                                        <option value="outline">Standard Outline Button</option>
+                                        <option value="whatsapp">WhatsApp Green Button (Join WhatsApp)</option>
+                                        <option value="primary">Solid Primary Button</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Display Order</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control"
+                                        value={newsForm.data.order_index}
+                                        onChange={e => newsForm.setData('order_index', Number(e.target.value))}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input 
+                                    type="checkbox" 
+                                    id="news_is_published"
+                                    checked={newsForm.data.is_published}
+                                    onChange={e => newsForm.setData('is_published', e.target.checked)}
+                                />
+                                <label htmlFor="news_is_published" className="form-label" style={{ margin: 0, cursor: 'pointer' }}>
+                                    Publish card on website landing page immediately
+                                </label>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => setNewsModalOpen(false)} 
+                                    className="btn btn-outline"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="btn btn-primary"
+                                    disabled={newsForm.processing}
+                                >
+                                    {newsForm.processing ? 'Saving...' : editingNews ? 'Update News Card' : 'Save News Card'}
                                 </button>
                             </div>
                         </form>
