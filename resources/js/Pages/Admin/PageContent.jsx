@@ -906,12 +906,6 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                         <div style={{ flex: 1 }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                                                 <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700' }}>{rev.name}</h4>
-                                                <span style={{ color: '#f59e0b', fontSize: '13px' }}>{'★'.repeat(rev.rating)}</span>
-                                                {rev.tag && (
-                                                    <span style={{ fontSize: '11px', color: 'var(--accent-teal)' }}>
-                                                        ({rev.tag})
-                                                    </span>
-                                                )}
                                             </div>
                                             <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
                                                 "{rev.quote}"
