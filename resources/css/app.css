@@ -910,17 +910,29 @@ h1, h2, h3, h4, h5, h6 {
 
 .landing-nav {
     display: flex;
-    gap: 28px;
     align-items: center;
+    gap: 24px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.landing-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    justify-content: center;
+    flex: 1;
 }
 
 .nav-link-item {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
-    text-transform: none;
-    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    letter-spacing: 0.03em;
     color: var(--text-muted);
     transition: var(--transition-smooth);
+    padding: 4px 8px;
+    white-space: nowrap;
 }
 
 .nav-link-item:hover,

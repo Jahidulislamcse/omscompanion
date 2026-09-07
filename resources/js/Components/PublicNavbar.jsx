@@ -47,66 +47,70 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                 </button>
 
                 <nav className={`landing-nav ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
-                    <Link 
-                        href="/" 
-                        className={`nav-link-item ${activePage === 'home' ? 'active-nav-item' : ''}`} 
-                        onClick={() => setMobileNavOpen(false)}
-                    >
-                        Home
-                    </Link>
-                    <Link 
-                        href={route('videos.public')} 
-                        className={`nav-link-item ${activePage === 'archive' ? 'active-nav-item' : ''}`} 
-                        onClick={() => setMobileNavOpen(false)}
-                    >
-                        Archive
-                    </Link>
-                    <Link 
-                        href={route('about')} 
-                        className={`nav-link-item ${activePage === 'about' ? 'active-nav-item' : ''}`} 
-                        onClick={() => setMobileNavOpen(false)}
-                    >
-                        About
-                    </Link>
-                    <Link 
-                        href={route('services')} 
-                        className={`nav-link-item ${activePage === 'services' ? 'active-nav-item' : ''}`} 
-                        onClick={() => setMobileNavOpen(false)}
-                    >
-                        Services
-                    </Link>
-                    <Link 
-                        href={route('contact')} 
-                        className={`nav-link-item ${activePage === 'contact' ? 'active-nav-item' : ''}`} 
-                        onClick={() => setMobileNavOpen(false)}
-                    >
-                        Contact
-                    </Link>
-                    
-                    {/* Refer a Patient Button */}
-                    <button 
-                        type="button"
-                        onClick={handleReferClick} 
-                        className="btn btn-secondary nav-btn btn-gold-glow"
-                        style={{ marginRight: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
-                    >
-                        <span>📋</span> Refer a Patient
-                    </button>
-
-                    {auth && auth.user ? (
-                        <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
-                            Dashboard →
+                    <div className="landing-nav-links">
+                        <Link 
+                            href="/" 
+                            className={`nav-link-item ${activePage === 'home' ? 'active-nav-item' : ''}`} 
+                            onClick={() => setMobileNavOpen(false)}
+                        >
+                            Home
                         </Link>
-                    ) : (
-                        <div className="landing-auth-buttons">
-                            <Link href={route('login')} className="btn btn-outline nav-btn" onClick={() => setMobileNavOpen(false)}>
-                                Login
+                        <Link 
+                            href={route('videos.public')} 
+                            className={`nav-link-item ${activePage === 'archive' ? 'active-nav-item' : ''}`} 
+                            onClick={() => setMobileNavOpen(false)}
+                        >
+                            Archive
+                        </Link>
+                        <Link 
+                            href={route('about')} 
+                            className={`nav-link-item ${activePage === 'about' ? 'active-nav-item' : ''}`} 
+                            onClick={() => setMobileNavOpen(false)}
+                        >
+                            About
+                        </Link>
+                        <Link 
+                            href={route('services')} 
+                            className={`nav-link-item ${activePage === 'services' ? 'active-nav-item' : ''}`} 
+                            onClick={() => setMobileNavOpen(false)}
+                        >
+                            Services
+                        </Link>
+                        <Link 
+                            href={route('contact')} 
+                            className={`nav-link-item ${activePage === 'contact' ? 'active-nav-item' : ''}`} 
+                            onClick={() => setMobileNavOpen(false)}
+                        >
+                            Contact
+                        </Link>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {/* Refer a Patient Button */}
+                        <button 
+                            type="button"
+                            onClick={handleReferClick} 
+                            className="btn btn-secondary nav-btn btn-gold-glow"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                        >
+                            <span>📋</span> Refer a Patient
+                        </button>
+
+                        {auth && auth.user ? (
+                            <Link href={getDashboardRoute()} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
+                                Dashboard →
                             </Link>
-                            <Link href={route('register')} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
-                                Registration
-                            </Link>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="landing-auth-buttons">
+                                <Link href={route('login')} className="btn btn-outline nav-btn" onClick={() => setMobileNavOpen(false)}>
+                                    Login
+                                </Link>
+                                <Link href={route('register')} className="btn btn-primary nav-btn btn-glow" onClick={() => setMobileNavOpen(false)}>
+                                    Registration
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                 </nav>
             </header>
 
