@@ -953,6 +953,12 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(16, 185, 129, 0.25));
 }
 
+.landing-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .landing-auth-buttons {
     display: flex;
     gap: 12px;
@@ -1017,12 +1023,12 @@ h1, h2, h3, h4, h5, h6 {
         background: #ffffff;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        padding: 10px 14px;
+        padding: 12px 16px;
         border-radius: 12px;
         border: 1px solid var(--border-color);
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
         z-index: 10000;
-        gap: 4px;
+        gap: 8px;
         align-items: stretch;
     }
 
@@ -1031,12 +1037,37 @@ h1, h2, h3, h4, h5, h6 {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .landing-nav.mobile-nav-open .nav-link-item {
-        font-size: 13px;
-        font-weight: 700;
-        padding: 6px 0;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    .landing-nav.mobile-nav-open .landing-nav-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 2px;
+        align-items: stretch;
+        justify-content: flex-start;
+        margin: 0;
+    }
+
+    .landing-nav.mobile-nav-open .landing-nav-actions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+        margin-top: 6px;
+        align-items: stretch;
+    }
+
+    .landing-nav.mobile-nav-open .landing-nav-actions .btn {
+        width: 100%;
         text-align: center;
+        justify-content: center;
+    }
+
+    .landing-nav.mobile-nav-open .nav-link-item {
+        font-size: 14px;
+        font-weight: 700;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        text-align: left;
         width: 100%;
         display: block;
         text-transform: none;
@@ -1051,14 +1082,13 @@ h1, h2, h3, h4, h5, h6 {
         flex-direction: row;
         width: 100%;
         gap: 8px;
-        margin-top: 4px;
     }
 
     .landing-nav.mobile-nav-open .nav-btn {
         flex: 1;
         text-align: center;
-        padding: 7px 10px;
-        font-size: 12px;
+        padding: 8px 12px;
+        font-size: 13px;
         justify-content: center;
         display: flex;
     }

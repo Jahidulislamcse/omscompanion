@@ -85,7 +85,7 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                         </Link>
                     </div>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div className="landing-nav-actions">
                         {/* Refer a Patient Button */}
                         <button 
                             type="button"
