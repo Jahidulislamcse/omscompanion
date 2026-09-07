@@ -429,20 +429,26 @@ export default function Welcome({ settings, freeVideos }) {
                     <button 
                         type="button" 
                         onClick={handleReferralClick}
-                        className="btn btn-primary btn-bump-animated"
-                        style={{ 
-                            backgroundColor: '#2563eb', 
-                            color: '#ffffff', 
-                            padding: '20px 52px', 
-                            fontSize: '20px', 
-                            fontWeight: '800', 
-                            borderRadius: '16px', 
-                            border: 'none', 
-                            boxShadow: '0 12px 25px -4px rgba(37, 99, 235, 0.45)',
-                            letterSpacing: '0.5px'
-                        }}
+                        className="refer-patient-glossy-btn"
+                        aria-label="Refer Patient"
                     >
-                        <span style={{ fontSize: '24px' }}>📋</span> Refer a Patient
+                        <div className="refer-patient-icon-circle">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="4" width="16" height="17" rx="2" fill="#0891b2" fillOpacity="0.12" stroke="#0e7490" strokeWidth="2"/>
+                                <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
+                                <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
+                                <circle cx="12" cy="10.5" r="2" fill="#0e7490"/>
+                                <path d="M8.5 15C8.5 13.5 10 13 12 13C14 13 15.5 13.5 15.5 15" stroke="#0e7490" strokeWidth="1.8" strokeLinecap="round"/>
+                                <path d="M12 17.5V20.5M10.5 19H13.5" stroke="#0891b2" strokeWidth="2.2" strokeLinecap="round"/>
+                            </svg>
+                        </div>
+                        <span className="refer-patient-text">Refer Patient</span>
+                        <div className="refer-patient-arrow-circle">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="4" y1="12" x2="20" y2="12" />
+                                <polyline points="13 5 20 12 13 19" />
+                            </svg>
+                        </div>
                     </button>
                 </div>
             </section>
