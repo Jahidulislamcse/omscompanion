@@ -1296,9 +1296,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             <section className="cta-banner-section">
                 <div className="landing-section-container">
                     <div className="glass-panel cta-banner-card">
-                        <h2 className="cta-title">Ready to Elevate Your Dental Referral Network?</h2>
+                        <h2 className="cta-title">Ready to elevate your practice with OMS Companion</h2>
                         <p className="cta-desc">
-                            Join hundreds of BDS Doctors and partner Medicine Shop Keepers using {site_name || 'DentistChamber'} for transparent referral tracking and specialist dental care.
+                            Join hundreds of practitioners, using {site_name || 'OMS COMPANION'} for professional improvement and better patient care.
                         </p>
                         <div className="cta-buttons">
                             <button 
