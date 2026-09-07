@@ -1335,7 +1335,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 <ApplicationLogo />
                             </Link>
                             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6' }}>
-                                OMSCOMPANION connects BDS Practitioners and Medicine Shop Keepers with automated patient referral pipelines and specialist dental care.
+                                OMS COMPANION connects doctors to enhance practice through learning and patient care
                             </p>
                         </div>
 
@@ -1393,7 +1393,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                     </div>
 
                     <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px', textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
-                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved. BDS Practitioner & Partner Referral Network.
+                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved.
                     </div>
                 </div>
             </footer>

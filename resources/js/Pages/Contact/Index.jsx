@@ -348,7 +348,7 @@ export default function Index({ settings = {} }) {
                                 <ApplicationLogo />
                             </Link>
                             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6' }}>
-                                OMSCOMPANION connects BDS Practitioners with automated patient referral pipelines, live status tracking, and surgical masterclasses.
+                                OMS COMPANION connects doctors to enhance practice through learning and patient care
                             </p>
                         </div>
 
@@ -402,7 +402,7 @@ export default function Index({ settings = {} }) {
                     </div>
 
                     <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px', textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
-                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved. BDS Practitioner Referral & Learning Network.
+                        © 2026 {site_name || 'OMSCOMPANION'} Association. All Rights Reserved.
                     </div>
                 </div>
             </footer>
