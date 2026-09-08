@@ -81,7 +81,7 @@ class AdminController extends Controller
             ->with(['referrals' => function($q) {
                 $q->orderBy('created_at', 'desc');
             }])
-            ->orderByRaw("FIELD(status, 'pending', 'approved', 'rejected')")
+            ->orderByRaw("CASE status WHEN 'pending' THEN 1 WHEN 'approved' THEN 2 WHEN 'rejected' THEN 3 ELSE 4 END")
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -107,16 +107,18 @@ class AdminController extends Controller
             'approved_at' => now(),
         ]);
 
-        // Send notifications
-        $prefix = !empty($user->bds_registration_number) ? 'Dr. ' : '';
-        $userEmail = $user->email ?? 'N/A';
-        $userPhone = $user->phone ?? 'N/A';
-        $userPassword = $user->raw_password ?? '(Registered password)';
+        // Send notifications safely
+        try {
+            $userEmail = $user->email ?? 'N/A';
+            $userPassword = $user->raw_password ?? '(Registered password)';
 
-        $subject = "Membership Approved";
-        $message = "Your membership has been approved (ID: {$memberId}). Login Email: {$userEmail} | Password: {$userPassword}";
-        
-        NotificationService::send($user, $subject, $message, 'both');
+            $subject = "Membership Approved";
+            $message = "Your membership has been approved (ID: {$memberId}). Login Email: {$userEmail} | Password: {$userPassword}";
+            
+            NotificationService::send($user, $subject, $message, 'both');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Approval notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', "Member approved successfully with ID: {$memberId}");
     }
@@ -131,11 +133,15 @@ class AdminController extends Controller
             'status' => 'rejected',
         ]);
 
-        // Send notification
-        $subject = "Membership Update";
-        $message = "Your membership application could not be approved at this time.";
-        
-        NotificationService::send($user, $subject, $message, 'email');
+        // Send notification safely
+        try {
+            $subject = "Membership Update";
+            $message = "Your membership application could not be approved at this time.";
+            
+            NotificationService::send($user, $subject, $message, 'email');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Rejection notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Member registration rejected.');
     }

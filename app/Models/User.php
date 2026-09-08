@@ -53,7 +53,13 @@ class User extends Authenticatable
      */
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->avatar ? route('user.avatar.stream', $this->id) : null;
+        try {
+            return (isset($this->attributes['avatar']) && $this->attributes['avatar'] && !empty($this->id))
+                ? route('user.avatar.stream', $this->id)
+                : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     /**
