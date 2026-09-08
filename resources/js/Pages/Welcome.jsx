@@ -1348,50 +1348,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 WhatsApp
                             </a>
 
-                            {/* Facebook Share Button (Opens Facebook App) */}
-                            <a
-                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
-                                    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-                                    if (isMobile) {
-                                        window.location.href = `fb://faceweb/f?href=${encodeURIComponent(url)}`;
-                                        setTimeout(() => {
-                                            if (navigator.share) {
-                                                navigator.share({ title: 'OMS Companion', url: url }).catch(() => {});
-                                            } else {
-                                                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-                                            }
-                                        }, 1200);
-                                    } else {
-                                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=650,height=550');
-                                    }
-                                }}
-                                style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    padding: '12px 22px',
-                                    borderRadius: '50px',
-                                    backgroundColor: '#1877F2',
-                                    color: '#ffffff',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 15px rgba(24, 119, 242, 0.35)',
-                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
-                                    cursor: 'pointer'
-                                }}
-                                className="share-btn-hover"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
-                                Facebook
-                            </a>
+
 
                             {/* Copy Link Button */}
                             <button
