@@ -304,11 +304,11 @@ export default function VideoLibrary({ categories = [] }) {
                 </div>
             )}
 
-            {/* Filter and Control Bar */}
+            {/* Control Bar (Search, Total Videos Count, List/Grid View Switcher) */}
             <div className="glass-panel" style={{ padding: '16px 20px', borderRadius: '16px', marginBottom: '28px', border: '1px solid var(--border-color)' }}>
-                <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     {/* Search Bar */}
-                    <div style={{ flex: '1 1 240px' }}>
+                    <div style={{ flex: '1 1 240px', maxWidth: '500px' }}>
                         <input
                             type="text"
                             className="form-control"
@@ -319,61 +319,10 @@ export default function VideoLibrary({ categories = [] }) {
                         />
                     </div>
 
-                    {/* Access Filter Pills */}
-                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <button
-                            type="button"
-                            onClick={() => setActiveAccessFilter('all')}
-                            className={`btn ${activeAccessFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                        >
-                            All Access
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setActiveAccessFilter('free')}
-                            className={`btn ${activeAccessFilter === 'free' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                        >
-                            🔓 Free Only
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setActiveAccessFilter('premium')}
-                            className={`btn ${activeAccessFilter === 'premium' ? 'btn-secondary btn-gold-glow' : 'btn-outline'}`}
-                            style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                        >
-                            👑 Premium Only
-                        </button>
-                    </div>
-
-                    {/* Category Filter Pills */}
-                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <button
-                            type="button"
-                            onClick={() => setActiveCategoryFilter('all')}
-                            className={`btn ${activeCategoryFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                        >
-                            All Categories
-                        </button>
-                        {(categories || []).map(cat => (
-                            <button
-                                key={cat.id}
-                                type="button"
-                                onClick={() => setActiveCategoryFilter(cat.id.toString())}
-                                className={`btn ${activeCategoryFilter.toString() === cat.id.toString() ? 'btn-primary' : 'btn-outline'}`}
-                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                            >
-                                📁 {cat.name}
-                            </button>
-                        ))}
-                    </div>
-
                     {/* View Manner Switcher & Count */}
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginLeft: 'auto' }}>
+                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginLeft: 'auto' }}>
                         <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                            {filteredVideos.length} Videos
+                            {filteredVideos.length} {filteredVideos.length === 1 ? 'Video' : 'Videos'}
                         </span>
 
                         <div style={{ display: 'flex', gap: '4px', backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px', borderRadius: '8px' }}>

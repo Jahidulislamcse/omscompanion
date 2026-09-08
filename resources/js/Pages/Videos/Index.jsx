@@ -327,96 +327,47 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         </p>
                     </div>
 
-                    {/* Search, Filter & Layout Toolbar */}
-                    <div className="glass-panel" style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', flexWrap: 'wrap', marginBottom: '32px', borderRadius: '16px' }}>
-                        {/* Search Bar */}
-                        <div style={{ flex: '1 1 260px', minWidth: '220px' }}>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="🔍 Search by title or keyword..."
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                                style={{ width: '100%' }}
-                            />
-                        </div>
+                    {/* Control Bar (Search, Total Videos Count, List/Grid View Switcher) */}
+                    <div className="glass-panel" style={{ padding: '16px 20px', borderRadius: '16px', marginBottom: '28px', border: '1px solid var(--border-color)' }}>
+                        <div style={{ display: 'flex', gap: '14px', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                            {/* Search Input Box */}
+                            <div style={{ flex: '1 1 240px', maxWidth: '500px' }}>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search video title or topic..."
+                                    value={searchTerm}
+                                    onChange={e => setSearchTerm(e.target.value)}
+                                    style={{ width: '100%' }}
+                                />
+                            </div>
 
-                        {/* Access Filter Pills (All / Free / Premium) */}
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                            <button
-                                type="button"
-                                onClick={() => setActiveAccessFilter('all')}
-                                className={`btn ${activeAccessFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                            >
-                                All Access
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setActiveAccessFilter('free')}
-                                className={`btn ${activeAccessFilter === 'free' ? 'btn-primary' : 'btn-outline'}`}
-                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                            >
-                                🔓 Free Only
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setActiveAccessFilter('premium')}
-                                className={`btn ${activeAccessFilter === 'premium' ? 'btn-secondary btn-gold-glow' : 'btn-outline'}`}
-                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                            >
-                                👑 Premium Only
-                            </button>
-                        </div>
+                            {/* Right Side: Total Count + View Manner Switcher */}
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginLeft: 'auto' }}>
+                                <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)' }}>
+                                    {filteredVideos.length} {filteredVideos.length === 1 ? 'Video' : 'Videos'}
+                                </span>
 
-                        {/* Category Filter Pills */}
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                            <button
-                                type="button"
-                                onClick={() => setActiveCategoryFilter('all')}
-                                className={`btn ${activeCategoryFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                                style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                            >
-                                All Categories
-                            </button>
-                            {(categories || []).map(cat => (
-                                <button
-                                    key={cat.id}
-                                    type="button"
-                                    onClick={() => setActiveCategoryFilter(cat.id.toString())}
-                                    className={`btn ${activeCategoryFilter.toString() === cat.id.toString() ? 'btn-primary' : 'btn-outline'}`}
-                                    style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '20px' }}
-                                >
-                                    📁 {cat.name}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* View Manner Switcher & Results Count */}
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginLeft: 'auto' }}>
-                            <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-muted)' }}>
-                                {filteredVideos.length} Videos
-                            </span>
-
-                            <div style={{ display: 'flex', gap: '4px', backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px', borderRadius: '8px' }}>
-                                <button
-                                    type="button"
-                                    onClick={() => setViewLayout('list')}
-                                    className={`btn ${viewLayout === 'list' ? 'btn-primary' : 'btn-outline'}`}
-                                    style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
-                                    title="List View"
-                                >
-                                    ☰ List
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setViewLayout('grid')}
-                                    className={`btn ${viewLayout === 'grid' ? 'btn-primary' : 'btn-outline'}`}
-                                    style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
-                                    title="Grid View"
-                                >
-                                    ⣿ Grid
-                                </button>
+                                <div style={{ display: 'flex', gap: '4px', backgroundColor: 'rgba(0,0,0,0.2)', padding: '3px', borderRadius: '8px' }}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setViewLayout('list')}
+                                        className={`btn ${viewLayout === 'list' ? 'btn-primary' : 'btn-outline'}`}
+                                        style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
+                                        title="List View"
+                                    >
+                                        ☰ List
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setViewLayout('grid')}
+                                        className={`btn ${viewLayout === 'grid' ? 'btn-primary' : 'btn-outline'}`}
+                                        style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '6px' }}
+                                        title="Grid View"
+                                    >
+                                        ⣿ Grid
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
