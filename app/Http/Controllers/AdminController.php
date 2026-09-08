@@ -305,6 +305,26 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Commission settings updated successfully.');
     }
 
+    public function updateReferralNote(Request $request, PatientReferral $referral)
+    {
+        $request->validate([
+            'notes' => 'required|string',
+        ]);
+
+        $referral->update([
+            'commission_notes' => $request->notes,
+        ]);
+
+        PatientStatusTimeline::create([
+            'referral_id' => $referral->id,
+            'status' => $referral->status,
+            'notes' => $request->notes,
+            'changed_by' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Note saved successfully.');
+    }
+
     public function videos()
     {
         // Ensure default categories exist

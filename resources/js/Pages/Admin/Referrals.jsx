@@ -69,6 +69,29 @@ export default function Referrals({ referrals, members = [] }) {
         notes: '',
     });
 
+    // Take Note Modal State
+    const [activeReferralForNote, setActiveReferralForNote] = useState(null);
+    const { data: noteData, setData: setNoteData, post: postNote, processing: noteProcessing, reset: resetNoteForm } = useForm({
+        notes: '',
+    });
+
+    const openNoteModal = (referral) => {
+        setActiveReferralForNote(referral);
+        setNoteData({
+            notes: referral.commission_notes || '',
+        });
+    };
+
+    const handleNoteSubmit = (e) => {
+        e.preventDefault();
+        postNote(route('admin.referrals.note', activeReferralForNote.id), {
+            onSuccess: () => {
+                setActiveReferralForNote(null);
+                resetNoteForm();
+            }
+        });
+    };
+
     const openStatusModal = (referral) => {
         setActiveReferralForStatus(referral);
         setStatusData({
@@ -204,35 +227,34 @@ export default function Referrals({ referrals, members = [] }) {
         );
     };
 
-    const renderTimelineCell = (referral) => {
-        const timelineEntries = (referral.timeline || []).filter(t => t && t.notes && t.notes.trim() !== '');
+    const renderNoteCell = (referral) => {
+        const hasNote = referral.commission_notes && referral.commission_notes.trim() !== '';
 
         return (
             <div style={{ maxWidth: '240px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '600' }}>
-                    📅 {new Date(referral.created_at).toLocaleDateString()}
-                </div>
-                {timelineEntries.length > 0 ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '110px', overflowY: 'auto' }}>
-                        {timelineEntries.map((t, idx) => (
-                            <div key={t.id || idx} style={{ fontSize: '11px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '6px', borderLeft: '3px solid #0d9488' }}>
-                                <div style={{ fontWeight: '600', color: 'var(--text-main, #0f172a)', wordBreak: 'break-word' }}>
-                                    {t.notes}
-                                </div>
-                                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                                    {new Date(t.created_at).toLocaleDateString()} {new Date(t.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : referral.additional_notes ? (
-                    <div style={{ fontSize: '11px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '6px', borderLeft: '3px solid #0d9488' }}>
-                        {referral.additional_notes}
+                {hasNote ? (
+                    <div>
+                        <div style={{ fontSize: '11px', padding: '6px 8px', backgroundColor: 'rgba(13, 148, 136, 0.08)', borderRadius: '6px', borderLeft: '3px solid #0d9488', marginBottom: '6px', fontWeight: '600', color: 'var(--text-main, #0f172a)', wordBreak: 'break-word' }}>
+                            {referral.commission_notes}
+                        </div>
+                        <button 
+                            type="button"
+                            onClick={() => openNoteModal(referral)}
+                            className="btn btn-outline"
+                            style={{ padding: '4px 10px', fontSize: '11px', fontWeight: '600', cursor: 'pointer', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                        >
+                            ✏️ Edit Note
+                        </button>
                     </div>
                 ) : (
-                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                        No notes logged
-                    </span>
+                    <button 
+                        type="button"
+                        onClick={() => openNoteModal(referral)}
+                        className="btn btn-outline"
+                        style={{ padding: '6px 12px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px', borderColor: 'var(--border-color)' }}
+                    >
+                        📝 Take Note
+                    </button>
                 )}
             </div>
         );
@@ -441,7 +463,7 @@ export default function Referrals({ referrals, members = [] }) {
                                 <th>Condition & Address</th>
                                 <th>Case Status</th>
                                 <th>Commission</th>
-                                <th>Timeline Logging</th>
+                                <th>Note</th>
                                 <th style={{ textAlign: 'right' }}>Actions</th>
                             </tr>
                         </thead>
@@ -500,7 +522,7 @@ export default function Referrals({ referrals, members = [] }) {
                                                 {renderCommissionCell(referral)}
                                             </td>
                                             <td>
-                                                {renderTimelineCell(referral)}
+                                                {renderNoteCell(referral)}
                                             </td>
                                             <td style={{ textAlign: 'right' }}>
                                                 <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
@@ -591,8 +613,8 @@ export default function Referrals({ referrals, members = [] }) {
                                     </div>
 
                                     <div>
-                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Timeline Logging</span>
-                                        {renderTimelineCell(referral)}
+                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Note</span>
+                                        {renderNoteCell(referral)}
                                     </div>
                                 </div>
 
@@ -719,6 +741,40 @@ export default function Referrals({ referrals, members = [] }) {
                                 <button type="button" onClick={() => setActiveReferralForCommission(null)} className="btn btn-outline">Cancel</button>
                                 <button type="submit" className="btn btn-secondary" disabled={commProcessing}>
                                     {commProcessing ? 'Saving...' : 'Save Settings'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal: Take Note */}
+            {activeReferralForNote && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.65)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 99999, padding: '20px', boxSizing: 'border-box' }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', backgroundColor: 'var(--bg-main)', margin: 'auto', borderRadius: '12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700' }}>Take Note: {activeReferralForNote.patient_name}</h3>
+                            <button type="button" onClick={() => setActiveReferralForNote(null)} className="btn btn-outline" style={{ padding: '4px 8px' }}>✕</button>
+                        </div>
+                        
+                        <form onSubmit={handleNoteSubmit}>
+                            <div className="form-group">
+                                <label className="form-label" style={{ fontWeight: '700', marginBottom: '6px', display: 'block' }}>Timeline Transition Note</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={noteData.notes}
+                                    onChange={e => setNoteData('notes', e.target.value)}
+                                    rows="4"
+                                    required
+                                    placeholder="Type transition notes or case observation..."
+                                    style={{ borderRadius: '8px' }}
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '14px' }}>
+                                <button type="button" onClick={() => setActiveReferralForNote(null)} className="btn btn-outline">Cancel</button>
+                                <button type="submit" className="btn btn-primary" disabled={noteProcessing}>
+                                    {noteProcessing ? 'Saving...' : 'Save Note'}
                                 </button>
                             </div>
                         </form>
