@@ -181,9 +181,10 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                         className="video-list-title"
                         style={{ 
                             fontSize: '14px', 
-                            fontWeight: '700', 
+                            fontWeight: '600', 
+                            color: '#1e293b',
                             margin: 0,
-                            lineHeight: '1.3'
+                            lineHeight: '1.35'
                         }}
                     >
                         {video.title}
@@ -192,9 +193,10 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                     {/* Short Description */}
                     <p style={{ 
                         fontSize: '12px', 
-                        color: 'var(--text-muted)', 
+                        color: '#475569', 
+                        fontWeight: '400',
                         margin: 0,
-                        lineHeight: '1.4',
+                        lineHeight: '1.45',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
