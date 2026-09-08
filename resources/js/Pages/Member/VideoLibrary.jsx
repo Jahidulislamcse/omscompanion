@@ -97,7 +97,8 @@ export default function VideoLibrary({ categories = [] }) {
                     position: 'relative',
                     overflow: 'hidden',
                     marginBottom: '10px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    flexShrink: 0
                 }}
             >
                 {/* Reduced Preview / Thumbnail */}
@@ -415,12 +416,12 @@ export default function VideoLibrary({ categories = [] }) {
                             {/* Category Videos Display */}
                             {viewLayout === 'list' ? (
                                 /* LIST MANNER DISPLAY */
-                                <div className="video-list-container category-section-scrollable" style={{ flex: 1, maxHeight: '380px', overflowY: 'auto' }}>
+                                <div className="video-list-container category-section-scrollable" style={{ flex: 1, maxHeight: '350px', overflowY: 'auto' }}>
                                     {cat.videos.map(video => renderVideoListItem(video))}
                                 </div>
                             ) : (
                                 /* GRID MANNER DISPLAY */
-                                <div className="video-grid category-section-scrollable" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1, maxHeight: '380px', overflowY: 'auto' }}>
+                                <div className="video-grid category-section-scrollable" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1, maxHeight: '350px', overflowY: 'auto' }}>
                                     {cat.videos.map(video => renderVideoCard(video))}
                                 </div>
                             )}

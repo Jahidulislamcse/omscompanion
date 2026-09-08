@@ -3552,11 +3552,15 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Custom Scrollbar for Category Section Video Container */
 .category-section-scrollable {
-    max-height: 380px !important;
+    max-height: 350px !important;
     overflow-y: auto !important;
     padding-right: 8px;
     scrollbar-width: thin;
     scrollbar-color: #0d9488 rgba(0, 0, 0, 0.08);
+}
+
+.category-section-scrollable > * {
+    flex-shrink: 0 !important;
 }
 
 .category-section-scrollable::-webkit-scrollbar {
