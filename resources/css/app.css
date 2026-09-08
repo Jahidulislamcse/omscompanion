@@ -3329,6 +3329,66 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(180deg, #0284c7 0%, #0891b2 100%);
 }
 
+/* Large Variant for Main Standalone Section */
+.refer-patient-glossy-btn-large {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, #0284c7 0%, #0891b2 35%, #0e7490 70%, #155e75 100%);
+    border: 2.5px solid rgba(56, 189, 248, 0.85);
+    border-radius: 9999px;
+    padding: 8px 12px 8px 8px;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    animation: glossyBumpPulse 2.8s infinite ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -3px 6px rgba(0, 0, 0, 0.3), 0 12px 30px -4px rgba(8, 145, 178, 0.5);
+    user-select: none;
+}
+
+.refer-patient-glossy-btn-large:hover {
+    animation-play-state: paused;
+    transform: scale(1.06) translateY(-3px);
+    border-color: #7dd3fc;
+    box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.9), inset 0 -3px 6px rgba(0, 0, 0, 0.3), 0 20px 45px -2px rgba(8, 145, 178, 0.75);
+}
+
+.refer-patient-glossy-btn-large:active {
+    transform: scale(0.98) translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 6px 15px rgba(8, 145, 178, 0.4);
+}
+
+.refer-patient-glossy-btn-large .refer-patient-icon-circle {
+    width: 60px;
+    height: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.refer-patient-glossy-btn-large .refer-patient-text {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin: 0 28px 0 22px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.refer-patient-glossy-btn-large .refer-patient-arrow-circle {
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.refer-patient-glossy-btn-large:hover .refer-patient-icon-circle {
+    transform: rotate(-5deg) scale(1.05);
+}
+
+.refer-patient-glossy-btn-large:hover .refer-patient-arrow-circle {
+    transform: translateX(3px) scale(1.05);
+    background: linear-gradient(180deg, #0284c7 0%, #0891b2 100%);
+}
+
 @media (max-width: 640px) {
     .refer-patient-icon-circle {
         width: 48px;
