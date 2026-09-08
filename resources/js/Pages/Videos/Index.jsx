@@ -488,12 +488,12 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                     {/* Category Videos Display */}
                                     {viewLayout === 'list' ? (
                                         /* LIST MANNER DISPLAY */
-                                        <div className="video-list-container" style={{ flex: 1 }}>
+                                        <div className="video-list-container category-section-scrollable" style={{ flex: 1 }}>
                                             {cat.videos.map(video => renderVideoListItem(video))}
                                         </div>
                                     ) : (
                                         /* GRID MANNER DISPLAY */
-                                        <div className="video-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1 }}>
+                                        <div className="video-grid category-section-scrollable" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1 }}>
                                             {cat.videos.map(video => renderVideoCard(video))}
                                         </div>
                                     )}
