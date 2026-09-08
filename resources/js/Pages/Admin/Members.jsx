@@ -48,12 +48,12 @@ export default function Members({ members = [] }) {
     const getTypeBadge = (member) => {
         const docType = typeof member === 'object' && member !== null ? member.doctor_type : null;
         if (docType === 'MBBS') {
-            return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px', backgroundColor: '#0284c7', color: '#ffffff' }}>👨‍⚕️ MBBS Doctor</span>;
+            return <span className="badge-status badge-treatment" style={{ fontSize: '10px', padding: '2px 6px', backgroundColor: '#0284c7', color: '#ffffff', whiteSpace: 'nowrap', display: 'inline-block', lineHeight: '1.2' }}>👨‍⚕️ MBBS Doctor</span>;
         }
         if (docType === 'BDS' || (typeof member === 'object' && member?.bds_registration_number)) {
-            return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ BDS Doctor</span>;
+            return <span className="badge-status badge-treatment" style={{ fontSize: '10px', padding: '2px 6px', whiteSpace: 'nowrap', display: 'inline-block', lineHeight: '1.2' }}>👨‍⚕️ BDS Doctor</span>;
         }
-        return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ Doctor</span>;
+        return <span className="badge-status badge-treatment" style={{ fontSize: '10px', padding: '2px 6px', whiteSpace: 'nowrap', display: 'inline-block', lineHeight: '1.2' }}>👨‍⚕️ Doctor</span>;
     };
 
     const getReferralStatusBadge = (status) => {
