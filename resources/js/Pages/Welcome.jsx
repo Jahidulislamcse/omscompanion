@@ -1094,7 +1094,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
 
                                 <button 
                                     onClick={() => setReferralStep('select_type')} 
-                                    style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '14px', cursor: 'pointer', textDecoration: 'underline', fontWeight: '600' }}
+                                    style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '14px', cursor: 'pointer', textDecoration: 'none', fontWeight: '600' }}
                                 >
                                     ← Back to options
                                 </button>
