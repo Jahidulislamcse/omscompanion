@@ -73,7 +73,7 @@ export default function AdminLayout({ children, title }) {
                             <li>
                                 <Link 
                                     href={route('admin.referrals')} 
-                                    className={`sidebar-link ${isCurrent('/admin/referrals') ? 'active' : ''}`}
+                                    className={`sidebar-link sidebar-link-highlight ${isCurrent('/admin/referrals') ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
                                 >
                                     <span>&#128100;</span> Referrals

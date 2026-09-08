@@ -64,7 +64,7 @@ export default function MemberLayout({ children, title }) {
                             <li>
                                 <Link 
                                     href={route('member.referrals')} 
-                                    className={`sidebar-link ${window.location.pathname === '/member/referrals' ? 'active' : ''}`}
+                                    className={`sidebar-link sidebar-link-highlight ${window.location.pathname === '/member/referrals' ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
                                 >
                                     <span>&#128100;</span> Patient Referral

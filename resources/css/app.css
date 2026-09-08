@@ -196,6 +196,30 @@ h1, h2, h3, h4, h5, h6 {
     border-left: 4px solid var(--accent-gold);
 }
 
+.sidebar-link-highlight {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+    background-color: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.sidebar-link-highlight span {
+    color: #38bdf8;
+}
+
+.sidebar-link-highlight:hover {
+    color: #ffffff !important;
+    background-color: rgba(56, 189, 248, 0.2) !important;
+    border-color: rgba(56, 189, 248, 0.35);
+}
+
+.sidebar-link-highlight.active {
+    color: #ffffff !important;
+    background-color: rgba(56, 189, 248, 0.25) !important;
+    border-left: 4px solid #38bdf8 !important;
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
 .sidebar-user {
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
