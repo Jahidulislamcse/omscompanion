@@ -46,17 +46,14 @@ export default function Members({ members = [] }) {
     };
 
     const getTypeBadge = (member) => {
-        if (typeof member === 'object' && member !== null) {
-            if (member.doctor_type === 'MBBS') {
-                return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px', backgroundColor: '#0284c7', color: '#ffffff' }}>👨‍⚕️ MBBS Doctor</span>;
-            }
-            if (member.bds_registration_number || member.doctor_type === 'BDS') {
-                return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ BDS Doctor</span>;
-            }
-        } else if (member) {
+        const docType = typeof member === 'object' && member !== null ? member.doctor_type : null;
+        if (docType === 'MBBS') {
+            return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px', backgroundColor: '#0284c7', color: '#ffffff' }}>👨‍⚕️ MBBS Doctor</span>;
+        }
+        if (docType === 'BDS' || (typeof member === 'object' && member?.bds_registration_number)) {
             return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ BDS Doctor</span>;
         }
-        return <span className="badge-status badge-contacted" style={{ fontSize: '11px', padding: '2px 8px' }}>🏪 Storekeeper</span>;
+        return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ Doctor</span>;
     };
 
     const getReferralStatusBadge = (status) => {
@@ -106,7 +103,7 @@ export default function Members({ members = [] }) {
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by name, email, clinic, BDS reg or member ID..."
+                        placeholder="Search by name, email, clinic, reg no or member ID..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
@@ -137,8 +134,8 @@ export default function Members({ members = [] }) {
                             <tr>
                                 <th>Name & Role</th>
                                 <th>Email / Phone</th>
-                                <th>BDS Registration</th>
-                                <th>Clinic / Store Details</th>
+                                <th>Registration Number</th>
+                                <th>Clinic / Chamber Details</th>
                                 <th>Member ID</th>
                                 <th>Referrals Submitted</th>
                                 <th>Status</th>
@@ -173,7 +170,7 @@ export default function Members({ members = [] }) {
                                             </td>
                                             <td>
                                                 <code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>
-                                                    {member.bds_registration_number || 'N/A (Storekeeper)'}
+                                                    {member.bds_registration_number || 'N/A'}
                                                 </code>
                                             </td>
                                             <td>
@@ -265,7 +262,7 @@ export default function Members({ members = [] }) {
                                             {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
                                         </div>
                                         <div style={{ marginTop: '4px' }}>
-                                            {getTypeBadge(member.bds_registration_number)}
+                                            {getTypeBadge(member)}
                                         </div>
                                     </div>
                                     <div>
@@ -281,12 +278,12 @@ export default function Members({ members = [] }) {
                                     </div>
 
                                     <div>
-                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>BDS Reg</span>
-                                        <code style={{ fontSize: '11px' }}>{member.bds_registration_number || 'N/A (Storekeeper)'}</code>
+                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Reg No.</span>
+                                        <code style={{ fontSize: '11px' }}>{member.bds_registration_number || 'N/A'}</code>
                                     </div>
 
                                     <div>
-                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Clinic / Store</span>
+                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Clinic / Chamber</span>
                                         <div style={{ fontWeight: '600' }}>{member.clinic_name || 'N/A'}</div>
                                         <div style={{ color: 'var(--text-muted)', fontSize: '11px' }}>{member.address || 'N/A'}</div>
                                     </div>
