@@ -155,10 +155,10 @@ export default function Members({ members = [] }) {
                             <tr>
                                 <th>Name & Role</th>
                                 <th>Email / Phone</th>
-                                <th>Registration Number</th>
+                                <th>Reg. No.</th>
                                 <th>Clinic Details</th>
                                 <th>Member ID</th>
-                                <th>Referrals Submitted</th>
+                                <th>Referrals</th>
                                 <th>Commission</th>
                                 <th>Status</th>
                                 <th style={{ textAlign: 'right' }}>Actions</th>
@@ -172,37 +172,37 @@ export default function Members({ members = [] }) {
                                     return (
                                         <tr key={member.id}>
                                             <td>
-                                                <div style={{ fontWeight: '700' }}>
+                                                <div style={{ fontWeight: '700', fontSize: '13px' }}>
                                                     {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
                                                 </div>
-                                                <div style={{ marginTop: '4px' }}>
+                                                <div style={{ marginTop: '3px' }}>
                                                     {getTypeBadge(member)}
                                                 </div>
                                             </td>
                                             <td>
-                                                <div>{member.email || 'N/A'}</div>
-                                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                <div style={{ fontSize: '12px', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{member.email || 'N/A'}</div>
+                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                                                     {member.phone || 'N/A'}
                                                     {member.whatsapp_number && (
-                                                        <span style={{ display: 'block', fontSize: '11px', color: '#10b981' }}>
+                                                        <span style={{ display: 'block', fontSize: '10px', color: '#10b981' }}>
                                                             💬 WA: {member.whatsapp_number}
                                                         </span>
                                                     )}
                                                 </div>
                                             </td>
                                             <td>
-                                                <code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>
+                                                <code style={{ background: 'var(--bg-main)', padding: '2px 5px', borderRadius: '4px', fontSize: '11px', whiteSpace: 'nowrap' }}>
                                                     {member.bds_registration_number || 'N/A'}
                                                 </code>
                                             </td>
                                             <td>
-                                                <div style={{ fontWeight: '600' }}>{member.clinic_name || 'N/A'}</div>
-                                                <div style={{ fontSize: '12px', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
+                                                <div style={{ fontWeight: '600', fontSize: '12px' }}>{member.clinic_name || 'N/A'}</div>
+                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '130px' }}>
                                                     {member.address || 'N/A'}
                                                 </div>
                                             </td>
                                             <td>
-                                                <span style={{ fontWeight: '700', color: 'var(--accent-gold)' }}>
+                                                <span style={{ fontWeight: '700', color: 'var(--accent-gold)', fontSize: '12px', whiteSpace: 'nowrap' }}>
                                                     {member.member_id || 'Pending'}
                                                 </span>
                                             </td>
@@ -212,10 +212,11 @@ export default function Members({ members = [] }) {
                                                     onClick={() => setSelectedMemberForReferrals(member)}
                                                     className="btn btn-outline"
                                                     style={{
-                                                        padding: '4px 10px',
-                                                        fontSize: '12px',
+                                                        padding: '3px 8px',
+                                                        fontSize: '11px',
                                                         fontWeight: '700',
                                                         borderRadius: '20px',
+                                                        whiteSpace: 'nowrap',
                                                         borderColor: refCount > 0 ? 'var(--accent-teal)' : 'var(--border-color)',
                                                         color: refCount > 0 ? 'var(--accent-teal)' : 'var(--text-muted)',
                                                         backgroundColor: refCount > 0 ? 'rgba(13, 148, 136, 0.08)' : 'transparent'
@@ -226,13 +227,13 @@ export default function Members({ members = [] }) {
                                                 </button>
                                             </td>
                                             <td>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                                                     {member.is_commission_applicable ? (
-                                                        <span className="badge-status badge-approved" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                                                        <span className="badge-status badge-approved" style={{ fontSize: '9px', padding: '1px 6px' }}>
                                                             Applicable
                                                         </span>
                                                     ) : (
-                                                        <span className="badge-status badge-outline" style={{ fontSize: '10px', padding: '2px 8px', color: 'var(--text-muted)' }}>
+                                                        <span className="badge-status badge-outline" style={{ fontSize: '9px', padding: '1px 6px', color: 'var(--text-muted)' }}>
                                                             Not Applicable
                                                         </span>
                                                     )}
@@ -240,14 +241,14 @@ export default function Members({ members = [] }) {
                                                         type="button"
                                                         onClick={() => handleOpenCommissionModal(member)}
                                                         className="btn btn-outline"
-                                                        style={{ padding: '2px 6px', fontSize: '11px', borderRadius: '4px' }}
+                                                        style={{ padding: '1px 5px', fontSize: '10px', borderRadius: '4px' }}
                                                         title="Edit Commission & Account Note"
                                                     >
                                                         ✏️
                                                     </button>
                                                 </div>
                                                 {member.commission_note && (
-                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '160px', wordBreak: 'break-word', fontStyle: 'italic' }}>
+                                                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', maxWidth: '140px', wordBreak: 'break-word', fontStyle: 'italic' }}>
                                                         📝 {member.commission_note}
                                                     </div>
                                                 )}
