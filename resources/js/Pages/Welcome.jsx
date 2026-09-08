@@ -156,6 +156,17 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     // Interactive FAQ state
     const [openFaq, setOpenFaq] = useState(null);
 
+    // Share link state
+    const [copiedLink, setCopiedLink] = useState(false);
+    const handleCopyLink = () => {
+        const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url);
+            setCopiedLink(true);
+            setTimeout(() => setCopiedLink(false), 2500);
+        }
+    };
+
     // Back to top state
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -1282,6 +1293,150 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                     </div>
                 </div>
             )}
+
+            {/* Website Share Feature Section */}
+            <section className="share-section" style={{ padding: '30px 20px 40px', textAlign: 'center' }}>
+                <div className="landing-section-container">
+                    <div 
+                        className="glass-panel" 
+                        style={{ 
+                            padding: '36px 24px', 
+                            borderRadius: '24px', 
+                            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.8) 100%)',
+                            border: '1px solid rgba(255, 255, 255, 0.12)',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                            maxWidth: '960px',
+                            margin: '0 auto'
+                        }}
+                    >
+                        <div className="outline-pill-wrapper" style={{ justifyContent: 'center', marginBottom: '14px' }}>
+                            <span className="outline-pill-badge" style={{ borderColor: 'rgba(6, 182, 212, 0.4)', color: 'var(--color-cyan, #06b6d4)' }}>
+                                🔗 Share OMS Companion
+                            </span>
+                        </div>
+
+                        <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '8px', color: '#ffffff', letterSpacing: '-0.3px' }}>
+                            Share with Colleagues & Dental Practitioners
+                        </h3>
+                        <p style={{ fontSize: '14px', color: 'var(--text-muted, #94a3b8)', maxWidth: '600px', margin: '0 auto 26px', lineHeight: '1.6' }}>
+                            Help fellow BDS doctors and dental clinics discover patient referral management, clinical video masterclasses, and digital tools.
+                        </p>
+
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                            {/* WhatsApp Share Button */}
+                            <a
+                                href={`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice: ' + (typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com'))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    padding: '12px 22px',
+                                    borderRadius: '50px',
+                                    backgroundColor: '#25D366',
+                                    color: '#ffffff',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 15px rgba(37, 211, 102, 0.35)',
+                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
+                                    cursor: 'pointer'
+                                }}
+                                className="share-btn-hover"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.705 1.754zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.146 4.186 4.226-1.107z"/>
+                                </svg>
+                                WhatsApp
+                            </a>
+
+                            {/* Messenger Share Button */}
+                            <a
+                                href={`https://www.facebook.com/dialog/send?link=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}&app_id=291494419107518&redirect_uri=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => {
+                                    const shareUrl = `https://www.facebook.com/dialog/share?app_id=87741124305&display=popup&href=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`;
+                                    window.open(shareUrl, '_blank', 'width=600,height=500');
+                                    e.preventDefault();
+                                }}
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    padding: '12px 22px',
+                                    borderRadius: '50px',
+                                    background: 'linear-gradient(135deg, #0084FF 0%, #00C6FF 100%)',
+                                    color: '#ffffff',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 15px rgba(0, 132, 255, 0.35)',
+                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
+                                    cursor: 'pointer'
+                                }}
+                                className="share-btn-hover"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.304 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26 6.559-6.963 3.13 3.259 5.889-3.259-6.56 6.964z"/>
+                                </svg>
+                                Messenger
+                            </a>
+
+                            {/* Facebook Share Button */}
+                            <a
+                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    padding: '12px 22px',
+                                    borderRadius: '50px',
+                                    backgroundColor: '#1877F2',
+                                    color: '#ffffff',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 15px rgba(24, 119, 242, 0.35)',
+                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
+                                    cursor: 'pointer'
+                                }}
+                                className="share-btn-hover"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                                Facebook
+                            </a>
+
+                            {/* Copy Link Button */}
+                            <button
+                                type="button"
+                                onClick={handleCopyLink}
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '11px 22px',
+                                    borderRadius: '50px',
+                                    backgroundColor: copiedLink ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.08)',
+                                    border: copiedLink ? '1.5px solid #10b981' : '1.5px solid rgba(255, 255, 255, 0.2)',
+                                    color: copiedLink ? '#34d399' : '#ffffff',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                {copiedLink ? '✓ Link Copied!' : '📋 Copy Link'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Call To Action Banner */}
             <section className="cta-banner-section">
