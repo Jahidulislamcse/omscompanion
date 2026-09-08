@@ -1072,23 +1072,23 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     I’m a Doctor
                                 </h4>
                                 <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.5', marginBottom: '24px' }}>
-                                    Please register or login to refer patients directly from your BDS doctor account panel.
+                                    Please register or login to refer patients directly from your account
                                 </p>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-                                    <Link 
-                                        href={route('register')} 
-                                        className="btn btn-primary"
-                                        style={{ padding: '14px', width: '100%', textAlign: 'center', fontWeight: '800', backgroundColor: '#10b981', color: '#ffffff', borderRadius: '12px', border: 'none', fontSize: '15px' }}
-                                    >
-                                        🌟 Register BDS Account
-                                    </Link>
                                     <Link 
                                         href={route('login')} 
                                         className="btn btn-outline"
                                         style={{ padding: '14px', width: '100%', textAlign: 'center', fontWeight: '700', borderRadius: '12px', border: '1px solid #cbd5e1', color: '#0f172a', fontSize: '15px' }}
                                     >
-                                        🔑 Login to BDS Panel
+                                        🔑 Login
+                                    </Link>
+                                    <Link 
+                                        href={route('register')} 
+                                        className="btn btn-primary"
+                                        style={{ padding: '14px', width: '100%', textAlign: 'center', fontWeight: '800', backgroundColor: '#10b981', color: '#ffffff', borderRadius: '12px', border: 'none', fontSize: '15px' }}
+                                    >
+                                        🌟 Register now
                                     </Link>
                                 </div>
 
