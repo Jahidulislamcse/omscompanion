@@ -288,6 +288,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/members', [AdminController::class, 'members'])->name('admin.members');
     Route::post('/members/{user}/approve', [AdminController::class, 'approveMember'])->name('admin.members.approve');
     Route::post('/members/{user}/reject', [AdminController::class, 'rejectMember'])->name('admin.members.reject');
+    Route::post('/members/{user}/commission-setting', [AdminController::class, 'updateMemberCommission'])->name('admin.members.commission_setting');
     Route::get('/referrals', [AdminController::class, 'referrals'])->name('admin.referrals');
     Route::post('/referrals', [AdminController::class, 'storeReferral'])->name('admin.referrals.store');
     Route::post('/referrals/{referral}/status', [AdminController::class, 'updateReferralStatus'])->name('admin.referrals.status');

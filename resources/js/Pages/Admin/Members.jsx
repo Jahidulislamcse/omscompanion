@@ -9,6 +9,27 @@ export default function Members({ members = [] }) {
     // Modal state for viewing member referral records
     const [selectedMemberForReferrals, setSelectedMemberForReferrals] = useState(null);
 
+    // Modal state for editing member commission settings
+    const [selectedMemberForCommission, setSelectedMemberForCommission] = useState(null);
+    const [commissionApplicable, setCommissionApplicable] = useState(false);
+    const [commissionNote, setCommissionNote] = useState('');
+
+    const handleOpenCommissionModal = (member) => {
+        setSelectedMemberForCommission(member);
+        setCommissionApplicable(!!member.is_commission_applicable);
+        setCommissionNote(member.commission_note || '');
+    };
+
+    const handleSaveCommission = (e) => {
+        e.preventDefault();
+        router.post(route('admin.members.commission_setting', selectedMemberForCommission.id), {
+            is_commission_applicable: commissionApplicable,
+            commission_note: commissionNote,
+        }, {
+            onSuccess: () => setSelectedMemberForCommission(null)
+        });
+    };
+
     const handleApprove = (userId) => {
         if (confirm('Are you sure you want to approve this membership application?')) {
             router.post(route('admin.members.approve', userId));
@@ -135,9 +156,10 @@ export default function Members({ members = [] }) {
                                 <th>Name & Role</th>
                                 <th>Email / Phone</th>
                                 <th>Registration Number</th>
-                                <th>Clinic / Chamber Details</th>
+                                <th>Clinic Details</th>
                                 <th>Member ID</th>
                                 <th>Referrals Submitted</th>
+                                <th>Commission</th>
                                 <th>Status</th>
                                 <th style={{ textAlign: 'right' }}>Actions</th>
                             </tr>
@@ -203,6 +225,33 @@ export default function Members({ members = [] }) {
                                                     📋 {refCount} {refCount === 1 ? 'Record' : 'Records'}
                                                 </button>
                                             </td>
+                                            <td>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                    {member.is_commission_applicable ? (
+                                                        <span className="badge-status badge-approved" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                                                            Applicable
+                                                        </span>
+                                                    ) : (
+                                                        <span className="badge-status badge-outline" style={{ fontSize: '10px', padding: '2px 8px', color: 'var(--text-muted)' }}>
+                                                            Not Applicable
+                                                        </span>
+                                                    )}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleOpenCommissionModal(member)}
+                                                        className="btn btn-outline"
+                                                        style={{ padding: '2px 6px', fontSize: '11px', borderRadius: '4px' }}
+                                                        title="Edit Commission & Account Note"
+                                                    >
+                                                        ✏️
+                                                    </button>
+                                                </div>
+                                                {member.commission_note && (
+                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '160px', wordBreak: 'break-word', fontStyle: 'italic' }}>
+                                                        📝 {member.commission_note}
+                                                    </div>
+                                                )}
+                                            </td>
                                             <td>{getStatusBadge(member.status)}</td>
                                             <td style={{ textAlign: 'right' }}>
                                                 {member.status === 'pending' ? (
@@ -238,7 +287,7 @@ export default function Members({ members = [] }) {
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan="8" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                                    <td colSpan="9" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                                         No members found matching your search or filters.
                                     </td>
                                 </tr>
@@ -283,7 +332,7 @@ export default function Members({ members = [] }) {
                                     </div>
 
                                     <div>
-                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Clinic / Chamber</span>
+                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Clinic Details</span>
                                         <div style={{ fontWeight: '600' }}>{member.clinic_name || 'N/A'}</div>
                                         <div style={{ color: 'var(--text-muted)', fontSize: '11px' }}>{member.address || 'N/A'}</div>
                                     </div>
@@ -291,6 +340,29 @@ export default function Members({ members = [] }) {
                                     <div>
                                         <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Member ID</span>
                                         <span style={{ fontWeight: '700', color: 'var(--accent-gold)' }}>{member.member_id || 'Pending'}</span>
+                                    </div>
+
+                                    <div style={{ gridColumn: 'span 2', background: 'rgba(255,255,255,0.02)', padding: '8px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <span style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Commission</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleOpenCommissionModal(member)}
+                                                style={{ background: 'none', border: 'none', color: 'var(--accent-teal)', fontSize: '11px', cursor: 'pointer', fontWeight: 'bold' }}
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                        </div>
+                                        <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                            {member.is_commission_applicable ? (
+                                                <span className="badge-status badge-approved" style={{ fontSize: '10px', padding: '1px 6px' }}>Applicable</span>
+                                            ) : (
+                                                <span className="badge-status badge-outline" style={{ fontSize: '10px', padding: '1px 6px', color: 'var(--text-muted)' }}>Not Applicable</span>
+                                            )}
+                                            {member.commission_note && (
+                                                <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>({member.commission_note})</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -459,6 +531,93 @@ export default function Members({ members = [] }) {
                                 Close Modal
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Member Commission Settings Modal */}
+            {selectedMemberForCommission && (
+                <div className="modal-wrapper" onClick={() => setSelectedMemberForCommission(null)}>
+                    <div 
+                        className="glass-panel modal-card" 
+                        style={{ maxWidth: '500px', width: '95%', padding: '24px' }} 
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '16px' }}>
+                            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800' }}>
+                                💼 Commission Settings
+                            </h3>
+                            <button 
+                                type="button" 
+                                onClick={() => setSelectedMemberForCommission(null)}
+                                className="btn btn-outline"
+                                style={{ padding: '4px 10px', fontSize: '12px' }}
+                            >
+                                ✕ Close
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSaveCommission}>
+                            <div style={{ marginBottom: '16px', padding: '10px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                                <div style={{ fontSize: '14px', fontWeight: '700' }}>
+                                    {selectedMemberForCommission.bds_registration_number ? `Dr. ${selectedMemberForCommission.name}` : selectedMemberForCommission.name} {selectedMemberForCommission.member_id ? `(${selectedMemberForCommission.member_id})` : ''}
+                                </div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                                    {selectedMemberForCommission.email || 'No email'} • {selectedMemberForCommission.phone || 'No phone'}
+                                </div>
+                            </div>
+
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" style={{ fontWeight: '700', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
+                                    Commission Status
+                                </label>
+                                <select 
+                                    className="form-control"
+                                    value={commissionApplicable ? '1' : '0'}
+                                    onChange={e => setCommissionApplicable(e.target.value === '1')}
+                                >
+                                    <option value="0">Not Applicable (Default)</option>
+                                    <option value="1">Applicable</option>
+                                </select>
+                            </div>
+
+                            <div className="form-group" style={{ marginBottom: '20px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                    <label className="form-label" style={{ fontWeight: '700', fontSize: '13px', margin: 0 }}>
+                                        Account Details / Short Note
+                                    </label>
+                                    <span style={{ fontSize: '11px', color: commissionNote.length >= 90 ? 'var(--color-danger)' : 'var(--text-muted)' }}>
+                                        {commissionNote.length}/100 chars
+                                    </span>
+                                </div>
+                                <textarea
+                                    className="form-control"
+                                    rows="3"
+                                    maxLength={100}
+                                    placeholder="Enter bank detail, payment note, or account info (max 100 chars)..."
+                                    value={commissionNote}
+                                    onChange={e => setCommissionNote(e.target.value)}
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                                <button 
+                                    type="button"
+                                    onClick={() => setSelectedMemberForCommission(null)}
+                                    className="btn btn-outline"
+                                    style={{ padding: '8px 16px', fontSize: '13px' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    style={{ padding: '8px 20px', fontSize: '13px' }}
+                                >
+                                    Save Settings
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

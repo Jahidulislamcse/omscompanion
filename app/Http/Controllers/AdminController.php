@@ -140,6 +140,21 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Member registration rejected.');
     }
 
+    public function updateMemberCommission(Request $request, User $user)
+    {
+        $request->validate([
+            'is_commission_applicable' => 'required|boolean',
+            'commission_note' => 'nullable|string|max:100',
+        ]);
+
+        $user->update([
+            'is_commission_applicable' => $request->is_commission_applicable,
+            'commission_note' => $request->commission_note,
+        ]);
+
+        return redirect()->back()->with('success', 'Member commission settings updated successfully.');
+    }
+
     public function referrals()
     {
         $referrals = PatientReferral::with('member')

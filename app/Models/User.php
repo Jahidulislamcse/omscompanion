@@ -34,6 +34,8 @@ class User extends Authenticatable
         'address',
         'approved_at',
         'premium_access',
+        'is_commission_applicable',
+        'commission_note',
     ];
 
     /**
@@ -57,6 +59,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'approved_at' => 'datetime',
+            'is_commission_applicable' => 'boolean',
         ];
     }
 
