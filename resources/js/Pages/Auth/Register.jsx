@@ -7,7 +7,7 @@ export default function Register() {
     const { site_name } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         name: '',
-        doctor_type: 'BDS',
+        doctor_type: '',
         email: '',
         phone: '',
         whatsapp_number: '',
@@ -65,47 +65,48 @@ export default function Register() {
                     </div>
 
                     <form onSubmit={handleSubmit}>
-                        {/* Doctor Qualification Selection & BMDC Reg No Row */}
-                        <div className="grid-2col-fixed-row" style={{ marginBottom: '10px' }}>
+                        {/* Select Doctor Type Dropdown & Dynamic Registration Number Field */}
+                        <div className={data.doctor_type ? "grid-2col-fixed-row" : ""} style={{ marginBottom: '10px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Doctor Type</label>
-                                <div style={{ display: 'flex', gap: '6px' }}>
-                                    <button
-                                        type="button"
-                                        className={`btn ${data.doctor_type === 'BDS' ? 'btn-primary' : 'btn-outline'}`}
-                                        style={{ flex: 1, padding: '7px 6px', fontSize: '12px', borderRadius: '8px', fontWeight: '700' }}
-                                        onClick={() => setData('doctor_type', 'BDS')}
-                                    >
-                                        🩺 BDS
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className={`btn ${data.doctor_type === 'MBBS' ? 'btn-primary' : 'btn-outline'}`}
-                                        style={{ flex: 1, padding: '7px 6px', fontSize: '12px', borderRadius: '8px', fontWeight: '700' }}
-                                        onClick={() => setData('doctor_type', 'MBBS')}
-                                    >
-                                        🏥 MBBS
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label" htmlFor="bds_registration_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>BMDC Reg No. *</label>
-                                <input
-                                    type="text"
-                                    id="bds_registration_number"
+                                <label className="form-label" htmlFor="doctor_type" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
+                                    Select Doctor Type *
+                                </label>
+                                <select
+                                    id="doctor_type"
                                     className="form-control"
-                                    placeholder="BMDC Reg No."
-                                    value={data.bds_registration_number}
-                                    onChange={e => setData('bds_registration_number', e.target.value)}
+                                    value={data.doctor_type}
+                                    onChange={e => setData('doctor_type', e.target.value)}
                                     required
                                     style={{ padding: '9px 12px', borderRadius: '8px' }}
-                                />
-                                {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
+                                >
+                                    <option value="">-- Choose Doctor Type (BDS / MBBS) --</option>
+                                    <option value="BDS">BDS Doctor</option>
+                                    <option value="MBBS">MBBS Doctor</option>
+                                </select>
+                                {errors.doctor_type && <span className="form-error">{errors.doctor_type}</span>}
                             </div>
+
+                            {data.doctor_type ? (
+                                <div className="form-group" style={{ marginBottom: 0, animation: 'fadeIn 0.25s ease-in-out' }}>
+                                    <label className="form-label" htmlFor="bds_registration_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
+                                        BMDC {data.doctor_type} Reg No. *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="bds_registration_number"
+                                        className="form-control"
+                                        placeholder={`BMDC ${data.doctor_type} Reg No.`}
+                                        value={data.bds_registration_number}
+                                        onChange={e => setData('bds_registration_number', e.target.value)}
+                                        required
+                                        style={{ padding: '9px 12px', borderRadius: '8px' }}
+                                    />
+                                    {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
+                                </div>
+                            ) : null}
                         </div>
 
-                        {/* Row 2: Full Name (single row) */}
+                        {/* Full Name */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
                             <label className="form-label" htmlFor="name" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Full Name *</label>
                             <input
@@ -121,7 +122,7 @@ export default function Register() {
                             {errors.name && <span className="form-error">{errors.name}</span>}
                         </div>
 
-                        {/* Row 3: Email (single row, required) */}
+                        {/* Email Address */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
                             <label className="form-label" htmlFor="email" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Email Address *</label>
                             <input
@@ -137,7 +138,7 @@ export default function Register() {
                             {errors.email && <span className="form-error">{errors.email}</span>}
                         </div>
 
-                        {/* Row 4: Phone Number (Mandatory) and WhatsApp Number */}
+                        {/* Phone Number (Mandatory) and WhatsApp Number */}
                         <div className="grid-2col-fixed-row" style={{ marginBottom: '10px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="phone" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Phone Number *</label>
@@ -169,7 +170,7 @@ export default function Register() {
                             </div>
                         </div>
 
-                        {/* Row 5: Clinic Name (single row) */}
+                        {/* Clinic Name */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
                             <label className="form-label" htmlFor="clinic_name" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic / Chamber Name *</label>
                             <input
@@ -185,7 +186,7 @@ export default function Register() {
                             {errors.clinic_name && <span className="form-error">{errors.clinic_name}</span>}
                         </div>
 
-                        {/* Row 6: Address (single row) */}
+                        {/* Address */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
                             <label className="form-label" htmlFor="address" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic Address *</label>
                             <input
@@ -201,7 +202,7 @@ export default function Register() {
                             {errors.address && <span className="form-error">{errors.address}</span>}
                         </div>
 
-                        {/* Row 7: Password & Confirm */}
+                        {/* Password & Confirm */}
                         <div className="grid-2col-fixed-row" style={{ marginBottom: '14px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Password *</label>
