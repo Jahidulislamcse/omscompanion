@@ -70,7 +70,6 @@ class AuthController extends Controller
         }
         return Inertia::render('Auth/Register');
     }
-
     public function register(Request $request)
     {
         $request->validate([
@@ -83,15 +82,27 @@ class AuthController extends Controller
             'clinic_name' => 'required|string|max:255',
             'address' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
-            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:500',
+            'avatar' => 'nullable|file|image|mimes:jpg,jpeg,png,webp|max:500',
         ]);
 
         $avatarPath = null;
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            try {
+                $file = $request->file('avatar');
+                $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+                $filename = 'avatar_' . time() . '_' . uniqid() . '.' . $extension;
+                $destinationPath = storage_path('app/public/avatars');
+                if (!file_exists($destinationPath)) {
+                    @mkdir($destinationPath, 0755, true);
+                }
+                $file->move($destinationPath, $filename);
+                $avatarPath = 'avatars/' . $filename;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Avatar storage failed during registration: ' . $e->getMessage());
+            }
         }
 
-        User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email ?: null,
             'phone' => $request->phone,
@@ -104,12 +115,16 @@ class AuthController extends Controller
             'raw_password' => $request->password,
             'role' => 'member',
             'status' => 'pending',
-            'avatar' => $avatarPath,
-        ]);
+        ];
+
+        if ($avatarPath && \Illuminate\Support\Facades\Schema::hasColumn('users', 'avatar')) {
+            $userData['avatar'] = $avatarPath;
+        }
+
+        User::create($userData);
 
         return redirect()->route('login')->with('success', 'Registration successful! Your account is pending admin approval.');
     }
-
     public function logout(Request $request)
     {
         Auth::logout();
