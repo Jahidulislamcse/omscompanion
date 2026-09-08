@@ -1348,9 +1348,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 WhatsApp
                             </a>
 
-                            {/* Messenger Share Button */}
+                            {/* Facebook Share Button (Opens Facebook App) */}
                             <a
-                                href={`https://www.facebook.com/dialog/send?link=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}&app_id=291494419107518&redirect_uri=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => {
@@ -1358,47 +1358,18 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
                                     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
                                     if (isMobile) {
-                                        window.location.href = `fb-messenger://share/?link=${encodeURIComponent(url)}`;
+                                        window.location.href = `fb://faceweb/f?href=${encodeURIComponent(url)}`;
                                         setTimeout(() => {
                                             if (navigator.share) {
                                                 navigator.share({ title: 'OMS Companion', url: url }).catch(() => {});
                                             } else {
-                                                window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=291494419107518&redirect_uri=${encodeURIComponent(url)}`, '_blank');
+                                                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
                                             }
                                         }, 1200);
                                     } else {
-                                        const sendUrl = `https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=291494419107518&redirect_uri=${encodeURIComponent(url)}`;
-                                        window.open(sendUrl, '_blank', 'width=650,height=650');
+                                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=650,height=550');
                                     }
                                 }}
-                                style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    padding: '12px 22px',
-                                    borderRadius: '50px',
-                                    background: 'linear-gradient(135deg, #0084FF 0%, #00C6FF 100%)',
-                                    color: '#ffffff',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 15px rgba(0, 132, 255, 0.35)',
-                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
-                                    cursor: 'pointer'
-                                }}
-                                className="share-btn-hover"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.304 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26 6.559-6.963 3.13 3.259 5.889-3.259-6.56 6.964z"/>
-                                </svg>
-                                Messenger
-                            </a>
-
-                            {/* Facebook Share Button */}
-                            <a
-                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
                                 style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
