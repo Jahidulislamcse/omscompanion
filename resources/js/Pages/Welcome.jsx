@@ -575,7 +575,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             <button 
                                 type="button" 
                                 onClick={handleReferralClick} 
-                                className="benefit-action-btn btn-gold-glow"
+                                className="benefit-action-btn btn-primary"
                                 style={{ cursor: 'pointer', border: 'none' }}
                             >
                                 Refer a Patient 📋
@@ -622,7 +622,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             <button 
                                 type="button" 
                                 onClick={handleReferralClick} 
-                                className="benefit-action-btn btn-gold-glow"
+                                className="benefit-action-btn btn-primary"
                                 style={{ cursor: 'pointer', border: 'none' }}
                             >
                                 Refer a Patient 📋
@@ -1290,22 +1290,39 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         <p className="cta-desc">
                             Join hundreds of practitioners, using {site_name || 'OMS COMPANION'} for professional improvement and better patient care.
                         </p>
-                        <div className="cta-buttons">
+                        <div className="cta-buttons" style={{ alignItems: 'center' }}>
                             <button 
                                 type="button" 
                                 onClick={handleReferralClick}
-                                className="btn btn-secondary hero-btn btn-gold-glow"
-                                style={{ cursor: 'pointer' }}
+                                className="refer-patient-glossy-btn"
+                                aria-label="Refer Patient"
+                                style={{ transform: 'scale(0.85)', margin: '-6px 0' }}
                             >
-                                📋 Refer a Patient
+                                <div className="refer-patient-icon-circle">
+                                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="4" y="4" width="16" height="17" rx="2" fill="#0891b2" fillOpacity="0.12" stroke="#0e7490" strokeWidth="2"/>
+                                        <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
+                                        <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
+                                        <circle cx="12" cy="10.5" r="2" fill="#0e7490"/>
+                                        <path d="M8.5 15C8.5 13.5 10 13 12 13C14 13 15.5 13.5 15.5 15" stroke="#0e7490" strokeWidth="1.8" strokeLinecap="round"/>
+                                        <path d="M12 17.5V20.5M10.5 19H13.5" stroke="#0891b2" strokeWidth="2.2" strokeLinecap="round"/>
+                                    </svg>
+                                </div>
+                                <span className="refer-patient-text" style={{ fontSize: '22px', margin: '0 20px 0 16px' }}>Refer Patient</span>
+                                <div className="refer-patient-arrow-circle" style={{ width: '44px', height: '44px' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="4" y1="12" x2="20" y2="12" />
+                                        <polyline points="13 5 20 12 13 19" />
+                                    </svg>
+                                </div>
                             </button>
                             
                             {auth.user ? (
-                                <Link href={getDashboardRoute()} className="btn btn-outline hero-btn">
+                                <Link href={getDashboardRoute()} className="btn btn-outline hero-btn" style={{ borderColor: 'rgba(255, 255, 255, 0.4)', color: '#ffffff' }}>
                                     Open Your Dashboard
                                 </Link>
                             ) : (
-                                <Link href={route('register')} className="btn btn-outline hero-btn">
+                                <Link href={route('register')} className="btn btn-outline hero-btn" style={{ borderColor: 'rgba(255, 255, 255, 0.4)', color: '#ffffff' }}>
                                     BDS Doctor Registration
                                 </Link>
                             )}
