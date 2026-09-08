@@ -50,7 +50,8 @@ class HandleInertiaRequests extends Middleware
                     'bds_registration_number' => $request->user()->bds_registration_number,
                     'address' => $request->user()->address,
                     'approved_at' => $request->user()->approved_at,
-                    'premium_access' => $request->user()->premium_access,
+                    'avatar' => $request->user()->avatar,
+                    'avatar_url' => $request->user()->avatar_url,
                 ] : null,
             ],
             'flash' => [

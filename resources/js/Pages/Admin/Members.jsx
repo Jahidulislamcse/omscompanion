@@ -14,6 +14,9 @@ export default function Members({ members = [] }) {
     const [commissionApplicable, setCommissionApplicable] = useState(false);
     const [commissionNote, setCommissionNote] = useState('');
 
+    // Modal state for enlarged user profile photo preview
+    const [selectedImageModal, setSelectedImageModal] = useState(null);
+
     const handleOpenCommissionModal = (member) => {
         setSelectedMemberForCommission(member);
         setCommissionApplicable(!!member.is_commission_applicable);
@@ -177,10 +180,13 @@ export default function Members({ members = [] }) {
                                                         <img 
                                                             src={member.avatar_url} 
                                                             alt={member.name} 
-                                                            style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--accent-teal, #0d9488)', flexShrink: 0 }} 
+                                                            onClick={() => setSelectedImageModal({ url: member.avatar_url, title: member.bds_registration_number ? `Dr. ${member.name}` : member.name, memberId: member.member_id })}
+                                                            style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-teal, #0d9488)', flexShrink: 0, cursor: 'pointer', transition: 'transform 0.15s ease' }} 
+                                                            title="Click to view enlarged profile photo"
+                                                            className="hover-scale-avatar"
                                                         />
                                                     ) : (
-                                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
+                                                        <div style={{ width: '38px', height: '38px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
                                                             {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
                                                         </div>
                                                     )}
@@ -327,10 +333,12 @@ export default function Members({ members = [] }) {
                                             <img 
                                                 src={member.avatar_url} 
                                                 alt={member.name} 
-                                                style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--accent-teal, #0d9488)', flexShrink: 0 }} 
+                                                onClick={() => setSelectedImageModal({ url: member.avatar_url, title: member.bds_registration_number ? `Dr. ${member.name}` : member.name, memberId: member.member_id })}
+                                                style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-teal, #0d9488)', flexShrink: 0, cursor: 'pointer' }} 
+                                                title="Click to view enlarged profile photo"
                                             />
                                         ) : (
-                                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', flexShrink: 0 }}>
+                                            <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', flexShrink: 0 }}>
                                                 {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
                                             </div>
                                         )}
@@ -647,6 +655,97 @@ export default function Members({ members = [] }) {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* User Image Popup Modal */}
+            {selectedImageModal && (
+                <div 
+                    className="modal-backdrop" 
+                    style={{ 
+                        position: 'fixed', 
+                        top: 0, 
+                        left: 0, 
+                        right: 0, 
+                        bottom: 0, 
+                        backgroundColor: 'rgba(0, 0, 0, 0.82)', 
+                        backdropFilter: 'blur(6px)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        zIndex: 2000,
+                        padding: '16px'
+                    }}
+                    onClick={() => setSelectedImageModal(null)}
+                >
+                    <div 
+                        className="glass-panel" 
+                        style={{ 
+                            maxWidth: '440px', 
+                            width: '100%', 
+                            padding: '20px', 
+                            borderRadius: '16px', 
+                            position: 'relative',
+                            textAlign: 'center',
+                            boxShadow: '0 20px 30px rgba(0,0,0,0.6)',
+                            animation: 'fadeIn 0.2s ease-in-out'
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button 
+                            type="button" 
+                            onClick={() => setSelectedImageModal(null)}
+                            style={{ 
+                                position: 'absolute', 
+                                top: '12px', 
+                                right: '14px', 
+                                background: 'rgba(255, 255, 255, 0.1)', 
+                                border: 'none', 
+                                borderRadius: '50%', 
+                                width: '32px', 
+                                height: '32px', 
+                                color: 'var(--text-color, #ffffff)', 
+                                fontSize: '16px', 
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                            title="Close"
+                        >
+                            ✕
+                        </button>
+                        
+                        <div style={{ marginBottom: '14px' }}>
+                            <h3 style={{ fontSize: '17px', fontWeight: '800', margin: '0 0 4px 0', color: 'var(--accent-teal, #0d9488)' }}>
+                                {selectedImageModal.title}
+                            </h3>
+                            {selectedImageModal.memberId && (
+                                <div style={{ fontSize: '12px', color: 'var(--accent-gold, #f59e0b)', fontWeight: '700' }}>
+                                    Member ID: {selectedImageModal.memberId}
+                                </div>
+                            )}
+                        </div>
+
+                        <div style={{ width: '100%', maxHeight: '420px', borderRadius: '12px', overflow: 'hidden', backgroundColor: 'rgba(0,0,0,0.25)', border: '1px solid var(--border-color, rgba(255,255,255,0.15))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img 
+                                src={selectedImageModal.url} 
+                                alt={selectedImageModal.title} 
+                                style={{ width: '100%', maxHeight: '420px', objectFit: 'contain', borderRadius: '12px' }} 
+                            />
+                        </div>
+
+                        <div style={{ marginTop: '16px' }}>
+                            <button 
+                                type="button" 
+                                className="btn btn-outline" 
+                                style={{ padding: '7px 24px', borderRadius: '20px', fontSize: '12px', fontWeight: '700' }}
+                                onClick={() => setSelectedImageModal(null)}
+                            >
+                                Close Preview
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
