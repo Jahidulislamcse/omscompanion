@@ -1342,10 +1342,10 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         </div>
 
                         <p style={{ fontSize: '13.5px', color: '#64748b', margin: '0 0 20px 0', textAlign: 'center', lineHeight: '1.5' }}>
-                            Share with BDS doctors & dental practitioners across social media web and apps:
+                            Share with BDS doctors & dental practitioners on Facebook & Messenger:
                         </p>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
                             {/* Facebook Web */}
                             <a
                                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
@@ -1356,26 +1356,26 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     gap: '8px',
-                                    padding: '14px 10px',
+                                    padding: '16px 12px',
                                     borderRadius: '14px',
                                     backgroundColor: '#e7f3ff',
                                     color: '#1877F2',
                                     fontWeight: '700',
-                                    fontSize: '13px',
+                                    fontSize: '14px',
                                     textDecoration: 'none',
                                     border: '1px solid #bcdcff',
                                     transition: 'all 0.2s ease'
                                 }}
                             >
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#1877F2">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="#1877F2">
                                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                                 </svg>
                                 Facebook
                             </a>
 
-                            {/* WhatsApp Web/App */}
+                            {/* Messenger Web */}
                             <a
-                                href={`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors: ' + (typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com'))}`}
+                                href={`https://www.facebook.com/dialog/send?link=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}&app_id=291494419107518&redirect_uri=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
@@ -1383,75 +1383,27 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     gap: '8px',
-                                    padding: '14px 10px',
+                                    padding: '16px 12px',
                                     borderRadius: '14px',
-                                    backgroundColor: '#e6f7ee',
-                                    color: '#075e54',
+                                    backgroundColor: '#f0f4ff',
+                                    color: '#0084FF',
                                     fontWeight: '700',
-                                    fontSize: '13px',
+                                    fontSize: '14px',
                                     textDecoration: 'none',
-                                    border: '1px solid #a3e9c4',
+                                    border: '1px solid #c2d9ff',
                                     transition: 'all 0.2s ease'
                                 }}
                             >
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#25D366">
-                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.893 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.705 1.754zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.146 4.186 4.226-1.107z"/>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="url(#messenger-grad)">
+                                    <defs>
+                                        <linearGradient id="messenger-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stopColor="#00C6FF" />
+                                            <stop offset="100%" stopColor="#0078FF" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.302 2.253.464 3.443.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26 6.559-6.963 3.13 3.26 5.888-3.26-6.559 6.963z"/>
                                 </svg>
-                                WhatsApp
-                            </a>
-
-                            {/* LinkedIn Web */}
-                            <a
-                                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    padding: '14px 10px',
-                                    borderRadius: '14px',
-                                    backgroundColor: '#edf4fb',
-                                    color: '#0a66c2',
-                                    fontWeight: '700',
-                                    fontSize: '13px',
-                                    textDecoration: 'none',
-                                    border: '1px solid #b8d7f5',
-                                    transition: 'all 0.2s ease'
-                                }}
-                            >
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#0a66c2">
-                                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-1.93 1.63-1.93 1.13 0 1.55.77 1.55 1.93v4.93h2.8M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-                                </svg>
-                                LinkedIn
-                            </a>
-
-                            {/* X / Twitter */}
-                            <a
-                                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice')}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    padding: '14px 10px',
-                                    borderRadius: '14px',
-                                    backgroundColor: '#f1f5f9',
-                                    color: '#0f172a',
-                                    fontWeight: '700',
-                                    fontSize: '13px',
-                                    textDecoration: 'none',
-                                    border: '1px solid #cbd5e1',
-                                    transition: 'all 0.2s ease'
-                                }}
-                            >
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#0f172a">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                </svg>
-                                X (Twitter)
+                                Messenger
                             </a>
                         </div>
 
