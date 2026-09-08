@@ -45,8 +45,15 @@ export default function Members({ members = [] }) {
         }
     };
 
-    const getTypeBadge = (bdsReg) => {
-        if (bdsReg) {
+    const getTypeBadge = (member) => {
+        if (typeof member === 'object' && member !== null) {
+            if (member.doctor_type === 'MBBS') {
+                return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px', backgroundColor: '#0284c7', color: '#ffffff' }}>👨‍⚕️ MBBS Doctor</span>;
+            }
+            if (member.bds_registration_number || member.doctor_type === 'BDS') {
+                return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ BDS Doctor</span>;
+            }
+        } else if (member) {
             return <span className="badge-status badge-treatment" style={{ fontSize: '11px', padding: '2px 8px' }}>👨‍⚕️ BDS Doctor</span>;
         }
         return <span className="badge-status badge-contacted" style={{ fontSize: '11px', padding: '2px 8px' }}>🏪 Storekeeper</span>;
@@ -150,12 +157,19 @@ export default function Members({ members = [] }) {
                                                     {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
                                                 </div>
                                                 <div style={{ marginTop: '4px' }}>
-                                                    {getTypeBadge(member.bds_registration_number)}
+                                                    {getTypeBadge(member)}
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>{member.email || 'N/A'}</div>
-                                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{member.phone || 'N/A'}</div>
+                                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                                    {member.phone || 'N/A'}
+                                                    {member.whatsapp_number && (
+                                                        <span style={{ display: 'block', fontSize: '11px', color: '#10b981' }}>
+                                                            💬 WA: {member.whatsapp_number}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td>
                                                 <code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>

@@ -76,6 +76,8 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20|unique:users,phone',
+            'whatsapp_number' => 'nullable|string|max:20',
+            'doctor_type' => 'nullable|string|in:BDS,MBBS',
             'email' => 'required|string|email|max:255|unique:users,email',
             'bds_registration_number' => 'required|string|max:50',
             'clinic_name' => 'required|string|max:255',
@@ -87,6 +89,8 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email ?: null,
             'phone' => $request->phone,
+            'whatsapp_number' => $request->whatsapp_number ?: null,
+            'doctor_type' => $request->doctor_type ?: 'BDS',
             'bds_registration_number' => $request->bds_registration_number,
             'clinic_name' => $request->clinic_name,
             'address' => $request->address,
