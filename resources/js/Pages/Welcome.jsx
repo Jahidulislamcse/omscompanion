@@ -423,7 +423,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             ) : (
                                 <>
                                     <Link href={route('register')} className="btn btn-primary hero-btn btn-glow">
-                                        🌟 BDS Doctor Registration
+                                        🌟 Register
                                     </Link>
                                     <Link href={route('videos.public')} className="btn btn-outline hero-btn">
                                         📁 View Archive
@@ -1322,7 +1322,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 </Link>
                             ) : (
                                 <Link href={route('register')} className="btn btn-outline hero-btn" style={{ borderColor: 'rgba(255, 255, 255, 0.4)', color: '#ffffff' }}>
-                                    BDS Doctor Registration
+                                    Register
                                 </Link>
                             )}
                         </div>
