@@ -27,6 +27,7 @@ class AdminController extends Controller
     {
         $totalMembers = User::where('role', 'member')->count();
         $activeMembers = User::where('role', 'member')->where('status', 'approved')->count();
+        $pendingMembers = User::where('role', 'member')->where('status', 'pending')->count();
         
         $totalReferrals = PatientReferral::count();
         $activeCases = PatientReferral::whereNotIn('status', ['completed', 'not_proceeding'])->count();
@@ -62,6 +63,7 @@ class AdminController extends Controller
             'stats' => [
                 'total_members' => $totalMembers,
                 'active_members' => $activeMembers,
+                'pending_members' => $pendingMembers,
                 'total_referrals' => $totalReferrals,
                 'active_cases' => $activeCases,
                 'completed_treatments' => $completedTreatments,

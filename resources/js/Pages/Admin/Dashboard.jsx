@@ -10,12 +10,12 @@ export default function Dashboard({ stats }) {
             {/* Stat Cards */}
             <div className="dashboard-grid">
                 <div className="glass-panel stat-card">
-                    <span className="stat-title">Total BDS Members</span>
+                    <span className="stat-title">Total Members</span>
                     <div className="stat-value">
                         {stats.total_members} <span>Doctors</span>
                     </div>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                        Registered BDS Doctor Applications
+                        {stats.pending_members ?? 0} Pending applications
                     </div>
                 </div>
 
