@@ -279,7 +279,7 @@ export default function Referrals({ referrals, members = [] }) {
                                 transition: 'all 0.2s ease'
                             }}
                         >
-                            🩺 Referral by BDS Doctors
+                            🩺 Referral by Doctors
                             <span style={{ 
                                 padding: '2px 8px', 
                                 borderRadius: '10px', 
@@ -311,7 +311,7 @@ export default function Referrals({ referrals, members = [] }) {
                                 transition: 'all 0.2s ease'
                             }}
                         >
-                            💊 Referral by Medicine Shop Keeper
+                            💊 Referral by Non-Doctors
                             <span style={{ 
                                 padding: '2px 8px', 
                                 borderRadius: '10px', 
@@ -330,7 +330,7 @@ export default function Referrals({ referrals, members = [] }) {
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Search patient, doctor, shop keeper or phone..."
+                            placeholder="Search patient, doctor, referrer or phone..."
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                         />
