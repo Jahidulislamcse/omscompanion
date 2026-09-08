@@ -285,7 +285,8 @@ class AdminController extends Controller
 
         $referral->update([
             'commission_amount' => $amount,
-            'commission_status' => $newStatus
+            'commission_status' => $newStatus,
+            'commission_notes' => $request->notes,
         ]);
 
         if ($request->notes || $oldStatus !== $newStatus) {

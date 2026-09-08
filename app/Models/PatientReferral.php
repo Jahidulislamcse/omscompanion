@@ -21,6 +21,7 @@ class PatientReferral extends Model
         'additional_notes',
         'commission_amount',
         'commission_status',
+        'commission_notes',
     ];
 
     public function member()

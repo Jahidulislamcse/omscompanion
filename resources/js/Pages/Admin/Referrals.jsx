@@ -92,7 +92,7 @@ export default function Referrals({ referrals, members = [] }) {
         setCommData({
             commission_amount: referral.commission_amount || 0,
             commission_status: referral.commission_status === 'paid' ? 'paid' : 'pending',
-            notes: '',
+            notes: referral.commission_notes || '',
         });
     };
 
