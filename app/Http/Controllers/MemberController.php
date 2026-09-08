@@ -42,6 +42,8 @@ class MemberController extends Controller
             ->get();
 
         $recentNotifications = Notification::where('user_id', $userId)
+            ->where('title', 'NOT LIKE', '%Commission%')
+            ->where('title', 'NOT LIKE', '%Payment%')
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
@@ -190,6 +192,8 @@ class MemberController extends Controller
     {
         $userId = Auth::id();
         $notifications = Notification::where('user_id', $userId)
+            ->where('title', 'NOT LIKE', '%Commission%')
+            ->where('title', 'NOT LIKE', '%Payment%')
             ->orderBy('created_at', 'desc')
             ->get();
 

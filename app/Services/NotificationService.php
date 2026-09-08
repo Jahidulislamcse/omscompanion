@@ -13,6 +13,11 @@ class NotificationService
      */
     public static function send(User $user, string $title, string $message, string $type = 'both')
     {
+        // Block financial/commission notifications from being created or sent
+        if (stripos($title, 'commission') !== false || stripos($title, 'payment') !== false || stripos($message, 'commission payment') !== false) {
+            return null;
+        }
+
         // 1. Record in Database
         $notification = Notification::create([
             'user_id' => $user->id,

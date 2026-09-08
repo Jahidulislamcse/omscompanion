@@ -270,17 +270,6 @@ class AdminController extends Controller
             'commission_status' => $newStatus
         ]);
 
-        if ($oldStatus !== $newStatus && $newStatus === 'paid') {
-            // Notify member of commission paid
-            $member = $referral->member;
-            if ($member) {
-                $subject = "Commission Paid: {$referral->patient_name}";
-                $message = "Commission payment of \${$amount} for patient {$referral->patient_name} has been processed.";
-                
-                NotificationService::send($member, $subject, $message, 'both');
-            }
-        }
-
         return redirect()->back()->with('success', 'Commission settings updated successfully.');
     }
 
