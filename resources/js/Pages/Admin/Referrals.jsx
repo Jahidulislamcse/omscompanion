@@ -66,6 +66,7 @@ export default function Referrals({ referrals, members = [] }) {
     const { data: commData, setData: setCommData, post: postComm, processing: commProcessing } = useForm({
         commission_amount: 0,
         commission_status: 'none',
+        notes: '',
     });
 
     const openStatusModal = (referral) => {
@@ -91,6 +92,7 @@ export default function Referrals({ referrals, members = [] }) {
         setCommData({
             commission_amount: referral.commission_amount || 0,
             commission_status: referral.commission_status === 'paid' ? 'paid' : 'pending',
+            notes: '',
         });
     };
 
@@ -198,6 +200,40 @@ export default function Referrals({ referrals, members = [] }) {
                         <span className="badge-status badge-pending">Pending</span>
                     )}
                 </div>
+            </div>
+        );
+    };
+
+    const renderTimelineCell = (referral) => {
+        const timelineEntries = (referral.timeline || []).filter(t => t && t.notes && t.notes.trim() !== '');
+
+        return (
+            <div style={{ maxWidth: '240px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '600' }}>
+                    📅 {new Date(referral.created_at).toLocaleDateString()}
+                </div>
+                {timelineEntries.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '110px', overflowY: 'auto' }}>
+                        {timelineEntries.map((t, idx) => (
+                            <div key={t.id || idx} style={{ fontSize: '11px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '6px', borderLeft: '3px solid #0d9488' }}>
+                                <div style={{ fontWeight: '600', color: 'var(--text-main, #0f172a)', wordBreak: 'break-word' }}>
+                                    {t.notes}
+                                </div>
+                                <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                                    {new Date(t.created_at).toLocaleDateString()} {new Date(t.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : referral.additional_notes ? (
+                    <div style={{ fontSize: '11px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '6px', borderLeft: '3px solid #0d9488' }}>
+                        {referral.additional_notes}
+                    </div>
+                ) : (
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                        No notes logged
+                    </span>
+                )}
             </div>
         );
     };
@@ -464,9 +500,7 @@ export default function Referrals({ referrals, members = [] }) {
                                                 {renderCommissionCell(referral)}
                                             </td>
                                             <td>
-                                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                                                    {new Date(referral.created_at).toLocaleDateString()}
-                                                </div>
+                                                {renderTimelineCell(referral)}
                                             </td>
                                             <td style={{ textAlign: 'right' }}>
                                                 <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
@@ -557,8 +591,8 @@ export default function Referrals({ referrals, members = [] }) {
                                     </div>
 
                                     <div>
-                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Submitted On</span>
-                                        <div style={{ color: 'var(--text-muted)' }}>{new Date(referral.created_at).toLocaleDateString()}</div>
+                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Timeline Logging</span>
+                                        {renderTimelineCell(referral)}
                                     </div>
                                 </div>
 
@@ -668,6 +702,17 @@ export default function Referrals({ referrals, members = [] }) {
                                     <option value="pending">Pending</option>
                                     <option value="paid">Paid</option>
                                 </select>
+                            </div>
+
+                            <div className="form-group" style={{ marginTop: '14px' }}>
+                                <label className="form-label">Timeline Transition Notes (Optional)</label>
+                                <textarea 
+                                    className="form-control"
+                                    value={commData.notes}
+                                    onChange={e => setCommData('notes', e.target.value)}
+                                    rows="3"
+                                    placeholder="Enter optional comments about this action..."
+                                />
                             </div>
 
                             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>

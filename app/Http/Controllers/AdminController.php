@@ -157,7 +157,9 @@ class AdminController extends Controller
 
     public function referrals()
     {
-        $referrals = PatientReferral::with('member')
+        $referrals = PatientReferral::with(['member', 'timeline' => function($q) {
+                $q->orderBy('created_at', 'desc');
+            }])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -208,7 +210,7 @@ class AdminController extends Controller
         PatientStatusTimeline::create([
             'referral_id' => $referral->id,
             'status' => 'new',
-            'notes' => 'Referral created by Admin' . ($memberId ? ' and assigned to member.' : '.'),
+            'notes' => $request->additional_notes ? $request->additional_notes : ('Referral created by Admin' . ($memberId ? ' and assigned to member.' : '.')),
             'changed_by' => Auth::id(),
         ]);
 
@@ -236,36 +238,34 @@ class AdminController extends Controller
         $oldStatus = $referral->status;
         $newStatus = $request->status;
 
-        if ($oldStatus !== $newStatus) {
-            $referral->update([
-                'status' => $newStatus
-            ]);
+        $referral->update([
+            'status' => $newStatus
+        ]);
 
-            // Log to timeline
-            PatientStatusTimeline::create([
-                'referral_id' => $referral->id,
-                'status' => $newStatus,
-                'notes' => $request->notes,
-                'changed_by' => Auth::id(),
-            ]);
+        // Log to timeline
+        PatientStatusTimeline::create([
+            'referral_id' => $referral->id,
+            'status' => $newStatus,
+            'notes' => $request->notes ? $request->notes : "Status updated to " . str_replace('_', ' ', ucfirst($newStatus)),
+            'changed_by' => Auth::id(),
+        ]);
 
-            // Notify referring member if exists
-            $member = $referral->member;
-            if ($member) {
-                $statusLabels = [
-                    'new' => 'New Referral',
-                    'contacted' => 'Contacted',
-                    'appointment_booked' => 'Appointment Booked',
-                    'under_treatment' => 'Under Treatment',
-                    'completed' => 'Completed',
-                    'not_proceeding' => 'Not Proceeding'
-                ];
+        // Notify referring member if exists
+        $member = $referral->member;
+        if ($member) {
+            $statusLabels = [
+                'new' => 'New Referral',
+                'contacted' => 'Contacted',
+                'appointment_booked' => 'Appointment Booked',
+                'under_treatment' => 'Under Treatment',
+                'completed' => 'Completed',
+                'not_proceeding' => 'Not Proceeding'
+            ];
 
-                $subject = "Referral Status Update: {$referral->patient_name}";
-                $message = "Patient {$referral->patient_name} status updated to \"{$statusLabels[$newStatus]}\"." . ($request->notes ? " Note: {$request->notes}" : "");
-                
-                NotificationService::send($member, $subject, $message, 'both');
-            }
+            $subject = "Referral Status Update: {$referral->patient_name}";
+            $message = "Patient {$referral->patient_name} status updated to \"{$statusLabels[$newStatus]}\"." . ($request->notes ? " Note: {$request->notes}" : "");
+            
+            NotificationService::send($member, $subject, $message, 'both');
         }
 
         return redirect()->back()->with('success', 'Patient referral status updated.');
@@ -276,8 +276,10 @@ class AdminController extends Controller
         $request->validate([
             'commission_amount' => 'nullable|numeric|min:0',
             'commission_status' => 'required|in:none,pending,paid',
+            'notes' => 'nullable|string',
         ]);
 
+        $oldStatus = $referral->commission_status;
         $newStatus = $request->commission_status;
         $amount = $request->input('commission_amount', $referral->commission_amount ?? 0);
 
@@ -285,6 +287,19 @@ class AdminController extends Controller
             'commission_amount' => $amount,
             'commission_status' => $newStatus
         ]);
+
+        if ($request->notes || $oldStatus !== $newStatus) {
+            $noteMsg = $request->notes 
+                ? $request->notes 
+                : ("Commission status updated to " . ucfirst($newStatus));
+
+            PatientStatusTimeline::create([
+                'referral_id' => $referral->id,
+                'status' => $referral->status,
+                'notes' => $noteMsg,
+                'changed_by' => Auth::id(),
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Commission settings updated successfully.');
     }
