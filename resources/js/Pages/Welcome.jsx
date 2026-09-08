@@ -1026,37 +1026,39 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                             backgroundColor: '#e6f4ea',
                                             transition: 'all 0.2s ease',
                                             display: 'flex',
+                                            flexDirection: 'column',
                                             alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            gap: '14px'
+                                            justifyContent: 'center',
+                                            textAlign: 'center',
+                                            gap: '4px'
                                         }}
                                     >
-                                        <div>
-                                            <h4 style={{ margin: '0 0 4px 0', fontSize: '19px', fontWeight: '800', color: '#1e293b' }}>
-                                                I’m a Doctor
-                                            </h4>
-                                            <span style={{ fontSize: '13px', color: '#475569', fontWeight: '500' }}>
-                                                Registered doctor
-                                            </span>
-                                        </div>
-                                        <span style={{ fontSize: '22px', color: '#10b981', fontWeight: 'bold' }}>→</span>
+                                        <h4 style={{ margin: 0, fontSize: '19px', fontWeight: '800', color: '#1e293b' }}>
+                                            I’m a Doctor
+                                        </h4>
+                                        <span style={{ fontSize: '13px', color: '#475569', fontWeight: '500' }}>
+                                            Registered doctor
+                                        </span>
                                     </div>
 
                                     {/* Option 2: I'm not a Doctor */}
                                     <div 
                                         onClick={() => { setReferralType('medicine_shop'); setReferralStep('medicine_shop_form'); }}
                                         style={{ 
-                                            padding: '22px 24px', 
+                                            padding: '18px 24px', 
                                             borderRadius: '14px', 
                                             cursor: 'pointer', 
                                             backgroundColor: '#e0e9fa',
                                             transition: 'all 0.2s ease',
                                             display: 'flex',
+                                            flexDirection: 'column',
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
+                                            textAlign: 'center',
+                                            gap: '4px'
                                         }}
                                     >
-                                        <h4 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#1e293b' }}>
+                                        <h4 style={{ margin: 0, fontSize: '19px', fontWeight: '800', color: '#1e293b' }}>
                                             I’m not a Doctor
                                         </h4>
                                     </div>
