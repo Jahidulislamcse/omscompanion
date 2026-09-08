@@ -386,8 +386,7 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                         display: 'flex', 
                                         flexDirection: 'column',
                                         border: '1px solid var(--border-color)',
-                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-                                        height: '100%'
+                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)'
                                     }}
                                 >
                                     {/* Category Header */}
@@ -439,12 +438,12 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
                                     {/* Category Videos Display */}
                                     {viewLayout === 'list' ? (
                                         /* LIST MANNER DISPLAY */
-                                        <div className="video-list-container category-section-scrollable" style={{ flex: 1 }}>
+                                        <div className="video-list-container category-section-scrollable" style={{ flex: 1, maxHeight: '380px', overflowY: 'auto' }}>
                                             {cat.videos.map(video => renderVideoListItem(video))}
                                         </div>
                                     ) : (
                                         /* GRID MANNER DISPLAY */
-                                        <div className="video-grid category-section-scrollable" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1 }}>
+                                        <div className="video-grid category-section-scrollable" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', flex: 1, maxHeight: '380px', overflowY: 'auto' }}>
                                             {cat.videos.map(video => renderVideoCard(video))}
                                         </div>
                                     )}

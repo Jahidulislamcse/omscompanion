@@ -3552,29 +3552,29 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Custom Scrollbar for Category Section Video Container */
 .category-section-scrollable {
-    max-height: 520px;
-    overflow-y: auto;
-    padding-right: 6px;
+    max-height: 380px !important;
+    overflow-y: auto !important;
+    padding-right: 8px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(8, 145, 178, 0.4) rgba(0, 0, 0, 0.05);
+    scrollbar-color: #0d9488 rgba(0, 0, 0, 0.08);
 }
 
 .category-section-scrollable::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .category-section-scrollable::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
 }
 
 .category-section-scrollable::-webkit-scrollbar-thumb {
-    background: rgba(8, 145, 178, 0.4);
-    border-radius: 4px;
+    background: #0d9488;
+    border-radius: 6px;
 }
 
 .category-section-scrollable::-webkit-scrollbar-thumb:hover {
-    background: rgba(8, 145, 178, 0.7);
+    background: #0f766e;
 }
 
 [data-theme="dark"] .category-column-title {
