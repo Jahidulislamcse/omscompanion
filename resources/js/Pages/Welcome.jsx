@@ -480,7 +480,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         aria-label="Refer Patient"
                     >
                         <div className="refer-patient-icon-circle">
-                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="4" y="4" width="16" height="17" rx="2" fill="#0891b2" fillOpacity="0.12" stroke="#0e7490" strokeWidth="2"/>
                                 <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
                                 <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
@@ -491,7 +491,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         </div>
                         <span className="refer-patient-text">Refer Patient</span>
                         <div className="refer-patient-arrow-circle">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="4" y1="12" x2="20" y2="12" />
                                 <polyline points="13 5 20 12 13 19" />
                             </svg>
@@ -1296,10 +1296,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 onClick={handleReferralClick}
                                 className="refer-patient-glossy-btn"
                                 aria-label="Refer Patient"
-                                style={{ transform: 'scale(0.85)', margin: '-6px 0' }}
                             >
                                 <div className="refer-patient-icon-circle">
-                                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="4" y="4" width="16" height="17" rx="2" fill="#0891b2" fillOpacity="0.12" stroke="#0e7490" strokeWidth="2"/>
                                         <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
                                         <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
@@ -1308,9 +1307,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         <path d="M12 17.5V20.5M10.5 19H13.5" stroke="#0891b2" strokeWidth="2.2" strokeLinecap="round"/>
                                     </svg>
                                 </div>
-                                <span className="refer-patient-text" style={{ fontSize: '22px', margin: '0 20px 0 16px' }}>Refer Patient</span>
-                                <div className="refer-patient-arrow-circle" style={{ width: '44px', height: '44px' }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                                <span className="refer-patient-text">Refer Patient</span>
+                                <div className="refer-patient-arrow-circle">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                         <line x1="4" y1="12" x2="20" y2="12" />
                                         <polyline points="13 5 20 12 13 19" />
                                     </svg>
