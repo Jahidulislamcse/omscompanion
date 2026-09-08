@@ -156,6 +156,7 @@ export default function Members({ members = [] }) {
                                 <th>Name & Role</th>
                                 <th>Email / Phone</th>
                                 <th>Reg. No.</th>
+                                <th>Clinic Details</th>
                                 <th>Member ID</th>
                                 <th>Referrals</th>
                                 <th>Commission</th>
@@ -193,6 +194,12 @@ export default function Members({ members = [] }) {
                                                 <code style={{ background: 'var(--bg-main)', padding: '2px 5px', borderRadius: '4px', fontSize: '11px', whiteSpace: 'nowrap' }}>
                                                     {member.bds_registration_number || 'N/A'}
                                                 </code>
+                                            </td>
+                                            <td>
+                                                <div style={{ fontWeight: '600', fontSize: '12px' }}>{member.clinic_name || 'N/A'}</div>
+                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '130px' }}>
+                                                    {member.address || 'N/A'}
+                                                </div>
                                             </td>
                                             <td>
                                                 <span style={{ fontWeight: '700', color: 'var(--accent-gold)', fontSize: '12px', whiteSpace: 'nowrap' }}>
@@ -281,7 +288,7 @@ export default function Members({ members = [] }) {
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan="8" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                                    <td colSpan="9" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
                                         No members found matching your search or filters.
                                     </td>
                                 </tr>
@@ -323,6 +330,12 @@ export default function Members({ members = [] }) {
                                     <div>
                                         <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Reg No.</span>
                                         <code style={{ fontSize: '11px' }}>{member.bds_registration_number || 'N/A'}</code>
+                                    </div>
+
+                                    <div>
+                                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Clinic Details</span>
+                                        <div style={{ fontWeight: '600' }}>{member.clinic_name || 'N/A'}</div>
+                                        <div style={{ color: 'var(--text-muted)', fontSize: '11px' }}>{member.address || 'N/A'}</div>
                                     </div>
 
                                     <div>
