@@ -191,10 +191,10 @@ export default function Referrals({ referrals, members = [] }) {
             }}>
                 <div>
                     <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: 'var(--text-main, #0f172a)' }}>
-                        Submit a Patient Referral
+                        Assign a Manually Referred Patient
                     </h2>
                     <p style={{ margin: '6px 0 0', color: 'var(--text-muted, #64748b)', fontSize: '14px' }}>
-                        Send patient cases to OMS COMPANION and track case progress in real-time.
+                        Create a patient referral and assign a doctor manually as the referrer.
                     </p>
                 </div>
                 <button
