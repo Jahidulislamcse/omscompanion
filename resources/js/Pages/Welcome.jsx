@@ -158,12 +158,30 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
 
     // Share link state
     const [copiedLink, setCopiedLink] = useState(false);
+    const [shareModalOpen, setShareModalOpen] = useState(false);
+
     const handleCopyLink = () => {
         const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
         if (navigator.clipboard) {
             navigator.clipboard.writeText(url);
             setCopiedLink(true);
             setTimeout(() => setCopiedLink(false), 2500);
+        }
+    };
+
+    const handleSocialShare = () => {
+        const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
+        const title = 'OMS Companion';
+        const text = 'Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice';
+
+        if (navigator.share) {
+            navigator.share({ title, text, url }).catch((err) => {
+                if (err && err.name !== 'AbortError') {
+                    setShareModalOpen(true);
+                }
+            });
+        } else {
+            setShareModalOpen(true);
         }
     };
 
@@ -1294,6 +1312,188 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                 </div>
             )}
 
+            {/* Social Media Web & App Share Modal */}
+            {shareModalOpen && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999999, padding: '20px', boxSizing: 'border-box' }} onClick={() => setShareModalOpen(false)}>
+                    <div 
+                        style={{ 
+                            maxWidth: '480px', 
+                            width: '100%',
+                            padding: '28px 24px', 
+                            backgroundColor: '#ffffff',
+                            borderRadius: '20px',
+                            border: '1px solid #e2e8f0',
+                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            position: 'relative',
+                            color: '#0f172a'
+                        }} 
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px' }}>
+                            <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a' }}>
+                                🌐 Share OMS Companion
+                            </h3>
+                            <button 
+                                onClick={() => setShareModalOpen(false)} 
+                                style={{ background: '#f1f5f9', border: 'none', color: '#64748b', fontSize: '16px', cursor: 'pointer', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <p style={{ fontSize: '13.5px', color: '#64748b', margin: '0 0 20px 0', textAlign: 'center', lineHeight: '1.5' }}>
+                            Share with BDS doctors & dental practitioners across social media web and apps:
+                        </p>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+                            {/* Facebook Web */}
+                            <a
+                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '14px 10px',
+                                    borderRadius: '14px',
+                                    backgroundColor: '#e7f3ff',
+                                    color: '#1877F2',
+                                    fontWeight: '700',
+                                    fontSize: '13px',
+                                    textDecoration: 'none',
+                                    border: '1px solid #bcdcff',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#1877F2">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                                Facebook
+                            </a>
+
+                            {/* WhatsApp Web/App */}
+                            <a
+                                href={`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors: ' + (typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com'))}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '14px 10px',
+                                    borderRadius: '14px',
+                                    backgroundColor: '#e6f7ee',
+                                    color: '#075e54',
+                                    fontWeight: '700',
+                                    fontSize: '13px',
+                                    textDecoration: 'none',
+                                    border: '1px solid #a3e9c4',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#25D366">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.893 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.705 1.754zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.146 4.186 4.226-1.107z"/>
+                                </svg>
+                                WhatsApp
+                            </a>
+
+                            {/* LinkedIn Web */}
+                            <a
+                                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '14px 10px',
+                                    borderRadius: '14px',
+                                    backgroundColor: '#edf4fb',
+                                    color: '#0a66c2',
+                                    fontWeight: '700',
+                                    fontSize: '13px',
+                                    textDecoration: 'none',
+                                    border: '1px solid #b8d7f5',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#0a66c2">
+                                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-1.93 1.63-1.93 1.13 0 1.55.77 1.55 1.93v4.93h2.8M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                                </svg>
+                                LinkedIn
+                            </a>
+
+                            {/* X / Twitter */}
+                            <a
+                                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice')}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '14px 10px',
+                                    borderRadius: '14px',
+                                    backgroundColor: '#f1f5f9',
+                                    color: '#0f172a',
+                                    fontWeight: '700',
+                                    fontSize: '13px',
+                                    textDecoration: 'none',
+                                    border: '1px solid #cbd5e1',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#0f172a">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                                X (Twitter)
+                            </a>
+                        </div>
+
+                        {/* Copy Link Row inside modal */}
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <input 
+                                type="text"
+                                readOnly
+                                value={typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com'}
+                                style={{
+                                    flex: 1,
+                                    padding: '10px 14px',
+                                    borderRadius: '10px',
+                                    border: '1px solid #cbd5e1',
+                                    backgroundColor: '#f8fafc',
+                                    fontSize: '13px',
+                                    color: '#475569'
+                                }}
+                            />
+                            <button
+                                type="button"
+                                onClick={handleCopyLink}
+                                style={{
+                                    padding: '10px 18px',
+                                    borderRadius: '10px',
+                                    backgroundColor: copiedLink ? '#10b981' : '#2563eb',
+                                    color: '#ffffff',
+                                    fontWeight: '700',
+                                    fontSize: '13px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    whiteSpace: 'nowrap',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                {copiedLink ? '✓ Copied!' : 'Copy'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Website Share Feature Section */}
             <section className="share-section" style={{ padding: '30px 20px 40px', textAlign: 'center' }}>
                 <div className="landing-section-container">
@@ -1348,21 +1548,10 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 WhatsApp
                             </a>
 
-                            {/* Native Mobile App Share Button (Opens native Facebook, Messenger, and installed apps) */}
+                            {/* Native / Web Social Media Share Button */}
                             <button
                                 type="button"
-                                onClick={() => {
-                                    const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
-                                    if (navigator.share) {
-                                        navigator.share({
-                                            title: 'OMS Companion',
-                                            text: 'Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice',
-                                            url: url
-                                        }).catch(() => {});
-                                    } else {
-                                        handleCopyLink();
-                                    }
-                                }}
+                                onClick={handleSocialShare}
                                 style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
