@@ -165,7 +165,7 @@ class AdminController extends Controller
 
         $members = User::where('role', 'member')
             ->where('status', 'approved')
-            ->select('id', 'name', 'member_id', 'bds_registration_number', 'phone', 'clinic_name', 'is_commission_applicable', 'commission_note')
+            ->select('id', 'name', 'member_id', 'bds_registration_number', 'phone', 'clinic_name', 'is_commission_applicable', 'commission_note', 'avatar')
             ->orderBy('name', 'asc')
             ->get();
 

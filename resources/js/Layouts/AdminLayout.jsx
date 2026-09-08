@@ -129,11 +129,26 @@ export default function AdminLayout({ children, title }) {
                 </div>
 
                 <div className="sidebar-user">
-                    <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px' }}>
-                        {auth.user.name}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', marginBottom: '15px' }}>
-                        Administrator
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        {auth.user.avatar_url ? (
+                            <img 
+                                src={auth.user.avatar_url} 
+                                alt={auth.user.name} 
+                                style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #0d9488', flexShrink: 0 }} 
+                            />
+                        ) : (
+                            <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: '#0d9488', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '18px', flexShrink: 0 }}>
+                                {auth.user.name ? auth.user.name.charAt(0).toUpperCase() : 'A'}
+                            </div>
+                        )}
+                        <div>
+                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                {auth.user.name}
+                            </div>
+                            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>
+                                Administrator
+                            </div>
+                        </div>
                     </div>
                     <a href="#" onClick={handleLogout} className="btn btn-danger" style={{ width: '100%', fontSize: '13px' }}>
                         Logout

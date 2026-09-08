@@ -266,6 +266,28 @@ Route::get('/service-image/{service}', function (\App\Models\Service $service) {
     ]);
 })->name('service.image.stream');
 
+// User Avatar Stream Route (Bypasses cPanel symlink issues)
+Route::get('/user-avatar/{user}', function (\App\Models\User $user) {
+    if (!$user->avatar) {
+        abort(404);
+    }
+    $filename = basename($user->avatar);
+    $filePath = storage_path('app/public/avatars/' . $filename);
+    if (!file_exists($filePath)) {
+        $filePath = storage_path('app/public/' . $user->avatar);
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+    }
+    $mimeType = function_exists('mime_content_type') ? @mime_content_type($filePath) : 'image/jpeg';
+    return response()->file($filePath, [
+        'Content-Type' => $mimeType,
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        'Pragma' => 'no-cache',
+        'Expires' => '0',
+    ]);
+})->name('user.avatar.stream');
+
 // Guest Medicine Shop Referral Submission Route
 Route::post('/referrals/guest', [GuestReferralController::class, 'store'])->name('guest.referral.store');
 

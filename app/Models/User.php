@@ -36,7 +36,25 @@ class User extends Authenticatable
         'premium_access',
         'is_commission_applicable',
         'commission_note',
+        'avatar',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'avatar_url',
+    ];
+
+    /**
+     * Get the user's avatar URL.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->avatar ? route('user.avatar.stream', $this->id) : null;
+    }
 
     /**
      * The attributes that should be hidden for serialization.

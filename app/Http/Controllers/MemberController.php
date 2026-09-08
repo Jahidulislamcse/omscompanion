@@ -77,14 +77,21 @@ class MemberController extends Controller
             'phone' => 'required|string|max:20',
             'clinic_name' => 'required|string|max:255',
             'address' => 'required|string',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:500',
         ]);
 
-        $user->update([
+        $updateData = [
             'name' => $request->name,
             'phone' => $request->phone,
             'clinic_name' => $request->clinic_name,
             'address' => $request->address,
-        ]);
+        ];
+
+        if ($request->hasFile('avatar')) {
+            $updateData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $user->update($updateData);
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }

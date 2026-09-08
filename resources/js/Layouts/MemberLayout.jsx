@@ -111,14 +111,31 @@ export default function MemberLayout({ children, title }) {
                 </div>
 
                 <div className="sidebar-user">
-                    <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '4px' }}>
-                        {auth.user.bds_registration_number ? `Dr. ${auth.user.name}` : auth.user.name}
-                    </div>
-                    <div style={{ fontSize: '11px', color: 'var(--accent-gold)', fontWeight: '700', marginBottom: '4px' }}>
-                        ID: {auth.user.member_id}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '15px' }}>
-                        {auth.user.clinic_name}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        {auth.user.avatar_url ? (
+                            <img 
+                                src={auth.user.avatar_url} 
+                                alt={auth.user.name} 
+                                style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-gold, #f59e0b)', flexShrink: 0 }} 
+                            />
+                        ) : (
+                            <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'var(--accent-gold, #f59e0b)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '18px', flexShrink: 0 }}>
+                                {auth.user.name ? auth.user.name.charAt(0).toUpperCase() : 'M'}
+                            </div>
+                        )}
+                        <div>
+                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                {auth.user.bds_registration_number ? `Dr. ${auth.user.name}` : auth.user.name}
+                            </div>
+                            <div style={{ fontSize: '11px', color: 'var(--accent-gold)', fontWeight: '700' }}>
+                                ID: {auth.user.member_id}
+                            </div>
+                            {auth.user.clinic_name && (
+                                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                                    {auth.user.clinic_name}
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <a href="#" onClick={handleLogout} className="btn btn-danger" style={{ width: '100%', fontSize: '13px' }}>
                         Logout

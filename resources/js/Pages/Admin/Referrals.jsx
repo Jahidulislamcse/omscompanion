@@ -486,19 +486,32 @@ export default function Referrals({ referrals, members = [] }) {
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <div>
-                                                        <span className="badge-status badge-approved" style={{ fontSize: '10px', padding: '2px 8px', marginBottom: '4px', display: 'inline-block' }}>
-                                                            🩺 BDS Doctor
-                                                        </span>
-                                                        <div style={{ fontWeight: '700' }}>
-                                                            {referral.member?.bds_registration_number ? `Dr. ${referral.member.name}` : (referral.member?.name || referral.referrer_name || 'Doctor')}
-                                                        </div>
-                                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                                                            {referral.member?.member_id ? `ID: ${referral.member.member_id}` : `BDS Reg: ${referral.member?.bds_registration_number || 'N/A'}`}
-                                                        </div>
-                                                        {referral.member?.clinic_name && (
-                                                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>🏥 {referral.member.clinic_name}</div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                        {referral.member?.avatar_url ? (
+                                                            <img 
+                                                                src={referral.member.avatar_url} 
+                                                                alt={referral.member.name} 
+                                                                style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #0d9488', flexShrink: 0 }} 
+                                                            />
+                                                        ) : (
+                                                            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
+                                                                {referral.member?.name ? referral.member.name.charAt(0).toUpperCase() : 'D'}
+                                                            </div>
                                                         )}
+                                                        <div>
+                                                            <span className="badge-status badge-approved" style={{ fontSize: '10px', padding: '2px 8px', marginBottom: '4px', display: 'inline-block' }}>
+                                                                🩺 BDS Doctor
+                                                            </span>
+                                                            <div style={{ fontWeight: '700' }}>
+                                                                {referral.member?.bds_registration_number ? `Dr. ${referral.member.name}` : (referral.member?.name || referral.referrer_name || 'Doctor')}
+                                                            </div>
+                                                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                                                                {referral.member?.member_id ? `ID: ${referral.member.member_id}` : `BDS Reg: ${referral.member?.bds_registration_number || 'N/A'}`}
+                                                            </div>
+                                                            {referral.member?.clinic_name && (
+                                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>🏥 {referral.member.clinic_name}</div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 )}
                                             </td>
@@ -587,13 +600,26 @@ export default function Referrals({ referrals, members = [] }) {
                                                 )}
                                             </div>
                                         ) : (
-                                            <div>
-                                                <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 'bold' }}>🩺 BDS Doctor</span>
-                                                <div style={{ fontWeight: '600' }}>
-                                                    {referral.member?.bds_registration_number ? `Dr. ${referral.member.name}` : (referral.member?.name || referral.referrer_name || 'Doctor')}
-                                                </div>
-                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                                                    {referral.member?.member_id ? `ID: ${referral.member.member_id}` : `BDS Reg: ${referral.member?.bds_registration_number || 'N/A'}`}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                {referral.member?.avatar_url ? (
+                                                    <img 
+                                                        src={referral.member.avatar_url} 
+                                                        alt={referral.member.name} 
+                                                        style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #10b981', flexShrink: 0 }} 
+                                                    />
+                                                ) : (
+                                                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
+                                                        {referral.member?.name ? referral.member.name.charAt(0).toUpperCase() : 'D'}
+                                                    </div>
+                                                )}
+                                                <div>
+                                                    <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 'bold' }}>🩺 BDS Doctor</span>
+                                                    <div style={{ fontWeight: '600' }}>
+                                                        {referral.member?.bds_registration_number ? `Dr. ${referral.member.name}` : (referral.member?.name || referral.referrer_name || 'Doctor')}
+                                                    </div>
+                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                                                        {referral.member?.member_id ? `ID: ${referral.member.member_id}` : `BDS Reg: ${referral.member?.bds_registration_number || 'N/A'}`}
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}

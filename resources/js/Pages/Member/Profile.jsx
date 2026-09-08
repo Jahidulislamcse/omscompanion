@@ -3,12 +3,32 @@ import { Head, useForm } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
 export default function Profile({ user }) {
+    const [photoPreview, setPhotoPreview] = React.useState(user.avatar_url || null);
     const { data, setData, post, processing, errors } = useForm({
         name: user.name || '',
         phone: user.phone || '',
         clinic_name: user.clinic_name || '',
         address: user.address || '',
+        avatar: null,
     });
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 500 * 1024) {
+                alert('Profile photo must be less than 500 KB.');
+                e.target.value = null;
+                setData('avatar', null);
+                setPhotoPreview(user.avatar_url || null);
+                return;
+            }
+            setData('avatar', file);
+            setPhotoPreview(URL.createObjectURL(file));
+        } else {
+            setData('avatar', null);
+            setPhotoPreview(user.avatar_url || null);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,9 +49,22 @@ export default function Profile({ user }) {
                     <h3 style={{ margin: 0 }}>Membership Identity</h3>
                     <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}></div>
                     
-                    <div>
-                        <div style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Unique Member ID</div>
-                        <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--accent-gold)' }}>{user.member_id}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '10px' }}>
+                        {photoPreview ? (
+                            <img src={photoPreview} alt={user.name} style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-gold)' }} />
+                        ) : (
+                            <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'var(--accent-gold)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: '800' }}>
+                                {user.name ? user.name.charAt(0).toUpperCase() : 'M'}
+                            </div>
+                        )}
+                        <div>
+                            <div style={{ fontSize: '18px', fontWeight: '800' }}>
+                                {user.bds_registration_number ? `Dr. ${user.name}` : user.name}
+                            </div>
+                            <div style={{ fontSize: '13px', color: 'var(--accent-gold)', fontWeight: '700' }}>
+                                Member ID: {user.member_id}
+                            </div>
+                        </div>
                     </div>
 
                     <div>
@@ -59,6 +92,19 @@ export default function Profile({ user }) {
                     <h3 style={{ marginBottom: '20px' }}>Update Clinic Information</h3>
 
                     <form onSubmit={handleSubmit}>
+                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                            <label className="form-label" htmlFor="avatar" style={{ fontWeight: '600', fontSize: '13px' }}>Profile Photo (Max 500 KB)</label>
+                            <input 
+                                type="file"
+                                id="avatar"
+                                accept="image/png, image/jpeg, image/jpg, image/webp"
+                                onChange={handleAvatarChange}
+                                className="form-control"
+                                style={{ padding: '6px 12px' }}
+                            />
+                            {errors.avatar && <span className="form-error">{errors.avatar}</span>}
+                        </div>
+
                         <div className="form-group">
                             <label className="form-label" htmlFor="name">Full Name</label>
                             <input 

@@ -83,7 +83,13 @@ class AuthController extends Controller
             'clinic_name' => 'required|string|max:255',
             'address' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:500',
         ]);
+
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
 
         User::create([
             'name' => $request->name,
@@ -98,6 +104,7 @@ class AuthController extends Controller
             'raw_password' => $request->password,
             'role' => 'member',
             'status' => 'pending',
+            'avatar' => $avatarPath,
         ]);
 
         return redirect()->route('login')->with('success', 'Registration successful! Your account is pending admin approval.');

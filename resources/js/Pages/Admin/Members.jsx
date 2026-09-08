@@ -172,11 +172,26 @@ export default function Members({ members = [] }) {
                                     return (
                                         <tr key={member.id}>
                                             <td>
-                                                <div style={{ fontWeight: '700', fontSize: '13px' }}>
-                                                    {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
-                                                </div>
-                                                <div style={{ marginTop: '3px' }}>
-                                                    {getTypeBadge(member)}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                    {member.avatar_url ? (
+                                                        <img 
+                                                            src={member.avatar_url} 
+                                                            alt={member.name} 
+                                                            style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--accent-teal, #0d9488)', flexShrink: 0 }} 
+                                                        />
+                                                    ) : (
+                                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
+                                                            {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
+                                                        </div>
+                                                    )}
+                                                    <div>
+                                                        <div style={{ fontWeight: '700', fontSize: '13px' }}>
+                                                            {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
+                                                        </div>
+                                                        <div style={{ marginTop: '3px' }}>
+                                                            {getTypeBadge(member)}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td>
@@ -307,12 +322,25 @@ export default function Members({ members = [] }) {
                         return (
                             <div key={member.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
-                                    <div>
-                                        <div style={{ fontWeight: '700', fontSize: '15px' }}>
-                                            {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
-                                        </div>
-                                        <div style={{ marginTop: '4px' }}>
-                                            {getTypeBadge(member)}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        {member.avatar_url ? (
+                                            <img 
+                                                src={member.avatar_url} 
+                                                alt={member.name} 
+                                                style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--accent-teal, #0d9488)', flexShrink: 0 }} 
+                                            />
+                                        ) : (
+                                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(13, 148, 136, 0.15)', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', flexShrink: 0 }}>
+                                                {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
+                                            </div>
+                                        )}
+                                        <div>
+                                            <div style={{ fontWeight: '700', fontSize: '15px' }}>
+                                                {member.bds_registration_number ? `Dr. ${member.name}` : member.name}
+                                            </div>
+                                            <div style={{ marginTop: '4px' }}>
+                                                {getTypeBadge(member)}
+                                            </div>
                                         </div>
                                     </div>
                                     <div>
