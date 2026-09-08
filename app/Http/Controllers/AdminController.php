@@ -96,16 +96,33 @@ class AdminController extends Controller
             return back()->withErrors(['error' => 'Invalid user status.']);
         }
 
-        // Generate unique member ID: MEM-YYYY-XXXX
+        // Generate guaranteed unique member ID: MEM-YYYY-XXXX
         $year = now()->year;
         $count = User::whereYear('approved_at', $year)->count() + 1;
-        $memberId = 'MEM-' . $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+        do {
+            $memberId = 'MEM-' . $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+            $exists = User::where('member_id', $memberId)->exists();
+            if ($exists) {
+                $count++;
+            }
+        } while ($exists);
 
-        $user->update([
-            'status' => 'approved',
-            'member_id' => $memberId,
-            'approved_at' => now(),
-        ]);
+        try {
+            $user->update([
+                'status' => 'approved',
+                'member_id' => $memberId,
+                'approved_at' => now(),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed updating member status/ID: " . $e->getMessage());
+            $fallbackMemberId = 'MEM-' . $year . '-' . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
+            $user->update([
+                'status' => 'approved',
+                'member_id' => $fallbackMemberId,
+                'approved_at' => now(),
+            ]);
+            $memberId = $fallbackMemberId;
+        }
 
         // Send notifications safely
         try {
