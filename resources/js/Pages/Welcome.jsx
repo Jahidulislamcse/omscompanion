@@ -1105,9 +1105,8 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         {referralStep === 'medicine_shop_form' && (
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '24px' }}>💊</span>
-                                    <h4 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#1e40af' }}>
-                                        Pharmacy / Medicine Shop Referral
+                                    <h4 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#1e40af', letterSpacing: '0.5px' }}>
+                                        REFERRAL DETAILS
                                     </h4>
                                 </div>
 
@@ -1115,7 +1114,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     {/* Section 1: Medicine Shop Details */}
                                     <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '14px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
                                         <div style={{ fontSize: '12px', fontWeight: '800', color: '#2563eb', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>
-                                            🏪 Your Pharmacy / Shop Details
+                                            YOUR DETAILS
                                         </div>
                                         
                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
@@ -1148,11 +1147,11 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         </div>
 
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Pharmacy / Shop Address *</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Address *</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"
-                                                placeholder="Shop Name & Address"
+                                                placeholder="Address"
                                                 value={shopForm.shop_keeper_address}
                                                 onChange={e => setShopForm('shop_keeper_address', e.target.value)}
                                                 required
