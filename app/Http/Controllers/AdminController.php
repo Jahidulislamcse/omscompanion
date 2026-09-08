@@ -163,7 +163,7 @@ class AdminController extends Controller
 
         $members = User::where('role', 'member')
             ->where('status', 'approved')
-            ->select('id', 'name', 'member_id', 'bds_registration_number', 'phone', 'clinic_name')
+            ->select('id', 'name', 'member_id', 'bds_registration_number', 'phone', 'clinic_name', 'is_commission_applicable', 'commission_note')
             ->orderBy('name', 'asc')
             ->get();
 
@@ -274,13 +274,12 @@ class AdminController extends Controller
     public function updateCommission(Request $request, PatientReferral $referral)
     {
         $request->validate([
-            'commission_amount' => 'required|numeric|min:0',
+            'commission_amount' => 'nullable|numeric|min:0',
             'commission_status' => 'required|in:none,pending,paid',
         ]);
 
-        $oldStatus = $referral->commission_status;
         $newStatus = $request->commission_status;
-        $amount = $request->commission_amount;
+        $amount = $request->input('commission_amount', $referral->commission_amount ?? 0);
 
         $referral->update([
             'commission_amount' => $amount,

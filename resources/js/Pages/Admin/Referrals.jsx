@@ -36,7 +36,7 @@ export default function Referrals({ referrals, members = [] }) {
         medical_condition: '',
         urgency_level: 'medium',
         commission_amount: 0,
-        commission_status: 'none',
+        commission_status: 'pending',
         additional_notes: '',
     });
 
@@ -89,8 +89,8 @@ export default function Referrals({ referrals, members = [] }) {
     const openCommissionModal = (referral) => {
         setActiveReferralForCommission(referral);
         setCommData({
-            commission_amount: referral.commission_amount,
-            commission_status: referral.commission_status,
+            commission_amount: referral.commission_amount || 0,
+            commission_status: referral.commission_status === 'paid' ? 'paid' : 'pending',
         });
     };
 
@@ -169,6 +169,37 @@ export default function Referrals({ referrals, members = [] }) {
             case 'pending': return <span className="badge-status badge-pending">Pending</span>;
             default: return <span className="badge-status badge-outline" style={{ color: 'var(--text-muted)' }}>None</span>;
         }
+    };
+
+    const renderCommissionCell = (referral) => {
+        const isApplicable = referral.member && Boolean(referral.member.is_commission_applicable);
+        
+        if (!isApplicable) {
+            return (
+                <div>
+                    <span style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-muted, #64748b)' }}>
+                        Not Applicable
+                    </span>
+                </div>
+            );
+        }
+
+        const currentStatus = (referral.commission_status === 'paid') ? 'paid' : 'pending';
+
+        return (
+            <div>
+                <div style={{ fontSize: '13px', fontWeight: '800', color: '#0d9488', marginBottom: '4px' }}>
+                    Applicable
+                </div>
+                <div>
+                    {currentStatus === 'paid' ? (
+                        <span className="badge-status badge-approved">Paid</span>
+                    ) : (
+                        <span className="badge-status badge-pending">Pending</span>
+                    )}
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -430,8 +461,7 @@ export default function Referrals({ referrals, members = [] }) {
                                             </td>
                                             <td>{getStatusBadge(referral.status)}</td>
                                             <td>
-                                                <div style={{ fontWeight: '700' }}>${parseFloat(referral.commission_amount).toFixed(2)}</div>
-                                                <div style={{ marginTop: '2px' }}>{getCommStatusBadge(referral.commission_status)}</div>
+                                                {renderCommissionCell(referral)}
                                             </td>
                                             <td>
                                                 <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
@@ -523,8 +553,7 @@ export default function Referrals({ referrals, members = [] }) {
 
                                     <div>
                                         <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Commission</span>
-                                        <div style={{ fontWeight: '700' }}>${parseFloat(referral.commission_amount).toFixed(2)}</div>
-                                        <div>{getCommStatusBadge(referral.commission_status)}</div>
+                                        {renderCommissionCell(referral)}
                                     </div>
 
                                     <div>
@@ -618,18 +647,15 @@ export default function Referrals({ referrals, members = [] }) {
                         </div>
                         
                         <form onSubmit={handleCommissionSubmit}>
-                            <div className="form-group">
-                                <label className="form-label">Commission Amount (USD)</label>
-                                <input 
-                                    type="number"
-                                    step="0.01"
-                                    className="form-control"
-                                    value={commData.commission_amount}
-                                    onChange={e => setCommData('commission_amount', e.target.value)}
-                                    required
-                                    min="0"
-                                />
-                            </div>
+                            {activeReferralForCommission.member && Boolean(activeReferralForCommission.member.is_commission_applicable) ? (
+                                <div style={{ padding: '10px 14px', backgroundColor: 'rgba(13, 148, 136, 0.1)', border: '1px solid rgba(13, 148, 136, 0.3)', borderRadius: '8px', marginBottom: '16px', fontSize: '13px', color: '#0d9488', fontWeight: '700' }}>
+                                    ✓ Doctor is Commission Applicable
+                                </div>
+                            ) : (
+                                <div style={{ padding: '10px 14px', backgroundColor: 'rgba(100, 116, 139, 0.1)', border: '1px solid rgba(100, 116, 139, 0.3)', borderRadius: '8px', marginBottom: '16px', fontSize: '13px', color: 'var(--text-muted)', fontWeight: '700' }}>
+                                    ℹ️ Doctor / Referrer is Not Applicable for Commission
+                                </div>
+                            )}
 
                             <div className="form-group">
                                 <label className="form-label">Commission Status</label>
@@ -639,7 +665,6 @@ export default function Referrals({ referrals, members = [] }) {
                                     onChange={e => setCommData('commission_status', e.target.value)}
                                     required
                                 >
-                                    <option value="none">None</option>
                                     <option value="pending">Pending</option>
                                     <option value="paid">Paid</option>
                                 </select>
@@ -878,32 +903,17 @@ export default function Referrals({ referrals, members = [] }) {
                                 </div>
                             </div>
 
-                            {/* Commission Amount & Status */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                                <div className="form-group">
-                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Commission Amount</label>
-                                    <input 
-                                        type="number"
-                                        step="0.01"
-                                        className="form-control"
-                                        value={addData.commission_amount}
-                                        onChange={e => setAddData('commission_amount', e.target.value)}
-                                        min="0"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Commission Status</label>
-                                    <select 
-                                        className="form-control"
-                                        value={addData.commission_status}
-                                        onChange={e => setAddData('commission_status', e.target.value)}
-                                    >
-                                        <option value="none">None</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="paid">Paid</option>
-                                    </select>
-                                </div>
+                            {/* Commission Status Selection */}
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" style={{ fontWeight: '600', marginBottom: '4px', display: 'block' }}>Commission Status</label>
+                                <select 
+                                    className="form-control"
+                                    value={addData.commission_status}
+                                    onChange={e => setAddData('commission_status', e.target.value)}
+                                >
+                                    <option value="pending">Pending</option>
+                                    <option value="paid">Paid</option>
+                                </select>
                             </div>
 
                             {/* Additional Notes */}
