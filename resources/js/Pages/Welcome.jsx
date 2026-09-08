@@ -1315,12 +1315,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             </span>
                         </div>
 
-                        <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '8px', color: 'var(--text-color, #0f172a)', letterSpacing: '-0.3px' }}>
+                        <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '22px', color: 'var(--text-color, #0f172a)', letterSpacing: '-0.3px' }}>
                             Share with Colleagues & Dental Practitioners
                         </h3>
-                        <p style={{ fontSize: '14px', color: 'var(--text-muted, #475569)', maxWidth: '600px', margin: '0 auto 26px', lineHeight: '1.6' }}>
-                            Help fellow BDS doctors and dental clinics discover patient referral management, clinical video masterclasses, and digital tools.
-                        </p>
 
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
                             {/* WhatsApp Share Button */}
