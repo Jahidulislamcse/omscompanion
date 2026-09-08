@@ -77,7 +77,6 @@ class MemberController extends Controller
             'phone' => 'required|string|max:20',
             'clinic_name' => 'required|string|max:255',
             'address' => 'required|string',
-            'avatar' => 'nullable|file|image|mimes:jpg,jpeg,png,webp|max:500',
         ]);
 
         $updateData = [
@@ -87,19 +86,23 @@ class MemberController extends Controller
             'address' => $request->address,
         ];
 
-        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+        if ($request->hasFile('avatar')) {
             try {
                 $file = $request->file('avatar');
-                $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
-                $filename = 'avatar_' . time() . '_' . uniqid() . '.' . $extension;
-                $destinationPath = storage_path('app/public/avatars');
-                if (!file_exists($destinationPath)) {
-                    @mkdir($destinationPath, 0755, true);
-                }
-                $file->move($destinationPath, $filename);
+                if ($file && $file->isValid()) {
+                    $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp']) && $file->getSize() <= 512000) {
+                        $filename = 'avatar_' . time() . '_' . uniqid() . '.' . $ext;
+                        $destinationPath = storage_path('app/public/avatars');
+                        if (!file_exists($destinationPath)) {
+                            @mkdir($destinationPath, 0755, true);
+                        }
+                        $file->move($destinationPath, $filename);
 
-                if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'avatar')) {
-                    $updateData['avatar'] = 'avatars/' . $filename;
+                        if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'avatar')) {
+                            $updateData['avatar'] = 'avatars/' . $filename;
+                        }
+                    }
                 }
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Avatar storage failed during profile update: ' . $e->getMessage());

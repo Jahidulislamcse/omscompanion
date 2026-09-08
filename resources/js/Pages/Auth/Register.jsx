@@ -40,7 +40,9 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('register'));
+        post(route('register'), {
+            forceFormData: true,
+        });
     };
 
     return (
