@@ -65,45 +65,24 @@ export default function Register() {
                     </div>
 
                     <form onSubmit={handleSubmit}>
-                        {/* Select Doctor Type Dropdown & Dynamic Registration Number Field */}
-                        <div className={data.doctor_type ? "grid-2col-fixed-row" : ""} style={{ marginBottom: '10px' }}>
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label" htmlFor="doctor_type" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
-                                    Select Doctor Type *
-                                </label>
-                                <select
-                                    id="doctor_type"
-                                    className="form-control"
-                                    value={data.doctor_type}
-                                    onChange={e => setData('doctor_type', e.target.value)}
-                                    required
-                                    style={{ padding: '9px 12px', borderRadius: '8px' }}
-                                >
-                                    <option value="">-- Choose Doctor Type (BDS / MBBS) --</option>
-                                    <option value="BDS">BDS Doctor</option>
-                                    <option value="MBBS">MBBS Doctor</option>
-                                </select>
-                                {errors.doctor_type && <span className="form-error">{errors.doctor_type}</span>}
-                            </div>
-
-                            {data.doctor_type ? (
-                                <div className="form-group" style={{ marginBottom: 0, animation: 'fadeIn 0.25s ease-in-out' }}>
-                                    <label className="form-label" htmlFor="bds_registration_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
-                                        BMDC {data.doctor_type} Reg No. *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="bds_registration_number"
-                                        className="form-control"
-                                        placeholder={`BMDC ${data.doctor_type} Reg No.`}
-                                        value={data.bds_registration_number}
-                                        onChange={e => setData('bds_registration_number', e.target.value)}
-                                        required
-                                        style={{ padding: '9px 12px', borderRadius: '8px' }}
-                                    />
-                                    {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
-                                </div>
-                            ) : null}
+                        {/* Select Doctor Type Dropdown */}
+                        <div className="form-group" style={{ marginBottom: '10px' }}>
+                            <label className="form-label" htmlFor="doctor_type" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
+                                Select Doctor Type *
+                            </label>
+                            <select
+                                id="doctor_type"
+                                className="form-control"
+                                value={data.doctor_type}
+                                onChange={e => setData('doctor_type', e.target.value)}
+                                required
+                                style={{ padding: '9px 12px', borderRadius: '8px' }}
+                            >
+                                <option value="">-- Choose Doctor Type (BDS / MBBS) --</option>
+                                <option value="BDS">BDS Doctor</option>
+                                <option value="MBBS">MBBS Doctor</option>
+                            </select>
+                            {errors.doctor_type && <span className="form-error">{errors.doctor_type}</span>}
                         </div>
 
                         {/* Full Name */}
@@ -138,7 +117,7 @@ export default function Register() {
                             {errors.email && <span className="form-error">{errors.email}</span>}
                         </div>
 
-                        {/* Phone Number (Mandatory) and WhatsApp Number */}
+                        {/* Phone Number & Dynamic Registration Number (Row after Phone Number) */}
                         <div className="grid-2col-fixed-row" style={{ marginBottom: '10px' }}>
                             <div className="form-group" style={{ marginBottom: 0 }}>
                                 <label className="form-label" htmlFor="phone" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Phone Number *</label>
@@ -155,19 +134,52 @@ export default function Register() {
                                 {errors.phone && <span className="form-error">{errors.phone}</span>}
                             </div>
 
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label" htmlFor="whatsapp_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>WhatsApp Number</label>
-                                <input
-                                    type="text"
-                                    id="whatsapp_number"
-                                    className="form-control"
-                                    placeholder="017XXXXXXXX"
-                                    value={data.whatsapp_number}
-                                    onChange={e => setData('whatsapp_number', e.target.value)}
-                                    style={{ padding: '9px 12px', borderRadius: '8px' }}
-                                />
-                                {errors.whatsapp_number && <span className="form-error">{errors.whatsapp_number}</span>}
-                            </div>
+                            {data.doctor_type ? (
+                                <div className="form-group" style={{ marginBottom: 0, animation: 'fadeIn 0.25s ease-in-out' }}>
+                                    <label className="form-label" htmlFor="bds_registration_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
+                                        {data.doctor_type === 'BDS' ? 'BDS Reg No. *' : 'MBBS Reg No. *'}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="bds_registration_number"
+                                        className="form-control"
+                                        placeholder={data.doctor_type === 'BDS' ? 'BDS Reg No.' : 'MBBS Reg No.'}
+                                        value={data.bds_registration_number}
+                                        onChange={e => setData('bds_registration_number', e.target.value)}
+                                        required
+                                        style={{ padding: '9px 12px', borderRadius: '8px' }}
+                                    />
+                                    {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
+                                </div>
+                            ) : (
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px', color: 'var(--text-muted)' }}>
+                                        Reg No.
+                                    </label>
+                                    <input
+                                        type="text"
+                                        disabled
+                                        className="form-control"
+                                        placeholder="Select Doctor Type first"
+                                        style={{ padding: '9px 12px', borderRadius: '8px', opacity: 0.6, cursor: 'not-allowed' }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        {/* WhatsApp Number */}
+                        <div className="form-group" style={{ marginBottom: '10px' }}>
+                            <label className="form-label" htmlFor="whatsapp_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>WhatsApp Number</label>
+                            <input
+                                type="text"
+                                id="whatsapp_number"
+                                className="form-control"
+                                placeholder="017XXXXXXXX"
+                                value={data.whatsapp_number}
+                                onChange={e => setData('whatsapp_number', e.target.value)}
+                                style={{ padding: '9px 12px', borderRadius: '8px' }}
+                            />
+                            {errors.whatsapp_number && <span className="form-error">{errors.whatsapp_number}</span>}
                         </div>
 
                         {/* Clinic Name */}
