@@ -1302,9 +1302,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         style={{ 
                             padding: '36px 24px', 
                             borderRadius: '24px', 
-                            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.8) 100%)',
-                            border: '1px solid rgba(255, 255, 255, 0.12)',
-                            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                            background: 'var(--card-bg, #ffffff)',
+                            border: '1px solid var(--border-color, #e2e8f0)',
+                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)',
                             maxWidth: '960px',
                             margin: '0 auto'
                         }}
@@ -1315,10 +1315,10 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             </span>
                         </div>
 
-                        <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '8px', color: '#ffffff', letterSpacing: '-0.3px' }}>
+                        <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '8px', color: 'var(--text-color, #0f172a)', letterSpacing: '-0.3px' }}>
                             Share with Colleagues & Dental Practitioners
                         </h3>
-                        <p style={{ fontSize: '14px', color: 'var(--text-muted, #94a3b8)', maxWidth: '600px', margin: '0 auto 26px', lineHeight: '1.6' }}>
+                        <p style={{ fontSize: '14px', color: 'var(--text-muted, #475569)', maxWidth: '600px', margin: '0 auto 26px', lineHeight: '1.6' }}>
                             Help fellow BDS doctors and dental clinics discover patient referral management, clinical video masterclasses, and digital tools.
                         </p>
 
@@ -1357,9 +1357,22 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => {
-                                    const shareUrl = `https://www.facebook.com/dialog/share?app_id=87741124305&display=popup&href=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`;
-                                    window.open(shareUrl, '_blank', 'width=600,height=500');
                                     e.preventDefault();
+                                    const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
+                                    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                                    if (isMobile) {
+                                        window.location.href = `fb-messenger://share/?link=${encodeURIComponent(url)}`;
+                                        setTimeout(() => {
+                                            if (navigator.share) {
+                                                navigator.share({ title: 'OMS Companion', url: url }).catch(() => {});
+                                            } else {
+                                                window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=291494419107518&redirect_uri=${encodeURIComponent(url)}`, '_blank');
+                                            }
+                                        }, 1200);
+                                    } else {
+                                        const sendUrl = `https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=291494419107518&redirect_uri=${encodeURIComponent(url)}`;
+                                        window.open(sendUrl, '_blank', 'width=650,height=650');
+                                    }
                                 }}
                                 style={{
                                     display: 'inline-flex',
@@ -1422,9 +1435,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     gap: '8px',
                                     padding: '11px 22px',
                                     borderRadius: '50px',
-                                    backgroundColor: copiedLink ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.08)',
-                                    border: copiedLink ? '1.5px solid #10b981' : '1.5px solid rgba(255, 255, 255, 0.2)',
-                                    color: copiedLink ? '#34d399' : '#ffffff',
+                                    backgroundColor: copiedLink ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-main, #f8fafc)',
+                                    border: copiedLink ? '1.5px solid #10b981' : '1.5px solid var(--border-color, #cbd5e1)',
+                                    color: copiedLink ? '#059669' : 'var(--text-color, #0f172a)',
                                     fontWeight: '700',
                                     fontSize: '14px',
                                     cursor: 'pointer',
