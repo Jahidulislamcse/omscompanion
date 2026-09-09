@@ -217,13 +217,13 @@ export default function Register() {
                             {data.doctor_type ? (
                                 <div className="form-group" style={{ marginBottom: 0, animation: 'fadeIn 0.25s ease-in-out' }}>
                                     <label className="form-label" htmlFor="bds_registration_number" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>
-                                        {data.doctor_type === 'BDS' ? 'BDS Reg No. *' : 'MBBS Reg No. *'}
+                                        BMDC Reg No. *
                                     </label>
                                     <input
                                         type="text"
                                         id="bds_registration_number"
                                         className="form-control"
-                                        placeholder={data.doctor_type === 'BDS' ? 'BDS Reg No.' : 'MBBS Reg No.'}
+                                        placeholder="BMDC Reg No."
                                         value={data.bds_registration_number}
                                         onChange={e => setData('bds_registration_number', e.target.value)}
                                         required
@@ -234,7 +234,7 @@ export default function Register() {
                             ) : (
                                 <div className="form-group" style={{ marginBottom: 0 }}>
                                     <label className="form-label" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px', color: 'var(--text-muted)' }}>
-                                        Reg No.
+                                        BMDC Reg No.
                                     </label>
                                     <input
                                         type="text"

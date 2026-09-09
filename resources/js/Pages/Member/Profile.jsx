@@ -68,7 +68,7 @@ export default function Profile({ user }) {
                     </div>
 
                     <div>
-                        <div style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase' }}>BDS Registration Number</div>
+                        <div style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase' }}>BMDC Registration Number</div>
                         <code style={{ background: 'var(--bg-main)', padding: '4px 8px', borderRadius: '4px', display: 'inline-block', fontSize: '13px', marginTop: '4px' }}>
                             {user.bds_registration_number}
                         </code>
