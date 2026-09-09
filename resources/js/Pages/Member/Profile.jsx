@@ -132,7 +132,7 @@ export default function Profile({ user }) {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label" htmlFor="clinic_name">Clinic / Practice Name</label>
+                            <label className="form-label" htmlFor="clinic_name">Clinic / Chamber / Hospital Name</label>
                             <input 
                                 type="text"
                                 id="clinic_name"
@@ -145,7 +145,7 @@ export default function Profile({ user }) {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label" htmlFor="address">Clinic Address</label>
+                            <label className="form-label" htmlFor="address">Clinic / Chamber / Hospital Address</label>
                             <textarea 
                                 id="address"
                                 className="form-control"

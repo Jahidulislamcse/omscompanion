@@ -247,14 +247,14 @@ export default function Register() {
                             )}
                         </div>
 
-                        {/* Clinic Name */}
+                        {/* Clinic / Chamber / Hospital Name */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
-                            <label className="form-label" htmlFor="clinic_name" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic / Chamber Name *</label>
+                            <label className="form-label" htmlFor="clinic_name" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic / Chamber / Hospital Name *</label>
                             <input
                                 type="text"
                                 id="clinic_name"
                                 className="form-control"
-                                placeholder="Chamber Name"
+                                placeholder="Clinic / Chamber / Hospital Name"
                                 value={data.clinic_name}
                                 onChange={e => setData('clinic_name', e.target.value)}
                                 required
@@ -265,7 +265,7 @@ export default function Register() {
 
                         {/* Address */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
-                            <label className="form-label" htmlFor="address" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic Address *</label>
+                            <label className="form-label" htmlFor="address" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic / Chamber / Hospital Address *</label>
                             <input
                                 type="text"
                                 id="address"
