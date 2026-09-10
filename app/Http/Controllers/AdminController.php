@@ -15,6 +15,7 @@ use App\Models\Review;
 use App\Models\NewsItem;
 use App\Models\ContactMessage;
 use App\Services\NotificationService;
+use App\Services\PushNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -215,6 +216,16 @@ class AdminController extends Controller
         $memberId = $request->member_id ? $request->member_id : null;
         $referrerType = $memberId ? 'doctor' : 'guest';
 
+        $commissionStatus = $request->commission_status;
+        if (empty($commissionStatus)) {
+            if ($memberId) {
+                $member = User::find($memberId);
+                $commissionStatus = ($member && $member->is_commission_applicable) ? 'pending' : 'none';
+            } else {
+                $commissionStatus = 'none';
+            }
+        }
+
         $referral = PatientReferral::create([
             'member_id' => $memberId,
             'referrer_type' => $referrerType,
@@ -226,7 +237,7 @@ class AdminController extends Controller
             'status' => 'new',
             'additional_notes' => $request->additional_notes,
             'commission_amount' => $request->commission_amount ?? 0,
-            'commission_status' => $request->commission_status ?? 'none',
+            'commission_status' => $commissionStatus,
         ]);
 
         // Create initial timeline entry
@@ -1000,5 +1011,70 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'News item publish status updated.');
+    }
+
+    public function pushNotifications()
+    {
+        $appId = LandingSetting::where('key', 'onesignal_app_id')->value('value') ?? '';
+        $restApiKey = LandingSetting::where('key', 'onesignal_rest_api_key')->value('value') ?? '';
+
+        $notifications = \App\Models\Notification::where('type', 'push')
+            ->orderBy('created_at', 'desc')
+            ->take(50)
+            ->get();
+
+        return Inertia::render('Admin/PushNotifications', [
+            'onesignal_app_id' => $appId,
+            'onesignal_rest_api_key' => $restApiKey,
+            'notifications' => $notifications,
+        ]);
+    }
+
+    public function updatePushNotificationSettings(Request $request)
+    {
+        $request->validate([
+            'onesignal_app_id' => 'required|string',
+            'onesignal_rest_api_key' => 'required|string',
+        ]);
+
+        LandingSetting::updateOrCreate(
+            ['key' => 'onesignal_app_id'],
+            ['value' => trim($request->onesignal_app_id)]
+        );
+
+        LandingSetting::updateOrCreate(
+            ['key' => 'onesignal_rest_api_key'],
+            ['value' => trim($request->onesignal_rest_api_key)]
+        );
+
+        return redirect()->back()->with('success', 'OneSignal credentials saved successfully!');
+    }
+
+    public function sendPushNotification(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'message' => 'required|string',
+            'url' => 'nullable|url',
+        ]);
+
+        $result = PushNotificationService::sendToAll(
+            $request->title,
+            $request->message,
+            $request->url
+        );
+
+        if ($result['success']) {
+            \App\Models\Notification::create([
+                'user_id' => Auth::id(),
+                'type' => 'push',
+                'title' => $request->title,
+                'message' => $request->message,
+            ]);
+
+            return redirect()->back()->with('success', $result['message']);
+        }
+
+        return redirect()->back()->with('error', $result['message']);
     }
 }

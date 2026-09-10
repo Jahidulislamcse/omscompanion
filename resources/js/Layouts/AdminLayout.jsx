@@ -108,6 +108,15 @@ export default function AdminLayout({ children, title }) {
                             </li>
                             <li>
                                 <Link 
+                                    href={route('admin.push_notifications')} 
+                                    className={`sidebar-link ${isCurrent('/admin/push-notifications') ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>🔔</span> Push Notifications
+                                </Link>
+                            </li>
+                            <li>
+                                <Link 
                                     href={route('admin.profile')} 
                                     className={`sidebar-link ${isCurrent('/admin/profile') ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}

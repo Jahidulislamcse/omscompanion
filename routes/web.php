@@ -346,6 +346,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/messages/{message}', [AdminController::class, 'destroyMessage'])->name('admin.messages.destroy');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/push-notifications', [AdminController::class, 'pushNotifications'])->name('admin.push_notifications');
+    Route::post('/push-notifications/settings', [AdminController::class, 'updatePushNotificationSettings'])->name('admin.push_notifications.settings');
+    Route::post('/push-notifications/send', [AdminController::class, 'sendPushNotification'])->name('admin.push_notifications.send');
 });
 
 // Public Pages Routes

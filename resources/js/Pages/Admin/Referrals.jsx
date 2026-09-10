@@ -36,7 +36,7 @@ export default function Referrals({ referrals, members = [] }) {
         medical_condition: '',
         urgency_level: 'medium',
         commission_amount: 0,
-        commission_status: 'pending',
+        commission_status: 'none',
         additional_notes: '',
     });
 
@@ -848,7 +848,11 @@ export default function Referrals({ referrals, members = [] }) {
                                         </div>
                                         <button 
                                             type="button" 
-                                            onClick={() => { setAddData('member_id', ''); setMemberSearchQuery(''); setIsSearchFocused(true); }} 
+                                            onClick={() => { 
+                                                setAddData(prev => ({ ...prev, member_id: '', commission_status: 'none' })); 
+                                                setMemberSearchQuery(''); 
+                                                setIsSearchFocused(true); 
+                                            }} 
                                             className="btn btn-outline" 
                                             style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer', borderRadius: '6px' }}
                                         >
@@ -883,7 +887,11 @@ export default function Referrals({ referrals, members = [] }) {
                                             }}>
                                                 {/* Option for Direct / Guest Referral */}
                                                 <div 
-                                                    onClick={() => { setAddData('member_id', ''); setMemberSearchQuery(''); setIsSearchFocused(false); }}
+                                                    onClick={() => { 
+                                                        setAddData(prev => ({ ...prev, member_id: '', commission_status: 'none' })); 
+                                                        setMemberSearchQuery(''); 
+                                                        setIsSearchFocused(false); 
+                                                    }}
                                                     style={{ 
                                                         padding: '10px 14px', 
                                                         cursor: 'pointer', 
@@ -901,7 +909,12 @@ export default function Referrals({ referrals, members = [] }) {
                                                         <div
                                                             key={m.id}
                                                             onClick={() => {
-                                                                setAddData('member_id', m.id);
+                                                                const isApplicable = Boolean(m.is_commission_applicable);
+                                                                setAddData(prev => ({
+                                                                    ...prev,
+                                                                    member_id: m.id,
+                                                                    commission_status: isApplicable ? 'pending' : 'none'
+                                                                }));
                                                                 setMemberSearchQuery('');
                                                                 setIsSearchFocused(false);
                                                             }}
@@ -1038,9 +1051,25 @@ export default function Referrals({ referrals, members = [] }) {
                                     value={addData.commission_status}
                                     onChange={e => setAddData('commission_status', e.target.value)}
                                 >
+                                    <option value="none">Not Applicable</option>
                                     <option value="pending">Pending</option>
                                     <option value="paid">Paid</option>
                                 </select>
+                                {selectedMemberObj ? (
+                                    Boolean(selectedMemberObj.is_commission_applicable) ? (
+                                        <small style={{ color: '#0d9488', fontSize: '12px', marginTop: '4px', display: 'block', fontWeight: '600' }}>
+                                            ✓ Selected user is applicable for commission (Auto-selected: Pending)
+                                        </small>
+                                    ) : (
+                                        <small style={{ color: 'var(--text-muted, #64748b)', fontSize: '12px', marginTop: '4px', display: 'block', fontWeight: '600' }}>
+                                            ℹ️ Selected user is not applicable for commission (Auto-selected: Not Applicable)
+                                        </small>
+                                    )
+                                ) : (
+                                    <small style={{ color: 'var(--text-muted, #64748b)', fontSize: '12px', marginTop: '4px', display: 'block', fontWeight: '600' }}>
+                                        ℹ️ No member assigned (Auto-selected: Not Applicable)
+                                    </small>
+                                )}
                             </div>
 
                             {/* Additional Notes */}
