@@ -124,9 +124,18 @@ class AuthController extends Controller
             $userData['avatar'] = $avatarPath;
         }
 
-        User::create($userData);
+        $user = User::create($userData);
 
-        return redirect()->route('login')->with('success', 'Registration successful! Your account is pending admin approval.');
+        // Send registration email notification to user
+        try {
+            $subject = "Registration Received - Account Pending Approval";
+            $message = "Dear {$user->name},\n\nThank you for registering with OMSCOMPANION.\n\nPlease wait for account approval from the authority.\n\nYou will receive a notification once your account has been reviewed and approved by the admin.";
+            \App\Services\NotificationService::send($user, $subject, $message, 'both');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Registration notification failed: ' . $e->getMessage());
+        }
+
+        return redirect()->route('login')->with('success', 'Please wait for account approval from the authority');
     }
     public function logout(Request $request)
     {

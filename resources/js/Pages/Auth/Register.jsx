@@ -4,7 +4,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import PasswordInput from '@/Components/PasswordInput';
 
 export default function Register() {
-    const { site_name } = usePage().props;
+    const { site_name, flash } = usePage().props;
     const [photoPreview, setPhotoPreview] = React.useState(null);
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -85,6 +85,22 @@ export default function Register() {
                             Member Registration
                         </h2>
                     </div>
+
+                    {flash?.success && (
+                        <div style={{
+                            padding: '12px 16px',
+                            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                            border: '1px solid rgba(16, 185, 129, 0.4)',
+                            borderRadius: '8px',
+                            color: '#10b981',
+                            fontSize: '13px',
+                            fontWeight: '700',
+                            marginBottom: '16px',
+                            textAlign: 'center'
+                        }}>
+                            ✓ {flash.success}
+                        </div>
+                    )}
 
                     <form onSubmit={handleSubmit}>
                         {/* Profile Photo Upload */}

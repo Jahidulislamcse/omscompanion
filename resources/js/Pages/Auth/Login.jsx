@@ -4,7 +4,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import PasswordInput from '@/Components/PasswordInput';
 
 export default function Login() {
-    const { site_name, login_side_image, login_side_title, login_side_subtitle } = usePage().props;
+    const { site_name, login_side_image, login_side_title, login_side_subtitle, flash } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         login: '',
         password: '',
@@ -64,6 +64,22 @@ export default function Login() {
                                 Referral & Membership Management System
                             </p>
                         </div>
+
+                        {flash?.success && (
+                            <div style={{
+                                padding: '12px 16px',
+                                backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                                border: '1px solid rgba(16, 185, 129, 0.4)',
+                                borderRadius: '8px',
+                                color: '#10b981',
+                                fontSize: '13px',
+                                fontWeight: '700',
+                                marginBottom: '16px',
+                                textAlign: 'center'
+                            }}>
+                                ✓ {flash.success}
+                            </div>
+                        )}
 
                         <form onSubmit={handleSubmit}>
                             <div className="form-group" style={{ marginBottom: '14px' }}>
