@@ -45,6 +45,13 @@ export default function Members({ members = [] }) {
         }
     };
 
+    const handleDelete = (member) => {
+        const title = member.bds_registration_number ? `Dr. ${member.name}` : member.name;
+        if (confirm(`Are you sure you want to permanently delete member "${title}"? This action cannot be undone.`)) {
+            router.delete(route('admin.members.destroy', member.id));
+        }
+    };
+
     // Filter members based on search and status
     const filteredMembers = (members || []).filter(member => {
         const query = searchTerm.toLowerCase();
@@ -276,33 +283,44 @@ export default function Members({ members = [] }) {
                                             </td>
                                             <td>{getStatusBadge(member.status)}</td>
                                             <td style={{ textAlign: 'right' }}>
-                                                {member.status === 'pending' ? (
-                                                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                                <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                    {member.status === 'pending' ? (
+                                                        <>
+                                                            <button 
+                                                                onClick={() => handleApprove(member.id)} 
+                                                                className="btn btn-secondary"
+                                                                style={{ padding: '5px 10px', fontSize: '12px' }}
+                                                            >
+                                                                Approve
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => handleReject(member.id)} 
+                                                                className="btn btn-outline"
+                                                                style={{ padding: '5px 10px', fontSize: '12px', color: 'var(--color-danger)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
+                                                            >
+                                                                Reject
+                                                            </button>
+                                                        </>
+                                                    ) : (
                                                         <button 
-                                                            onClick={() => handleApprove(member.id)} 
-                                                            className="btn btn-secondary"
-                                                            style={{ padding: '6px 12px', fontSize: '12px' }}
-                                                        >
-                                                            Approve
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => handleReject(member.id)} 
+                                                            type="button"
+                                                            onClick={() => setSelectedMemberForReferrals(member)}
                                                             className="btn btn-outline"
-                                                            style={{ padding: '6px 12px', fontSize: '12px', color: 'var(--color-danger)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
+                                                            style={{ padding: '4px 10px', fontSize: '11px' }}
                                                         >
-                                                            Reject
+                                                            View Referrals
                                                         </button>
-                                                    </div>
-                                                ) : (
+                                                    )}
                                                     <button 
                                                         type="button"
-                                                        onClick={() => setSelectedMemberForReferrals(member)}
+                                                        onClick={() => handleDelete(member)}
                                                         className="btn btn-outline"
-                                                        style={{ padding: '4px 10px', fontSize: '11px' }}
+                                                        style={{ padding: '4px 8px', fontSize: '11px', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}
+                                                        title="Delete Member Account"
                                                     >
-                                                        View Referrals
+                                                        🗑️ Delete
                                                     </button>
-                                                )}
+                                                </div>
                                             </td>
                                         </tr>
                                     );
@@ -403,7 +421,7 @@ export default function Members({ members = [] }) {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '8px', marginTop: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+                                <div style={{ display: 'flex', gap: '8px', marginTop: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px', flexWrap: 'wrap' }}>
                                     <button
                                         type="button"
                                         onClick={() => setSelectedMemberForReferrals(member)}
@@ -431,6 +449,16 @@ export default function Members({ members = [] }) {
                                             </button>
                                         </>
                                     )}
+
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDelete(member)}
+                                        className="btn btn-outline"
+                                        style={{ padding: '8px 12px', fontSize: '12px', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}
+                                        title="Delete Member Account"
+                                    >
+                                        🗑️ Delete
+                                    </button>
                                 </div>
                             </div>
                         );

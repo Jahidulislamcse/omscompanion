@@ -179,6 +179,31 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Member commission settings updated successfully.');
     }
 
+    public function destroyMember(User $user)
+    {
+        if ($user->role !== 'member') {
+            return back()->withErrors(['error' => 'Only member accounts can be deleted.']);
+        }
+
+        // Unlink or clean up referrals associated with this member to avoid foreign key issues
+        PatientReferral::where('member_id', $user->id)->update([
+            'member_id' => null,
+            'referrer_type' => 'guest',
+        ]);
+
+        // Delete user avatar file if custom file exists
+        if ($user->avatar) {
+            $avatarPath = storage_path('app/public/' . $user->avatar);
+            if (file_exists($avatarPath)) {
+                @unlink($avatarPath);
+            }
+        }
+
+        $user->delete();
+
+        return redirect()->back()->with('success', 'Member account deleted successfully.');
+    }
+
     public function referrals()
     {
         $referrals = PatientReferral::with(['member', 'timeline' => function($q) {
