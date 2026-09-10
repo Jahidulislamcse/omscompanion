@@ -90,7 +90,7 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                         <button 
                             type="button" 
                             onClick={handleReferClick}
-                            className="refer-patient-glossy-btn"
+                            className="refer-patient-glossy-btn nav-refer-btn"
                             aria-label="Refer Patient"
                         >
                             <div className="refer-patient-icon-circle">

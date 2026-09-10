@@ -3353,6 +3353,43 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(180deg, #0284c7 0%, #0891b2 100%);
 }
 
+/* Compact non-animated navbar variant */
+.refer-patient-glossy-btn.nav-refer-btn {
+    animation: none !important;
+    padding: 3px 5px 3px 4px;
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5), inset 0 -1px 3px rgba(0, 0, 0, 0.2), 0 3px 10px -2px rgba(8, 145, 178, 0.35);
+}
+
+.refer-patient-glossy-btn.nav-refer-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.8), inset 0 -1px 3px rgba(0, 0, 0, 0.2), 0 5px 14px -2px rgba(8, 145, 178, 0.5);
+}
+
+.refer-patient-glossy-btn.nav-refer-btn .refer-patient-icon-circle {
+    width: 25px;
+    height: 25px;
+}
+
+.refer-patient-glossy-btn.nav-refer-btn .refer-patient-icon-circle svg {
+    width: 14px;
+    height: 14px;
+}
+
+.refer-patient-glossy-btn.nav-refer-btn .refer-patient-text {
+    font-size: 12.5px;
+    margin: 0 8px 0 6px;
+}
+
+.refer-patient-glossy-btn.nav-refer-btn .refer-patient-arrow-circle {
+    width: 22px;
+    height: 22px;
+}
+
+.refer-patient-glossy-btn.nav-refer-btn .refer-patient-arrow-circle svg {
+    width: 11px;
+    height: 11px;
+}
+
 /* Large Variant for Main Standalone Section */
 .refer-patient-glossy-btn-large {
     display: inline-flex;
