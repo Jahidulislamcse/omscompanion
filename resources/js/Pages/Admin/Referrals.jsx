@@ -6,6 +6,23 @@ export default function Referrals({ referrals, members = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [typeFilter, setTypeFilter] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(30);
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleStatusFilterChange = (e) => {
+        setStatusFilter(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleTypeFilterChange = (type) => {
+        setTypeFilter(type);
+        setCurrentPage(1);
+    };
 
     // Add Patient Referral Modal State
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -168,6 +185,28 @@ export default function Referrals({ referrals, members = [] }) {
         return matchesSearch && matchesStatus && matchesType;
     });
 
+    const totalPages = Math.ceil(filteredReferrals.length / itemsPerPage) || 1;
+    const safeCurrentPage = Math.min(Math.max(currentPage, 1), totalPages);
+    const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredReferrals.length);
+    const paginatedReferrals = filteredReferrals.slice(startIndex, endIndex);
+
+    const getPageNumbers = () => {
+        const pages = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            if (safeCurrentPage <= 4) {
+                pages.push(1, 2, 3, 4, 5, '...', totalPages);
+            } else if (safeCurrentPage >= totalPages - 3) {
+                pages.push(1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+            } else {
+                pages.push(1, '...', safeCurrentPage - 1, safeCurrentPage, safeCurrentPage + 1, '...', totalPages);
+            }
+        }
+        return pages;
+    };
+
     const getStatusBadge = (status) => {
         const labels = {
             new: 'New Referral',
@@ -319,7 +358,7 @@ export default function Referrals({ referrals, members = [] }) {
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
                         <button
                             type="button"
-                            onClick={() => setTypeFilter('all')}
+                            onClick={() => handleTypeFilterChange('all')}
                             style={{
                                 padding: '8px 16px',
                                 borderRadius: '20px',
@@ -351,7 +390,7 @@ export default function Referrals({ referrals, members = [] }) {
 
                         <button
                             type="button"
-                            onClick={() => setTypeFilter('bds_doctor')}
+                            onClick={() => handleTypeFilterChange('bds_doctor')}
                             style={{
                                 padding: '8px 16px',
                                 borderRadius: '20px',
@@ -383,7 +422,7 @@ export default function Referrals({ referrals, members = [] }) {
 
                         <button
                             type="button"
-                            onClick={() => setTypeFilter('medicine_shop')}
+                            onClick={() => handleTypeFilterChange('medicine_shop')}
                             style={{
                                 padding: '8px 16px',
                                 borderRadius: '20px',
@@ -421,33 +460,53 @@ export default function Referrals({ referrals, members = [] }) {
                             className="form-control"
                             placeholder="Search patient, doctor, referrer or phone..."
                             value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
+                            onChange={handleSearchChange}
                         />
                     </div>
                 </div>
 
-                {/* Bottom Bar: Case Status Filter & Results Count */}
+                {/* Bottom Bar: Case Status Filter, Items Per Page & Results Count */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '14px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600' }}>Case Status:</span>
-                        <select
-                            className="form-control"
-                            value={statusFilter}
-                            onChange={e => setStatusFilter(e.target.value)}
-                            style={{ width: 'auto', minWidth: '180px', padding: '6px 12px', fontSize: '13px' }}
-                        >
-                            <option value="all">All Case Statuses</option>
-                            <option value="new">New Referral</option>
-                            <option value="contacted">Contacted</option>
-                            <option value="appointment_booked">Appointment Booked</option>
-                            <option value="under_treatment">Under Treatment</option>
-                            <option value="completed">Completed</option>
-                            <option value="not_proceeding">Not Proceeding</option>
-                        </select>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600' }}>Case Status:</span>
+                            <select
+                                className="form-control"
+                                value={statusFilter}
+                                onChange={handleStatusFilterChange}
+                                style={{ width: 'auto', minWidth: '180px', padding: '6px 12px', fontSize: '13px' }}
+                            >
+                                <option value="all">All Case Statuses</option>
+                                <option value="new">New Referral</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="appointment_booked">Appointment Booked</option>
+                                <option value="under_treatment">Under Treatment</option>
+                                <option value="completed">Completed</option>
+                                <option value="not_proceeding">Not Proceeding</option>
+                            </select>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600' }}>Per Page:</span>
+                            <select
+                                className="form-control"
+                                value={itemsPerPage}
+                                onChange={e => {
+                                    setItemsPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                                style={{ width: 'auto', padding: '6px 12px', fontSize: '13px' }}
+                            >
+                                <option value={15}>15</option>
+                                <option value={30}>30</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>
-                        Showing <span style={{ color: 'var(--accent-teal)' }}>{filteredReferrals.length}</span> of {referrals.length} patient cases
+                        Showing <span style={{ color: 'var(--accent-teal)' }}>{filteredReferrals.length === 0 ? 0 : startIndex + 1} - {endIndex}</span> of {filteredReferrals.length} patient cases
                     </div>
                 </div>
             </div>
@@ -468,8 +527,8 @@ export default function Referrals({ referrals, members = [] }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredReferrals.length > 0 ? (
-                                filteredReferrals.map((referral) => {
+                            {paginatedReferrals.length > 0 ? (
+                                paginatedReferrals.map((referral) => {
                                     const isMedicineShop = referral.referrer_type === 'medicine_shop' || (!referral.member_id && !referral.member);
                                     return (
                                         <tr key={referral.id}>
@@ -585,8 +644,8 @@ export default function Referrals({ referrals, members = [] }) {
 
             {/* Mobile Responsive Cards View */}
             <div className="visible-mobile" style={{ flexDirection: 'column', gap: '12px' }}>
-                {filteredReferrals.length > 0 ? (
-                    filteredReferrals.map((referral) => {
+                {paginatedReferrals.length > 0 ? (
+                    paginatedReferrals.map((referral) => {
                         const isMedicineShop = referral.referrer_type === 'medicine_shop' || (!referral.member_id && !referral.member);
                         return (
                             <div key={referral.id} className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -695,6 +754,64 @@ export default function Referrals({ referrals, members = [] }) {
                     </div>
                 )}
             </div>
+
+            {/* Pagination Controls */}
+            {filteredReferrals.length > 0 && (
+                <div className="glass-panel" style={{ marginTop: '16px', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                        Showing <strong style={{ color: 'var(--text-main)' }}>{filteredReferrals.length === 0 ? 0 : startIndex + 1}</strong> to <strong style={{ color: 'var(--text-main)' }}>{endIndex}</strong> of <strong style={{ color: 'var(--accent-teal)' }}>{filteredReferrals.length}</strong> patient cases
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <button
+                            type="button"
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={safeCurrentPage === 1}
+                            className="btn btn-secondary"
+                            style={{ padding: '6px 12px', fontSize: '12px', opacity: safeCurrentPage === 1 ? 0.5 : 1, cursor: safeCurrentPage === 1 ? 'not-allowed' : 'pointer' }}
+                        >
+                            Previous
+                        </button>
+
+                        {getPageNumbers().map((page, idx) => {
+                            if (page === '...') {
+                                return <span key={`ellipsis-${idx}`} style={{ padding: '4px 8px', color: 'var(--text-muted)', fontSize: '12px' }}>...</span>;
+                            }
+                            const isActive = page === safeCurrentPage;
+                            return (
+                                <button
+                                    key={page}
+                                    type="button"
+                                    onClick={() => setCurrentPage(page)}
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '12px',
+                                        borderRadius: '6px',
+                                        fontWeight: isActive ? '700' : '500',
+                                        border: isActive ? '1px solid var(--accent-teal)' : '1px solid var(--border-color)',
+                                        backgroundColor: isActive ? 'rgba(13, 148, 136, 0.2)' : 'transparent',
+                                        color: isActive ? 'var(--accent-teal)' : 'var(--text-main)',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.15s ease'
+                                    }}
+                                >
+                                    {page}
+                                </button>
+                            );
+                        })}
+
+                        <button
+                            type="button"
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={safeCurrentPage === totalPages}
+                            className="btn btn-secondary"
+                            style={{ padding: '6px 12px', fontSize: '12px', opacity: safeCurrentPage === totalPages ? 0.5 : 1, cursor: safeCurrentPage === totalPages ? 'not-allowed' : 'pointer' }}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Modal: Update Referral Status */}
             {activeReferralForStatus && (
