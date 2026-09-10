@@ -475,15 +475,28 @@ export default function Referrals({ referrals, members = [] }) {
                                         <tr key={referral.id}>
                                             <td>
                                                 {isMedicineShop ? (
-                                                    <div>
-                                                        <span className="badge-status" style={{ fontSize: '10px', padding: '2px 8px', marginBottom: '4px', display: 'inline-block', backgroundColor: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
-                                                            Non-Doctor
-                                                        </span>
-                                                        <div style={{ fontWeight: '700', color: '#f59e0b' }}>{referral.referrer_name || 'Guest Referrer'}</div>
-                                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📞 {referral.referrer_phone || 'N/A'}</div>
-                                                        {referral.referrer_address && (
-                                                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {referral.referrer_address}</div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                        {referral.avatar_url || referral.member?.avatar_url ? (
+                                                            <img 
+                                                                src={referral.avatar_url || referral.member.avatar_url} 
+                                                                alt={referral.referrer_name || 'Non-Doctor'} 
+                                                                style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #f59e0b', flexShrink: 0 }} 
+                                                            />
+                                                        ) : (
+                                                            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
+                                                                {referral.referrer_name ? referral.referrer_name.charAt(0).toUpperCase() : 'N'}
+                                                            </div>
                                                         )}
+                                                        <div>
+                                                            <span className="badge-status" style={{ fontSize: '10px', padding: '2px 8px', marginBottom: '4px', display: 'inline-block', backgroundColor: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
+                                                                Non-Doctor
+                                                            </span>
+                                                            <div style={{ fontWeight: '700', color: '#f59e0b' }}>{referral.referrer_name || 'Guest Referrer'}</div>
+                                                            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📞 {referral.referrer_phone || 'N/A'}</div>
+                                                            {referral.referrer_address && (
+                                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {referral.referrer_address}</div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 ) : (
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -591,13 +604,26 @@ export default function Referrals({ referrals, members = [] }) {
                                     <div>
                                         <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Referrer Identity</span>
                                         {isMedicineShop ? (
-                                            <div>
-                                                <span style={{ fontSize: '10px', color: '#f59e0b', fontWeight: 'bold' }}>Non-Doctor</span>
-                                                <div style={{ fontWeight: '600' }}>{referral.referrer_name || 'Guest Referrer'}</div>
-                                                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📞 {referral.referrer_phone || 'N/A'}</div>
-                                                {referral.referrer_address && (
-                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {referral.referrer_address}</div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                {referral.avatar_url || referral.member?.avatar_url ? (
+                                                    <img 
+                                                        src={referral.avatar_url || referral.member.avatar_url} 
+                                                        alt={referral.referrer_name || 'Non-Doctor'} 
+                                                        style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #f59e0b', flexShrink: 0 }} 
+                                                    />
+                                                ) : (
+                                                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '14px', flexShrink: 0 }}>
+                                                        {referral.referrer_name ? referral.referrer_name.charAt(0).toUpperCase() : 'N'}
+                                                    </div>
                                                 )}
+                                                <div>
+                                                    <span style={{ fontSize: '10px', color: '#f59e0b', fontWeight: 'bold' }}>Non-Doctor</span>
+                                                    <div style={{ fontWeight: '600' }}>{referral.referrer_name || 'Guest Referrer'}</div>
+                                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📞 {referral.referrer_phone || 'N/A'}</div>
+                                                    {referral.referrer_address && (
+                                                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {referral.referrer_address}</div>
+                                                    )}
+                                                </div>
                                             </div>
                                         ) : (
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
