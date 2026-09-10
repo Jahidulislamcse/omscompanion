@@ -1461,14 +1461,8 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             margin: '0 auto'
                         }}
                     >
-                        <div className="outline-pill-wrapper" style={{ justifyContent: 'center', marginBottom: '14px' }}>
-                            <span className="outline-pill-badge" style={{ borderColor: 'rgba(6, 182, 212, 0.4)', color: 'var(--color-cyan, #06b6d4)' }}>
-                                🔗 Share OMS Companion
-                            </span>
-                        </div>
-
                         <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '22px', color: 'var(--text-color, #0f172a)', letterSpacing: '-0.3px' }}>
-                            Share with Colleagues & Dental Practitioners
+                            Share & Invite
                         </h3>
 
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
