@@ -1178,14 +1178,13 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         </div>
 
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Address *</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Address</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"
                                                 placeholder="Address"
                                                 value={shopForm.shop_keeper_address}
                                                 onChange={e => setShopForm('shop_keeper_address', e.target.value)}
-                                                required
                                                 style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                             />
                                             {shopErrors.shop_keeper_address && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.shop_keeper_address}</span>}
@@ -1228,14 +1227,13 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         </div>
 
                                         <div style={{ marginBottom: '12px' }}>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Address *</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Address</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"
                                                 placeholder="Patient Address"
                                                 value={shopForm.patient_address}
                                                 onChange={e => setShopForm('patient_address', e.target.value)}
-                                                required
                                                 style={{ width: '100%', boxSizing: 'border-box', backgroundColor: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1' }}
                                             />
                                             {shopErrors.patient_address && <span style={{ color: '#ef4444', fontSize: '11px' }}>{shopErrors.patient_address}</span>}

@@ -80,7 +80,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email',
             'bds_registration_number' => 'required|string|max:50',
             'clinic_name' => 'required|string|max:255',
-            'address' => 'required|string',
+            'address' => 'nullable|string',
             'password' => 'required|string|min:8|confirmed',
         ]);
 

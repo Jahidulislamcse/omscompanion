@@ -14,10 +14,10 @@ class GuestReferralController extends Controller
         $request->validate([
             'shop_keeper_name' => 'required|string|max:255',
             'shop_keeper_phone' => 'required|string|max:20',
-            'shop_keeper_address' => 'required|string',
+            'shop_keeper_address' => 'nullable|string',
             'patient_name' => 'required|string|max:255',
             'patient_phone' => 'required|string|max:20',
-            'patient_address' => 'required|string',
+            'patient_address' => 'nullable|string',
             'medical_condition' => 'required|string',
         ]);
 

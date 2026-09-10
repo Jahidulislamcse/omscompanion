@@ -281,15 +281,14 @@ export default function Register() {
 
                         {/* Address */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>
-                            <label className="form-label" htmlFor="address" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic / Chamber / Hospital Address *</label>
+                            <label className="form-label" htmlFor="address" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Clinic / Chamber / Hospital Address</label>
                             <input
                                 type="text"
                                 id="address"
                                 className="form-control"
-                                placeholder="City / Area Address"
+                                placeholder="City / Area Address (Optional)"
                                 value={data.address}
                                 onChange={e => setData('address', e.target.value)}
-                                required
                                 style={{ padding: '9px 12px', borderRadius: '8px' }}
                             />
                             {errors.address && <span className="form-error">{errors.address}</span>}
