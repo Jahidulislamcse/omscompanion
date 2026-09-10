@@ -76,7 +76,7 @@ class MemberController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'clinic_name' => 'required|string|max:255',
-            'address' => 'nullable|string',
+            'address' => 'required|string',
         ]);
 
         $updateData = [

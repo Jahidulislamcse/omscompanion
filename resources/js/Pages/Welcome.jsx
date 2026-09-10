@@ -1178,7 +1178,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         </div>
 
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Address</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Address (Optional)</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"
@@ -1227,7 +1227,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         </div>
 
                                         <div style={{ marginBottom: '12px' }}>
-                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Address</label>
+                                            <label style={{ display: 'block', fontSize: '12px', color: '#334155', marginBottom: '4px', fontWeight: '600' }}>Patient Address (Optional)</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control"

@@ -152,6 +152,7 @@ export default function Profile({ user }) {
                                 value={data.address}
                                 onChange={e => setData('address', e.target.value)}
                                 rows="4"
+                                required
                                 style={{ resize: 'vertical', fontFamily: 'inherit' }}
                             />
                             {errors.address && <span className="form-error">{errors.address}</span>}
