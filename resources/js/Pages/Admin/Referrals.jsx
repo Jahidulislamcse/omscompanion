@@ -477,9 +477,9 @@ export default function Referrals({ referrals, members = [] }) {
                                                 {isMedicineShop ? (
                                                     <div>
                                                         <span className="badge-status" style={{ fontSize: '10px', padding: '2px 8px', marginBottom: '4px', display: 'inline-block', backgroundColor: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
-                                                            💊 Medicine Shop Keeper
+                                                            Non-Doctor
                                                         </span>
-                                                        <div style={{ fontWeight: '700', color: '#f59e0b' }}>{referral.referrer_name || 'Guest Shop Keeper'}</div>
+                                                        <div style={{ fontWeight: '700', color: '#f59e0b' }}>{referral.referrer_name || 'Guest Referrer'}</div>
                                                         <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📞 {referral.referrer_phone || 'N/A'}</div>
                                                         {referral.referrer_address && (
                                                             <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {referral.referrer_address}</div>
@@ -592,8 +592,8 @@ export default function Referrals({ referrals, members = [] }) {
                                         <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>Referrer Identity</span>
                                         {isMedicineShop ? (
                                             <div>
-                                                <span style={{ fontSize: '10px', color: '#f59e0b', fontWeight: 'bold' }}>💊 Medicine Shop Keeper</span>
-                                                <div style={{ fontWeight: '600' }}>{referral.referrer_name || 'Guest Shop Keeper'}</div>
+                                                <span style={{ fontSize: '10px', color: '#f59e0b', fontWeight: 'bold' }}>Non-Doctor</span>
+                                                <div style={{ fontWeight: '600' }}>{referral.referrer_name || 'Guest Referrer'}</div>
                                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📞 {referral.referrer_phone || 'N/A'}</div>
                                                 {referral.referrer_address && (
                                                     <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {referral.referrer_address}</div>
