@@ -368,7 +368,7 @@ export default function Referrals({ referrals, members = [] }) {
                                 transition: 'all 0.2s ease'
                             }}
                         >
-                            🩺 Referral by Doctors
+                            Referral by Doctors
                             <span style={{ 
                                 padding: '2px 8px', 
                                 borderRadius: '10px', 
@@ -400,7 +400,7 @@ export default function Referrals({ referrals, members = [] }) {
                                 transition: 'all 0.2s ease'
                             }}
                         >
-                            💊 Referral by Non-Doctors
+                            Referral by Non-Doctors
                             <span style={{ 
                                 padding: '2px 8px', 
                                 borderRadius: '10px', 
