@@ -21,95 +21,54 @@ export default function PushNotifications({ notifications = [] }) {
             <Head title="Push Notifications - Admin Portal" />
 
             <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+                {/* Composer Form */}
+                <div className="glass-panel" style={{ padding: '25px', borderRadius: '16px' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>🚀</span> Compose Notification
+                    </h3>
 
-
-                {/* Main Content: Composer + Live Preview */}
-                <div className="grid-2-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '25px' }}>
-                    {/* Composer Form */}
-                    <div className="glass-panel" style={{ padding: '25px', borderRadius: '16px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span>🚀</span> Compose Notification
-                        </h3>
-
-                        <form onSubmit={handleSendPush}>
-                            <div className="form-group" style={{ marginBottom: '18px' }}>
-                                <label className="form-label" style={{ fontWeight: '600', display: 'block', marginBottom: '6px' }}>
-                                    Notification Title <span style={{ color: 'var(--color-danger, #ef4444)' }}>*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="e.g. New Clinical Video Released!"
-                                    value={pushData.title}
-                                    onChange={(e) => setPushData('title', e.target.value)}
-                                    required
-                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color, #cbd5e1)' }}
-                                />
-                                {pushErrors.title && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{pushErrors.title}</div>}
-                            </div>
-
-                            <div className="form-group" style={{ marginBottom: '18px' }}>
-                                <label className="form-label" style={{ fontWeight: '600', display: 'block', marginBottom: '6px' }}>
-                                    Notification Message Body <span style={{ color: 'var(--color-danger, #ef4444)' }}>*</span>
-                                </label>
-                                <textarea
-                                    className="form-control"
-                                    rows="4"
-                                    placeholder="Enter the main announcement message here..."
-                                    value={pushData.message}
-                                    onChange={(e) => setPushData('message', e.target.value)}
-                                    required
-                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color, #cbd5e1)', resize: 'vertical' }}
-                                ></textarea>
-                                {pushErrors.message && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{pushErrors.message}</div>}
-                            </div>
-
-
-
-                            <button
-                                type="submit"
-                                className="btn btn-primary"
-                                disabled={processingPush}
-                                style={{ width: '100%', padding: '14px', borderRadius: '10px', fontSize: '16px', fontWeight: '700', boxShadow: '0 4px 14px rgba(13, 148, 136, 0.4)' }}
-                            >
-                                {processingPush ? 'Sending Push Notification...' : '📢 Send Notification to All Mobile Devices'}
-                            </button>
-                        </form>
-                    </div>
-
-                    {/* Live Mobile Notification Preview */}
-                    <div>
-                        <div className="glass-panel" style={{ padding: '20px', borderRadius: '16px', position: 'sticky', top: '20px' }}>
-                            <h4 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted, #64748b)', marginBottom: '15px' }}>
-                                📱 Live Phone Preview
-                            </h4>
-
-                            <div style={{ background: '#1e293b', color: '#ffffff', borderRadius: '16px', padding: '16px', boxShadow: '0 10px 25px rgba(0,0,0,0.3)', border: '1px solid #334155' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <div style={{ width: '20px', height: '20px', borderRadius: '5px', backgroundColor: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 'bold' }}>
-                                            OMS
-                                        </div>
-                                        <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600' }}>OMS COMPANION</span>
-                                    </div>
-                                    <span style={{ fontSize: '11px', color: '#64748b' }}>Now</span>
-                                </div>
-                                <div style={{ fontWeight: '700', fontSize: '15px', marginBottom: '4px', color: '#f8fafc' }}>
-                                    {pushData.title || 'Notification Title'}
-                                </div>
-                                <div style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: '1.4', wordBreak: 'break-word' }}>
-                                    {pushData.message || 'Your push notification message body preview will appear here in real-time...'}
-                                </div>
-                                <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid #334155', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#38bdf8' }}>
-                                    <span>🔔 Plays Sound & Vibration</span>
-                                </div>
-                            </div>
-
-                            <div style={{ marginTop: '20px', padding: '14px', borderRadius: '10px', backgroundColor: 'var(--bg-secondary, #f8fafc)', fontSize: '12px', color: 'var(--text-muted, #64748b)' }}>
-                                💡 <strong>Note:</strong> All phones with the OMS Companion APK or iOS app installed will receive this notification with sound immediately.
-                            </div>
+                    <form onSubmit={handleSendPush}>
+                        <div className="form-group" style={{ marginBottom: '18px' }}>
+                            <label className="form-label" style={{ fontWeight: '600', display: 'block', marginBottom: '6px' }}>
+                                Notification Title <span style={{ color: 'var(--color-danger, #ef4444)' }}>*</span>
+                            </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="e.g. New Clinical Video Released!"
+                                value={pushData.title}
+                                onChange={(e) => setPushData('title', e.target.value)}
+                                required
+                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color, #cbd5e1)' }}
+                            />
+                            {pushErrors.title && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{pushErrors.title}</div>}
                         </div>
-                    </div>
+
+                        <div className="form-group" style={{ marginBottom: '22px' }}>
+                            <label className="form-label" style={{ fontWeight: '600', display: 'block', marginBottom: '6px' }}>
+                                Notification Message Body <span style={{ color: 'var(--color-danger, #ef4444)' }}>*</span>
+                            </label>
+                            <textarea
+                                className="form-control"
+                                rows="4"
+                                placeholder="Enter the main announcement message here..."
+                                value={pushData.message}
+                                onChange={(e) => setPushData('message', e.target.value)}
+                                required
+                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color, #cbd5e1)', resize: 'vertical' }}
+                            ></textarea>
+                            {pushErrors.message && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{pushErrors.message}</div>}
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            disabled={processingPush}
+                            style={{ width: '100%', padding: '14px', borderRadius: '10px', fontSize: '16px', fontWeight: '700', boxShadow: '0 4px 14px rgba(13, 148, 136, 0.4)' }}
+                        >
+                            {processingPush ? 'Sending Push Notification...' : '📢 Send Notification to All Mobile Devices'}
+                        </button>
+                    </form>
                 </div>
 
                 {/* Push Notification History */}
