@@ -47,9 +47,8 @@ class PushNotificationService
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
             'url' => $url ?: 'http://omscompanion.com',
-            // Android sound & channel settings
+            // Android sound & priority settings
             'android_sound' => 'notification',
-            'android_channel_id' => 'oms_push_channel',
             'priority' => 10,
             // iOS sound & badge settings
             'ios_sound' => 'default',
