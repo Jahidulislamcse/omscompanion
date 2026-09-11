@@ -358,6 +358,20 @@ Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+Route::get('/download-app', function () {
+    return Inertia\Inertia::render('DownloadApp');
+})->name('app.download');
+
+Route::get('/download-apk-file', function () {
+    $path = public_path('omscompanion.apk');
+    if (!file_exists($path)) {
+        abort(404, 'APK file not found on server.');
+    }
+    return response()->download($path, 'omscompanion.apk', [
+        'Content-Type' => 'application/vnd.android.package-archive',
+    ]);
+})->name('app.download_file');
+
 // Member Routes
 Route::middleware(['auth', 'member'])->prefix('member')->group(function () {
     Route::get('/dashboard', [MemberController::class, 'dashboard'])->name('member.dashboard');
