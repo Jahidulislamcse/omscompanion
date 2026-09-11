@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Head, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { Head, usePage } from '@inertiajs/react';
 import PublicNavbar from '@/Components/PublicNavbar';
 
 export default function DownloadApp() {
@@ -12,7 +12,7 @@ export default function DownloadApp() {
     };
 
     return (
-        <div className="landing-wrapper page-colorful-theme" style={{ backgroundColor: '#0f172a', color: '#ffffff', minHeight: '100vh' }}>
+        <div className="landing-wrapper page-colorful-theme" style={{ backgroundColor: '#0f172a', color: '#ffffff', minHeight: '100vh', overflowX: 'hidden' }}>
             <Head title={`Download Mobile App - ${site_name || 'OMSCOMPANION'}`} />
 
             {/* Top Navigation Bar */}
@@ -21,8 +21,11 @@ export default function DownloadApp() {
             <main className="max-w-6xl mx-auto px-4 py-12 md:py-20">
                 {/* Hero Section */}
                 <div className="text-center max-w-3xl mx-auto mb-14">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-sm font-semibold mb-6">
-                        <svg className="w-5 h-5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
+                    <div 
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-cyan-400 text-sm font-semibold mb-6"
+                        style={{ backgroundColor: 'rgba(6, 182, 212, 0.12)', border: '1px solid rgba(6, 182, 212, 0.3)' }}
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#22d3ee" style={{ width: '20px', height: '20px', flexShrink: 0 }}>
                             <path d="M17.523 15.3414C17.06 15.3414 16.691 14.9724 16.691 14.5094C16.691 14.0464 17.06 13.6774 17.523 13.6774C17.986 13.6774 18.355 14.0464 18.355 14.5094C18.355 14.9724 17.986 15.3414 17.523 15.3414ZM6.477 15.3414C6.014 15.3414 5.645 14.9724 5.645 14.5094C5.645 14.0464 6.014 13.6774 6.477 13.6774C6.94 13.6774 7.309 14.0464 7.309 14.5094C7.309 14.9724 6.94 15.3414 6.477 15.3414ZM17.94 10.4284L19.467 7.7834C19.615 7.5274 19.527 7.2004 19.271 7.0524C19.015 6.9044 18.688 6.9924 18.54 7.2484L16.98 9.9494C15.485 9.2674 13.805 8.8784 12 8.8784C10.195 8.8784 8.515 9.2674 7.02 9.9494L5.46 7.2484C5.312 6.9924 4.985 6.9044 4.729 7.0524C4.473 7.2004 4.385 7.5274 4.533 7.7834L6.06 10.4284C2.628 12.2944 0.285 15.7484 0 19.8244H24C23.715 15.7484 21.372 12.2944 17.94 10.4284Z" />
                         </svg>
                         Official Android Mobile App v1.0
@@ -40,10 +43,14 @@ export default function DownloadApp() {
                         <a
                             href="/download-apk-file"
                             onClick={handleDownload}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-lg font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all transform hover:-translate-y-0.5"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-lg font-bold text-white shadow-lg transition-all transform hover:-translate-y-0.5"
+                            style={{
+                                background: 'linear-gradient(135deg, #10b981 0%, #0d9488 100%)',
+                                boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.4)',
+                            }}
                         >
-                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '28px', height: '28px', flexShrink: 0 }}>
+                                <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                             <span>{downloading ? 'Downloading APK...' : 'Download Android App (APK)'}</span>
                         </a>
@@ -55,10 +62,10 @@ export default function DownloadApp() {
 
                 {/* Features Grid */}
                 <div className="grid md:grid-cols-3 gap-8 mb-16">
-                    <div className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/60 hover:border-emerald-500/50 transition-all">
+                    <div className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/60">
                         <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-5">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                                <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">Instant Push Notifications</h3>
@@ -67,10 +74,10 @@ export default function DownloadApp() {
                         </p>
                     </div>
 
-                    <div className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/60 hover:border-cyan-500/50 transition-all">
+                    <div className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/60">
                         <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-5">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                                <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">Referral & Case Tracker</h3>
@@ -79,10 +86,10 @@ export default function DownloadApp() {
                         </p>
                     </div>
 
-                    <div className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/60 hover:border-indigo-500/50 transition-all">
+                    <div className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/60">
                         <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-5">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                                <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                             </svg>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">Clinical Video Archive</h3>

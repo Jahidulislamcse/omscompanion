@@ -366,13 +366,24 @@ Route::get('/download-app', function () {
 })->name('app.download');
 
 Route::get('/download-apk-file', function () {
-    $path = public_path('omscompanion.apk');
-    if (!file_exists($path)) {
-        abort(404, 'APK file not found on server.');
-    }
-    return response()->download($path, 'omscompanion.apk', [
-        'Content-Type' => 'application/vnd.android.package-archive',
+    $possiblePaths = array_filter([
+        public_path('omscompanion.apk'),
+        base_path('public/omscompanion.apk'),
+        base_path('omscompanion.apk'),
+        storage_path('app/public/omscompanion.apk'),
+        isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] . '/omscompanion.apk' : null,
     ]);
+
+    foreach ($possiblePaths as $path) {
+        if (file_exists($path)) {
+            return response()->download($path, 'omscompanion.apk', [
+                'Content-Type' => 'application/vnd.android.package-archive',
+                'Content-Length' => filesize($path),
+            ]);
+        }
+    }
+
+    abort(404, 'APK file not found on server.');
 })->name('app.download_file');
 
 // Member Routes
