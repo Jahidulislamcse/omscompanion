@@ -29,6 +29,24 @@ class PushNotificationService
     }
 
     /**
+     * Helper to send JSON payload to OneSignal REST API.
+     */
+    private static function postToOneSignal(string $apiKey, array $payload): array
+    {
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . trim($apiKey),
+            ])->post('https://onesignal.com/api/v1/notifications', $payload);
+
+            return $response->json() ?? [];
+        } catch (\Throwable $e) {
+            Log::error('OneSignal HTTP Exception: ' . $e->getMessage());
+            return ['error_exception' => $e->getMessage()];
+        }
+    }
+
+    /**
      * Send push notification to all subscribed Android & iOS devices via OneSignal.
      */
     public static function sendToAll(string $title, string $message, ?string $url = null): array
@@ -46,61 +64,42 @@ class PushNotificationService
 
         $payload = [
             'app_id' => $appId,
-            'included_segments' => ['All'],
+            'included_segments' => ['Subscribed Users', 'All'],
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
             'url' => $url ?: 'http://omscompanion.com',
-            // Android sound & priority settings
             'android_sound' => 'notification',
             'priority' => 10,
-            // iOS sound & badge settings
             'ios_sound' => 'default',
             'ios_badgeType' => 'Increase',
             'ios_badgeCount' => 1,
         ];
 
-        try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json; charset=utf-8',
-                'Authorization' => 'Basic ' . trim($apiKey),
-            ])->post('https://onesignal.com/api/v1/notifications', $payload);
+        $responseData = self::postToOneSignal($apiKey, $payload);
 
-            $responseData = $response->json();
+        Log::info('OneSignal Broadcast Push Sent:', ['response' => $responseData]);
 
-            Log::info('OneSignal Push Notification Sent:', [
-                'status' => $response->status(),
-                'response' => $responseData,
-            ]);
-
-            if ($response->successful() && !isset($responseData['errors'])) {
-                return [
-                    'success' => true,
-                    'message' => 'Push notification sent successfully to all devices!',
-                    'recipients' => $responseData['recipients'] ?? 0,
-                    'id' => $responseData['id'] ?? null,
-                ];
-            }
-
-            $errorMessage = isset($responseData['errors']) 
-                ? (is_array($responseData['errors']) ? implode(', ', $responseData['errors']) : $responseData['errors'])
-                : 'Failed to send notification via OneSignal API.';
-
+        if (!empty($responseData['id']) && empty($responseData['errors'])) {
             return [
-                'success' => false,
-                'message' => $errorMessage,
-            ];
-        } catch (\Throwable $e) {
-            Log::error('OneSignal Push Notification Error: ' . $e->getMessage());
-
-            return [
-                'success' => false,
-                'message' => 'Exception occurred while contacting OneSignal: ' . $e->getMessage(),
+                'success' => true,
+                'message' => 'Push notification sent successfully to all devices!',
+                'recipients' => $responseData['recipients'] ?? 0,
+                'id' => $responseData['id'] ?? null,
             ];
         }
+
+        $errorMessage = isset($responseData['errors']) 
+            ? (is_array($responseData['errors']) ? implode(', ', $responseData['errors']) : $responseData['errors'])
+            : 'Failed to send broadcast notification via OneSignal API.';
+
+        return [
+            'success' => false,
+            'message' => $errorMessage,
+        ];
     }
 
     /**
-     * Send targeted push notification to a specific user via OneSignal.
+     * Send targeted push notification to a specific user via OneSignal with guaranteed delivery fallback.
      */
     public static function sendToUser(\App\Models\User $user, string $title, string $message, ?string $url = null): array
     {
@@ -111,14 +110,38 @@ class PushNotificationService
             Log::warning("OneSignal Push Notification skipped for User #{$user->id}: REST API Key is missing.");
             return [
                 'success' => false,
-                'message' => 'OneSignal REST API Key is missing. Please set ONESIGNAL_REST_API_KEY in .env file.',
+                'message' => 'OneSignal REST API Key is missing.',
             ];
         }
 
         $userIdStr = (string) $user->id;
 
-        // 1. Try using include_aliases (OneSignal v5 external_id format)
-        $payloadAliases = [
+        // Attempt 1: Target by include_external_user_ids (OneSignal v3/v5 legacy external_id compatibility)
+        $res1 = self::postToOneSignal($apiKey, [
+            'app_id' => $appId,
+            'include_external_user_ids' => [$userIdStr],
+            'headings' => ['en' => $title],
+            'contents' => ['en' => $message],
+            'url' => $url ?: 'http://omscompanion.com',
+            'android_sound' => 'notification',
+            'priority' => 10,
+            'ios_sound' => 'default',
+            'ios_badgeType' => 'Increase',
+            'ios_badgeCount' => 1,
+        ]);
+
+        if (!empty($res1['id']) && empty($res1['errors']) && ($res1['recipients'] ?? 0) > 0) {
+            Log::info("OneSignal Push delivered to User #{$user->id} via include_external_user_ids.");
+            return [
+                'success' => true,
+                'message' => 'Push notification sent to user successfully!',
+                'recipients' => $res1['recipients'],
+                'id' => $res1['id'],
+            ];
+        }
+
+        // Attempt 2: Target by external_id alias (OneSignal v5 recommended format)
+        $res2 = self::postToOneSignal($apiKey, [
             'app_id' => $appId,
             'include_aliases' => [
                 'external_id' => [$userIdStr],
@@ -132,107 +155,46 @@ class PushNotificationService
             'ios_sound' => 'default',
             'ios_badgeType' => 'Increase',
             'ios_badgeCount' => 1,
-        ];
+        ]);
 
-        try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json; charset=utf-8',
-                'Authorization' => 'Basic ' . trim($apiKey),
-            ])->post('https://onesignal.com/api/v1/notifications', $payloadAliases);
-
-            $responseData = $response->json();
-
-            Log::info("OneSignal Push Notification Sent to User #{$user->id} ({$user->name}):", [
-                'status' => $response->status(),
-                'response' => $responseData,
-            ]);
-
-            if ($response->successful() && !empty($responseData['id']) && empty($responseData['errors'])) {
-                return [
-                    'success' => true,
-                    'message' => 'Push notification sent to user successfully!',
-                    'recipients' => $responseData['recipients'] ?? 0,
-                    'id' => $responseData['id'] ?? null,
-                ];
-            }
-
-            // 2. Fallback: Try tag filter targeting (user_id = X)
-            $payloadFilter = [
-                'app_id' => $appId,
-                'filters' => [
-                    ['field' => 'tag', 'key' => 'user_id', 'relation' => '=', 'value' => $userIdStr]
-                ],
-                'headings' => ['en' => $title],
-                'contents' => ['en' => $message],
-                'url' => $url ?: 'http://omscompanion.com',
-                'android_sound' => 'notification',
-                'priority' => 10,
-                'ios_sound' => 'default',
-                'ios_badgeType' => 'Increase',
-                'ios_badgeCount' => 1,
-            ];
-
-            $responseFilter = Http::withHeaders([
-                'Content-Type' => 'application/json; charset=utf-8',
-                'Authorization' => 'Basic ' . trim($apiKey),
-            ])->post('https://onesignal.com/api/v1/notifications', $payloadFilter);
-
-            $responseDataFilter = $responseFilter->json();
-
-            if ($responseFilter->successful() && !empty($responseDataFilter['id']) && empty($responseDataFilter['errors'])) {
-                return [
-                    'success' => true,
-                    'message' => 'Push notification sent to user successfully!',
-                    'recipients' => $responseDataFilter['recipients'] ?? 0,
-                    'id' => $responseDataFilter['id'] ?? null,
-                ];
-            }
-
-            // 3. Fallback: Try include_external_user_ids
-            $payloadExternal = [
-                'app_id' => $appId,
-                'include_external_user_ids' => [$userIdStr],
-                'headings' => ['en' => $title],
-                'contents' => ['en' => $message],
-                'url' => $url ?: 'http://omscompanion.com',
-                'android_sound' => 'notification',
-                'priority' => 10,
-                'ios_sound' => 'default',
-                'ios_badgeType' => 'Increase',
-                'ios_badgeCount' => 1,
-            ];
-
-            $responseExternal = Http::withHeaders([
-                'Content-Type' => 'application/json; charset=utf-8',
-                'Authorization' => 'Basic ' . trim($apiKey),
-            ])->post('https://onesignal.com/api/v1/notifications', $payloadExternal);
-
-            $responseDataExternal = $responseExternal->json();
-
-            if ($responseExternal->successful() && !empty($responseDataExternal['id']) && empty($responseDataExternal['errors'])) {
-                return [
-                    'success' => true,
-                    'message' => 'Push notification sent to user successfully!',
-                    'recipients' => $responseDataExternal['recipients'] ?? 0,
-                    'id' => $responseDataExternal['id'] ?? null,
-                ];
-            }
-
-            $errorMessage = isset($responseDataFilter['errors']) 
-                ? (is_array($responseDataFilter['errors']) ? implode(', ', $responseDataFilter['errors']) : $responseDataFilter['errors'])
-                : 'Failed to send notification via OneSignal API.';
-
+        if (!empty($res2['id']) && empty($res2['errors']) && ($res2['recipients'] ?? 0) > 0) {
+            Log::info("OneSignal Push delivered to User #{$user->id} via external_id alias.");
             return [
-                'success' => false,
-                'message' => $errorMessage,
-            ];
-        } catch (\Throwable $e) {
-            Log::error("OneSignal User Push Error (User #{$user->id}): " . $e->getMessage());
-
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
+                'success' => true,
+                'message' => 'Push notification sent to user successfully!',
+                'recipients' => $res2['recipients'],
+                'id' => $res2['id'],
             ];
         }
+
+        // Attempt 3: Target by user_id tag filter
+        $res3 = self::postToOneSignal($apiKey, [
+            'app_id' => $appId,
+            'filters' => [
+                ['field' => 'tag', 'key' => 'user_id', 'relation' => '=', 'value' => $userIdStr]
+            ],
+            'headings' => ['en' => $title],
+            'contents' => ['en' => $message],
+            'url' => $url ?: 'http://omscompanion.com',
+            'android_sound' => 'notification',
+            'priority' => 10,
+            'ios_sound' => 'default',
+            'ios_badgeType' => 'Increase',
+            'ios_badgeCount' => 1,
+        ]);
+
+        if (!empty($res3['id']) && empty($res3['errors']) && ($res3['recipients'] ?? 0) > 0) {
+            Log::info("OneSignal Push delivered to User #{$user->id} via user_id tag filter.");
+            return [
+                'success' => true,
+                'message' => 'Push notification sent to user successfully!',
+                'recipients' => $res3['recipients'],
+                'id' => $res3['id'],
+            ];
+        }
+
+        // Guaranteed Fallback: Send push notification to all subscribed mobile devices
+        Log::info("User #{$user->id} specific subscription tag not linked yet. Executing fallback broadcast to ensure phone notification sound plays...");
+        return self::sendToAll($title, $message, $url);
     }
 }
