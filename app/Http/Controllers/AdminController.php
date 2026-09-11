@@ -1040,17 +1040,12 @@ class AdminController extends Controller
 
     public function pushNotifications()
     {
-        $appId = LandingSetting::where('key', 'onesignal_app_id')->value('value') ?? '';
-        $restApiKey = LandingSetting::where('key', 'onesignal_rest_api_key')->value('value') ?? '';
-
         $notifications = \App\Models\Notification::where('type', 'push')
             ->orderBy('created_at', 'desc')
             ->take(50)
             ->get();
 
         return Inertia::render('Admin/PushNotifications', [
-            'onesignal_app_id' => $appId,
-            'onesignal_rest_api_key' => $restApiKey,
             'notifications' => $notifications,
         ]);
     }

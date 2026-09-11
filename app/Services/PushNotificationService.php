@@ -13,8 +13,9 @@ class PushNotificationService
      */
     public static function getAppId(): string
     {
-        return LandingSetting::where('key', 'onesignal_app_id')->value('value') 
-            ?? config('services.onesignal.app_id', 'cd9df2b6-fda0-463e-bebb-7d8b49edf74c');
+        return config('services.onesignal.app_id') 
+            ?? LandingSetting::where('key', 'onesignal_app_id')->value('value') 
+            ?? 'cd9df2b6-fda0-463e-bebb-7d8b49edf74c';
     }
 
     /**
@@ -22,8 +23,9 @@ class PushNotificationService
      */
     public static function getRestApiKey(): string
     {
-        return LandingSetting::where('key', 'onesignal_rest_api_key')->value('value') 
-            ?? config('services.onesignal.rest_api_key', '');
+        return config('services.onesignal.rest_api_key') 
+            ?? LandingSetting::where('key', 'onesignal_rest_api_key')->value('value') 
+            ?? '';
     }
 
     /**
