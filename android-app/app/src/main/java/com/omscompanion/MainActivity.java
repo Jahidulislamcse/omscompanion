@@ -57,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
+        webView.addJavascriptInterface(new Object() {
+            @android.webkit.JavascriptInterface
+            public void setUserId(String userId) {
+                if (userId != null && !userId.isEmpty() && !userId.equals("0")) {
+                    com.onesignal.OneSignal.login(userId);
+                    com.onesignal.OneSignal.getUser().addTag("user_id", userId);
+                }
+            }
+        }, "OMSCompanionNative");
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -68,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
+                view.evaluateJavascript(
+                    "(function() { if (window.authUser && window.authUser.id && window.OMSCompanionNative) { window.OMSCompanionNative.setUserId(String(window.authUser.id)); } })();",
+                    null
+                );
             }
 
             @Override

@@ -41,6 +41,17 @@
         @inertiaHead
     </head>
     <body>
+        @auth
+        <script>
+            window.authUser = {
+                id: {{ auth()->id() }},
+                email: "{{ auth()->user()->email }}"
+            };
+            if (window.OMSCompanionNative && window.OMSCompanionNative.setUserId) {
+                window.OMSCompanionNative.setUserId(String({{ auth()->id() }}));
+            }
+        </script>
+        @endauth
         @inertia
     </body>
 </html>

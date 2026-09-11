@@ -71,6 +71,13 @@ class NotificationService
             Log::info("=================================================");
         }
 
+        // 4. Dispatch Targeted Push Notification to User's Mobile App
+        try {
+            PushNotificationService::sendToUser($user, $title, $message);
+        } catch (\Throwable $e) {
+            Log::error("Failed to send push notification to user #{$user->id}: " . $e->getMessage());
+        }
+
         return $notification;
     }
 
@@ -82,6 +89,13 @@ class NotificationService
         $members = User::where('role', 'member')->where('status', 'approved')->get();
         foreach ($members as $member) {
             self::send($member, $title, $message, 'email');
+        }
+
+        // Broadcast Push Notification to all app users
+        try {
+            PushNotificationService::sendToAll($title, $message);
+        } catch (\Throwable $e) {
+            Log::error("Failed to broadcast push notification: " . $e->getMessage());
         }
     }
 }
