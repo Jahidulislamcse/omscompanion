@@ -2,12 +2,12 @@
   "project_info": {
     "project_number": "481306547951",
     "project_id": "omscompanion",
-    "storage_bucket": "omscompanion.appspot.com"
+    "storage_bucket": "omscompanion.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:481306547951:android:omscompanionapp123456",
+        "mobilesdk_app_id": "1:481306547951:android:97ffff6455c32d3b58ad1a",
         "android_client_info": {
           "package_name": "com.omscompanion"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyOMSCompanionDefaultKeyForFCM12345"
+          "current_key": "AIzaSyCtxOfb_o4f-sdEO5HixxPICAwZ6WCBzZM"
         }
       ],
       "services": {
