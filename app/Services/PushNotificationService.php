@@ -13,9 +13,11 @@ class PushNotificationService
      */
     public static function getAppId(): string
     {
-        return config('services.onesignal.app_id') 
-            ?? LandingSetting::where('key', 'onesignal_app_id')->value('value') 
-            ?? 'cd9df2b6-fda0-463e-bebb-7d8b49edf74c';
+        $envVal = config('services.onesignal.app_id');
+        if (!empty($envVal)) return $envVal;
+        $dbVal = LandingSetting::where('key', 'onesignal_app_id')->value('value');
+        if (!empty($dbVal)) return $dbVal;
+        return 'cd9df2b6-fda0-463e-bebb-7d8b49edf74c';
     }
 
     /**
@@ -23,9 +25,11 @@ class PushNotificationService
      */
     public static function getRestApiKey(): string
     {
-        return config('services.onesignal.rest_api_key') 
-            ?? LandingSetting::where('key', 'onesignal_rest_api_key')->value('value') 
-            ?? '';
+        $envVal = config('services.onesignal.rest_api_key');
+        if (!empty($envVal)) return $envVal;
+        $dbVal = LandingSetting::where('key', 'onesignal_rest_api_key')->value('value');
+        if (!empty($dbVal)) return $dbVal;
+        return '';
     }
 
     /**
@@ -84,6 +88,10 @@ class PushNotificationService
             $errorMessage = isset($responseData['errors']) 
                 ? (is_array($responseData['errors']) ? implode(', ', $responseData['errors']) : $responseData['errors'])
                 : 'Failed to send notification via OneSignal API.';
+
+            if (stripos($errorMessage, 'All included players are not subscribed') !== false) {
+                $errorMessage = 'No active subscribed app users found yet. Please download & open the updated OMS Companion app on your phone to subscribe your device.';
+            }
 
             return [
                 'success' => false,
