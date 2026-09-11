@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-31:12
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\6226c7725f4a8a842f1a46c4202c6c56\transformed\material-1.9.0\AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.gradle\caches\transforms-3\80bc2211690f56e6063d66d7e4cf0117\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\dcc78b2f4a3d879e4e36052f1930563b\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -134,8 +134,8 @@ MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\tran
 	android:name
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:8:22-63
 application
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-29:19
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-29:19
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-31:19
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-31:19
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\6226c7725f4a8a842f1a46c4202c6c56\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\6226c7725f4a8a842f1a46c4202c6c56\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.gradle\caches\transforms-3\80bc2211690f56e6063d66d7e4cf0117\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -206,24 +206,30 @@ MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\HP\.gradle\caches\transf
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:18:9-44
 	android:name
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:11:9-40
+meta-data#onesignal_app_id
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:9-107
+	android:value
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:52-104
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:20-51
 activity#com.omscompanion.MainActivity
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:9-28:20
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:9-30:20
 	android:exported
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:13-36
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:24:13-36
 	android:configChanges
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:13-74
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:13-74
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:21:13-41
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:24:13-27:29
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:26:13-29:29
 action#android.intent.action.MAIN
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:17-69
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:27:17-69
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:25-66
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:27:25-66
 category#android.intent.category.LAUNCHER
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:26:17-77
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:28:17-77
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:26:27-74
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:28:27-74
 uses-sdk
 INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml
