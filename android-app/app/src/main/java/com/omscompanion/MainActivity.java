@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         com.onesignal.OneSignal.getNotifications().requestPermission(true, com.onesignal.Continue.none());
+        com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
 
         webView = findViewById(R.id.webview);
         progressBar = findViewById(R.id.progressBar);
