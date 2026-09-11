@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+
+        <meta-data android:name="onesignal_app_id" android:value="cd9df2b6-fda0-463e-bebb-7d8b49edf74c" />
         
         <activity
             android:name=".MainActivity"
