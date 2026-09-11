@@ -64,7 +64,7 @@ class PushNotificationService
 
         $payload = [
             'app_id' => $appId,
-            'included_segments' => ['Subscribed Users', 'All'],
+            'included_segments' => ['All'],
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
             'url' => $url ?: 'http://omscompanion.com',
