@@ -359,7 +359,10 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/download-app', function () {
-    return Inertia\Inertia::render('DownloadApp');
+    $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
+    return Inertia::render('DownloadApp', [
+        'settings' => $settings,
+    ]);
 })->name('app.download');
 
 Route::get('/download-apk-file', function () {
