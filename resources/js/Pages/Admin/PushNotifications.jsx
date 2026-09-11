@@ -64,27 +64,7 @@ export default function PushNotifications({ notifications = [] }) {
                                 {pushErrors.message && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{pushErrors.message}</div>}
                             </div>
 
-                            <div className="form-group" style={{ marginBottom: '22px' }}>
-                                <label className="form-label" style={{ fontWeight: '600', display: 'block', marginBottom: '6px' }}>
-                                    Target Launch URL (Optional)
-                                </label>
-                                <input
-                                    type="url"
-                                    className="form-control"
-                                    placeholder="http://omscompanion.com"
-                                    value={pushData.url}
-                                    onChange={(e) => setPushData('url', e.target.value)}
-                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color, #cbd5e1)' }}
-                                />
-                                <small style={{ color: 'var(--text-muted, #64748b)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-                                    When a user taps the notification on their phone, it opens this link directly.
-                                </small>
-                            </div>
 
-                            <div style={{ backgroundColor: 'rgba(13, 148, 136, 0.08)', padding: '12px 16px', borderRadius: '8px', marginBottom: '22px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px', color: '#0f766e' }}>
-                                <span>🔊</span>
-                                <span><strong>Sound Enabled:</strong> High priority system sound and vibration will be triggered on all Android & iOS devices automatically.</span>
-                            </div>
 
                             <button
                                 type="submit"
