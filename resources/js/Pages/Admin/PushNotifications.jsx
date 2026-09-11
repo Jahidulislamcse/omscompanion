@@ -21,20 +21,7 @@ export default function PushNotifications({ notifications = [] }) {
             <Head title="Push Notifications - Admin Portal" />
 
             <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-                {/* Header Banner */}
-                <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', marginBottom: '25px', background: 'linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)', border: '1px solid rgba(13, 148, 136, 0.2)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '56px', height: '56px', borderRadius: '14px', backgroundColor: 'var(--color-primary, #0d9488)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', flexShrink: 0, boxShadow: '0 8px 20px rgba(13, 148, 136, 0.3)' }}>
-                            🔔
-                        </div>
-                        <div>
-                            <h2 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0' }}>OneSignal Push Notification Center</h2>
-                            <p style={{ margin: 0, color: 'var(--text-muted, #64748b)', fontSize: '14px' }}>
-                                Broadcast push notifications with sound directly to all installed Android & iOS mobile app devices.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+
 
                 {/* Main Content: Composer + Live Preview */}
                 <div className="grid-2-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '25px' }}>
