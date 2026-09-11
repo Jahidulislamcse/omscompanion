@@ -372,3 +372,15 @@ Route::middleware(['auth', 'member'])->prefix('member')->group(function () {
     Route::get('/certificate', [CertificateController::class, 'download'])->name('member.certificate.download');
     Route::get('/notifications', [MemberController::class, 'notifications'])->name('member.notifications');
 });
+
+// Direct APK Download Route
+Route::get('/omscompanion.apk', function () {
+    $path = public_path('omscompanion.apk');
+    if (!file_exists($path)) {
+        abort(404, 'APK file not found on server.');
+    }
+    return response()->download($path, 'omscompanion.apk', [
+        'Content-Type' => 'application/vnd.android.package-archive',
+    ]);
+});
+
