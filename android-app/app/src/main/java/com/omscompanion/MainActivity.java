@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 if (userId != null && !userId.isEmpty() && !userId.equals("0")) {
                     com.onesignal.OneSignal.login(userId);
                     com.onesignal.OneSignal.getUser().addTag("user_id", userId);
+                    com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
                 }
             }
         }, "OMSCompanionNative");
