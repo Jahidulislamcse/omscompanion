@@ -514,7 +514,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
                                 <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
                                 <circle cx="12" cy="10.5" r="2" fill="#0e7490"/>
-                                <path d="M8.5 15C8.5 13.5 10 13 12 13C14 13 15.5 13.5 15.5 15" stroke="#0e7490" strokeWidth="1.8" strokeLinecap="round"/>
+                                <path d="M8.5 15C8.5 13.5 10 13 12 13C14 13 15.5 15" stroke="#0e7490" strokeWidth="1.8" strokeLinecap="round"/>
                                 <path d="M12 17.5V20.5M10.5 19H13.5" stroke="#0891b2" strokeWidth="2.2" strokeLinecap="round"/>
                             </svg>
                         </div>
@@ -526,6 +526,73 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             </svg>
                         </div>
                     </button>
+                </div>
+            </section>
+
+            {/* Download Mobile App Feature Banner */}
+            <section id="download-app-section" className="landing-section" style={{ paddingTop: '10px', paddingBottom: '40px' }}>
+                <div className="landing-section-container">
+                    <div className="glass-panel" style={{ 
+                        background: 'linear-gradient(135deg, rgba(15, 43, 53, 0.95), rgba(6, 182, 212, 0.85))',
+                        borderRadius: '24px',
+                        padding: '40px 32px',
+                        color: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '24px',
+                        boxShadow: '0 20px 40px rgba(6, 182, 212, 0.25)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)'
+                    }}>
+                        <div style={{ flex: '1 1 340px', maxWidth: '600px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '20px', backgroundColor: 'rgba(255, 255, 255, 0.15)', fontSize: '12px', fontWeight: '700', marginBottom: '16px', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
+                                <span>📱 OFFICIAL ANDROID APP</span>
+                                <span>•</span>
+                                <span style={{ color: '#34d399' }}>Instant Push Notifications</span>
+                            </div>
+                            <h2 style={{ fontSize: '28px', fontWeight: '800', margin: '0 0 12px 0', color: '#ffffff', lineHeight: '1.2' }}>
+                                Get {site_name || 'OMS Companion'} on Your Phone
+                            </h2>
+                            <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.88)', margin: 0, lineHeight: '1.6' }}>
+                                Stay updated on patient referral case progress, video additions, and clinical masterclasses with real-time push notifications directly on your Android mobile device.
+                            </p>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
+                            <Link 
+                                href={route('app.download')} 
+                                className="btn btn-primary"
+                                style={{ 
+                                    padding: '14px 28px', 
+                                    fontSize: '15px', 
+                                    fontWeight: '800', 
+                                    borderRadius: '12px',
+                                    backgroundColor: '#10b981',
+                                    color: '#ffffff',
+                                    boxShadow: '0 8px 20px rgba(16, 185, 129, 0.4)',
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                📱 Download App Page →
+                            </Link>
+                            <a 
+                                href="/download-apk-file" 
+                                className="btn btn-outline"
+                                style={{ 
+                                    padding: '14px 24px', 
+                                    fontSize: '15px', 
+                                    fontWeight: '700', 
+                                    borderRadius: '12px',
+                                    borderColor: 'rgba(255, 255, 255, 0.4)',
+                                    color: '#ffffff',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                }}
+                            >
+                                📥 Direct APK Download
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
 

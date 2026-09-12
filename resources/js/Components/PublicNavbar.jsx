@@ -83,6 +83,13 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                         >
                             Contact
                         </Link>
+                        <Link 
+                            href={route('app.download')} 
+                            className={`nav-link-item ${activePage === 'app_download' ? 'active-nav-item' : ''}`} 
+                            onClick={() => setMobileNavOpen(false)}
+                        >
+                            📱 Download App
+                        </Link>
                     </div>
                     
                     <div className="landing-nav-actions">

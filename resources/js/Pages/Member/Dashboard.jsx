@@ -55,6 +55,35 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                 </Link>
             </div>
 
+            {/* Download Mobile App Banner */}
+            <div className="glass-panel" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                marginTop: '16px', 
+                padding: '20px 24px', 
+                flexWrap: 'wrap', 
+                gap: '16px',
+                borderLeft: '4px solid #10b981'
+            }}>
+                <div>
+                    <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        📱 Install {site_name || 'OMS Companion'} Android App
+                    </h3>
+                    <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
+                        Get instant push notifications on your phone when your patient referral statuses are updated or new surgical videos are released.
+                    </p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                    <Link href={route('app.download')} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '14px', backgroundColor: '#10b981', border: 'none', color: '#ffffff' }}>
+                        📲 Download App Page
+                    </Link>
+                    <a href="/download-apk-file" className="btn btn-outline" style={{ padding: '10px 16px', fontSize: '14px' }}>
+                        📥 Direct APK
+                    </a>
+                </div>
+            </div>
+
             {/* Split layout: Recent Referrals & Notifications */}
             <div className="dashboard-split-grid" style={{ marginTop: '24px' }}>
                 {/* Referrals table */}
