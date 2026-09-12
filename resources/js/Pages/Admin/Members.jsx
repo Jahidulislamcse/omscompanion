@@ -481,7 +481,7 @@ export default function Members({ members = [] }) {
                         {/* Modal Header */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', marginBottom: '20px' }}>
                             <div>
-                                <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)' }}>
                                     📋 Patient Referral Records
                                 </h3>
                                 <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -503,21 +503,21 @@ export default function Members({ members = [] }) {
 
                         {/* Member Summary Stats Row */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '20px' }}>
-                            <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
+                            <div style={{ padding: '12px 16px', background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
                                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Total Referrals</span>
                                 <span style={{ fontSize: '20px', fontWeight: '900', color: 'var(--accent-teal)' }}>
                                     {(selectedMemberForReferrals.referrals || []).length} Cases
                                 </span>
                             </div>
 
-                            <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
+                            <div style={{ padding: '12px 16px', background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
                                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Completed / Active</span>
                                 <span style={{ fontSize: '20px', fontWeight: '900', color: '#10b981' }}>
                                     {(selectedMemberForReferrals.referrals || []).filter(r => r.status === 'completed' || r.status === 'under_treatment').length} Cases
                                 </span>
                             </div>
 
-                            <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
+                            <div style={{ padding: '12px 16px', background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
                                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Total Commission</span>
                                 <span style={{ fontSize: '20px', fontWeight: '900', color: 'var(--accent-gold)' }}>
                                     ${(selectedMemberForReferrals.referrals || []).reduce((acc, r) => acc + (parseFloat(r.commission_amount) || 0), 0).toFixed(2)}
@@ -542,26 +542,26 @@ export default function Members({ members = [] }) {
                                         selectedMemberForReferrals.referrals.map(ref => (
                                             <tr key={ref.id}>
                                                 <td>
-                                                    <div style={{ fontWeight: '700' }}>{ref.patient_name}</div>
+                                                    <div style={{ fontWeight: '700', color: 'var(--text-main)' }}>{ref.patient_name}</div>
                                                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>📞 {ref.phone}</div>
                                                     {ref.patient_address && (
                                                         <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>📍 {ref.patient_address}</div>
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <div style={{ fontSize: '13px', fontStyle: 'italic' }}>"{ref.medical_condition}"</div>
+                                                    <div style={{ fontSize: '13px', fontStyle: 'italic', color: 'var(--text-main)' }}>"{ref.medical_condition}"</div>
                                                     <span style={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', color: ref.urgency_level === 'critical' || ref.urgency_level === 'high' ? 'var(--color-danger)' : 'var(--text-muted)', display: 'block', marginTop: '2px' }}>
                                                         {ref.urgency_level} urgency
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <div style={{ fontSize: '12px' }}>{formatDate(ref.created_at)}</div>
+                                                    <div style={{ fontSize: '12px', color: 'var(--text-main)' }}>{formatDate(ref.created_at)}</div>
                                                 </td>
                                                 <td>
                                                     {getReferralStatusBadge(ref.status)}
                                                 </td>
                                                 <td>
-                                                    <div style={{ fontWeight: '700' }}>${parseFloat(ref.commission_amount || 0).toFixed(2)}</div>
+                                                    <div style={{ fontWeight: '700', color: 'var(--text-main)' }}>${parseFloat(ref.commission_amount || 0).toFixed(2)}</div>
                                                     <div style={{ marginTop: '2px' }}>{getCommStatusBadge(ref.commission_status)}</div>
                                                 </td>
                                             </tr>
@@ -609,7 +609,7 @@ export default function Members({ members = [] }) {
                         onClick={e => e.stopPropagation()}
                     >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '16px' }}>
-                            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800' }}>
+                            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)' }}>
                                 💼 Commission Settings
                             </h3>
                             <button 
@@ -623,8 +623,8 @@ export default function Members({ members = [] }) {
                         </div>
 
                         <form onSubmit={handleSaveCommission}>
-                            <div style={{ marginBottom: '16px', padding: '10px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                                <div style={{ fontSize: '14px', fontWeight: '700' }}>
+                            <div style={{ marginBottom: '16px', padding: '10px 12px', background: 'var(--bg-main)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                                <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-main)' }}>
                                     {selectedMemberForCommission.bds_registration_number ? `Dr. ${selectedMemberForCommission.name}` : selectedMemberForCommission.name} {selectedMemberForCommission.member_id ? `(${selectedMemberForCommission.member_id})` : ''}
                                 </div>
                                 <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
@@ -633,7 +633,7 @@ export default function Members({ members = [] }) {
                             </div>
 
                             <div className="form-group" style={{ marginBottom: '16px' }}>
-                                <label className="form-label" style={{ fontWeight: '700', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
+                                <label className="form-label" style={{ fontWeight: '700', fontSize: '13px', display: 'block', marginBottom: '6px', color: 'var(--text-main)' }}>
                                     Commission Status
                                 </label>
                                 <select 
@@ -648,7 +648,7 @@ export default function Members({ members = [] }) {
 
                             <div className="form-group" style={{ marginBottom: '20px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                                    <label className="form-label" style={{ fontWeight: '700', fontSize: '13px', margin: 0 }}>
+                                    <label className="form-label" style={{ fontWeight: '700', fontSize: '13px', margin: 0, color: 'var(--text-main)' }}>
                                         Account Details / Short Note
                                     </label>
                                     <span style={{ fontSize: '11px', color: commissionNote.length >= 90 ? 'var(--color-danger)' : 'var(--text-muted)' }}>
@@ -690,14 +690,14 @@ export default function Members({ members = [] }) {
             {/* User Image Popup Modal */}
             {selectedImageModal && (
                 <div 
-                    className="modal-backdrop" 
+                    className="modal-wrapper" 
                     style={{ 
                         position: 'fixed', 
                         top: 0, 
                         left: 0, 
                         right: 0, 
                         bottom: 0, 
-                        backgroundColor: 'rgba(0, 0, 0, 0.82)', 
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)', 
                         backdropFilter: 'blur(6px)', 
                         display: 'flex', 
                         alignItems: 'center', 
@@ -708,7 +708,7 @@ export default function Members({ members = [] }) {
                     onClick={() => setSelectedImageModal(null)}
                 >
                     <div 
-                        className="glass-panel" 
+                        className="glass-panel modal-card" 
                         style={{ 
                             maxWidth: '440px', 
                             width: '100%', 
@@ -716,7 +716,7 @@ export default function Members({ members = [] }) {
                             borderRadius: '16px', 
                             position: 'relative',
                             textAlign: 'center',
-                            boxShadow: '0 20px 30px rgba(0,0,0,0.6)',
+                            boxShadow: 'var(--shadow-glass)',
                             animation: 'fadeIn 0.2s ease-in-out'
                         }}
                         onClick={(e) => e.stopPropagation()}
@@ -728,12 +728,12 @@ export default function Members({ members = [] }) {
                                 position: 'absolute', 
                                 top: '12px', 
                                 right: '14px', 
-                                background: 'rgba(255, 255, 255, 0.1)', 
-                                border: 'none', 
+                                background: 'var(--bg-main)', 
+                                border: '1px solid var(--border-color)', 
                                 borderRadius: '50%', 
                                 width: '32px', 
                                 height: '32px', 
-                                color: 'var(--text-color, #ffffff)', 
+                                color: 'var(--text-main)', 
                                 fontSize: '16px', 
                                 cursor: 'pointer',
                                 display: 'flex',
@@ -746,17 +746,17 @@ export default function Members({ members = [] }) {
                         </button>
                         
                         <div style={{ marginBottom: '14px' }}>
-                            <h3 style={{ fontSize: '17px', fontWeight: '800', margin: '0 0 4px 0', color: 'var(--accent-teal, #0d9488)' }}>
+                            <h3 style={{ fontSize: '17px', fontWeight: '800', margin: '0 0 4px 0', color: 'var(--accent-teal)' }}>
                                 {selectedImageModal.title}
                             </h3>
                             {selectedImageModal.memberId && (
-                                <div style={{ fontSize: '12px', color: 'var(--accent-gold, #f59e0b)', fontWeight: '700' }}>
+                                <div style={{ fontSize: '12px', color: 'var(--accent-gold)', fontWeight: '700' }}>
                                     Member ID: {selectedImageModal.memberId}
                                 </div>
                             )}
                         </div>
 
-                        <div style={{ width: '100%', maxHeight: '420px', borderRadius: '12px', overflow: 'hidden', backgroundColor: 'rgba(0,0,0,0.25)', border: '1px solid var(--border-color, rgba(255,255,255,0.15))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ width: '100%', maxHeight: '420px', borderRadius: '12px', overflow: 'hidden', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <img 
                                 src={selectedImageModal.url} 
                                 alt={selectedImageModal.title} 
