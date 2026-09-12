@@ -547,7 +547,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                     }}>
                         <div style={{ flex: '1 1 340px', maxWidth: '600px' }}>
                             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '20px', backgroundColor: 'rgba(255, 255, 255, 0.15)', fontSize: '12px', fontWeight: '700', marginBottom: '16px', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
-                                <span>📱 OFFICIAL ANDROID APP</span>
+                                <span>📱 OFFICIAL MOBILE APP</span>
                                 <span>•</span>
                                 <span style={{ color: '#34d399' }}>Instant Push Notifications</span>
                             </div>
@@ -555,7 +555,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 Get {site_name || 'OMS Companion'} on Your Phone
                             </h2>
                             <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.88)', margin: 0, lineHeight: '1.6' }}>
-                                Stay updated on patient referral case progress, video additions, and clinical masterclasses with real-time push notifications directly on your Android mobile device.
+                                Stay updated on clinical announcements, surgical video uploads, and masterclass releases with real-time push notifications directly on your mobile device.
                             </p>
                         </div>
 

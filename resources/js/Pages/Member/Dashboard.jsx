@@ -68,10 +68,10 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
             }}>
                 <div>
                     <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        📱 Install {site_name || 'OMS Companion'} Android App
+                        📱 Install {site_name || 'OMS Companion'} Mobile App
                     </h3>
                     <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                        Get instant push notifications on your phone when your patient referral statuses are updated or new surgical videos are released.
+                        Get instant push notifications on your phone when clinical announcements or new surgical videos are released.
                     </p>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>

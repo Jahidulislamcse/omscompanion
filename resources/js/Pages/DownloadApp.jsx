@@ -22,7 +22,7 @@ export default function DownloadApp() {
         <div className="landing-wrapper page-colorful-theme">
             <Head>
                 <title>{`Download Mobile App - ${site_name || 'OMS COMPANION'}`}</title>
-                <meta name="description" content={`Download the official ${site_name || 'OMS Companion'} Mobile App for Android. Get instant push notifications for clinical announcements and surgical video masterclasses.`} />
+                <meta name="description" content={`Download the official ${site_name || 'OMS Companion'} Mobile App. Get instant push notifications for clinical announcements and surgical video masterclasses.`} />
             </Head>
 
             {/* Vibrant Ambient Glow Blobs */}
@@ -95,7 +95,7 @@ export default function DownloadApp() {
                                     border: '1px solid rgba(16, 185, 129, 0.3)'
                                 }}
                             >
-                                📱 Android App v1.0 &bull; 9.1 MB
+                                📱 Mobile App v1.0 &bull; 9.1 MB
                             </span>
                             <span 
                                 style={{ 
@@ -150,11 +150,11 @@ export default function DownloadApp() {
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
                                 <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
-                            <span>{downloading ? 'Downloading App...' : 'Download Android App'}</span>
+                            <span>{downloading ? 'Downloading App...' : 'Download Mobile App'}</span>
                         </a>
 
                         <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
-                            Direct Safe Download &bull; Compatible with Android 5.0+
+                            Direct Safe Download &bull; Works on Mobile Devices
                         </div>
 
                         {/* Security & Safety Badges Bar */}
@@ -211,7 +211,7 @@ export default function DownloadApp() {
                             <ul style={{ margin: 0, padding: 0, listStyle: 'none', fontSize: '13px', color: 'var(--text-muted)' }}>
                                 <li style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
                                     <span style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: 'var(--color-emerald, #10b981)', color: '#ffffff', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', flexShrink: 0 }}>1</span>
-                                    <span>Click <strong style={{ color: 'var(--text-main)' }}>Download Android App</strong> button above.</span>
+                                    <span>Click <strong style={{ color: 'var(--text-main)' }}>Download Mobile App</strong> button above.</span>
                                 </li>
                                 <li style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
                                     <span style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: 'var(--color-emerald, #10b981)', color: '#ffffff', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', flexShrink: 0 }}>2</span>
