@@ -3,19 +3,26 @@ import { Head, usePage } from '@inertiajs/react';
 import PublicNavbar from '@/Components/PublicNavbar';
 
 export default function DownloadApp() {
-    const { site_name } = usePage().props;
+    const { site_name, site_logo } = usePage().props;
     const [downloading, setDownloading] = useState(false);
+    const [logoSrc, setLogoSrc] = useState(site_logo || '/app-logo.png');
 
     const handleDownload = () => {
         setDownloading(true);
         setTimeout(() => setDownloading(false), 5000);
     };
 
+    const handleImgError = () => {
+        if (logoSrc !== '/app-logo.png') {
+            setLogoSrc('/app-logo.png');
+        }
+    };
+
     return (
         <div className="landing-wrapper page-colorful-theme">
             <Head>
                 <title>{`Download Mobile App - ${site_name || 'OMS COMPANION'}`}</title>
-                <meta name="description" content={`Download the official ${site_name || 'OMS Companion'} Mobile App for Android. Get instant push notifications for patient referrals and surgical video masterclasses.`} />
+                <meta name="description" content={`Download the official ${site_name || 'OMS Companion'} Mobile App for Android. Get instant push notifications for clinical announcements and surgical video masterclasses.`} />
             </Head>
 
             {/* Vibrant Ambient Glow Blobs */}
@@ -61,12 +68,10 @@ export default function DownloadApp() {
                                 }}
                             >
                                 <img 
-                                    src="/app-logo.png" 
+                                    src={logoSrc} 
                                     alt={`${site_name || 'OMS Companion'} App Icon`}
+                                    onError={handleImgError}
                                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                                    onError={(e) => {
-                                        e.target.style.display = 'none';
-                                    }}
                                 />
                             </div>
                             <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px', fontWeight: '600' }}>
@@ -115,7 +120,7 @@ export default function DownloadApp() {
                             {site_name || 'OMS Companion'} Mobile App
                         </h1>
                         <p style={{ fontSize: '15px', color: 'var(--text-muted)', margin: '0 0 24px 0', lineHeight: '1.6' }}>
-                            Get real-time push notifications for patient referral case progress, clinical announcements, surgical video uploads, and account updates directly on your phone.
+                            Get real-time push notifications for clinical announcements, surgical video uploads, masterclass releases, and account updates directly on your phone.
                         </p>
 
                         {/* Primary Action Button */}
@@ -173,10 +178,10 @@ export default function DownloadApp() {
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
                                 <div style={{ padding: '12px 14px', background: 'var(--bg-main)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                                     <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--accent-teal)', marginBottom: '4px' }}>
-                                        🔔 Instant Referral Notifications
+                                        🔔 Instant Clinical Alerts
                                     </div>
                                     <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
-                                        Get real-time push alerts as soon as your patient referral status updates to contacted, under treatment, or completed.
+                                        Get real-time push alerts as soon as new clinical announcements, surgical masterclasses, or account approvals are published.
                                     </div>
                                 </div>
 

@@ -358,6 +358,21 @@ Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+Route::get('/app-logo.png', function () {
+    $possiblePaths = [
+        public_path('app-logo.png'),
+        storage_path('app logo.png'),
+        base_path('storage/app logo.png'),
+        public_path('storage/logos/site_logo.png'),
+    ];
+    foreach ($possiblePaths as $path) {
+        if (file_exists($path)) {
+            return response()->file($path, ['Content-Type' => 'image/png']);
+        }
+    }
+    abort(404);
+});
+
 Route::get('/download-app', function () {
     $settings = LandingSetting::all()->pluck('value', 'key')->toArray();
     return Inertia::render('DownloadApp', [
