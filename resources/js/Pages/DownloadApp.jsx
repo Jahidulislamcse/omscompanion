@@ -36,7 +36,7 @@ export default function DownloadApp() {
 
             {/* Main Download App Section */}
             <section className="landing-section" style={{ minHeight: '85vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
-                <div className="landing-section-container" style={{ maxWidth: '640px', width: '100%' }}>
+                <div className="landing-section-container" style={{ maxWidth: '860px', width: '100%' }}>
                     
                     <div 
                         className="glass-panel" 
@@ -179,27 +179,36 @@ export default function DownloadApp() {
                             </div>
                         </div>
 
-                        {/* Why Use the App (Usefulness Highlights) */}
+                        {/* Why Use the App (3 Benefits on Single Row) */}
                         <div style={{ marginTop: '28px', textAlign: 'left' }}>
                             <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 14px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
                                 🌟 Why Install the Mobile App?
                             </h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
-                                <div style={{ padding: '12px 14px', background: 'var(--bg-main)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                                    <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--accent-teal)', marginBottom: '4px' }}>
+                            <div className="download-benefits-grid">
+                                <div style={{ padding: '14px 16px', background: 'var(--bg-main)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--accent-teal)', marginBottom: '6px' }}>
                                         🔔 Instant Clinical Alerts
                                     </div>
-                                    <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                                    <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.45' }}>
                                         Get real-time push alerts as soon as new clinical announcements, surgical masterclasses, or account approvals are published.
                                     </div>
                                 </div>
 
-                                <div style={{ padding: '12px 14px', background: 'var(--bg-main)', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-                                    <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--accent-gold)', marginBottom: '4px' }}>
+                                <div style={{ padding: '14px 16px', background: 'var(--bg-main)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--accent-gold)', marginBottom: '6px' }}>
                                         🎥 Surgical Masterclass Alerts
                                     </div>
-                                    <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                                    <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.45' }}>
                                         Be notified immediately when new clinical impaction, surgical videos, or guidelines are published.
+                                    </div>
+                                </div>
+
+                                <div style={{ padding: '14px 16px', background: 'var(--bg-main)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--color-emerald, #10b981)', marginBottom: '6px' }}>
+                                        ⚡ Easy Access
+                                    </div>
+                                    <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.45' }}>
+                                        Instantly launch and access clinical videos, surgical guidelines, and referral tracking directly from your mobile home screen.
                                     </div>
                                 </div>
                             </div>

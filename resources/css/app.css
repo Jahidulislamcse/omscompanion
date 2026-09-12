@@ -4069,3 +4069,16 @@ select.form-control option {
     transform: translateY(-1px) scale(0.99);
 }
 
+.download-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+@media (max-width: 768px) {
+    .download-benefits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
