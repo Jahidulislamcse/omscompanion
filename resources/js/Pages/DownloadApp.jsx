@@ -208,7 +208,7 @@ export default function DownloadApp() {
                                         ⚡ Easy Access
                                     </div>
                                     <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.45' }}>
-                                        Instantly launch and access clinical videos, surgical guidelines, and referral tracking directly from your mobile home screen.
+                                        Open directly with one tap from your phone screen — no need to search for the site or open web browsers.
                                     </div>
                                 </div>
                             </div>
