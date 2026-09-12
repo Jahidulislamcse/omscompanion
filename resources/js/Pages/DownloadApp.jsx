@@ -50,19 +50,19 @@ export default function DownloadApp() {
                             border: '1px solid var(--border-color)'
                         }}
                     >
-                        {/* Genuine App Icon Preview */}
+                        {/* Genuine App Icon */}
                         <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
                             <div 
                                 style={{ 
-                                    width: '90px', 
-                                    height: '90px', 
-                                    borderRadius: '22px', 
+                                    width: '96px', 
+                                    height: '96px', 
+                                    borderRadius: '24px', 
                                     backgroundColor: 'var(--bg-sidebar, #0f2b35)', 
                                     border: '2px solid var(--accent-teal, #0d9488)', 
                                     display: 'flex', 
                                     alignItems: 'center', 
                                     justifyContent: 'center',
-                                    boxShadow: '0 12px 28px rgba(13, 148, 136, 0.3)',
+                                    boxShadow: '0 14px 32px rgba(13, 148, 136, 0.35)',
                                     overflow: 'hidden',
                                     padding: '8px'
                                 }}
@@ -74,23 +74,20 @@ export default function DownloadApp() {
                                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                                 />
                             </div>
-                            <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px', fontWeight: '600' }}>
-                                Official App Icon Preview
-                            </span>
                         </div>
 
-                        {/* Version & Specs Badge */}
-                        <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        {/* Version & Specs Badges */}
+                        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
                             <span 
                                 style={{ 
                                     display: 'inline-flex', 
                                     alignItems: 'center',
                                     gap: '6px',
-                                    padding: '4px 14px', 
+                                    padding: '6px 16px', 
                                     borderRadius: '20px', 
                                     backgroundColor: 'var(--color-emerald-light, rgba(16, 185, 129, 0.12))', 
                                     color: 'var(--color-emerald, #10b981)', 
-                                    fontSize: '12.5px', 
+                                    fontSize: '13px', 
                                     fontWeight: '700',
                                     border: '1px solid rgba(16, 185, 129, 0.3)'
                                 }}
@@ -102,11 +99,11 @@ export default function DownloadApp() {
                                     display: 'inline-flex', 
                                     alignItems: 'center',
                                     gap: '6px',
-                                    padding: '4px 14px', 
+                                    padding: '6px 16px', 
                                     borderRadius: '20px', 
                                     backgroundColor: 'var(--color-cyan-light, rgba(6, 182, 212, 0.12))', 
                                     color: 'var(--color-cyan, #06b6d4)', 
-                                    fontSize: '12.5px', 
+                                    fontSize: '13px', 
                                     fontWeight: '700',
                                     border: '1px solid rgba(6, 182, 212, 0.3)'
                                 }}
@@ -115,47 +112,59 @@ export default function DownloadApp() {
                             </span>
                         </div>
 
-                        {/* Title & Headline */}
-                        <h1 style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 10px 0', lineHeight: '1.3' }}>
-                            {site_name || 'OMS Companion'} Mobile App
-                        </h1>
-                        <p style={{ fontSize: '15px', color: 'var(--text-muted)', margin: '0 0 24px 0', lineHeight: '1.6' }}>
-                            Get real-time push notifications for clinical announcements, surgical video uploads, masterclass releases, and account updates directly on your phone.
-                        </p>
-
-                        {/* Primary Action Button */}
+                        {/* Primary Action Button - Attractive & Glossy */}
                         <a
                             href="/download-apk-file"
                             onClick={handleDownload}
-                            className="btn btn-primary btn-glow"
+                            className="download-app-glossy-btn"
                             style={{
-                                display: 'flex',
+                                display: 'inline-flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '12px',
+                                gap: '14px',
                                 width: '100%',
-                                padding: '16px 24px',
-                                borderRadius: '14px',
-                                backgroundColor: 'var(--color-emerald, #10b981)',
+                                padding: '18px 28px',
+                                borderRadius: '16px',
+                                background: 'linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #059669 100%)',
                                 color: '#ffffff',
                                 fontSize: '18px',
-                                fontWeight: '800',
+                                fontWeight: '900',
                                 textDecoration: 'none',
-                                boxShadow: '0 12px 24px -6px rgba(16, 185, 129, 0.4)',
-                                transition: 'var(--transition-smooth)',
-                                border: 'none',
-                                boxSizing: 'border-box'
+                                boxShadow: '0 14px 32px -4px rgba(13, 148, 136, 0.5), 0 0 20px rgba(6, 182, 212, 0.35)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                                boxSizing: 'border-box',
+                                cursor: 'pointer',
+                                position: 'relative',
+                                overflow: 'hidden'
                             }}
                         >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
-                                <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                            <span>{downloading ? 'Downloading App...' : 'Download Mobile App'}</span>
+                            <div 
+                                style={{ 
+                                    width: '42px', 
+                                    height: '42px', 
+                                    borderRadius: '12px', 
+                                    background: 'rgba(255, 255, 255, 0.22)', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    backdropFilter: 'blur(4px)',
+                                    flexShrink: 0 
+                                }}
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', lineHeight: '1.25' }}>
+                                <span style={{ fontSize: '17px', fontWeight: '900', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                                    {downloading ? 'Downloading App...' : 'Download Mobile App'}
+                                </span>
+                                <span style={{ fontSize: '11px', opacity: 0.95, fontWeight: '600', letterSpacing: '0.2px' }}>
+                                    Instant Direct Download &bull; 9.1 MB
+                                </span>
+                            </div>
                         </a>
-
-                        <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
-                            Direct Safe Download &bull; Works on Mobile Devices
-                        </div>
 
                         {/* Security & Safety Badges Bar */}
                         <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '20px', padding: '12px', background: 'var(--bg-main)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
