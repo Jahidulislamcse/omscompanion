@@ -79,7 +79,7 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                         📲 Download App Page
                     </Link>
                     <a href="/download-apk-file" className="btn btn-outline" style={{ padding: '10px 16px', fontSize: '14px' }}>
-                        📥 Direct APK
+                        📥 Direct App Download
                     </a>
                 </div>
             </div>

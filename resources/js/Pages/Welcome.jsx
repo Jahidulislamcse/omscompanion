@@ -589,7 +589,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                     backgroundColor: 'rgba(255, 255, 255, 0.1)'
                                 }}
                             >
-                                📥 Direct APK Download
+                                📥 Direct App Download
                             </a>
                         </div>
                     </div>
