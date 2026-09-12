@@ -88,7 +88,7 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                             className={`nav-link-item ${activePage === 'app_download' ? 'active-nav-item' : ''}`} 
                             onClick={() => setMobileNavOpen(false)}
                         >
-                            📱 Download App
+                            📱 Install Mobile App
                         </Link>
                     </div>
                     

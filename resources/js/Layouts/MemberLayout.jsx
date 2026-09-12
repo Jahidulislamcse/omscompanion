@@ -103,7 +103,7 @@ export default function MemberLayout({ children, title }) {
                                     className={`sidebar-link ${window.location.pathname === '/download-app' ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
                                 >
-                                    <span>📱</span> Download App
+                                    <span>📱</span> Install Mobile App
                                 </Link>
                             </li>
                             <li>

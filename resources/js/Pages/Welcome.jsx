@@ -563,19 +563,17 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
                             <Link 
                                 href={route('app.download')} 
-                                className="btn btn-primary"
+                                className="btn btn-primary btn-glow"
                                 style={{ 
                                     padding: '14px 28px', 
                                     fontSize: '15px', 
                                     fontWeight: '800', 
-                                    borderRadius: '12px',
-                                    backgroundColor: '#10b981',
-                                    color: '#ffffff',
-                                    boxShadow: '0 8px 20px rgba(16, 185, 129, 0.4)',
+                                    backgroundColor: 'var(--color-emerald, #10b981)',
+                                    borderColor: 'var(--color-emerald, #10b981)',
                                     textDecoration: 'none'
                                 }}
                             >
-                                📱 Download App Page →
+                                📱 Install Mobile App →
                             </Link>
                             <a 
                                 href="/download-apk-file" 

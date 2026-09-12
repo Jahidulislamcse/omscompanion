@@ -21,8 +21,8 @@ export default function DownloadApp() {
     return (
         <div className="landing-wrapper page-colorful-theme">
             <Head>
-                <title>{`Download Mobile App - ${site_name || 'OMS COMPANION'}`}</title>
-                <meta name="description" content={`Download the official ${site_name || 'OMS Companion'} Mobile App. Get instant push notifications for clinical announcements and surgical video masterclasses.`} />
+                <title>{`Install Mobile App - ${site_name || 'OMS COMPANION'}`}</title>
+                <meta name="description" content={`Install the official ${site_name || 'OMS Companion'} Mobile App. Get instant push notifications for clinical announcements and surgical video masterclasses.`} />
             </Head>
 
             {/* Vibrant Ambient Glow Blobs */}
@@ -158,7 +158,7 @@ export default function DownloadApp() {
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', lineHeight: '1.25' }}>
                                 <span style={{ fontSize: '17px', fontWeight: '900', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
-                                    {downloading ? 'Downloading App...' : 'Download Mobile App'}
+                                    {downloading ? 'Installing App...' : 'INSTALL MOBILE APP'}
                                 </span>
                                 <span style={{ fontSize: '11px', opacity: 0.95, fontWeight: '600', letterSpacing: '0.2px' }}>
                                     Instant Direct Download &bull; 9.1 MB
@@ -229,7 +229,7 @@ export default function DownloadApp() {
                             <ul style={{ margin: 0, padding: 0, listStyle: 'none', fontSize: '13px', color: 'var(--text-muted)' }}>
                                 <li style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
                                     <span style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: 'var(--color-emerald, #10b981)', color: '#ffffff', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', flexShrink: 0 }}>1</span>
-                                    <span>Click <strong style={{ color: 'var(--text-main)' }}>Download Mobile App</strong> button above.</span>
+                                    <span>Click <strong style={{ color: 'var(--text-main)' }}>Install Mobile App</strong> button above.</span>
                                 </li>
                                 <li style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
                                     <span style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: 'var(--color-emerald, #10b981)', color: '#ffffff', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', flexShrink: 0 }}>2</span>

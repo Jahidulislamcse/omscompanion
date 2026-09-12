@@ -126,6 +126,15 @@ export default function AdminLayout({ children, title }) {
                             </li>
                             <li>
                                 <Link 
+                                    href={route('app.download')} 
+                                    className={`sidebar-link ${window.location.pathname === '/download-app' ? 'active' : ''}`}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
+                                    <span>📱</span> Install Mobile App
+                                </Link>
+                            </li>
+                            <li>
+                                <Link 
                                     href={route('home')} 
                                     className={`sidebar-link ${window.location.pathname === '/' ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
