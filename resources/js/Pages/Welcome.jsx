@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, Head, usePage, useForm, router } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import PublicNavbar from '@/Components/PublicNavbar';
+import FloatingAppInstallWidget from '@/Components/FloatingAppInstallWidget';
 
 export function getYouTubeId(url) {
     if (!url) return '';
@@ -1749,6 +1750,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                     ↑
                 </button>
             )}
+
+            {/* Floating Mobile App Install Icon */}
+            <FloatingAppInstallWidget />
         </div>
     );
 }
