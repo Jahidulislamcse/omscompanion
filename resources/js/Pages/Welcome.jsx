@@ -530,70 +530,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                 </div>
             </section>
 
-            {/* Download Mobile App Feature Banner */}
-            <section id="download-app-section" className="landing-section" style={{ paddingTop: '10px', paddingBottom: '40px' }}>
-                <div className="landing-section-container">
-                    <div className="glass-panel" style={{ 
-                        background: 'linear-gradient(135deg, rgba(15, 43, 53, 0.95), rgba(6, 182, 212, 0.85))',
-                        borderRadius: '24px',
-                        padding: '40px 32px',
-                        color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        gap: '24px',
-                        boxShadow: '0 20px 40px rgba(6, 182, 212, 0.25)',
-                        border: '1px solid rgba(255, 255, 255, 0.15)'
-                    }}>
-                        <div style={{ flex: '1 1 340px', maxWidth: '600px' }}>
-                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '20px', backgroundColor: 'rgba(255, 255, 255, 0.15)', fontSize: '12px', fontWeight: '700', marginBottom: '16px', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
-                                <span>📱 OFFICIAL MOBILE APP</span>
-                                <span>•</span>
-                                <span style={{ color: '#34d399' }}>Instant Push Notifications</span>
-                            </div>
-                            <h2 style={{ fontSize: '28px', fontWeight: '800', margin: '0 0 12px 0', color: '#ffffff', lineHeight: '1.2' }}>
-                                Get {site_name || 'OMS Companion'} on Your Phone
-                            </h2>
-                            <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.88)', margin: 0, lineHeight: '1.6' }}>
-                                Stay updated on clinical announcements, surgical video uploads, and masterclass releases with real-time push notifications directly on your mobile device.
-                            </p>
-                        </div>
 
-                        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
-                            <Link 
-                                href={route('app.download')} 
-                                className="btn btn-primary btn-glow"
-                                style={{ 
-                                    padding: '14px 28px', 
-                                    fontSize: '15px', 
-                                    fontWeight: '800', 
-                                    backgroundColor: 'var(--color-emerald, #10b981)',
-                                    borderColor: 'var(--color-emerald, #10b981)',
-                                    textDecoration: 'none'
-                                }}
-                            >
-                                📱 Install Mobile App →
-                            </Link>
-                            <a 
-                                href="/download-apk-file" 
-                                className="btn btn-outline"
-                                style={{ 
-                                    padding: '14px 24px', 
-                                    fontSize: '15px', 
-                                    fontWeight: '700', 
-                                    borderRadius: '12px',
-                                    borderColor: 'rgba(255, 255, 255, 0.4)',
-                                    color: '#ffffff',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                                }}
-                            >
-                                📥 Direct App Download
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             {/* Benefits of Membership Section */}
             <section id="benefits" className="landing-section benefits-section">
