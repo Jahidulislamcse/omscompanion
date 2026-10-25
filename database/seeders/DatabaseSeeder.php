@@ -15,13 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@dentistchamber.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('adminpassword'),
-            'raw_password' => 'adminpassword',
-            'role' => 'admin',
-            'status' => 'approved',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@dentistchamber.com'],
+            [
+                'name' => 'Admin User',
+                'phone' => '01700000000',
+                'password' => \Illuminate\Support\Facades\Hash::make('adminpassword'),
+                'raw_password' => 'adminpassword',
+                'role' => 'admin',
+                'status' => 'approved',
+            ]
+        );
     }
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, Head, usePage, useForm, router } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import PublicNavbar from '@/Components/PublicNavbar';
@@ -11,7 +11,7 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, onLearnMoreClick }) {
+function CategoryVideoGridColumn({ categoryTitle, videos = [], onVideoClick, onLearnMoreClick, theme = 'cyan' }) {
     const categoryVideos = useMemo(() => {
         if (!videos || videos.length === 0) return [];
 
@@ -28,6 +28,8 @@ function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, o
                 matches = videos.filter(v => 
                     (v.title || '').toLowerCase().includes('surgical') || 
                     (v.description || '').toLowerCase().includes('surgical') ||
+                    (v.title || '').toLowerCase().includes('impaction') ||
+                    (v.title || '').toLowerCase().includes('bone') ||
                     (v.title || '').toLowerCase().includes('airplane') ||
                     (v.title || '').toLowerCase().includes('molar')
                 );
@@ -35,81 +37,93 @@ function CategoryAutoRollingColumn({ categoryTitle, videos = [], onVideoClick, o
                 matches = videos.filter(v => 
                     (v.title || '').toLowerCase().includes('clinical') || 
                     (v.description || '').toLowerCase().includes('clinical') ||
+                    (v.title || '').toLowerCase().includes('lecture') ||
+                    (v.title || '').toLowerCase().includes('anesthesia') ||
                     (v.title || '').toLowerCase().includes('imperial') ||
-                    (v.title || '').toLowerCase().includes('lecture')
+                    (v.title || '').toLowerCase().includes('tips')
                 );
             }
         }
 
-        return matches.length > 0 ? matches : videos;
+        const list = matches.length > 0 ? matches : videos;
+        if (list.length === 0) return [];
+
+        // Ensure exactly 4 videos are displayed in the 2x2 grid
+        let result = [...list];
+        let i = 0;
+        while (result.length < 4) {
+            result.push({
+                ...list[i % list.length],
+                id: `pad-${categoryTitle}-${i}-${result.length}`
+            });
+            i++;
+        }
+        return result.slice(0, 4);
     }, [videos, categoryTitle]);
-
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    useEffect(() => {
-        if (categoryVideos.length <= 1) return;
-        const interval = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % categoryVideos.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [categoryVideos]);
 
     if (categoryVideos.length === 0) return null;
 
-    const currentVid = categoryVideos[currentIndex % categoryVideos.length];
-    const ytId = getYouTubeId(currentVid.video_path);
+    const isEmerald = theme === 'emerald';
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <h3 className="category-column-title">{categoryTitle}</h3>
-
-            <div className="rolling-video-card" style={{ width: '100%', cursor: 'pointer' }} onClick={() => onVideoClick(currentVid)}>
-                {ytId ? (
-                    <img 
-                        src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
-                        alt={currentVid.title} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} 
-                    />
-                ) : (
-                    <div style={{ width: '100%', height: '100%', background: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', textAlign: 'center' }}>
-                        <span style={{ color: '#fff', fontSize: '15px', fontWeight: 'bold' }}>{currentVid.title}</span>
-                    </div>
-                )}
-
-                <div className="thumb-overlay">
-                    <div className="play-button-glow golden-play-button">
-                        <span className="play-icon">▶</span>
-                    </div>
-                    <span className="play-label" style={{ fontWeight: '800', letterSpacing: '0.5px', color: '#ffffff' }}>WATCH VIDEO</span>
-                </div>
-
-                <span className="video-duration" style={{ position: 'absolute', bottom: '12px', right: '12px', background: 'rgba(0,0,0,0.85)', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold', color: '#ffffff' }}>
-                    Preview
+        <div className={`category-column-card ${isEmerald ? 'col-theme-emerald' : 'col-theme-cyan'}`}>
+            <div className="category-card-header">
+                <span className="category-pill-badge">
+                    <span className="category-badge-dot"></span>
+                    <span>{categoryTitle}</span>
                 </span>
             </div>
 
-            {categoryVideos.length > 1 && (
-                <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
-                    {categoryVideos.map((_, idx) => (
-                        <span 
-                            key={idx}
-                            onClick={() => setCurrentIndex(idx)}
-                            style={{
-                                width: idx === currentIndex ? '20px' : '8px',
-                                height: '8px',
-                                borderRadius: '4px',
-                                backgroundColor: idx === currentIndex ? '#0d9488' : 'rgba(15, 23, 42, 0.25)',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s ease'
-                            }}
-                        />
-                    ))}
-                </div>
-            )}
+            <div className="category-videos-2x2-grid">
+                {categoryVideos.map((vid, idx) => {
+                    const ytId = getYouTubeId(vid.video_path);
+                    return (
+                        <div 
+                            key={vid.id || idx}
+                            className="video-grid-item-card"
+                            onClick={() => onVideoClick(vid)}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            <div className="video-thumb-container">
+                                {ytId ? (
+                                    <img 
+                                        src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} 
+                                        alt={vid.title} 
+                                        className="video-grid-thumb"
+                                        loading="lazy"
+                                    />
+                                ) : (
+                                    <div className="video-fallback-thumb">
+                                        <span>{vid.title}</span>
+                                    </div>
+                                )}
 
-            <div style={{ marginTop: '18px', textAlign: 'center' }}>
+                                <div className="video-thumb-overlay">
+                                    <div className="mini-play-glow">
+                                        <span className="play-icon">▶</span>
+                                    </div>
+                                    <span className="play-hover-label">WATCH VIDEO</span>
+                                </div>
+
+                                <span className="video-grid-duration">
+                                    {vid.duration ? `${Math.floor(vid.duration / 60)}:${String(vid.duration % 60).padStart(2, '0')}` : 'Preview'}
+                                </span>
+                            </div>
+
+                            <div className="video-grid-meta">
+                                <h4 className="video-grid-item-title" title={vid.title}>
+                                    {vid.title}
+                                </h4>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div style={{ marginTop: 'auto', textAlign: 'center', paddingTop: '8px' }}>
                 <button 
-                    onClick={() => onLearnMoreClick(currentVid)}
+                    onClick={() => onLearnMoreClick(categoryVideos[0])}
                     className="learn-more-btn"
                 >
                     <span>LEARN MORE</span>
@@ -130,6 +144,34 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     const [activeVideo, setActiveVideo] = useState(null);
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | 'unapproved' | null
     const [videoFilter, setVideoFilter] = useState('all');
+
+    // Mobile Horizontal Carousel for Benefits Section
+    const benefitsGridRef = useRef(null);
+    const [activeBenefitIndex, setActiveBenefitIndex] = useState(0);
+
+    const handleBenefitsScroll = () => {
+        const el = benefitsGridRef.current;
+        if (!el) return;
+        const scrollLeft = el.scrollLeft;
+        const firstCard = el.firstElementChild;
+        if (!firstCard) return;
+        const cardWidth = firstCard.offsetWidth + 16;
+        const index = Math.round(scrollLeft / cardWidth);
+        setActiveBenefitIndex(Math.min(Math.max(index, 0), 6));
+    };
+
+    const scrollToBenefit = (index) => {
+        const el = benefitsGridRef.current;
+        if (!el || !el.children[index]) return;
+        const target = el.children[index];
+        const cardLeft = target.offsetLeft - el.offsetLeft;
+        const centerOffset = (el.clientWidth - target.offsetWidth) / 2;
+        el.scrollTo({
+            left: Math.max(0, cardLeft - centerOffset),
+            behavior: 'smooth'
+        });
+        setActiveBenefitIndex(index);
+    };
 
     // Referral System Modal State
     const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -500,172 +542,6 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                 )}
             </section>
 
-            {/* ONLY A BIG REFERRAL BUTTON WITH BUMP ANIMATION */}
-            <section id="referral-system" className="landing-section" style={{ paddingTop: '36px', paddingBottom: '36px', textAlign: 'center' }}>
-                <div className="landing-section-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <button 
-                        type="button" 
-                        onClick={handleReferralClick}
-                        className="refer-patient-glossy-btn-large"
-                        aria-label="Refer Patient"
-                    >
-                        <div className="refer-patient-icon-circle">
-                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="4" y="4" width="16" height="17" rx="2" fill="#0891b2" fillOpacity="0.12" stroke="#0e7490" strokeWidth="2"/>
-                                <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
-                                <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
-                                <circle cx="12" cy="10.5" r="2" fill="#0e7490"/>
-                                <path d="M8.5 15C8.5 13.5 10 13 12 13C14 13 15.5 15" stroke="#0e7490" strokeWidth="1.8" strokeLinecap="round"/>
-                                <path d="M12 17.5V20.5M10.5 19H13.5" stroke="#0891b2" strokeWidth="2.2" strokeLinecap="round"/>
-                            </svg>
-                        </div>
-                        <span className="refer-patient-text">Refer Patient</span>
-                        <div className="refer-patient-arrow-circle">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="4" y1="12" x2="20" y2="12" />
-                                <polyline points="13 5 20 12 13 19" />
-                            </svg>
-                        </div>
-                    </button>
-                </div>
-            </section>
-
-
-
-            {/* Benefits of Membership Section */}
-            <section id="benefits" className="landing-section benefits-section">
-                <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <div className="outline-pill-wrapper">
-                            <span className="outline-pill-badge">
-                                Member Advantages
-                            </span>
-                        </div>
-                        <h2 className="landing-section-title">Benefit of Membership</h2>
-                        <p className="landing-section-subtitle">
-                            Explore how joining {site_name || 'OMS COMPANION'} empowers BDS Doctors with surgical video archives, online consultations, transparent management tracking, and professional Learning.
-                        </p>
-                    </div>
-
-                    <div className="benefits-grid">
-                        {/* Benefit 1 */}
-                        <div className="glass-panel benefit-card card-glow-cyan">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">🎥</div>
-                                    <span className="benefit-tag">Surgical Archive</span>
-                                </div>
-                                <h3 className="benefit-title">Free access to surgical reference videos</h3>
-                            </div>
-                            <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                View Archive →
-                            </Link>
-                        </div>
-
-                        {/* Benefit 2 */}
-                        <div className="glass-panel benefit-card card-glow-emerald">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">📈</div>
-                                    <span className="benefit-tag">Clinical Expansion</span>
-                                </div>
-                                <h3 className="benefit-title">Improve your range of treatments</h3>
-                            </div>
-                            <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                View Archive →
-                            </Link>
-                        </div>
-
-                        {/* Benefit 3 */}
-                        <div className="glass-panel benefit-card card-glow-gold">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">💬</div>
-                                    <span className="benefit-tag">WhatsApp Support</span>
-                                </div>
-                                <h3 className="benefit-title">Online consultation / Expert opinion</h3>
-                            </div>
-                            <a 
-                                href={`https://wa.me/${(getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000'}?text=${encodeURIComponent('Hello OMSCOMPANION! I would like an Online consultation / Expert opinion.')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="benefit-action-btn btn-whatsapp"
-                            >
-                                WhatsApp Chat 📲
-                            </a>
-                        </div>
-
-                        {/* Benefit 4 */}
-                        <div className="glass-panel benefit-card card-glow-indigo">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">🛡️</div>
-                                    <span className="benefit-tag">Case Tracking</span>
-                                </div>
-                                <h3 className="benefit-title">Don’t lose your patient through referral</h3>
-                            </div>
-                            <button 
-                                type="button" 
-                                onClick={handleReferralClick} 
-                                className="benefit-action-btn btn-primary"
-                                style={{ cursor: 'pointer', border: 'none' }}
-                            >
-                                Refer a Patient 📋
-                            </button>
-                        </div>
-
-                        {/* Benefit 5 */}
-                        <div className="glass-panel benefit-card card-glow-rose">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">🎓</div>
-                                    <span className="benefit-tag">Training & News</span>
-                                </div>
-                                <h3 className="benefit-title">Improve clinical skills / Professional training</h3>
-                            </div>
-                            <a href="#news" className="benefit-action-btn btn-rose-glow">
-                                News & Training 📰
-                            </a>
-                        </div>
-
-                        {/* Benefit 6 */}
-                        <div className="glass-panel benefit-card card-glow-amber">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">🩺</div>
-                                    <span className="benefit-tag">Complex Cases</span>
-                                </div>
-                                <h3 className="benefit-title">Manage more co-morbid patients</h3>
-                            </div>
-                            <Link href={route('videos.public')} className="benefit-action-btn btn-primary">
-                                View Archive →
-                            </Link>
-                        </div>
-
-                        {/* Benefit 7 */}
-                        <div className="glass-panel benefit-card card-glow-cyan">
-                            <div>
-                                <div className="benefit-card-header">
-                                    <div className="benefit-icon-wrapper">🤝</div>
-                                    <span className="benefit-tag">Multidisciplinary Team</span>
-                                </div>
-                                <h3 className="benefit-title">Participate in Maxillofacial surgery cases as a team</h3>
-                            </div>
-                            <button 
-                                type="button" 
-                                onClick={handleReferralClick} 
-                                className="benefit-action-btn btn-primary"
-                                style={{ cursor: 'pointer', border: 'none' }}
-                            >
-                                Refer a Patient 📋
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
-
             {/* Videos Section */}
             <section id="free-videos" className="landing-section">
                 <div className="landing-section-container">
@@ -687,20 +563,307 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                     {/* Two Categories Side-by-Side Grid */}
                     <div className="masterclasses-two-column-grid">
                         {/* Category 1 Column */}
-                        <CategoryAutoRollingColumn 
+                        <CategoryVideoGridColumn 
                             categoryTitle="Surgical approaches" 
+                            theme="cyan"
                             videos={freeVideos} 
                             onVideoClick={handleVideoClick} 
                             onLearnMoreClick={handleLearnMoreClick}
                         />
 
                         {/* Category 2 Column */}
-                        <CategoryAutoRollingColumn 
+                        <CategoryVideoGridColumn 
                             categoryTitle="Clinical lecture/ tips tricks" 
+                            theme="emerald"
                             videos={freeVideos} 
                             onVideoClick={handleVideoClick} 
                             onLearnMoreClick={handleLearnMoreClick}
                         />
+                    </div>
+                </div>
+            </section>
+
+            {/* Benefits of Membership Section */}
+            <section id="benefits" className="landing-section benefits-section">
+                <div className="landing-section-container">
+                    <div className="landing-section-header">
+                        <div className="benefits-header-pill">
+                            <span className="pulse-dot"></span>
+                            <span className="pill-text">MEMBER PRIVILEGES & CLINICAL HUB</span>
+                        </div>
+                        <h2 className="landing-section-title">
+                            Benefit of Membership with <span className="title-gradient-brand">{site_name || 'OMS COMPANION'}</span>
+                        </h2>
+                        <p className="landing-section-subtitle">
+                            Empowering BDS Practitioners with masterclass surgical walkthroughs, live specialist WhatsApp desk, zero-loss patient tracking, and collaborative maxillofacial care.
+                        </p>
+                        <div className="benefits-trust-badges">
+                            <span className="trust-badge-item">⚡ Live Surgeon Consultation Desk</span>
+                            <span className="trust-badge-dot">•</span>
+                            <span className="trust-badge-item">🛡️ Zero-Loss Patient Referral Log</span>
+                            <span className="trust-badge-dot">•</span>
+                            <span className="trust-badge-item">🎥 100+ HD Masterclass Streams</span>
+                        </div>
+
+                        {/* Mobile Swipe Hint Badge */}
+                        <div className="benefits-mobile-scroll-hint">
+                            <span className="hint-hand-bounce">👉</span>
+                            <span>Swipe cards to explore all <strong>7 benefits</strong></span>
+                            <span className="hint-pill-counter">{activeBenefitIndex + 1}/7</span>
+                        </div>
+                    </div>
+
+                    <div 
+                        className="benefits-grid"
+                        ref={benefitsGridRef}
+                        onScroll={handleBenefitsScroll}
+                    >
+                        {/* Benefit 1 */}
+                        <div className="glass-panel benefit-card-premium theme-cyan">
+                            <span className="benefit-watermark-num">01</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <polygon points="23 7 16 12 23 17 23 7" />
+                                            <rect x="1" y="5" width="15" height="14" rx="3" ry="3" />
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>🎥</span> Surgical Archive
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Free Access to Surgical Videos</h3>
+                                <p className="benefit-card-desc">
+                                    High-definition procedural walkthroughs, impaction techniques, and clinical reference cases.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>100+ Masterclass Streams</span>
+                                </div>
+                            </div>
+                            <Link href={route('videos.public')} className="benefit-card-btn">
+                                <span>View Archive</span>
+                                <span className="btn-arrow-icon">→</span>
+                            </Link>
+                        </div>
+
+                        {/* Benefit 2 */}
+                        <div className="glass-panel benefit-card-premium theme-emerald">
+                            <span className="benefit-watermark-num">02</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                            <polyline points="17 6 23 6 23 12" />
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>📈</span> Clinical Expansion
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Improve Your Range of Treatments</h3>
+                                <p className="benefit-card-desc">
+                                    Broaden minor surgical skills, diagnostic precision, and chairside procedural confidence.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>Chairside Skills Growth</span>
+                                </div>
+                            </div>
+                            <Link href={route('videos.public')} className="benefit-card-btn">
+                                <span>View Archive</span>
+                                <span className="btn-arrow-icon">→</span>
+                            </Link>
+                        </div>
+
+                        {/* Benefit 3 */}
+                        <div className="glass-panel benefit-card-premium theme-whatsapp">
+                            <span className="benefit-watermark-num">03</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/>
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>💬</span> WhatsApp Support
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Online Consultation & Expert Opinion</h3>
+                                <p className="benefit-card-desc">
+                                    Direct real-time specialist backing and case discussions via our dedicated WhatsApp channel.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>&lt; 15 Min Surgeon Response</span>
+                                </div>
+                            </div>
+                            <a 
+                                href={`https://wa.me/${(getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000'}?text=${encodeURIComponent('Hello OMSCOMPANION! I would like an Online consultation / Expert opinion.')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="benefit-card-btn"
+                            >
+                                <span>WhatsApp Chat</span>
+                                <span className="btn-arrow-icon">💬</span>
+                            </a>
+                        </div>
+
+                        {/* Benefit 4 */}
+                        <div className="glass-panel benefit-card-premium theme-indigo">
+                            <span className="benefit-watermark-num">04</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                            <polyline points="9 12 11 14 15 10" />
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>🛡️</span> Case Tracking
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Don’t Lose Your Patient</h3>
+                                <p className="benefit-card-desc">
+                                    End-to-end transparent referral logs and milestone tracking for every referred patient.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>Zero Patient Loss Guarantee</span>
+                                </div>
+                            </div>
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick} 
+                                className="benefit-card-btn"
+                            >
+                                <span>Refer a Patient</span>
+                                <span className="btn-arrow-icon">📋</span>
+                            </button>
+                        </div>
+
+                        {/* Benefit 5 */}
+                        <div className="glass-panel benefit-card-premium theme-rose">
+                            <span className="benefit-watermark-num">05</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                                            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>🎓</span> Training & News
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Professional Clinical Training</h3>
+                                <p className="benefit-card-desc">
+                                    Hands-on surgical workshop alerts, accredited masterclasses, and modern clinical updates.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>Accredited Workshops</span>
+                                </div>
+                            </div>
+                            <a href="#news" className="benefit-card-btn">
+                                <span>News & Training</span>
+                                <span className="btn-arrow-icon">📰</span>
+                            </a>
+                        </div>
+
+                        {/* Benefit 6 */}
+                        <div className="glass-panel benefit-card-premium theme-amber">
+                            <span className="benefit-watermark-num">06</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3" />
+                                            <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />
+                                            <circle cx="20" cy="10" r="2" />
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>🩺</span> Complex Cases
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Manage Co-Morbid Patients</h3>
+                                <p className="benefit-card-desc">
+                                    Evidence-based clinical guidelines to safely assess and treat medically compromised cases.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>Safety Protocol Checklists</span>
+                                </div>
+                            </div>
+                            <Link href={route('videos.public')} className="benefit-card-btn">
+                                <span>View Archive</span>
+                                <span className="btn-arrow-icon">→</span>
+                            </Link>
+                        </div>
+
+                        {/* Benefit 7 */}
+                        <div className="glass-panel benefit-card-premium theme-teal">
+                            <span className="benefit-watermark-num">07</span>
+                            <div className="card-shimmer" />
+                            <div className="card-top-content">
+                                <div className="benefit-card-header">
+                                    <div className="benefit-icon-box">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                            <circle cx="9" cy="7" r="4" />
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                        </svg>
+                                    </div>
+                                    <span className="benefit-pill-tag">
+                                        <span>🤝</span> Multidisciplinary Team
+                                    </span>
+                                </div>
+                                <h3 className="benefit-card-title">Team Surgery Collaboration</h3>
+                                <p className="benefit-card-desc">
+                                    Partner in hospital maxillofacial procedures with specialized surgical team support.
+                                </p>
+                                <div className="benefit-feature-chip">
+                                    <span className="chip-star">✦</span>
+                                    <span>Hospital OT Coordination</span>
+                                </div>
+                            </div>
+                            <button 
+                                type="button" 
+                                onClick={handleReferralClick} 
+                                className="benefit-card-btn"
+                            >
+                                <span>Refer a Patient</span>
+                                <span className="btn-arrow-icon">📋</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Mobile Carousel Indicators (Pure Finger Scroll) */}
+                    <div className="benefits-mobile-controls">
+                        <div className="benefits-dots-track">
+                            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+                                <button
+                                    key={i}
+                                    type="button"
+                                    className={`benefits-dot-item ${activeBenefitIndex === i ? 'is-active' : ''}`}
+                                    onClick={() => scrollToBenefit(i)}
+                                    aria-label={`Go to benefit ${i + 1}`}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>

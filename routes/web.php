@@ -29,30 +29,32 @@ Route::get('/', function () {
         ['description' => 'Clinical lectures, guides, and practical tips & tricks.']
     );
 
-    // Ensure videos exist for Surgical approaches category
-    if (Video::where('category_id', $surgicalCat->id)->count() === 0) {
-        Video::create([
-            'category_id' => $surgicalCat->id,
-            'title' => "EUROPE'S BIGGEST AIRPLANE GRAVEYARD",
-            'description' => 'Detailed clinical video covering surgical approaches and procedure techniques.',
-            'duration' => 640,
-            'storage_type' => 'youtube',
-            'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            'is_free' => true,
-        ]);
+    // Ensure 4 videos exist for Surgical approaches category
+    $sExisting = Video::where('category_id', $surgicalCat->id)->count();
+    if ($sExisting < 4) {
+        $defaultSurgical = [
+            ['title' => "Maxillary 3rd Molar Impaction Approach", 'description' => 'Detailed clinical video covering surgical approaches and procedure techniques.', 'duration' => 640, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+            ['title' => "Piezosurgery Flap Design & Bone Cut", 'description' => 'Ultrasonic bone surgery techniques minimizing soft tissue trauma.', 'duration' => 520, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+            ['title' => "Mandibular Miniplate Fixation Protocol", 'description' => 'Transoral approach and anatomical landmarks for miniplate fixation.', 'duration' => 780, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+            ['title' => "Minor Oral Surgery Flap Suturing Protocols", 'description' => 'Clinical guidelines on suture materials and tension-free closure.', 'duration' => 410, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+        ];
+        foreach (array_slice($defaultSurgical, $sExisting) as $vidData) {
+            Video::create(array_merge($vidData, ['category_id' => $surgicalCat->id]));
+        }
     }
 
-    // Ensure videos exist for Clinical lecture/ tips tricks category
-    if (Video::where('category_id', $clinicalCat->id)->count() === 0) {
-        Video::create([
-            'category_id' => $clinicalCat->id,
-            'title' => 'IMPERIAL AIRWAYS LONDON - Clinical Tips',
-            'description' => 'Comprehensive clinical lecture covering practical tips & tricks for BDS practitioners.',
-            'duration' => 480,
-            'storage_type' => 'youtube',
-            'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            'is_free' => true,
-        ]);
+    // Ensure 4 videos exist for Clinical lecture/ tips tricks category
+    $cExisting = Video::where('category_id', $clinicalCat->id)->count();
+    if ($cExisting < 4) {
+        $defaultClinical = [
+            ['title' => 'Clinical Management of Co-Morbid Cases', 'description' => 'Comprehensive clinical lecture covering practical tips & tricks for BDS practitioners.', 'duration' => 480, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+            ['title' => 'Local Anesthesia Pitfalls & Nerve Blocks', 'description' => 'Troubleshooting missed IANB blocks and alternative clinical techniques.', 'duration' => 510, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+            ['title' => 'Chairside Emergency Bleeding Control', 'description' => 'Hemostatic agents and immediate protocols for post-extraction bleeding.', 'duration' => 360, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+            ['title' => 'Oral Lesion Biopsy & Pathology Tips', 'description' => 'When and how to perform punch vs excisional biopsies in dental chambers.', 'duration' => 450, 'storage_type' => 'youtube', 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'is_free' => true],
+        ];
+        foreach (array_slice($defaultClinical, $cExisting) as $vidData) {
+            Video::create(array_merge($vidData, ['category_id' => $clinicalCat->id]));
+        }
     }
 
     $dbFreeVideos = Video::with('category')->orderBy('created_at', 'desc')->get()->map(function ($video) {
