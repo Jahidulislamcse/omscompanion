@@ -37,8 +37,8 @@ export default function MemberLayout({ children, title }) {
 
             {/* Sidebar */}
             <aside className={`app-sidebar ${isMobileOpen ? 'mobile-open' : ''}`}>
-                <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                <div className="sidebar-main-content">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexShrink: 0 }}>
                         <Link href={route('member.dashboard')}>
                             <ApplicationLogo />
                         </Link>
@@ -128,23 +128,23 @@ export default function MemberLayout({ children, title }) {
                 </div>
 
                 <div className="sidebar-user">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                         {auth.user.avatar_url ? (
                             <img 
                                 src={auth.user.avatar_url} 
                                 alt={auth.user.name} 
-                                style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-gold, #f59e0b)', flexShrink: 0 }} 
+                                style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-gold, #f59e0b)', flexShrink: 0 }} 
                             />
                         ) : (
-                            <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'var(--accent-gold, #f59e0b)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '18px', flexShrink: 0 }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '50%', backgroundColor: 'var(--accent-gold, #f59e0b)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', flexShrink: 0 }}>
                                 {auth.user.name ? auth.user.name.charAt(0).toUpperCase() : 'M'}
                             </div>
                         )}
                         <div>
-                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                            <div style={{ fontSize: '13.5px', fontWeight: 'bold', lineHeight: 1.2 }}>
                                 {auth.user.bds_registration_number ? `Dr. ${auth.user.name}` : auth.user.name}
                             </div>
-                            <div style={{ fontSize: '11px', color: 'var(--accent-gold)', fontWeight: '700' }}>
+                            <div style={{ fontSize: '11px', color: 'var(--accent-gold)', fontWeight: '700', marginTop: '2px' }}>
                                 ID: {auth.user.member_id}
                             </div>
                             {auth.user.clinic_name && (
@@ -154,7 +154,7 @@ export default function MemberLayout({ children, title }) {
                             )}
                         </div>
                     </div>
-                    <a href="#" onClick={handleLogout} className="btn btn-danger" style={{ width: '100%', fontSize: '13px' }}>
+                    <a href="#" onClick={handleLogout} className="btn btn-danger sidebar-logout-btn">
                         Logout
                     </a>
                 </div>

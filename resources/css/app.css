@@ -137,10 +137,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Sidebar Styling */
 .app-sidebar {
-    width: 280px;
+    width: 270px;
     background-color: var(--bg-sidebar);
     color: var(--text-white);
-    padding: 30px 20px;
+    padding: 20px 16px 16px 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -148,18 +148,33 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 10;
     position: fixed;
     height: 100vh;
+    max-height: 100vh;
     left: 0;
     top: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 2px;
+    margin-bottom: 10px;
 }
 
 .sidebar-logo {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
     color: var(--text-white);
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -172,15 +187,18 @@ h1, h2, h3, h4, h5, h6 {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 3px;
+    margin: 0;
+    padding: 0;
     flex-grow: 1;
 }
 
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
+    gap: 11px;
+    padding: 9px 12px;
+    font-size: 13.5px;
     border-radius: var(--radius-sm);
     color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
@@ -219,20 +237,58 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sidebar-user {
-    padding-top: 20px;
+    padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    margin-top: auto;
+    background-color: var(--bg-sidebar);
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+}
+
+.sidebar-logout-btn {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+
+/* Custom slim scrollbar for sidebar */
+.app-sidebar::-webkit-scrollbar,
+.sidebar-main-content::-webkit-scrollbar {
+    width: 4px;
+}
+.app-sidebar::-webkit-scrollbar-track,
+.sidebar-main-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+.app-sidebar::-webkit-scrollbar-thumb,
+.sidebar-main-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+}
+.app-sidebar::-webkit-scrollbar-thumb:hover,
+.sidebar-main-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
 }
 
 /* Main Area Layout */
 .app-main {
     flex: 1 1 auto;
     min-width: 0;
-    margin-left: 280px;
+    margin-left: 270px;
     padding: 40px;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    width: calc(100% - 280px);
+    width: calc(100% - 270px);
     max-width: 1400px;
     box-sizing: border-box;
     transition: var(--transition-smooth);

@@ -37,8 +37,8 @@ export default function AdminLayout({ children, title }) {
 
             {/* Sidebar */}
             <aside className={`app-sidebar ${isMobileOpen ? 'mobile-open' : ''}`}>
-                <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                <div className="sidebar-main-content">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexShrink: 0 }}>
                         <Link href={route('admin.dashboard')}>
                             <ApplicationLogo />
                         </Link>
@@ -147,28 +147,28 @@ export default function AdminLayout({ children, title }) {
                 </div>
 
                 <div className="sidebar-user">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                         {auth.user.avatar_url ? (
                             <img 
                                 src={auth.user.avatar_url} 
                                 alt={auth.user.name} 
-                                style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #0d9488', flexShrink: 0 }} 
+                                style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #0d9488', flexShrink: 0 }} 
                             />
                         ) : (
-                            <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: '#0d9488', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '18px', flexShrink: 0 }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '50%', backgroundColor: '#0d9488', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '16px', flexShrink: 0 }}>
                                 {auth.user.name ? auth.user.name.charAt(0).toUpperCase() : 'A'}
                             </div>
                         )}
                         <div>
-                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                            <div style={{ fontSize: '13.5px', fontWeight: 'bold', lineHeight: 1.2 }}>
                                 {auth.user.name}
                             </div>
-                            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>
+                            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', marginTop: '2px' }}>
                                 Administrator
                             </div>
                         </div>
                     </div>
-                    <a href="#" onClick={handleLogout} className="btn btn-danger" style={{ width: '100%', fontSize: '13px' }}>
+                    <a href="#" onClick={handleLogout} className="btn btn-danger sidebar-logout-btn">
                         Logout
                     </a>
                 </div>
