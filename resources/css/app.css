@@ -4875,4 +4875,146 @@ select.form-control option {
     }
 }
 
+/* ==========================================================================
+   SHARE & INVITE DEDICATED SOCIAL APPS SECTION
+   ========================================================================== */
+.share-invite-card {
+    position: relative;
+    padding: 38px 28px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(15, 43, 53, 0.96) 0%, rgba(13, 74, 96, 0.94) 100%);
+    border: 1px solid rgba(6, 182, 212, 0.28);
+    box-shadow: 0 20px 45px -10px rgba(15, 43, 53, 0.35), 0 0 30px rgba(6, 182, 212, 0.12);
+    max-width: 980px;
+    margin: 0 auto;
+    text-align: center;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.share-invite-pill {
+    background: rgba(6, 182, 212, 0.15) !important;
+    border-color: rgba(6, 182, 212, 0.4) !important;
+    color: #38bdf8 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 5px 18px !important;
+}
+
+.share-invite-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.share-invite-desc {
+    font-size: 14.5px;
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 620px;
+    margin: 0 auto 26px;
+    line-height: 1.5;
+}
+
+.share-apps-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.share-app-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.share-app-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    color: #ffffff;
+}
+
+/* WhatsApp */
+.app-whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+}
+.app-whatsapp:hover {
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.6);
+}
+
+/* Facebook Messenger */
+.app-messenger {
+    background: linear-gradient(135deg, #00B2FF 0%, #006AFF 100%);
+    box-shadow: 0 4px 16px rgba(0, 106, 255, 0.4);
+}
+.app-messenger:hover {
+    box-shadow: 0 8px 24px rgba(0, 106, 255, 0.6);
+}
+
+/* Viber */
+.app-viber {
+    background: linear-gradient(135deg, #7360F2 0%, #5944D3 100%);
+    box-shadow: 0 4px 16px rgba(115, 96, 242, 0.4);
+}
+.app-viber:hover {
+    box-shadow: 0 8px 24px rgba(115, 96, 242, 0.6);
+}
+
+/* Telegram */
+.app-telegram {
+    background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
+    box-shadow: 0 4px 16px rgba(42, 171, 238, 0.4);
+}
+.app-telegram:hover {
+    box-shadow: 0 8px 24px rgba(42, 171, 238, 0.6);
+}
+
+/* Copy Link */
+.app-copylink {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.32);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+}
+.app-copylink:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.55);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 640px) {
+    .share-invite-card {
+        padding: 28px 16px;
+        border-radius: 22px;
+    }
+    .share-invite-title {
+        font-size: 19px;
+    }
+    .share-invite-desc {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+    .share-apps-grid {
+        gap: 10px;
+    }
+    .share-app-btn {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+}
+
+
 

@@ -212,6 +212,27 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
         }
     };
 
+    const handleMessengerShare = (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
+        const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            window.location.href = `fb-messenger://share/?link=${encodeURIComponent(url)}`;
+            setTimeout(() => {
+                window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=291494419107518&redirect_uri=${encodeURIComponent(url)}`, '_blank');
+            }, 800);
+        } else {
+            window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=291494419107518&redirect_uri=${encodeURIComponent(url)}`, '_blank');
+        }
+    };
+
+    const handleViberShare = (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
+        const text = 'Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice: ';
+        window.location.href = `viber://forward?text=${encodeURIComponent(text + url)}`;
+    };
+
     const handleSocialShare = () => {
         const url = typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com';
         const title = 'OMS Companion';
@@ -1613,102 +1634,89 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             {/* Website Share Feature Section */}
             <section className="share-section" style={{ padding: '30px 20px 40px', textAlign: 'center' }}>
                 <div className="landing-section-container">
-                    <div 
-                        className="glass-panel" 
-                        style={{ 
-                            padding: '36px 24px', 
-                            borderRadius: '24px', 
-                            background: 'var(--card-bg, #ffffff)',
-                            border: '1px solid var(--border-color, #e2e8f0)',
-                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)',
-                            maxWidth: '960px',
-                            margin: '0 auto'
-                        }}
-                    >
-                        <div className="outline-pill-wrapper" style={{ justifyContent: 'center', marginBottom: '22px' }}>
-                            <span className="outline-pill-badge" style={{ borderColor: 'rgba(6, 182, 212, 0.4)', color: 'var(--color-cyan, #06b6d4)' }}>
+                    <div className="share-invite-card">
+                        <div className="outline-pill-wrapper" style={{ justifyContent: 'center', marginBottom: '14px' }}>
+                            <span className="outline-pill-badge share-invite-pill">
                                 🔗 Share & Invite
                             </span>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-                            {/* WhatsApp Share Button */}
+                        <h3 className="share-invite-title">
+                            Share OMS Companion With Colleagues
+                        </h3>
+                        <p className="share-invite-desc">
+                            Connect with fellow BDS doctors and dental practitioners across your preferred messaging apps.
+                        </p>
+
+                        <div className="share-apps-grid">
+                            {/* WhatsApp Button */}
                             <a
                                 href={`https://api.whatsapp.com/send?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice: ' + (typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com'))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    padding: '12px 22px',
-                                    borderRadius: '50px',
-                                    backgroundColor: '#25D366',
-                                    color: '#ffffff',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 15px rgba(37, 211, 102, 0.35)',
-                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
-                                    cursor: 'pointer'
-                                }}
-                                className="share-btn-hover"
+                                className="share-app-btn app-whatsapp"
+                                title="Share on WhatsApp"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.705 1.754zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.146 4.186 4.226-1.107z"/>
                                 </svg>
-                                WhatsApp
+                                <span>WhatsApp</span>
                             </a>
 
-                            {/* Native / Web Social Media Share Button */}
-                            <button
-                                type="button"
-                                onClick={handleSocialShare}
-                                style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    padding: '12px 22px',
-                                    borderRadius: '50px',
-                                    backgroundColor: '#1877F2',
-                                    color: '#ffffff',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    border: 'none',
-                                    boxShadow: '0 4px 15px rgba(24, 119, 242, 0.35)',
-                                    transition: 'transform 0.2s ease, boxShadow 0.2s ease',
-                                    cursor: 'pointer'
-                                }}
-                                className="share-btn-hover"
+                            {/* Facebook Messenger Button */}
+                            <a
+                                href={typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) 
+                                    ? `fb-messenger://share/?link=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`
+                                    : `https://www.facebook.com/dialog/send?link=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}&app_id=291494419107518&redirect_uri=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}`}
+                                onClick={handleMessengerShare}
+                                className="share-app-btn app-messenger"
+                                title="Share on Facebook Messenger"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.914 1.455 5.527 3.735 7.205V22l3.415-1.874c.905.251 1.865.387 2.85.387 5.523 0 10-4.145 10-9.255C22 6.145 17.523 2 12 2zm1.047 12.448l-2.678-2.857-5.228 2.857 5.75-6.103 2.748 2.857 5.158-2.857-5.75 6.103z"/>
                                 </svg>
-                                Share on Social Media Apps
-                            </button>
+                                <span>Messenger</span>
+                            </a>
 
+                            {/* Viber Button */}
+                            <a
+                                href={`viber://forward?text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice: ' + (typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com'))}`}
+                                onClick={handleViberShare}
+                                className="share-app-btn app-viber"
+                                title="Share on Viber"
+                            >
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.64 3.79C17.76 2.06 15.17 1.2 12.06 1.2c-3.12 0-5.7.86-7.58 2.59C2.59 5.53 1.63 7.85 1.63 10.7c0 2.28.64 4.3 1.9 6.01L2 22.8l6.32-1.5c1.19.45 2.45.68 3.74.68 3.12 0 5.7-.86 7.58-2.59 1.88-1.74 2.84-4.06 2.84-6.91 0-2.85-.96-5.17-2.84-6.69zm-1.32 12.18c-1.48 1.36-3.56 2.05-6.26 2.05-1.12 0-2.22-.19-3.26-.57l-.46-.17-4.1 1 1-3.95-.19-.48C4.38 12.7 3.8 11.3 3.8 9.88c0-2.3 .77-4.13 2.29-5.45C7.6 3.12 9.69 2.45 12.06 2.45c2.37 0 4.45.67 5.97 1.98 1.52 1.32 2.29 3.15 2.29 5.45 0 2.3-.77 4.14-2.29 5.46l.29.63zM15.4 12.9c-.27-.12-1.6-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.71.88-.87 1.06-.16.18-.32.2-.59.08-.27-.12-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.55.12-.12.27-.31.41-.46.14-.15.18-.25.27-.42.09-.17.05-.32-.02-.45-.07-.13-.61-1.47-.84-2.02-.22-.53-.45-.46-.62-.47-.16-.01-.34-.01-.52-.01-.18 0-.47.07-.72.34-.25.27-.95.93-.95 2.27s.97 2.63 1.11 2.82c.14.18 1.91 2.92 4.63 4.09.65.28 1.15.45 1.55.57.65.21 1.24.18 1.71.11.52-.08 1.6-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.3z"/>
+                                </svg>
+                                <span>Viber</span>
+                            </a>
 
+                            {/* Telegram Button */}
+                            <a
+                                href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : 'https://omscompanion.com')}&text=${encodeURIComponent('Check out OMS Companion - Digital Hub for BDS Doctors & Maxillofacial Practice')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="share-app-btn app-telegram"
+                                title="Share on Telegram"
+                            >
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                                </svg>
+                                <span>Telegram</span>
+                            </a>
 
                             {/* Copy Link Button */}
                             <button
                                 type="button"
                                 onClick={handleCopyLink}
-                                style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    padding: '11px 22px',
-                                    borderRadius: '50px',
-                                    backgroundColor: copiedLink ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-main, #f8fafc)',
-                                    border: copiedLink ? '1.5px solid #10b981' : '1.5px solid var(--border-color, #cbd5e1)',
-                                    color: copiedLink ? '#059669' : 'var(--text-color, #0f172a)',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s ease'
-                                }}
+                                className="share-app-btn app-copylink"
+                                title="Copy link to clipboard"
                             >
-                                {copiedLink ? '✓ Link Copied!' : '📋 Copy Link'}
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>{copiedLink ? '✓ Link Copied!' : 'Copy Link'}</span>
                             </button>
                         </div>
                     </div>
