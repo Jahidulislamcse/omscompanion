@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import { useAppInstalled } from '@/utils/appDetection';
 
 export default function MemberLayout({ children, title }) {
-    const { auth, flash, unread_notifications_count = 0 } = usePage().props;
+    const { auth, flash, unread_notifications_count = 0, is_app_installed } = usePage().props;
+    const isInstalled = useAppInstalled() || Boolean(is_app_installed);
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -105,15 +107,17 @@ export default function MemberLayout({ children, title }) {
                                     <span>&#128101;</span> My Profile
                                 </Link>
                             </li>
-                            <li>
-                                <Link 
-                                    href={route('app.download')} 
-                                    className={`sidebar-link ${window.location.pathname === '/download-app' ? 'active' : ''}`}
-                                    onClick={() => setIsMobileOpen(false)}
-                                >
-                                    <span>📱</span> Install Mobile App
-                                </Link>
-                            </li>
+                            {!isInstalled && (
+                                <li>
+                                    <Link 
+                                        href={route('app.download')} 
+                                        className={`sidebar-link ${window.location.pathname === '/download-app' ? 'active' : ''}`}
+                                        onClick={() => setIsMobileOpen(false)}
+                                    >
+                                        <span>📱</span> Install Mobile App
+                                    </Link>
+                                </li>
+                            )}
                             <li>
                                 <Link 
                                     href={route('home')} 

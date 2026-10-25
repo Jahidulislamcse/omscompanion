@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import PublicNavbar from '@/Components/PublicNavbar';
+import { useAppInstalled, markAppAsInstalled } from '@/utils/appDetection';
 
 export default function DownloadApp() {
-    const { site_name, site_logo } = usePage().props;
+    const { site_name, site_logo, is_app_installed } = usePage().props;
+    const isInstalled = useAppInstalled() || Boolean(is_app_installed);
     const [downloading, setDownloading] = useState(false);
     const [logoSrc, setLogoSrc] = useState(site_logo || '/app-logo.png');
 
     const handleDownload = () => {
+        markAppAsInstalled();
         setDownloading(true);
         setTimeout(() => setDownloading(false), 5000);
     };
@@ -112,6 +115,26 @@ export default function DownloadApp() {
                             </span>
                         </div>
 
+                        {/* Status if already installed */}
+                        {isInstalled && (
+                            <div style={{
+                                margin: '0 auto 20px',
+                                padding: '10px 18px',
+                                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                                border: '1px solid rgba(16, 185, 129, 0.4)',
+                                borderRadius: '12px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                color: '#10b981',
+                                fontSize: '13px',
+                                fontWeight: '700'
+                            }}>
+                                <span>✅</span>
+                                <span>Mobile App Installed / Active</span>
+                            </div>
+                        )}
+
                         {/* Primary Action Button - Attractive & Glossy */}
                         <a
                             href="/download-apk-file"
@@ -158,7 +181,7 @@ export default function DownloadApp() {
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', lineHeight: '1.25' }}>
                                 <span style={{ fontSize: '17px', fontWeight: '900', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
-                                    {downloading ? 'Installing App...' : 'INSTALL MOBILE APP'}
+                                    {downloading ? 'Downloading APK...' : isInstalled ? 'DOWNLOAD APK AGAIN' : 'INSTALL MOBILE APP'}
                                 </span>
                                 <span style={{ fontSize: '11px', opacity: 0.95, fontWeight: '600', letterSpacing: '0.2px' }}>
                                     Instant Direct Download &bull; 9.1 MB

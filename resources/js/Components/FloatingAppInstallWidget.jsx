@@ -1,7 +1,21 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+import { useAppInstalled } from '@/utils/appDetection';
 
 export default function FloatingAppInstallWidget() {
+    const isInstalled = useAppInstalled();
+    const { is_app_installed } = usePage().props;
+
+    // Do not show widget if user is running inside the app or has installed it
+    if (isInstalled || is_app_installed) {
+        return null;
+    }
+
+    // Also avoid cluttering the dedicated download page
+    if (typeof window !== 'undefined' && window.location.pathname === '/download-app') {
+        return null;
+    }
+
     return (
         <Link 
             href={route('app.download')} 

@@ -391,17 +391,24 @@ Route::get('/download-apk-file', function () {
         isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] . '/omscompanion.apk' : null,
     ]);
 
+    $cookie = cookie('oms_app_installed', 'true', 525600, '/', null, false, false);
+
     foreach ($possiblePaths as $path) {
         if (file_exists($path)) {
             return response()->download($path, 'omscompanion.apk', [
                 'Content-Type' => 'application/vnd.android.package-archive',
                 'Content-Length' => filesize($path),
-            ]);
+            ])->withCookie($cookie);
         }
     }
 
     abort(404, 'APK file not found on server.');
 })->name('app.download_file');
+
+Route::post('/mark-app-installed', function () {
+    $cookie = cookie('oms_app_installed', 'true', 525600, '/', null, false, false);
+    return response()->json(['status' => 'ok'])->withCookie($cookie);
+})->name('app.mark_installed');
 
 // Member Routes
 Route::middleware(['auth', 'member'])->prefix('member')->group(function () {

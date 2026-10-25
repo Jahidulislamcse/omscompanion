@@ -3,9 +3,11 @@ import { Link, usePage, router } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import WhatsAppWidget from '@/Components/WhatsAppWidget';
 import ReferralModal from '@/Components/ReferralModal';
+import { useAppInstalled } from '@/utils/appDetection';
 
 export default function PublicNavbar({ activePage = '', onReferralClick }) {
-    const { auth } = usePage().props;
+    const { auth, is_app_installed } = usePage().props;
+    const isInstalled = useAppInstalled() || Boolean(is_app_installed);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const [referralModalOpen, setReferralModalOpen] = useState(false);
 
@@ -112,13 +114,15 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                         >
                             Contact
                         </Link>
-                        <Link 
-                            href={route('app.download')} 
-                            className={`nav-link-item ${activePage === 'app_download' ? 'active-nav-item' : ''}`} 
-                            onClick={() => setMobileNavOpen(false)}
-                        >
-                            📱 Install Mobile App
-                        </Link>
+                        {!isInstalled && (
+                            <Link 
+                                href={route('app.download')} 
+                                className={`nav-link-item ${activePage === 'app_download' ? 'active-nav-item' : ''}`} 
+                                onClick={() => setMobileNavOpen(false)}
+                            >
+                                📱 Install Mobile App
+                            </Link>
+                        )}
                     </div>
                     
                     <div className="landing-nav-actions">

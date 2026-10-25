@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
+        // Customize User Agent so mobile app requests can be identified on web
+        String defaultUa = webSettings.getUserAgentString();
+        webSettings.setUserAgentString(defaultUa + " OMSCompanionAndroidApp");
+
         webView.addJavascriptInterface(new Object() {
             @android.webkit.JavascriptInterface
             public void setUserId(String userId) {
@@ -67,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
                     com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
                 }
             }
+
+            @android.webkit.JavascriptInterface
+            public boolean isApp() {
+                return true;
+            }
         }, "OMSCompanionNative");
 
         webView.setWebViewClient(new WebViewClient() {
@@ -74,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 progressBar.setVisibility(View.VISIBLE);
                 super.onPageStarted(view, url, favicon);
+                view.evaluateJavascript(
+                    "(function() { " +
+                    "window.isOMSCompanionApp = true; " +
+                    "try { " +
+                    "  localStorage.setItem('oms_app_installed', 'true'); " +
+                    "  document.cookie = 'oms_app_installed=true;path=/;max-age=31536000'; " +
+                    "  window.dispatchEvent(new Event('app-installed-status-changed')); " +
+                    "} catch(e) {} " +
+                    "})();",
+                    null
+                );
             }
 
             @Override
@@ -81,7 +101,17 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
                 view.evaluateJavascript(
-                    "(function() { if (window.authUser && window.authUser.id && window.OMSCompanionNative) { window.OMSCompanionNative.setUserId(String(window.authUser.id)); } })();",
+                    "(function() { " +
+                    "window.isOMSCompanionApp = true; " +
+                    "try { " +
+                    "  localStorage.setItem('oms_app_installed', 'true'); " +
+                    "  document.cookie = 'oms_app_installed=true;path=/;max-age=31536000'; " +
+                    "  window.dispatchEvent(new Event('app-installed-status-changed')); " +
+                    "} catch(e) {} " +
+                    "if (window.authUser && window.authUser.id && window.OMSCompanionNative) { " +
+                    "  window.OMSCompanionNative.setUserId(String(window.authUser.id)); " +
+                    "} " +
+                    "})();",
                     null
                 );
             }
