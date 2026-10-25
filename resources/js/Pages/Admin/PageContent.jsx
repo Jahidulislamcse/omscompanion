@@ -126,6 +126,7 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
         footer_contact_phone: settings.footer_contact_phone || '',
         footer_contact_email: settings.footer_contact_email || '',
         footer_facebook_url: settings.footer_facebook_url || '',
+        footer_youtube_url: settings.footer_youtube_url || '',
         whatsapp_number: settings.whatsapp_number || '+8801700000000',
         site_logo: null,
         remove_logo: false,
@@ -1488,6 +1489,18 @@ export default function PageContent({ settings = {}, teamMembers = [], services 
                                         placeholder="e.g. https://facebook.com/omscompanion"
                                     />
                                     {errors.footer_facebook_url && <span className="form-error">{errors.footer_facebook_url}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">YouTube Channel Link / URL</label>
+                                    <input 
+                                        type="url" 
+                                        className="form-control"
+                                        value={data.footer_youtube_url}
+                                        onChange={e => setData('footer_youtube_url', e.target.value)}
+                                        placeholder="e.g. https://youtube.com/@omscompanion"
+                                    />
+                                    {errors.footer_youtube_url && <span className="form-error">{errors.footer_youtube_url}</span>}
                                 </div>
                             </div>
                         )}

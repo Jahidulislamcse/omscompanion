@@ -5016,5 +5016,61 @@ select.form-control option {
     }
 }
 
+/* ==========================================================================
+   FOOTER SOCIAL LINKS (FACEBOOK & YOUTUBE)
+   ========================================================================== */
+.footer-social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: all 0.25s ease;
+    width: fit-content;
+}
+
+.footer-social-btn:hover {
+    transform: translateX(4px);
+    color: #ffffff;
+}
+
+.footer-btn-facebook {
+    border-color: rgba(24, 119, 242, 0.4);
+}
+.footer-btn-facebook svg {
+    color: #1877F2;
+    transition: transform 0.2s ease;
+}
+.footer-btn-facebook:hover {
+    background: rgba(24, 119, 242, 0.2);
+    border-color: #1877F2;
+    box-shadow: 0 4px 14px rgba(24, 119, 242, 0.35);
+}
+.footer-btn-facebook:hover svg {
+    transform: scale(1.15);
+}
+
+.footer-btn-youtube {
+    border-color: rgba(255, 0, 0, 0.4);
+}
+.footer-btn-youtube svg {
+    color: #FF0000;
+    transition: transform 0.2s ease;
+}
+.footer-btn-youtube:hover {
+    background: rgba(255, 0, 0, 0.2);
+    border-color: #FF0000;
+    box-shadow: 0 4px 14px rgba(255, 0, 0, 0.35);
+}
+.footer-btn-youtube:hover svg {
+    transform: scale(1.15);
+}
+
 
 
