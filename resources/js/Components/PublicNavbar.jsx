@@ -1,11 +1,30 @@
-import React, { useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { Link, usePage, router } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import WhatsAppWidget from '@/Components/WhatsAppWidget';
+import ReferralModal from '@/Components/ReferralModal';
 
 export default function PublicNavbar({ activePage = '', onReferralClick }) {
     const { auth } = usePage().props;
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
+    const [referralModalOpen, setReferralModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('referral') === 'open' || window.location.hash === '#referral') {
+                if (auth && auth.user) {
+                    router.visit(auth.user.role === 'admin' ? route('admin.referrals') : route('member.referrals'));
+                } else if (onReferralClick) {
+                    onReferralClick();
+                } else {
+                    setReferralModalOpen(true);
+                }
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+            }
+        }
+    }, [auth]);
 
     const getDashboardRoute = () => {
         if (!auth || !auth.user) return '#';
@@ -13,13 +32,23 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
     };
 
     const handleReferClick = (e) => {
-        if (onReferralClick) {
-            e.preventDefault();
-            onReferralClick();
-        } else {
-            // If on a sub-page without referral modal, redirect to homepage with referral trigger
-            window.location.href = '/?referral=open';
+        if (e) e.preventDefault();
+        setMobileNavOpen(false);
+
+        // If authenticated user clicks Refer Patient anywhere, take them directly to their Referrals dashboard!
+        if (auth && auth.user) {
+            router.visit(auth.user.role === 'admin' ? route('admin.referrals') : route('member.referrals'));
+            return;
         }
+
+        // If custom referral handler provided by parent page
+        if (onReferralClick) {
+            onReferralClick();
+            return;
+        }
+
+        // Otherwise open the referral modal directly on this page (e.g. /videos, /about, /services, /contact)
+        setReferralModalOpen(true);
     };
 
     return (
@@ -139,6 +168,12 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
 
             {/* Bumping Floating WhatsApp Widget for Front Pages */}
             <WhatsAppWidget />
+
+            {/* Direct Referral Modal available on any page */}
+            <ReferralModal 
+                isOpen={referralModalOpen} 
+                onClose={() => setReferralModalOpen(false)} 
+            />
         </>
     );
 }
