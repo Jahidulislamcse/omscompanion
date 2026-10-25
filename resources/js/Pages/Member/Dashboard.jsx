@@ -193,15 +193,33 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                     <div style={{ display: 'flex', flexDirection: 'column', maxHeight: '350px', overflowY: 'auto' }}>
                         {recentNotifications.length > 0 ? (
                             recentNotifications.map(notif => (
-                                <div key={notif.id} className="notification-item" style={{ borderBottom: '1px solid var(--border-color)', padding: '12px 24px' }}>
+                                <Link 
+                                    key={notif.id} 
+                                    href={route('member.notifications.go', notif.id)}
+                                    className="notification-item dashboard-notif-link" 
+                                    style={{ 
+                                        borderBottom: '1px solid var(--border-color)', 
+                                        padding: '12px 24px',
+                                        textDecoration: 'none',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Click to view details"
+                                >
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', gap: '10px' }}>
-                                        <span style={{ fontWeight: '700', fontSize: '14px', color: 'var(--accent-teal)' }}>{notif.title}</span>
-                                        <span style={{ fontSize: '10px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{new Date(notif.created_at).toLocaleDateString()}</span>
+                                        <span style={{ fontWeight: '700', fontSize: '14px', color: 'var(--accent-teal)' }}>
+                                            {notif.title}
+                                        </span>
+                                        <span style={{ fontSize: '10px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                                            {new Date(notif.created_at).toLocaleDateString()}
+                                        </span>
                                     </div>
                                     <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                                         {notif.message}
                                     </p>
-                                </div>
+                                    <div style={{ marginTop: '4px', fontSize: '11px', color: '#3b82f6', fontWeight: '600' }}>
+                                        Open section →
+                                    </div>
+                                </Link>
                             ))
                         ) : (
                             <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)', fontSize: '14px' }}>

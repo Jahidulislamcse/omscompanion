@@ -416,6 +416,9 @@ Route::middleware(['auth', 'member'])->prefix('member')->group(function () {
     Route::get('/videos/{video}/stream', [VideoStreamingController::class, 'stream'])->name('member.videos.stream');
     Route::get('/certificate', [CertificateController::class, 'download'])->name('member.certificate.download');
     Route::get('/notifications', [MemberController::class, 'notifications'])->name('member.notifications');
+    Route::get('/notifications/{notification}/go', [MemberController::class, 'goToNotification'])->name('member.notifications.go');
+    Route::post('/notifications/{notification}/read', [MemberController::class, 'markNotificationRead'])->name('member.notifications.read');
+    Route::post('/notifications/mark-all-read', [MemberController::class, 'markAllNotificationsRead'])->name('member.notifications.mark_all_read');
 });
 
 // Direct APK Download Route

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Head } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
@@ -10,7 +10,13 @@ export function getYouTubeId(url) {
 }
 
 export default function VideoLibrary({ categories = [] }) {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('search') || params.get('title') || '';
+        }
+        return '';
+    });
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
     const [activeAccessFilter, setActiveAccessFilter] = useState('all'); // 'all' | 'free' | 'premium'
@@ -29,6 +35,27 @@ export default function VideoLibrary({ categories = [] }) {
             return acc;
         }, []);
     }, [categories]);
+
+    // Auto-select video if redirected from notification or URL query
+    useEffect(() => {
+        if (typeof window !== 'undefined' && allVideos.length > 0) {
+            const params = new URLSearchParams(window.location.search);
+            const query = (params.get('search') || params.get('title') || '').toLowerCase().trim();
+            const vidId = params.get('video_id');
+
+            if (vidId) {
+                const found = allVideos.find(v => v.id.toString() === vidId.toString());
+                if (found) setSelectedVideo(found);
+            } else if (query) {
+                const found = allVideos.find(v => (v.title || '').toLowerCase().includes(query)) 
+                    || allVideos.find(v => query.includes((v.title || '').toLowerCase()));
+                if (found) {
+                    setSelectedVideo(found);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        }
+    }, [allVideos]);
 
     // Filter videos based on search, active category & access filter
     const filteredVideos = useMemo(() => {

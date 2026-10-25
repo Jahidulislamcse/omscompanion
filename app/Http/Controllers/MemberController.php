@@ -222,13 +222,106 @@ class MemberController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Mark all unread as read
-        Notification::where('user_id', $userId)->whereNull('read_at')->update([
-            'read_at' => now()
-        ]);
+        $unreadCount = Notification::where('user_id', $userId)
+            ->where('title', 'NOT LIKE', '%Commission%')
+            ->where('title', 'NOT LIKE', '%Payment%')
+            ->whereNull('read_at')
+            ->count();
 
         return Inertia::render('Member/Notifications', [
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
         ]);
+    }
+
+    public function goToNotification(Notification $notification)
+    {
+        if ($notification->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this notification.');
+        }
+
+        // Mark as read when clicked
+        if (is_null($notification->read_at)) {
+            $notification->update(['read_at' => now()]);
+        }
+
+        $destination = $this->resolveNotificationDestination($notification);
+
+        return redirect($destination);
+    }
+
+    public function markNotificationRead(Notification $notification)
+    {
+        if ($notification->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this notification.');
+        }
+
+        if (is_null($notification->read_at)) {
+            $notification->update(['read_at' => now()]);
+        }
+
+        return redirect()->back();
+    }
+
+    public function markAllNotificationsRead()
+    {
+        Notification::where('user_id', Auth::id())
+            ->where('title', 'NOT LIKE', '%Commission%')
+            ->where('title', 'NOT LIKE', '%Payment%')
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
+
+    protected function resolveNotificationDestination(Notification $notification): string
+    {
+        if (!empty($notification->action_url)) {
+            return $notification->action_url;
+        }
+
+        $title = $notification->title ?? '';
+        $message = $notification->message ?? '';
+        $titleLower = strtolower($title);
+        $messageLower = strtolower($message);
+
+        // 1. Video Notifications (New Video added, video approved, etc.)
+        if (str_contains($titleLower, 'video') || str_contains($messageLower, 'video')) {
+            // Check if title has "New Video: [Title]"
+            if (preg_match('/New Video:\s*(.*)/i', $title, $matches)) {
+                $vidTitle = trim($matches[1]);
+                return route('member.videos') . '?search=' . urlencode($vidTitle);
+            }
+            return route('member.videos');
+        }
+
+        // 2. Referral Notifications (Status update, assignment, submission)
+        if (str_contains($titleLower, 'referral') || str_contains($messageLower, 'patient referral')) {
+            // Check if title has "Referral Status Update: [Patient Name]"
+            if (preg_match('/Referral Status Update:\s*(.*)/i', $title, $matches)) {
+                $patientName = trim($matches[1]);
+                $referral = PatientReferral::where('member_id', Auth::id())
+                    ->where('patient_name', 'LIKE', "%{$patientName}%")
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                if ($referral) {
+                    return route('member.referrals.tracker', $referral->id);
+                }
+                return route('member.referrals') . '?search=' . urlencode($patientName);
+            }
+            return route('member.referrals');
+        }
+
+        // 3. Profile / Account Settings
+        if (str_contains($titleLower, 'account') || str_contains($titleLower, 'profile')) {
+            return route('member.profile');
+        }
+
+        // 4. Mobile App Download
+        if (str_contains($titleLower, 'mobile app') || str_contains($messageLower, 'mobile app')) {
+            return route('app.download');
+        }
+
+        return route('member.dashboard');
     }
 }

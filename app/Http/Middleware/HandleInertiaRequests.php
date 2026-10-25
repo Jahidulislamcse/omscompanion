@@ -58,6 +58,11 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
+            'unread_notifications_count' => $request->user() ? \App\Models\Notification::where('user_id', $request->user()->id)
+                ->where('title', 'NOT LIKE', '%Commission%')
+                ->where('title', 'NOT LIKE', '%Payment%')
+                ->whereNull('read_at')
+                ->count() : 0,
             'site_logo' => LandingSetting::where('key', 'site_logo')->value('value') 
                 ? route('site.logo.stream') . '?v=' . (LandingSetting::where('key', 'site_logo_updated_at')->value('value') ?: time())
                 : null,

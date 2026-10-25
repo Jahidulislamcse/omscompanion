@@ -3,7 +3,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function MemberLayout({ children, title }) {
-    const { auth, flash } = usePage().props;
+    const { auth, flash, unread_notifications_count = 0 } = usePage().props;
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -84,8 +84,16 @@ export default function MemberLayout({ children, title }) {
                                     href={route('member.notifications')} 
                                     className={`sidebar-link ${isCurrent('/member/notifications') ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
+                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                                 >
-                                    <span>&#128276;</span> Notifications
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span>&#128276;</span> Notifications
+                                    </div>
+                                    {unread_notifications_count > 0 && (
+                                        <span className="sidebar-notification-badge">
+                                            {unread_notifications_count > 99 ? '99+' : unread_notifications_count}
+                                        </span>
+                                    )}
                                 </Link>
                             </li>
                             <li>
@@ -169,7 +177,22 @@ export default function MemberLayout({ children, title }) {
                         </div>
                     </div>
 
-                    <div className="navbar-user-info">
+                    <div className="navbar-user-info" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Link 
+                            href={route('member.notifications')} 
+                            className="btn btn-outline" 
+                            style={{ position: 'relative', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                            title="Notifications"
+                        >
+                            <span>🔔</span>
+                            <span style={{ fontSize: '13px' }}>Notifications</span>
+                            {unread_notifications_count > 0 && (
+                                <span className="sidebar-notification-badge" style={{ marginLeft: '2px' }}>
+                                    {unread_notifications_count > 99 ? '99+' : unread_notifications_count}
+                                </span>
+                            )}
+                        </Link>
+
                         <button onClick={toggleTheme} className="btn btn-outline" style={{ padding: '8px 12px' }}>
                             {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
                         </button>

@@ -3,7 +3,13 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
 export default function Referrals({ referrals = [] }) {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('search') || '';
+        }
+        return '';
+    });
     const [showFormModal, setShowFormModal] = useState(false);
 
     const { data, setData, post, processing, errors, reset } = useForm({
