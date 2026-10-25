@@ -1811,7 +1811,7 @@ select.form-control option {
 .thumb-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1819,40 +1819,49 @@ select.form-control option {
     transition: var(--transition-smooth);
 }
 
-.free-video-thumb:hover .thumb-overlay {
-    background: rgba(0, 0, 0, 0.25);
+.free-video-thumb:hover .thumb-overlay,
+.video-list-item:hover .thumb-overlay {
+    background: rgba(0, 0, 0, 0.32);
 }
 
 .play-button-glow {
-    width: 56px;
-    height: 56px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #d4af37, #f59e0b);
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     transition: var(--transition-smooth);
 }
 
-.free-video-thumb:hover .play-button-glow {
-    transform: scale(1.15);
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.9);
+.free-video-thumb:hover .play-button-glow,
+.video-list-item:hover .play-button-glow {
+    transform: scale(1.12);
+    background: rgba(13, 148, 136, 0.85);
+    border-color: #ffffff;
+    box-shadow: 0 0 16px rgba(13, 148, 136, 0.6);
 }
 
 .play-icon {
-    font-size: 24px;
+    font-size: 11px;
     color: #fff;
-    margin-left: 3px;
+    margin-left: 2px;
+    line-height: 1;
 }
 
 .free-video-thumb .play-label {
-    font-size: 11px;
+    font-size: 10px;
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
-    margin-top: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-top: 6px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .free-video-info {
@@ -4401,19 +4410,49 @@ select.form-control option {
     box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.25);
 }
 
-/* Golden Central Play Button */
+/* Small & Transparent Play Button for Video Thumbnails */
 .golden-play-button {
-    width: 64px !important;
-    height: 64px !important;
-    background: linear-gradient(135deg, #facc15 0%, #eab308 100%) !important;
-    border-color: #fef08a !important;
-    box-shadow: 0 0 24px rgba(234, 179, 8, 0.6) !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background: rgba(15, 23, 42, 0.45) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.25s ease !important;
 }
 
 .golden-play-button .play-icon {
     color: #ffffff !important;
-    font-size: 24px !important;
-    margin-left: 4px;
+    font-size: 11px !important;
+    margin-left: 2px !important;
+    line-height: 1 !important;
+}
+
+.free-video-thumb:hover .golden-play-button,
+.video-list-item:hover .golden-play-button,
+.video-card:hover .golden-play-button {
+    background: rgba(13, 148, 136, 0.85) !important;
+    border-color: #ffffff !important;
+    transform: scale(1.12) !important;
+    box-shadow: 0 0 14px rgba(13, 148, 136, 0.6) !important;
+}
+
+/* In Grid View, make it nicely proportioned (38px) */
+.video-card .golden-play-button,
+.video-grid-view .golden-play-button {
+    width: 38px !important;
+    height: 38px !important;
+}
+
+.video-card .golden-play-button .play-icon,
+.video-grid-view .golden-play-button .play-icon {
+    font-size: 13px !important;
+    margin-left: 3px !important;
 }
 
 /* LEARN MORE Button */
