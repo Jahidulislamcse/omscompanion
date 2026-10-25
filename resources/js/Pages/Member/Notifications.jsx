@@ -13,10 +13,16 @@ export default function Notifications({ notifications = [], unreadCount = 0 }) {
         if (title.includes('referral') || message.includes('patient referral') || message.includes('referral')) {
             return { label: 'View Referral', icon: '📋' };
         }
-        if (title.includes('account') || title.includes('profile')) {
+        if (
+            title.includes('account') || 
+            title.includes('profile') || 
+            title.includes('member') || 
+            title.includes('register') || 
+            title.includes('approved')
+        ) {
             return { label: 'View Profile', icon: '👤' };
         }
-        if (title.includes('app') || message.includes('mobile app')) {
+        if (title.includes('mobile app') || message.includes('mobile app') || title.includes('install app')) {
             return { label: 'Install App', icon: '📱' };
         }
         return { label: 'Open Section', icon: '↗' };
@@ -93,23 +99,15 @@ export default function Notifications({ notifications = [], unreadCount = 0 }) {
                             return (
                                 <div 
                                     key={notif.id} 
-                                    className={`notification-item notification-item-card ${isUnread ? 'unread' : ''}`}
+                                    className={`notification-item-card ${isUnread ? 'unread' : ''}`}
                                     onClick={() => handleItemClick(notif.id)}
                                     style={{
-                                        borderBottom: '1px solid var(--border-color)',
-                                        padding: '18px 24px',
-                                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        cursor: 'pointer',
                                         backgroundColor: isUnread ? 'rgba(59, 130, 246, 0.05)' : 'transparent',
-                                        borderLeft: isUnread ? '4px solid #3b82f6' : '4px solid transparent',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        gap: '16px'
+                                        borderLeft: isUnread ? '4px solid #3b82f6' : '4px solid transparent'
                                     }}
                                 >
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div className="notification-header" style={{ marginBottom: '8px' }}>
+                                    <div className="notif-content">
+                                        <div className="notification-header" style={{ marginBottom: '6px' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                                                 <span style={{ 
                                                     fontWeight: '800', 
@@ -141,7 +139,7 @@ export default function Notifications({ notifications = [], unreadCount = 0 }) {
                                         <p className="notification-body" style={{ margin: 0, fontSize: '14px', lineHeight: '1.6' }}>
                                             {notif.message}
                                         </p>
-                                        <div style={{ marginTop: '8px', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                        <div style={{ marginTop: '6px', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                                             <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-light)' }}>
                                                 Simulated Dispatch Channels:
                                             </span>
@@ -152,14 +150,14 @@ export default function Notifications({ notifications = [], unreadCount = 0 }) {
                                     </div>
 
                                     {/* Direct Action Link to specific section */}
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
+                                    <div className="notif-actions">
                                         <Link 
                                             href={route('member.notifications.go', notif.id)}
                                             onClick={(e) => e.stopPropagation()}
                                             className="btn btn-primary"
                                             style={{ 
-                                                fontSize: '12px', 
-                                                padding: '8px 14px', 
+                                                fontSize: '13px', 
+                                                padding: '8px 16px', 
                                                 fontWeight: '800',
                                                 display: 'inline-flex',
                                                 alignItems: 'center',

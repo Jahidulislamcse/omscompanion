@@ -313,12 +313,22 @@ class MemberController extends Controller
         }
 
         // 3. Profile / Account Settings
-        if (str_contains($titleLower, 'account') || str_contains($titleLower, 'profile')) {
+        if (
+            str_contains($titleLower, 'account') || 
+            str_contains($titleLower, 'profile') || 
+            str_contains($titleLower, 'member') || 
+            str_contains($titleLower, 'register') || 
+            str_contains($titleLower, 'approved')
+        ) {
             return route('member.profile');
         }
 
         // 4. Mobile App Download
-        if (str_contains($titleLower, 'mobile app') || str_contains($messageLower, 'mobile app')) {
+        if (
+            str_contains($titleLower, 'mobile app') || 
+            str_contains($messageLower, 'mobile app') || 
+            str_contains($titleLower, 'install app')
+        ) {
             return route('app.download');
         }
 
