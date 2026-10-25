@@ -474,8 +474,9 @@ class AdminController extends Controller
         $typeLabel = $video->is_free ? 'Free' : 'Premium';
         $title = "New Video: {$video->title}";
         $message = "New {$typeLabel} video added: \"{$video->title}\". Log in now to watch.";
+        $actionUrl = route('member.videos', ['video_id' => $video->id]);
         
-        NotificationService::broadcastToMembers($title, $message);
+        NotificationService::broadcastToMembers($title, $message, $actionUrl);
 
         return redirect()->back()->with('success', 'Video uploaded successfully.');
     }

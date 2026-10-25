@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 
 export function getYouTubeId(url) {
@@ -9,8 +9,10 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-export default function VideoLibrary({ categories = [] }) {
+export default function VideoLibrary({ categories = [], targetVideoId = null, initialSearch = '' }) {
+    const { url } = usePage();
     const [searchTerm, setSearchTerm] = useState(() => {
+        if (initialSearch) return initialSearch;
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
             return params.get('search') || params.get('title') || '';
@@ -38,24 +40,45 @@ export default function VideoLibrary({ categories = [] }) {
 
     // Auto-select video if redirected from notification or URL query
     useEffect(() => {
-        if (typeof window !== 'undefined' && allVideos.length > 0) {
-            const params = new URLSearchParams(window.location.search);
-            const query = (params.get('search') || params.get('title') || '').toLowerCase().trim();
-            const vidId = params.get('video_id');
+        if (!allVideos || allVideos.length === 0) return;
 
-            if (vidId) {
-                const found = allVideos.find(v => v.id.toString() === vidId.toString());
-                if (found) setSelectedVideo(found);
-            } else if (query) {
-                const found = allVideos.find(v => (v.title || '').toLowerCase().includes(query)) 
-                    || allVideos.find(v => query.includes((v.title || '').toLowerCase()));
-                if (found) {
-                    setSelectedVideo(found);
+        let vidId = targetVideoId;
+        let query = initialSearch || searchTerm;
+
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (!vidId) vidId = params.get('video_id');
+            if (!query) query = params.get('search') || params.get('title') || '';
+        }
+
+        let found = null;
+        if (vidId) {
+            found = allVideos.find(v => v.id.toString() === vidId.toString());
+        }
+
+        if (!found && query) {
+            const q = query.toLowerCase().trim();
+            found = allVideos.find(v => (v.title || '').toLowerCase() === q)
+                || allVideos.find(v => (v.title || '').toLowerCase().includes(q)) 
+                || allVideos.find(v => q.includes((v.title || '').toLowerCase()));
+        }
+
+        if (found) {
+            setSelectedVideo(found);
+            // Ensure filters do not hide the selected video category
+            if (activeCategoryFilter !== 'all' && found.category_id && found.category_id.toString() !== activeCategoryFilter.toString()) {
+                setActiveCategoryFilter('all');
+            }
+            if (activeAccessFilter !== 'all') {
+                setActiveAccessFilter('all');
+            }
+            setTimeout(() => {
+                if (typeof window !== 'undefined') {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-            }
+            }, 80);
         }
-    }, [allVideos]);
+    }, [allVideos, targetVideoId, initialSearch, url]);
 
     // Filter videos based on search, active category & access filter
     const filteredVideos = useMemo(() => {

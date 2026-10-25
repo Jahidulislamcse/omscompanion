@@ -43,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
         com.onesignal.OneSignal.getNotifications().requestPermission(true, com.onesignal.Continue.none());
         com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
 
+        // Handle OneSignal Push Notification Click
+        com.onesignal.OneSignal.getNotifications().addClickListener(event -> {
+            String launchUrl = event.getNotification().getLaunchURL();
+            if (launchUrl != null && !launchUrl.isEmpty()) {
+                runOnUiThread(() -> {
+                    if (webView != null) {
+                        webView.loadUrl(launchUrl);
+                    }
+                });
+            }
+        });
+
         webView = findViewById(R.id.webview);
         progressBar = findViewById(R.id.progressBar);
 
@@ -171,8 +183,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        String initialUrl = APP_URL;
+        Intent startingIntent = getIntent();
+        if (startingIntent != null) {
+            if (startingIntent.getData() != null) {
+                initialUrl = startingIntent.getData().toString();
+            } else if (startingIntent.hasExtra("launchUrl")) {
+                initialUrl = startingIntent.getStringExtra("launchUrl");
+            } else if (startingIntent.hasExtra("url")) {
+                initialUrl = startingIntent.getStringExtra("url");
+            }
+        }
+
         if (savedInstanceState == null) {
-            webView.loadUrl(APP_URL);
+            webView.loadUrl(initialUrl);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent != null) {
+            String targetUrl = null;
+            if (intent.getData() != null) {
+                targetUrl = intent.getData().toString();
+            } else if (intent.hasExtra("launchUrl")) {
+                targetUrl = intent.getStringExtra("launchUrl");
+            } else if (intent.hasExtra("url")) {
+                targetUrl = intent.getStringExtra("url");
+            }
+            if (targetUrl != null && !targetUrl.isEmpty() && webView != null) {
+                webView.loadUrl(targetUrl);
+            }
         }
     }
 

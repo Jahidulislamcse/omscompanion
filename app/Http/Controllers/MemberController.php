@@ -184,7 +184,7 @@ class MemberController extends Controller
         ]);
     }
 
-    public function videos()
+    public function videos(Request $request)
     {
         // Ensure default categories exist
         VideoCategory::firstOrCreate(
@@ -197,9 +197,20 @@ class MemberController extends Controller
         );
 
         $categories = VideoCategory::with('videos')->get();
+        $targetVideoId = $request->query('video_id');
+        $searchQuery = $request->query('search');
+
+        if (!$targetVideoId && !empty($searchQuery)) {
+            $matchedVideo = Video::where('title', 'LIKE', "%{$searchQuery}%")->first();
+            if ($matchedVideo) {
+                $targetVideoId = $matchedVideo->id;
+            }
+        }
 
         return Inertia::render('Member/VideoLibrary', [
             'categories' => $categories,
+            'targetVideoId' => $targetVideoId,
+            'initialSearch' => $searchQuery,
         ]);
     }
 
@@ -287,11 +298,29 @@ class MemberController extends Controller
 
         // 1. Video Notifications (New Video added, video approved, etc.)
         if (str_contains($titleLower, 'video') || str_contains($messageLower, 'video')) {
-            // Check if title has "New Video: [Title]"
+            $vidTitle = '';
             if (preg_match('/New Video:\s*(.*)/i', $title, $matches)) {
                 $vidTitle = trim($matches[1]);
-                return route('member.videos') . '?search=' . urlencode($vidTitle);
+            } elseif (preg_match('/video added:\s*["\']?(.*?)["\']?\./i', $message, $matches)) {
+                $vidTitle = trim($matches[1]);
             }
+
+            if (!empty($vidTitle)) {
+                $video = Video::where('title', 'LIKE', "%{$vidTitle}%")->first();
+                if ($video) {
+                    return route('member.videos', ['video_id' => $video->id]);
+                }
+                return route('member.videos', ['search' => $vidTitle]);
+            }
+
+            // Fallback: check if any recent video title is in notification text
+            $recentVideos = Video::latest()->take(30)->get(['id', 'title']);
+            foreach ($recentVideos as $v) {
+                if (stripos($title, $v->title) !== false || stripos($message, $v->title) !== false) {
+                    return route('member.videos', ['video_id' => $v->id]);
+                }
+            }
+
             return route('member.videos');
         }
 

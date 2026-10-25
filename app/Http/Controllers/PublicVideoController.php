@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class PublicVideoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Ensure default categories exist
         VideoCategory::firstOrCreate(
@@ -79,11 +79,22 @@ class PublicVideoController extends Controller
         }
 
         $settings = \App\Models\LandingSetting::all()->pluck('value', 'key')->toArray();
+        $targetVideoId = $request->query('video_id');
+        $searchQuery = $request->query('search');
+
+        if (!$targetVideoId && !empty($searchQuery)) {
+            $matchedVideo = Video::where('title', 'LIKE', "%{$searchQuery}%")->first();
+            if ($matchedVideo) {
+                $targetVideoId = $matchedVideo->id;
+            }
+        }
 
         return Inertia::render('Videos/Index', [
             'categories' => $categories,
             'videos' => $allVideos,
             'settings' => $settings,
+            'targetVideoId' => $targetVideoId,
+            'initialSearch' => $searchQuery,
         ]);
     }
 }

@@ -11,7 +11,7 @@ class NotificationService
     /**
      * Send email/SMS notification and record it in database.
      */
-    public static function send(User $user, string $title, string $message, string $type = 'both')
+    public static function send(User $user, string $title, string $message, string $type = 'both', ?string $actionUrl = null)
     {
         // Block financial/commission notifications from being created or sent
         if (stripos($title, 'commission') !== false || stripos($title, 'payment') !== false || stripos($message, 'commission payment') !== false) {
@@ -24,6 +24,7 @@ class NotificationService
             'type' => $type,
             'title' => $title,
             'message' => $message,
+            'action_url' => $actionUrl,
         ]);
 
         // 2. Dispatch Email
@@ -33,11 +34,22 @@ class NotificationService
             Log::info("To: {$user->email} ({$user->name})");
             Log::info("Subject: {$title}");
             Log::info("Message: {$message}");
+            Log::info("Action URL: " . ($actionUrl ?: 'N/A'));
             Log::info("=================================================");
 
             if (!empty($user->email)) {
                 try {
                     $htmlMessage = nl2br(e($message));
+                    $actionButtonHtml = '';
+                    if (!empty($actionUrl)) {
+                        $actionButtonHtml = '
+                        <div style="margin-top: 20px; text-align: center;">
+                            <a href="' . e($actionUrl) . '" style="display: inline-block; padding: 12px 24px; background: #0d9488; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px;">
+                                View Now &rarr;
+                            </a>
+                        </div>';
+                    }
+
                     $htmlContent = '
                     <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 25px; color: #333;">
                         <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 8px; padding: 25px; border: 1px solid #e2e8f0;">
@@ -45,6 +57,7 @@ class NotificationService
                             <div style="font-size: 15px; line-height: 1.6; color: #334155; margin-top: 15px;">
                                 ' . $htmlMessage . '
                             </div>
+                            ' . $actionButtonHtml . '
                             <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
                                 &copy; ' . date('Y') . ' OMSCOMPANION. All rights reserved.
                             </div>
@@ -73,7 +86,7 @@ class NotificationService
 
         // 4. Dispatch Targeted Push Notification to User's Mobile App
         try {
-            PushNotificationService::sendToUser($user, $title, $message);
+            PushNotificationService::sendToUser($user, $title, $message, $actionUrl);
         } catch (\Throwable $e) {
             Log::error("Failed to send push notification to user #{$user->id}: " . $e->getMessage());
         }
@@ -84,16 +97,16 @@ class NotificationService
     /**
      * Send notification to all approved members.
      */
-    public static function broadcastToMembers(string $title, string $message)
+    public static function broadcastToMembers(string $title, string $message, ?string $actionUrl = null)
     {
         $members = User::where('role', 'member')->where('status', 'approved')->get();
         foreach ($members as $member) {
-            self::send($member, $title, $message, 'email');
+            self::send($member, $title, $message, 'email', $actionUrl);
         }
 
         // Broadcast Push Notification to all app users
         try {
-            PushNotificationService::sendToAll($title, $message);
+            PushNotificationService::sendToAll($title, $message, $actionUrl);
         } catch (\Throwable $e) {
             Log::error("Failed to broadcast push notification: " . $e->getMessage());
         }

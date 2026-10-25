@@ -10,14 +10,21 @@ export function getYouTubeId(url) {
     return (match && match[2].length === 11) ? match[2] : url;
 }
 
-export default function Index({ categories = [], videos = [], settings = {} }) {
-    const { auth, site_name } = usePage().props;
+export default function Index({ categories = [], videos = [], settings = {}, targetVideoId = null, initialSearch = '' }) {
+    const { auth, site_name, url } = usePage().props;
     const [activeVideo, setActiveVideo] = useState(null);
     const [accessBlockedReason, setAccessBlockedReason] = useState(null); // 'unauthenticated' | null
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     // Search and filter states
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(() => {
+        if (initialSearch) return initialSearch;
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('search') || params.get('title') || '';
+        }
+        return '';
+    });
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
     const [activeAccessFilter, setActiveAccessFilter] = useState('all'); // 'all' | 'free' | 'premium'
     const [viewLayout, setViewLayout] = useState('list'); // Default to list view layout
@@ -25,6 +32,47 @@ export default function Index({ categories = [], videos = [], settings = {} }) {
     const getSetting = (key, defaultValue = '') => {
         return (settings && settings[key]) ? settings[key] : defaultValue;
     };
+
+    // Auto-select video if video_id or query in URL
+    useEffect(() => {
+        if (!videos || videos.length === 0) return;
+
+        let vidId = targetVideoId;
+        let query = initialSearch || searchTerm;
+
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (!vidId) vidId = params.get('video_id');
+            if (!query) query = params.get('search') || params.get('title') || '';
+        }
+
+        let found = null;
+        if (vidId) {
+            found = videos.find(v => v.id.toString() === vidId.toString());
+        }
+
+        if (!found && query) {
+            const q = query.toLowerCase().trim();
+            found = videos.find(v => (v.title || '').toLowerCase() === q)
+                || videos.find(v => (v.title || '').toLowerCase().includes(q))
+                || videos.find(v => q.includes((v.title || '').toLowerCase()));
+        }
+
+        if (found) {
+            handleVideoClick(found);
+            if (activeCategoryFilter !== 'all' && found.category_id && found.category_id.toString() !== activeCategoryFilter.toString()) {
+                setActiveCategoryFilter('all');
+            }
+            if (activeAccessFilter !== 'all') {
+                setActiveAccessFilter('all');
+            }
+            setTimeout(() => {
+                if (typeof window !== 'undefined') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, 80);
+        }
+    }, [videos, targetVideoId, initialSearch, url]);
 
     useEffect(() => {
         const handleScroll = () => {
