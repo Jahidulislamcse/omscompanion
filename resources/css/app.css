@@ -975,6 +975,7 @@ select.form-control option {
 .landing-wrapper {
     display: flex;
     flex-direction: column;
+    align-items: center;
     min-height: 100vh;
     background-color: var(--bg-main);
     overflow-x: hidden;
@@ -1051,6 +1052,9 @@ select.form-control option {
     position: sticky;
     top: 15px;
     margin: 15px auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    align-self: center !important;
     width: 95%;
     max-width: 1200px;
     display: flex;
@@ -1292,6 +1296,9 @@ select.form-control option {
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    align-self: center !important;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -1464,6 +1471,8 @@ select.form-control option {
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
     box-sizing: border-box;
 }
 

@@ -500,7 +500,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     }, [newsItems]);
 
     return (
-        <div className="landing-wrapper page-colorful-theme" style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%', position: 'relative' }}>
+        <div className="landing-wrapper page-colorful-theme" style={{ overflowX: 'hidden', maxWidth: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
             <Head>
                 <title>{`${site_name || 'OMS COMPANION'} - oms clinical hub & patient management platform`}</title>
                 <meta name="description" content={`${site_name || 'OMS COMPANION'} empowers BDS Doctors with surgical video archives, online consultations, transparent management tracking, and professional Learning.`} />
