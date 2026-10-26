@@ -2350,9 +2350,13 @@ select.form-control option {
 
 /* Landing Footer */
 .landing-footer {
+    width: 100% !important;
+    max-width: 100% !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
     margin-top: auto;
     border-top: 1px solid var(--border-color);
-    padding: 40px 20px;
+    padding: 60px 0 30px 0;
     background-color: var(--bg-sidebar);
     color: rgba(255, 255, 255, 0.6);
     text-align: center;
