@@ -89,6 +89,12 @@
     padding: 0;
 }
 
+html {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+}
+
 body {
     font-family: var(--font-primary);
     background-color: var(--bg-main);
@@ -96,6 +102,10 @@ body {
     line-height: 1.5;
     transition: var(--transition-smooth);
     min-height: 100vh;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative;
 }
 
 a {
@@ -963,11 +973,17 @@ select.form-control option {
     flex-direction: column;
     min-height: 100vh;
     background-color: var(--bg-main);
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative;
 }
 
 .page-colorful-theme {
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
 }
 
 /* Ambient Background Glow Spheres */
@@ -979,6 +995,12 @@ select.form-control option {
     pointer-events: none;
     z-index: 0;
     animation: floatGlow 18s ease-in-out infinite alternate;
+}
+
+@media (max-width: 768px) {
+    .ambient-glow {
+        display: none !important;
+    }
 }
 
 .glow-cyan {
@@ -1428,13 +1450,17 @@ select.form-control option {
 .landing-section {
     padding: 70px 20px;
     width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
     position: relative;
     z-index: 1;
 }
 
 .landing-section-container {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .landing-section-header {
@@ -2490,6 +2516,9 @@ select.form-control option {
     
     .landing-section {
         padding: 24px 10px;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
     }
     
     .landing-section-title {
@@ -3605,8 +3634,11 @@ select.form-control option {
 /* Mobile Horizontal Carousel for Benefits Section */
 @media (max-width: 768px) {
     .benefits-section {
-        padding: 45px 14px 60px !important;
-        overflow: hidden;
+        padding: 45px 0 60px !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
     }
 
     .benefits-grid {
@@ -3619,15 +3651,18 @@ select.form-control option {
         scroll-snap-type: x proximity !important; /* Smooth proximity snapping prevents scroll-snap locking */
         -webkit-overflow-scrolling: touch;
         gap: 16px !important;
-        padding: 14px 18px 24px !important;
-        margin-left: -14px !important;
-        margin-right: -14px !important;
+        padding: 14px 16px 24px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         margin-top: 18px !important;
         scrollbar-width: none;
         -ms-overflow-style: none;
-        scroll-padding-left: 18px !important;
-        scroll-padding-right: 18px !important;
+        scroll-padding-left: 16px !important;
+        scroll-padding-right: 16px !important;
         position: relative;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
     }
 
     .benefits-grid::after {
