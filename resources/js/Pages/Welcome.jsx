@@ -151,30 +151,22 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     const [activeBenefitIndex, setActiveBenefitIndex] = useState(0);
     const [benefitsViewMode, setBenefitsViewMode] = useState('carousel'); // 'carousel' | 'grid'
 
-    // Reset scroll position on mount so Card 01 is always first
+    // Reset horizontal carousel scroll position so Card 01 is always first (ONLY internal scrollLeft, NEVER scrolls the window)
     useEffect(() => {
-        const resetScroll = () => {
+        const resetCarousel = () => {
             if (benefitsGridRef.current) {
                 benefitsGridRef.current.scrollLeft = 0;
-                const firstCard = benefitsGridRef.current.querySelector('.benefit-card-premium');
-                if (firstCard && typeof firstCard.scrollIntoView === 'function') {
-                    try {
-                        firstCard.scrollIntoView({ inline: 'start', block: 'nearest', behavior: 'instant' });
-                    } catch (e) {
-                        firstCard.scrollIntoView(true);
-                    }
-                }
             }
         };
-        resetScroll();
-        const rAF = requestAnimationFrame(resetScroll);
-        const t1 = setTimeout(resetScroll, 100);
-        const t2 = setTimeout(resetScroll, 400);
-        return () => {
-            cancelAnimationFrame(rAF);
-            clearTimeout(t1);
-            clearTimeout(t2);
-        };
+        resetCarousel();
+        const t1 = setTimeout(resetCarousel, 100);
+
+        // Ensure page itself loads at the very top if no hash is present in the URL
+        if (typeof window !== 'undefined' && !window.location.hash) {
+            window.scrollTo(0, 0);
+        }
+
+        return () => clearTimeout(t1);
     }, []);
 
     const handleBenefitsScroll = () => {
