@@ -2367,9 +2367,17 @@ select.form-control option {
     padding: 60px 0 30px 0;
     background-color: var(--bg-sidebar);
     color: rgba(255, 255, 255, 0.6);
-    text-align: center;
+    text-align: left !important;
     position: relative;
     z-index: 1;
+}
+
+.landing-footer h4 {
+    text-align: left !important;
+}
+
+.landing-footer p {
+    text-align: left !important;
 }
 
 .footer-container {
@@ -5373,6 +5381,9 @@ select.form-control option {
     border: 1px solid rgba(255, 255, 255, 0.18);
     transition: all 0.25s ease;
     width: fit-content;
+    min-width: 180px;
+    justify-content: flex-start;
+    box-sizing: border-box;
 }
 
 .footer-social-btn:hover {

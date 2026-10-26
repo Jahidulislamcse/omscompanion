@@ -340,7 +340,7 @@ export default function Index({ settings = {} }) {
             {/* Footer */}
             <footer className="landing-footer" style={{ width: '100%', alignSelf: 'stretch', boxSizing: 'border-box', padding: '60px 0 30px 0', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-white)' }}>
                 <div className="container" style={{ maxWidth: '1200px', width: '100%', margin: '0 auto', padding: '0 24px', boxSizing: 'border-box' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '40px', marginBottom: '40px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '40px', marginBottom: '40px', textAlign: 'left' }}>
                         
                         {/* Brand Column */}
                         <div>
@@ -375,8 +375,8 @@ export default function Index({ settings = {} }) {
 
                         {/* Social Links Column */}
                         <div>
-                            <h4 style={{ color: '#fff', fontSize: '16px', marginBottom: '16px', fontWeight: '700' }}>🌐 Connect With Us</h4>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <h4 style={{ color: '#fff', fontSize: '16px', marginBottom: '16px', fontWeight: '700', textAlign: 'left' }}>🌐 Connect With Us</h4>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start' }}>
                                 {/* Facebook Page Link */}
                                 <a 
                                     href={getSetting('footer_facebook_url') || 'https://facebook.com'} 
