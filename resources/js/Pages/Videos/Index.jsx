@@ -668,9 +668,9 @@ export default function Index({ categories = [], videos = [], settings = {}, tar
             )}
 
             {/* Call To Action Banner */}
-            <section className="cta-banner-section" style={{ paddingBottom: '60px' }}>
-                <div className="landing-section-container">
-                    <div className="glass-panel cta-banner-card">
+            <section className="cta-banner-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 60px', boxSizing: 'border-box' }}>
+                <div className="landing-section-container" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
+                    <div className="glass-panel cta-banner-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                         <h2 className="cta-title">Ready to Elevate Your Dental Practice?</h2>
                         <p className="cta-desc">
                             Join hundreds of BDS Doctors using {site_name || 'DentistChamber'} for transparent referral tracking, clinical video masterclasses, and verified digital certificates.

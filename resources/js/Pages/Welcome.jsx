@@ -1413,9 +1413,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             )}
 
             {/* Website Share Feature Section */}
-            <section className="share-section" style={{ padding: '30px 20px 40px', textAlign: 'center' }}>
-                <div className="landing-section-container">
-                    <div className="share-invite-card">
+            <section className="share-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 40px', boxSizing: 'border-box', textAlign: 'center' }}>
+                <div className="landing-section-container" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
+                    <div className="share-invite-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                         <div className="outline-pill-wrapper" style={{ justifyContent: 'center', marginBottom: '14px' }}>
                             <span className="outline-pill-badge share-invite-pill">
                                 🔗 Share & Invite
@@ -1505,9 +1505,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             </section>
 
             {/* Call To Action Banner */}
-            <section className="cta-banner-section">
-                <div className="landing-section-container">
-                    <div className="glass-panel cta-banner-card">
+            <section className="cta-banner-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 60px', boxSizing: 'border-box' }}>
+                <div className="landing-section-container" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
+                    <div className="glass-panel cta-banner-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                         <h2 className="cta-title">Ready to elevate your practice with OMS Companion</h2>
                         <p className="cta-desc">
                             Join hundreds of practitioners, using {site_name || 'OMS COMPANION'} for professional improvement and better patient care.

@@ -2280,12 +2280,20 @@ select.form-control option {
 
 /* Call To Action Banner */
 .cta-banner-section {
-    padding: 60px 20px;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 30px 20px 60px !important;
+    box-sizing: border-box !important;
+    align-self: center !important;
     position: relative;
     z-index: 1;
 }
 
 .cta-banner-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     text-align: center;
     padding: 48px 32px;
     background: linear-gradient(135deg, rgba(15, 43, 53, 0.95), rgba(6, 182, 212, 0.9));
@@ -2660,8 +2668,16 @@ select.form-control option {
         font-size: 11px;
     }
 
+    .share-section {
+        padding: 20px 12px 28px !important;
+    }
+
+    .cta-banner-section {
+        padding: 20px 12px 36px !important;
+    }
+
     .cta-banner-card {
-        padding: 16px 12px;
+        padding: 24px 16px;
     }
 
     .cta-title {
@@ -5190,6 +5206,16 @@ select.form-control option {
 /* ==========================================================================
    SHARE & INVITE DEDICATED SOCIAL APPS SECTION
    ========================================================================== */
+.share-section {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 30px 20px 40px !important;
+    box-sizing: border-box !important;
+    align-self: center !important;
+    text-align: center;
+}
+
 .share-invite-card {
     position: relative;
     padding: 38px 28px;
@@ -5197,7 +5223,9 @@ select.form-control option {
     background: linear-gradient(135deg, rgba(15, 43, 53, 0.96) 0%, rgba(13, 74, 96, 0.94) 100%);
     border: 1px solid rgba(6, 182, 212, 0.28);
     box-shadow: 0 20px 45px -10px rgba(15, 43, 53, 0.35), 0 0 30px rgba(6, 182, 212, 0.12);
-    max-width: 980px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     margin: 0 auto;
     text-align: center;
     color: #ffffff;
