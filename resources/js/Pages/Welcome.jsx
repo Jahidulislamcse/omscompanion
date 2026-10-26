@@ -149,23 +149,44 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     // Mobile Horizontal Carousel for Benefits Section
     const benefitsGridRef = useRef(null);
     const [activeBenefitIndex, setActiveBenefitIndex] = useState(0);
+    const [benefitsViewMode, setBenefitsViewMode] = useState('carousel'); // 'carousel' | 'grid'
+
+    // Reset scroll position on mount so Card 01 is always first
+    useEffect(() => {
+        if (benefitsGridRef.current) {
+            benefitsGridRef.current.scrollLeft = 0;
+        }
+    }, []);
 
     const handleBenefitsScroll = () => {
         const el = benefitsGridRef.current;
         if (!el) return;
-        const scrollLeft = el.scrollLeft;
-        const firstCard = el.firstElementChild;
-        if (!firstCard) return;
-        const cardWidth = firstCard.offsetWidth + 16;
-        const index = Math.round(scrollLeft / cardWidth);
-        setActiveBenefitIndex(Math.min(Math.max(index, 0), 6));
+        const cards = el.querySelectorAll('.benefit-card-premium');
+        if (!cards || cards.length === 0) return;
+
+        const containerCenter = el.scrollLeft + el.clientWidth / 2;
+        let closestIdx = 0;
+        let minDiff = Infinity;
+
+        cards.forEach((card, idx) => {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+            const diff = Math.abs(containerCenter - cardCenter);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestIdx = idx;
+            }
+        });
+
+        setActiveBenefitIndex(closestIdx);
     };
 
     const scrollToBenefit = (index) => {
         const el = benefitsGridRef.current;
-        if (!el || !el.children[index]) return;
-        const target = el.children[index];
-        const cardLeft = target.offsetLeft - el.offsetLeft;
+        if (!el) return;
+        const cards = el.querySelectorAll('.benefit-card-premium');
+        if (!cards || !cards[index]) return;
+        const target = cards[index];
+        const cardLeft = target.offsetLeft;
         const centerOffset = (el.clientWidth - target.offsetWidth) / 2;
         el.scrollTo({
             left: Math.max(0, cardLeft - centerOffset),
@@ -607,16 +628,26 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             <span className="trust-badge-item">🎥 100+ HD Masterclass Streams</span>
                         </div>
 
-                        {/* Mobile Swipe Hint Badge */}
-                        <div className="benefits-mobile-scroll-hint">
-                            <span className="hint-hand-bounce">👉</span>
-                            <span>Swipe cards to explore all <strong>7 benefits</strong></span>
-                            <span className="hint-pill-counter">{activeBenefitIndex + 1}/7</span>
+                        {/* Mobile Swipe Hint Toolbar & View Mode Switcher */}
+                        <div className="benefits-mobile-header-toolbar">
+                            <div className="benefits-mobile-scroll-hint">
+                                <span className="hint-hand-bounce">{benefitsViewMode === 'carousel' ? '👉' : '📋'}</span>
+                                <span>{benefitsViewMode === 'carousel' ? 'Swipe cards to explore all' : 'Viewing all'} <strong>7 benefits</strong></span>
+                                <span className="hint-pill-counter">{benefitsViewMode === 'carousel' ? `${activeBenefitIndex + 1}/7` : '7/7'}</span>
+                            </div>
+                            <button
+                                type="button"
+                                className="benefits-view-toggle-btn"
+                                onClick={() => setBenefitsViewMode(prev => prev === 'carousel' ? 'grid' : 'carousel')}
+                                aria-label="Toggle Benefits View Mode"
+                            >
+                                {benefitsViewMode === 'carousel' ? '⊞ Show All Cards' : '↔ Swipe Carousel'}
+                            </button>
                         </div>
                     </div>
 
                     <div 
-                        className="benefits-grid"
+                        className={`benefits-grid ${benefitsViewMode === 'grid' ? 'is-grid-view' : ''}`}
                         ref={benefitsGridRef}
                         onScroll={handleBenefitsScroll}
                     >
@@ -853,20 +884,40 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         </div>
                     </div>
 
-                    {/* Mobile Carousel Indicators (Pure Finger Scroll) */}
-                    <div className="benefits-mobile-controls">
-                        <div className="benefits-dots-track">
-                            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-                                <button
-                                    key={i}
-                                    type="button"
-                                    className={`benefits-dot-item ${activeBenefitIndex === i ? 'is-active' : ''}`}
-                                    onClick={() => scrollToBenefit(i)}
-                                    aria-label={`Go to benefit ${i + 1}`}
-                                />
-                            ))}
+                    {/* Mobile Carousel Indicators (Pure Finger Scroll with Quick Navigation Arrows) */}
+                    {benefitsViewMode === 'carousel' && (
+                        <div className="benefits-mobile-controls">
+                            <button
+                                type="button"
+                                className="benefits-nav-arrow-btn"
+                                onClick={() => scrollToBenefit(Math.max(0, activeBenefitIndex - 1))}
+                                disabled={activeBenefitIndex === 0}
+                                aria-label="Previous Benefit"
+                            >
+                                ‹
+                            </button>
+                            <div className="benefits-dots-track">
+                                {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        className={`benefits-dot-item ${activeBenefitIndex === i ? 'is-active' : ''}`}
+                                        onClick={() => scrollToBenefit(i)}
+                                        aria-label={`Go to benefit ${i + 1}`}
+                                    />
+                                ))}
+                            </div>
+                            <button
+                                type="button"
+                                className="benefits-nav-arrow-btn"
+                                onClick={() => scrollToBenefit(Math.min(6, activeBenefitIndex + 1))}
+                                disabled={activeBenefitIndex === 6}
+                                aria-label="Next Benefit"
+                            >
+                                ›
+                            </button>
                         </div>
-                    </div>
+                    )}
                 </div>
             </section>
 
