@@ -3189,12 +3189,18 @@ select.form-control option {
 .benefits-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 22px;
     margin-top: 42px;
     max-width: 1320px;
     margin-left: auto;
     margin-right: auto;
+}
+
+@media (min-width: 1024px) {
+    .benefits-grid {
+        justify-content: center;
+    }
 }
 
 .benefit-card-premium {

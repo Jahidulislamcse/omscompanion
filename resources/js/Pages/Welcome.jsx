@@ -156,12 +156,22 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
         const resetScroll = () => {
             if (benefitsGridRef.current) {
                 benefitsGridRef.current.scrollLeft = 0;
+                const firstCard = benefitsGridRef.current.querySelector('.benefit-card-premium');
+                if (firstCard && typeof firstCard.scrollIntoView === 'function') {
+                    try {
+                        firstCard.scrollIntoView({ inline: 'start', block: 'nearest', behavior: 'instant' });
+                    } catch (e) {
+                        firstCard.scrollIntoView(true);
+                    }
+                }
             }
         };
         resetScroll();
-        const t1 = setTimeout(resetScroll, 80);
-        const t2 = setTimeout(resetScroll, 300);
+        const rAF = requestAnimationFrame(resetScroll);
+        const t1 = setTimeout(resetScroll, 100);
+        const t2 = setTimeout(resetScroll, 400);
         return () => {
+            cancelAnimationFrame(rAF);
             clearTimeout(t1);
             clearTimeout(t2);
         };
@@ -682,6 +692,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         className={`benefits-grid ${benefitsViewMode === 'grid' ? 'is-grid-view' : ''}`}
                         ref={benefitsGridRef}
                         onScroll={handleBenefitsScroll}
+                        style={{ justifyContent: 'flex-start' }}
                     >
                         {/* Benefit 1 */}
                         <div className="glass-panel benefit-card-premium theme-cyan">
