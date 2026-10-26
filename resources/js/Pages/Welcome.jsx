@@ -153,9 +153,18 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
 
     // Reset scroll position on mount so Card 01 is always first
     useEffect(() => {
-        if (benefitsGridRef.current) {
-            benefitsGridRef.current.scrollLeft = 0;
-        }
+        const resetScroll = () => {
+            if (benefitsGridRef.current) {
+                benefitsGridRef.current.scrollLeft = 0;
+            }
+        };
+        resetScroll();
+        const t1 = setTimeout(resetScroll, 80);
+        const t2 = setTimeout(resetScroll, 300);
+        return () => {
+            clearTimeout(t1);
+            clearTimeout(t2);
+        };
     }, []);
 
     const handleBenefitsScroll = () => {
@@ -164,20 +173,32 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
         const cards = el.querySelectorAll('.benefit-card-premium');
         if (!cards || cards.length === 0) return;
 
-        const containerCenter = el.scrollLeft + el.clientWidth / 2;
-        let closestIdx = 0;
-        let minDiff = Infinity;
+        const scrollLeft = el.scrollLeft;
+        if (scrollLeft <= 25) {
+            setActiveBenefitIndex(0);
+            return;
+        }
+        if (scrollLeft + el.clientWidth >= el.scrollWidth - 25) {
+            setActiveBenefitIndex(cards.length - 1);
+            return;
+        }
+
+        const viewportLeft = scrollLeft;
+        const viewportRight = scrollLeft + el.clientWidth;
+        let maxOverlap = 0;
+        let bestIdx = 0;
 
         cards.forEach((card, idx) => {
-            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-            const diff = Math.abs(containerCenter - cardCenter);
-            if (diff < minDiff) {
-                minDiff = diff;
-                closestIdx = idx;
+            const cardLeft = card.offsetLeft - el.offsetLeft;
+            const cardRight = cardLeft + card.offsetWidth;
+            const overlap = Math.max(0, Math.min(viewportRight, cardRight) - Math.max(viewportLeft, cardLeft));
+            if (overlap > maxOverlap) {
+                maxOverlap = overlap;
+                bestIdx = idx;
             }
         });
 
-        setActiveBenefitIndex(closestIdx);
+        setActiveBenefitIndex(bestIdx);
     };
 
     const scrollToBenefit = (index) => {
@@ -185,11 +206,22 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
         if (!el) return;
         const cards = el.querySelectorAll('.benefit-card-premium');
         if (!cards || !cards[index]) return;
+
+        if (index === 0) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+            setActiveBenefitIndex(0);
+            return;
+        }
+        if (index === cards.length - 1) {
+            el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
+            setActiveBenefitIndex(index);
+            return;
+        }
+
         const target = cards[index];
-        const cardLeft = target.offsetLeft;
-        const centerOffset = (el.clientWidth - target.offsetWidth) / 2;
+        const targetLeft = Math.max(0, target.offsetLeft - el.offsetLeft - 18);
         el.scrollTo({
-            left: Math.max(0, cardLeft - centerOffset),
+            left: targetLeft,
             behavior: 'smooth'
         });
         setActiveBenefitIndex(index);
