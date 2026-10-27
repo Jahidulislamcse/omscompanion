@@ -456,27 +456,52 @@ class AdminController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'video_url' => 'required|string',
-            'duration' => 'nullable|integer|min:0',
+            'duration' => 'nullable',
             'is_free' => 'nullable|boolean',
         ]);
 
-        $video = Video::create([
-            'category_id' => $request->category_id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'video_path' => $request->video_url,
-            'storage_type' => 'youtube',
-            'duration' => $request->duration,
-            'is_free' => $request->boolean('is_free'),
-        ]);
+        // Safely parse duration (supports seconds integer or "mm:ss" format)
+        $duration = null;
+        if ($request->filled('duration')) {
+            $durationRaw = trim((string)$request->duration);
+            if (is_numeric($durationRaw)) {
+                $duration = (int) $durationRaw;
+            } elseif (strpos($durationRaw, ':') !== false) {
+                $parts = array_map('intval', explode(':', $durationRaw));
+                if (count($parts) === 2) {
+                    $duration = ($parts[0] * 60) + $parts[1];
+                } elseif (count($parts) === 3) {
+                    $duration = ($parts[0] * 3600) + ($parts[1] * 60) + $parts[2];
+                }
+            }
+        }
 
-        // Notify members about new video
-        $typeLabel = $video->is_free ? 'Free' : 'Premium';
-        $title = "New Video: {$video->title}";
-        $message = "New {$typeLabel} video added: \"{$video->title}\". Log in now to watch.";
-        $actionUrl = route('member.videos', ['video_id' => $video->id]);
-        
-        NotificationService::broadcastToMembers($title, $message, $actionUrl);
+        try {
+            $video = Video::create([
+                'category_id' => $request->category_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'video_path' => $request->video_url,
+                'storage_type' => 'youtube',
+                'duration' => $duration,
+                'is_free' => $request->boolean('is_free'),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to store video: " . $e->getMessage());
+            return redirect()->back()->withErrors(['video_url' => 'Failed to save video: ' . $e->getMessage()]);
+        }
+
+        // Notify members about new video (safely wrapped so notification failure never crashes video creation)
+        try {
+            $typeLabel = $video->is_free ? 'Free' : 'Premium';
+            $title = "New Video: {$video->title}";
+            $message = "New {$typeLabel} video added: \"{$video->title}\". Log in now to watch.";
+            $actionUrl = route('member.videos', ['video_id' => $video->id]);
+            
+            NotificationService::broadcastToMembers($title, $message, $actionUrl);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to broadcast new video notification: " . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Video uploaded successfully.');
     }
@@ -488,18 +513,38 @@ class AdminController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'video_url' => 'required|string',
-            'duration' => 'nullable|integer|min:0',
+            'duration' => 'nullable',
             'is_free' => 'nullable|boolean',
         ]);
 
-        $video->update([
-            'category_id' => $request->category_id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'video_path' => $request->video_url,
-            'duration' => $request->duration,
-            'is_free' => $request->boolean('is_free'),
-        ]);
+        $duration = null;
+        if ($request->filled('duration')) {
+            $durationRaw = trim((string)$request->duration);
+            if (is_numeric($durationRaw)) {
+                $duration = (int) $durationRaw;
+            } elseif (strpos($durationRaw, ':') !== false) {
+                $parts = array_map('intval', explode(':', $durationRaw));
+                if (count($parts) === 2) {
+                    $duration = ($parts[0] * 60) + $parts[1];
+                } elseif (count($parts) === 3) {
+                    $duration = ($parts[0] * 3600) + ($parts[1] * 60) + $parts[2];
+                }
+            }
+        }
+
+        try {
+            $video->update([
+                'category_id' => $request->category_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'video_path' => $request->video_url,
+                'duration' => $duration,
+                'is_free' => $request->boolean('is_free'),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to update video: " . $e->getMessage());
+            return redirect()->back()->withErrors(['video_url' => 'Failed to update video: ' . $e->getMessage()]);
+        }
 
         return redirect()->back()->with('success', 'Video updated successfully.');
     }

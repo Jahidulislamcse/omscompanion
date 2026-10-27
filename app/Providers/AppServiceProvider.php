@@ -19,6 +19,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('notifications') && !\Illuminate\Support\Facades\Schema::hasColumn('notifications', 'action_url')) {
+                \Illuminate\Support\Facades\Schema::table('notifications', function ($table) {
+                    $table->string('action_url', 500)->nullable()->after('message');
+                });
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Auto-migration for notifications.action_url failed: ' . $e->getMessage());
+        }
     }
 }

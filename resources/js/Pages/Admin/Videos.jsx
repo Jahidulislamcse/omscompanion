@@ -59,6 +59,10 @@ export default function Videos({ categories = [], videos = [] }) {
             onSuccess: () => {
                 setEditingVideo(null);
                 alert('Video updated successfully!');
+            },
+            onError: (err) => {
+                const msg = Object.values(err).flat().join('\n');
+                alert(msg || 'Failed to update video. Please check form errors.');
             }
         });
     };
@@ -69,6 +73,9 @@ export default function Videos({ categories = [], videos = [] }) {
                 preserveScroll: true,
                 onSuccess: () => {
                     alert('Video deleted successfully!');
+                },
+                onError: (err) => {
+                    alert('Failed to delete video.');
                 }
             });
         }
@@ -80,6 +87,10 @@ export default function Videos({ categories = [], videos = [] }) {
             onSuccess: () => {
                 resetVidForm();
                 alert('YouTube video saved successfully! Members notified.');
+            },
+            onError: (err) => {
+                const msg = Object.values(err).flat().join('\n');
+                alert(msg || 'Failed to save video. Please check form errors.');
             }
         });
     };

@@ -19,13 +19,39 @@ class NotificationService
         }
 
         // 1. Record in Database
-        $notification = Notification::create([
+        $notificationData = [
             'user_id' => $user->id,
             'type' => $type,
             'title' => $title,
             'message' => $message,
-            'action_url' => $actionUrl,
-        ]);
+        ];
+
+        static $hasActionUrl = null;
+        if ($hasActionUrl === null) {
+            try {
+                $hasActionUrl = \Illuminate\Support\Facades\Schema::hasColumn('notifications', 'action_url');
+            } catch (\Throwable $e) {
+                $hasActionUrl = false;
+            }
+        }
+
+        if ($hasActionUrl && !empty($actionUrl)) {
+            $notificationData['action_url'] = $actionUrl;
+        }
+
+        $notification = null;
+        try {
+            $notification = Notification::create($notificationData);
+        } catch (\Throwable $e) {
+            Log::error("Failed to create notification record in database: " . $e->getMessage());
+            // Retry without action_url in case the column was missing
+            try {
+                unset($notificationData['action_url']);
+                $notification = Notification::create($notificationData);
+            } catch (\Throwable $ex) {
+                Log::error("Fallback notification creation also failed: " . $ex->getMessage());
+            }
+        }
 
         // 2. Dispatch Email
         if ($type === 'email' || $type === 'both') {
@@ -99,9 +125,17 @@ class NotificationService
      */
     public static function broadcastToMembers(string $title, string $message, ?string $actionUrl = null)
     {
-        $members = User::where('role', 'member')->where('status', 'approved')->get();
-        foreach ($members as $member) {
-            self::send($member, $title, $message, 'email', $actionUrl);
+        try {
+            $members = User::where('role', 'member')->where('status', 'approved')->get();
+            foreach ($members as $member) {
+                try {
+                    self::send($member, $title, $message, 'email', $actionUrl);
+                } catch (\Throwable $e) {
+                    Log::error("Failed to notify member #{$member->id}: " . $e->getMessage());
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error("Failed to broadcast notification to members: " . $e->getMessage());
         }
 
         // Broadcast Push Notification to all app users
