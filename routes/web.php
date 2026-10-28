@@ -392,13 +392,32 @@ Route::get('/download-apk-file', function () {
     ]);
 
     $cookie = cookie('oms_app_installed', 'true', 525600, '/', null, false, false);
+    \Illuminate\Support\Facades\Cookie::queue($cookie);
 
     foreach ($possiblePaths as $path) {
-        if (file_exists($path)) {
-            return response()->download($path, 'omscompanion.apk', [
+        if (file_exists($path) && is_readable($path)) {
+            $downloadResponse = response()->download($path, 'omscompanion.apk', [
                 'Content-Type' => 'application/vnd.android.package-archive',
-                'Content-Length' => filesize($path),
-            ])->withCookie($cookie);
+                'Content-Disposition' => 'attachment; filename="omscompanion.apk"',
+            ]);
+            $downloadResponse->headers->setCookie($cookie);
+            return $downloadResponse;
+        }
+    }
+
+    // Fallback if file is somehow missing from primary paths: check build outputs
+    $fallbackPaths = [
+        base_path('android-app/app/build/outputs/apk/debug/app-debug.apk'),
+        base_path('android-app/app/build/outputs/apk/release/app-release-unsigned.apk'),
+    ];
+    foreach ($fallbackPaths as $fallbackPath) {
+        if (file_exists($fallbackPath) && is_readable($fallbackPath)) {
+            $downloadResponse = response()->download($fallbackPath, 'omscompanion.apk', [
+                'Content-Type' => 'application/vnd.android.package-archive',
+                'Content-Disposition' => 'attachment; filename="omscompanion.apk"',
+            ]);
+            $downloadResponse->headers->setCookie($cookie);
+            return $downloadResponse;
         }
     }
 
