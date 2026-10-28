@@ -17,6 +17,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,16 +44,29 @@ public class MainActivity extends AppCompatActivity {
         com.onesignal.OneSignal.getNotifications().requestPermission(true, com.onesignal.Continue.none());
         com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
 
-        // Handle OneSignal Push Notification Click
+        // Handle OneSignal Push Notification Click inside WebView
         com.onesignal.OneSignal.getNotifications().addClickListener(event -> {
-            String launchUrl = event.getNotification().getLaunchURL();
-            if (launchUrl != null && !launchUrl.isEmpty()) {
-                runOnUiThread(() -> {
-                    if (webView != null) {
-                        webView.loadUrl(launchUrl);
-                    }
-                });
+            String targetUrl = null;
+            if (event.getNotification() != null && event.getNotification().getAdditionalData() != null) {
+                JSONObject data = event.getNotification().getAdditionalData();
+                if (data.has("target_url") && !data.isNull("target_url")) {
+                    targetUrl = data.optString("target_url", null);
+                } else if (data.has("url") && !data.isNull("url")) {
+                    targetUrl = data.optString("url", null);
+                }
             }
+            if ((targetUrl == null || targetUrl.isEmpty()) && event.getNotification() != null) {
+                targetUrl = event.getNotification().getLaunchURL();
+            }
+            if (targetUrl == null || targetUrl.isEmpty()) {
+                targetUrl = APP_URL;
+            }
+            final String urlToLoad = targetUrl;
+            runOnUiThread(() -> {
+                if (webView != null) {
+                    webView.loadUrl(urlToLoad);
+                }
+            });
         });
 
         webView = findViewById(R.id.webview);
@@ -186,12 +200,14 @@ public class MainActivity extends AppCompatActivity {
         String initialUrl = APP_URL;
         Intent startingIntent = getIntent();
         if (startingIntent != null) {
-            if (startingIntent.getData() != null) {
-                initialUrl = startingIntent.getData().toString();
+            if (startingIntent.hasExtra("target_url")) {
+                initialUrl = startingIntent.getStringExtra("target_url");
             } else if (startingIntent.hasExtra("launchUrl")) {
                 initialUrl = startingIntent.getStringExtra("launchUrl");
             } else if (startingIntent.hasExtra("url")) {
                 initialUrl = startingIntent.getStringExtra("url");
+            } else if (startingIntent.getData() != null) {
+                initialUrl = startingIntent.getData().toString();
             }
         }
 
@@ -206,12 +222,14 @@ public class MainActivity extends AppCompatActivity {
         setIntent(intent);
         if (intent != null) {
             String targetUrl = null;
-            if (intent.getData() != null) {
-                targetUrl = intent.getData().toString();
+            if (intent.hasExtra("target_url")) {
+                targetUrl = intent.getStringExtra("target_url");
             } else if (intent.hasExtra("launchUrl")) {
                 targetUrl = intent.getStringExtra("launchUrl");
             } else if (intent.hasExtra("url")) {
                 targetUrl = intent.getStringExtra("url");
+            } else if (intent.getData() != null) {
+                targetUrl = intent.getData().toString();
             }
             if (targetUrl != null && !targetUrl.isEmpty() && webView != null) {
                 webView.loadUrl(targetUrl);

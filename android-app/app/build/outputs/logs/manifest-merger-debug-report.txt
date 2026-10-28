@@ -1,17 +1,17 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-33:12
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:1-47:12
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\1b8c6da6647029fa764a506cbf2e565f\transformed\material-1.9.0\AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.gradle\caches\transforms-3\7f92fd0c87693c55a005a000797e6f9f\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\7e258b21984c01db9d82424cbcfe457e\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
-MERGED from [com.onesignal:OneSignal:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\5e46b7cd9b3c7839f9d45e2aa7dc0f73\transformed\jetified-OneSignal-5.10.0\AndroidManifest.xml:2:1-7:12
-MERGED from [com.onesignal:in-app-messages:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\255975441a7b8696e8bc07ca69618e55\transformed\jetified-in-app-messages-5.10.0\AndroidManifest.xml:2:1-7:12
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:2:1-110:12
-MERGED from [com.onesignal:location:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\63ab7b551481e9e19f3693969ee64ff7\transformed\jetified-location-5.10.0\AndroidManifest.xml:2:1-10:12
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:2:1-45:12
+MERGED from [com.onesignal:OneSignal:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\d82a2a0eae6828447fdfa4fd984a97f8\transformed\jetified-OneSignal-5.10.2\AndroidManifest.xml:2:1-7:12
+MERGED from [com.onesignal:in-app-messages:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\6c2c2224994ebe8845fd956fa3b59059\transformed\jetified-in-app-messages-5.10.2\AndroidManifest.xml:2:1-7:12
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:2:1-110:12
+MERGED from [com.onesignal:location:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\7afead4403eb4e437722a5ead6f4a9fd\transformed\jetified-location-5.10.2\AndroidManifest.xml:2:1-10:12
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:2:1-45:12
 MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\655389d927aea35f4be673d8560d8bc6\transformed\appcompat-1.6.1\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:17:1-66:12
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] C:\Users\HP\.gradle\caches\transforms-3\951beea09a55f6cb7ce0d91b430d7a38\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:15:1-33:12
@@ -58,7 +58,7 @@ MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\HP\.gradle\caches\tr
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] C:\Users\HP\.gradle\caches\transforms-3\7a3da0d326341f27e72bf7c9348e448b\transformed\lifecycle-viewmodel-2.6.2\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\HP\.gradle\caches\transforms-3\b294a81bf7b57454315f6ce7363e8b5a\transformed\jetified-lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] C:\Users\HP\.gradle\caches\transforms-3\04beeec5945c12ebd3e376d5947007f3\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.onesignal:kmp-android:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\0ae757319b70c06b8f908a36f06682e2\transformed\jetified-kmp-release\AndroidManifest.xml:2:1-7:12
+MERGED from [com.onesignal:kmp-android:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\36d26ded3a0e4a07f0eba1d351b31a70\transformed\jetified-kmp-release\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\HP\.gradle\caches\transforms-3\3598aa2c19a415fd4b36b9950669f811\transformed\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:2:1-6:12
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\HP\.gradle\caches\transforms-3\5cf0a727d5ba3e3e5bff1140435c0380\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:16:1-26:12
 MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\HP\.gradle\caches\transforms-3\2071d843a236984f4e9658a1462b1ae4\transformed\fragment-1.3.6\AndroidManifest.xml:17:1-24:12
@@ -91,8 +91,8 @@ MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\HP\.gra
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:2:11-69
 uses-permission#android.permission.INTERNET
 ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:5:5-67
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:8:5-67
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:8:5-67
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:8:5-67
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:8:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\HP\.gradle\caches\transforms-3\a3be75cb354c268ae853545e73f62dde\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:25:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\HP\.gradle\caches\transforms-3\a3be75cb354c268ae853545e73f62dde\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:25:5-67
 MERGED from [com.google.firebase:firebase-installations:17.2.0] C:\Users\HP\.gradle\caches\transforms-3\a42e98f792a74b464e50eb9eb3ea48b3\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:8:5-67
@@ -103,8 +103,8 @@ MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Use
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:5:22-64
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:6:5-79
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:9:5-79
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:9:5-79
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:9:5-79
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:9:5-79
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:22:5-79
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:22:5-79
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\HP\.gradle\caches\transforms-3\a3be75cb354c268ae853545e73f62dde\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:24:5-79
@@ -121,29 +121,51 @@ MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transf
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:6:22-76
 uses-permission#android.permission.POST_NOTIFICATIONS
 ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:7:5-77
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:15:5-77
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:15:5-77
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:15:5-77
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:15:5-77
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:23:5-77
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:23:5-77
 	android:name
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:7:22-74
 uses-permission#android.permission.VIBRATE
 ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:8:5-66
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:22:5-66
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:22:5-66
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:22:5-66
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:22:5-66
 	android:name
 		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:8:22-63
+uses-permission#android.permission.WAKE_LOCK
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:9:5-68
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:16:5-68
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:16:5-68
+MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:24:5-68
+MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:24:5-68
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:9:5-68
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:9:5-68
+MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:23:5-68
+MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:23:5-68
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:9:22-65
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-82
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:17:5-82
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:17:5-82
+MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:5-82
+MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:5-82
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:11:5-82
+MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:11:5-82
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:22-79
 application
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-31:19
-INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:10:5-31:19
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:12:5-45:19
+INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:12:5-45:19
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\1b8c6da6647029fa764a506cbf2e565f\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\1b8c6da6647029fa764a506cbf2e565f\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.gradle\caches\transforms-3\7f92fd0c87693c55a005a000797e6f9f\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.gradle\caches\transforms-3\7f92fd0c87693c55a005a000797e6f9f\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:46:5-108:19
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:46:5-108:19
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:11:5-43:19
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:11:5-43:19
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:46:5-108:19
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:46:5-108:19
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:11:5-43:19
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:11:5-43:19
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:28:5-64:19
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:28:5-64:19
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] C:\Users\HP\.gradle\caches\transforms-3\951beea09a55f6cb7ce0d91b430d7a38\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:23:5-31:19
@@ -191,45 +213,79 @@ MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\HP\.gradle\caches\transf
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.9.0] C:\Users\HP\.gradle\caches\transforms-3\653719141696bd4bcbcc12ecdfbe4137\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:16:9-35
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:18:9-35
 	android:label
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:15:9-41
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:17:9-41
 	android:roundIcon
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:14:9-54
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:16:9-54
 	android:icon
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:13:9-43
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:15:9-43
 	android:allowBackup
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:12:9-35
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:14:9-35
 	android:theme
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:17:9-65
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:19:9-65
 	android:usesCleartextTraffic
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:18:9-44
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:9-44
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:11:9-40
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:13:9-40
 meta-data#onesignal_app_id
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:9-107
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:9-107
 	android:value
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:52-104
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:52-104
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:20:20-51
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:20-51
+meta-data#com.google.firebase.messaging.default_notification_channel_id
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:9-132
+	android:value
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:97-129
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:20-96
+meta-data#com.onesignal.suppressLaunchURLs
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:9-91
+	android:value
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:68-88
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:20-67
 activity#com.omscompanion.MainActivity
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:22:9-30:20
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:27:9-44:20
+	android:launchMode
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:30:13-44
 	android:exported
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:24:13-36
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:29:13-36
 	android:configChanges
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:25:13-74
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:31:13-74
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:23:13-41
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:28:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:26:13-29:29
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:32:13-35:29
 action#android.intent.action.MAIN
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:27:17-69
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:33:17-69
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:27:25-66
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:33:25-66
 category#android.intent.category.LAUNCHER
-ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:28:17-77
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:34:17-77
 	android:name
-		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:28:27-74
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:34:27-74
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:omscompanion.com+data:host:omscompanion.com+data:scheme:http+data:scheme:https
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:37:13-43:29
+action#android.intent.action.VIEW
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:38:17-69
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:38:25-66
+category#android.intent.category.DEFAULT
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:39:17-76
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:39:27-73
+category#android.intent.category.BROWSABLE
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:40:17-78
+	android:name
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:40:27-75
+data
+ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:41:17-79
+	android:host
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:41:45-76
+	android:scheme
+		ADDED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml:41:23-44
 uses-sdk
 INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml
@@ -240,16 +296,16 @@ MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.grad
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\HP\.gradle\caches\transforms-3\7f92fd0c87693c55a005a000797e6f9f\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\7e258b21984c01db9d82424cbcfe457e\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\7e258b21984c01db9d82424cbcfe457e\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
-MERGED from [com.onesignal:OneSignal:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\5e46b7cd9b3c7839f9d45e2aa7dc0f73\transformed\jetified-OneSignal-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:OneSignal:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\5e46b7cd9b3c7839f9d45e2aa7dc0f73\transformed\jetified-OneSignal-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:in-app-messages:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\255975441a7b8696e8bc07ca69618e55\transformed\jetified-in-app-messages-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:in-app-messages:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\255975441a7b8696e8bc07ca69618e55\transformed\jetified-in-app-messages-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:location:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\63ab7b551481e9e19f3693969ee64ff7\transformed\jetified-location-5.10.0\AndroidManifest.xml:8:5-44
-MERGED from [com.onesignal:location:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\63ab7b551481e9e19f3693969ee64ff7\transformed\jetified-location-5.10.0\AndroidManifest.xml:8:5-44
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:OneSignal:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\d82a2a0eae6828447fdfa4fd984a97f8\transformed\jetified-OneSignal-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:OneSignal:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\d82a2a0eae6828447fdfa4fd984a97f8\transformed\jetified-OneSignal-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:in-app-messages:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\6c2c2224994ebe8845fd956fa3b59059\transformed\jetified-in-app-messages-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:in-app-messages:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\6c2c2224994ebe8845fd956fa3b59059\transformed\jetified-in-app-messages-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:location:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\7afead4403eb4e437722a5ead6f4a9fd\transformed\jetified-location-5.10.2\AndroidManifest.xml:8:5-44
+MERGED from [com.onesignal:location:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\7afead4403eb4e437722a5ead6f4a9fd\transformed\jetified-location-5.10.2\AndroidManifest.xml:8:5-44
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:5:5-44
 MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\655389d927aea35f4be673d8560d8bc6\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\HP\.gradle\caches\transforms-3\655389d927aea35f4be673d8560d8bc6\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
 MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:20:5-44
@@ -342,8 +398,8 @@ MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\HP\.gradle
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\HP\.gradle\caches\transforms-3\b294a81bf7b57454315f6ce7363e8b5a\transformed\jetified-lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] C:\Users\HP\.gradle\caches\transforms-3\04beeec5945c12ebd3e376d5947007f3\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] C:\Users\HP\.gradle\caches\transforms-3\04beeec5945c12ebd3e376d5947007f3\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\AndroidManifest.xml:20:5-44
-MERGED from [com.onesignal:kmp-android:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\0ae757319b70c06b8f908a36f06682e2\transformed\jetified-kmp-release\AndroidManifest.xml:5:5-44
-MERGED from [com.onesignal:kmp-android:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\0ae757319b70c06b8f908a36f06682e2\transformed\jetified-kmp-release\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:kmp-android:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\36d26ded3a0e4a07f0eba1d351b31a70\transformed\jetified-kmp-release\AndroidManifest.xml:5:5-44
+MERGED from [com.onesignal:kmp-android:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\36d26ded3a0e4a07f0eba1d351b31a70\transformed\jetified-kmp-release\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\HP\.gradle\caches\transforms-3\3598aa2c19a415fd4b36b9950669f811\transformed\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:4:5-43
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] C:\Users\HP\.gradle\caches\transforms-3\3598aa2c19a415fd4b36b9950669f811\transformed\jetified-play-services-tasks-18.0.2\AndroidManifest.xml:4:5-43
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\HP\.gradle\caches\transforms-3\5cf0a727d5ba3e3e5bff1140435c0380\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:18:5-43
@@ -391,251 +447,229 @@ MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\HP\.gra
 	android:minSdkVersion
 		INJECTED from D:\xampp\htdocs\OMSCOMPANION\android-app\app\src\main\AndroidManifest.xml
 permission#${applicationId}.permission.C2D_MESSAGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:8:5-10:47
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:8:5-10:47
 	android:protectionLevel
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:10:9-44
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:10:9-44
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:9:9-63
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:9:9-63
 permission#com.omscompanion.permission.C2D_MESSAGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:8:5-10:47
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:8:5-10:47
 	android:protectionLevel
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:10:9-44
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:10:9-44
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:9:9-63
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:9:9-63
 uses-permission#${applicationId}.permission.C2D_MESSAGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:12:5-79
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:12:5-79
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:12:22-76
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:12:22-76
 uses-permission#com.omscompanion.permission.C2D_MESSAGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:12:5-79
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:12:5-79
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:12:22-76
-uses-permission#android.permission.WAKE_LOCK
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:16:5-68
-MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:24:5-68
-MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:24:5-68
-MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:9:5-68
-MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:9:5-68
-MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:23:5-68
-MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:23:5-68
-	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:16:22-65
-uses-permission#com.google.android.c2dm.permission.RECEIVE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:17:5-82
-MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:5-82
-MERGED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:26:5-82
-MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:11:5-82
-MERGED from [com.google.android.gms:play-services-cloud-messaging:17.1.0] C:\Users\HP\.gradle\caches\transforms-3\5040f49da60e7a1344daf2948986d655\transformed\jetified-play-services-cloud-messaging-17.1.0\AndroidManifest.xml:11:5-82
-	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:17:22-79
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:12:22-76
 uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:27:5-81
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:27:5-81
 MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:25:5-81
 MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:25:5-81
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:27:22-78
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:27:22-78
 uses-permission#com.sec.android.provider.badge.permission.READ
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:29:5-86
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:29:5-86
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:29:22-83
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:29:22-83
 uses-permission#com.sec.android.provider.badge.permission.WRITE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:30:5-87
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:30:5-87
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:30:22-84
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:30:22-84
 uses-permission#com.htc.launcher.permission.READ_SETTINGS
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:31:5-81
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:31:5-81
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:31:22-78
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:31:22-78
 uses-permission#com.htc.launcher.permission.UPDATE_SHORTCUT
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:32:5-83
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:32:5-83
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:32:22-80
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:32:22-80
 uses-permission#com.sonyericsson.home.permission.BROADCAST_BADGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:33:5-88
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:33:5-88
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:33:22-85
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:33:22-85
 uses-permission#com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:34:5-92
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:34:5-92
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:34:22-89
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:34:22-89
 uses-permission#com.anddoes.launcher.permission.UPDATE_COUNT
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:35:5-84
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:35:5-84
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:35:22-81
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:35:22-81
 uses-permission#com.majeur.launcher.permission.UPDATE_BADGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:36:5-83
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:36:5-83
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:36:22-80
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:36:22-80
 uses-permission#com.huawei.android.launcher.permission.CHANGE_BADGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:37:5-91
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:37:5-91
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:37:22-88
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:37:22-88
 uses-permission#com.huawei.android.launcher.permission.READ_SETTINGS
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:38:5-92
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:38:5-92
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:38:22-89
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:38:22-89
 uses-permission#com.huawei.android.launcher.permission.WRITE_SETTINGS
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:39:5-93
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:39:5-93
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:39:22-90
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:39:22-90
 uses-permission#android.permission.READ_APP_BADGE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:40:5-73
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:40:5-73
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:40:22-70
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:40:22-70
 uses-permission#com.oppo.launcher.permission.READ_SETTINGS
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:41:5-82
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:41:5-82
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:41:22-79
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:41:22-79
 uses-permission#com.oppo.launcher.permission.WRITE_SETTINGS
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:42:5-83
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:42:5-83
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:42:22-80
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:42:22-80
 uses-permission#me.everything.badger.permission.BADGE_COUNT_READ
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:43:5-88
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:43:5-88
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:43:22-85
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:43:22-85
 uses-permission#me.everything.badger.permission.BADGE_COUNT_WRITE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:44:5-89
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:44:5-89
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:44:22-86
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:44:22-86
 receiver#com.onesignal.notifications.receivers.FCMBroadcastReceiver
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:47:9-58:20
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:47:9-58:20
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:49:13-36
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:49:13-36
 	android:permission
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:50:13-73
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:50:13-73
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:48:13-86
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:48:13-86
 intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:${applicationId}
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:53:13-57:29
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:53:13-57:29
 	android:priority
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:53:28-50
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:53:28-50
 intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:com.omscompanion
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:53:13-57:29
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:53:13-57:29
 	android:priority
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:53:28-50
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:53:28-50
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:54:17-81
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:54:17-81
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:54:25-78
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:54:25-78
 category#${applicationId}
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:56:17-61
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:56:17-61
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:56:27-58
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:56:27-58
 category#com.omscompanion
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:56:17-61
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:56:17-61
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:56:27-58
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:56:27-58
 service#com.onesignal.notifications.services.HmsMessageServiceOneSignal
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:60:9-66:19
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:60:9-66:19
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:62:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:62:13-37
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:61:13-91
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:61:13-91
 intent-filter#action:name:com.huawei.push.action.MESSAGING_EVENT
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:63:13-65:29
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:63:13-65:29
 action#com.huawei.push.action.MESSAGING_EVENT
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:64:17-81
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:64:17-81
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:64:25-78
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:64:25-78
 activity#com.onesignal.NotificationOpenedActivityHMS
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:67:9-75:20
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:67:9-75:20
 	android:noHistory
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:70:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:70:13-37
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:69:13-36
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:69:13-36
 	android:theme
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:71:13-72
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:71:13-72
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:68:13-71
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:68:13-71
 intent-filter#action:name:android.intent.action.VIEW
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:72:13-74:29
-action#android.intent.action.VIEW
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:73:17-69
-	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:73:25-66
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:72:13-74:29
 receiver#com.onesignal.notifications.receivers.NotificationDismissReceiver
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:77:9-79:40
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:77:9-79:40
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:79:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:79:13-37
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:78:13-93
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:78:13-93
 receiver#com.onesignal.notifications.receivers.BootUpReceiver
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:80:9-86:20
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:80:9-86:20
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:82:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:82:13-37
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:81:13-80
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:81:13-80
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:83:13-85:29
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:83:13-85:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:84:17-79
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:84:17-79
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:84:25-76
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:84:25-76
 receiver#com.onesignal.notifications.receivers.UpgradeReceiver
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:87:9-93:20
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:87:9-93:20
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:89:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:89:13-37
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:88:13-81
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:88:13-81
 intent-filter#action:name:android.intent.action.MY_PACKAGE_REPLACED
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:90:13-92:29
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:90:13-92:29
 action#android.intent.action.MY_PACKAGE_REPLACED
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:91:17-84
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:91:17-84
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:91:25-81
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:91:25-81
 activity#com.onesignal.notifications.activities.NotificationOpenedActivity
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:95:9-101:75
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:95:9-101:75
 	android:excludeFromRecents
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:97:13-46
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:97:13-46
 	android:noHistory
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:99:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:99:13-37
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:98:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:98:13-37
 	android:theme
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:101:13-72
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:101:13-72
 	android:taskAffinity
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:100:13-36
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:100:13-36
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:96:13-93
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:96:13-93
 activity#com.onesignal.notifications.activities.NotificationOpenedActivityAndroid22AndOlder
-ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:102:9-107:75
+ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:102:9-107:75
 	android:excludeFromRecents
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:104:13-46
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:104:13-46
 	android:noHistory
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:106:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:106:13-37
 	android:exported
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:105:13-37
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:105:13-37
 	android:theme
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:107:13-72
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:107:13-72
 	android:name
-		ADDED from [com.onesignal:notifications:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\ef30e46d9ad8ce6760d78568c2cabcfc\transformed\jetified-notifications-5.10.0\AndroidManifest.xml:103:13-110
+		ADDED from [com.onesignal:notifications:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\b23fd8a498c840286d6e30588608d381\transformed\jetified-notifications-5.10.2\AndroidManifest.xml:103:13-110
 service#com.onesignal.core.services.SyncJobService
-ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:12:9-15:72
+ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:12:9-15:72
 	android:exported
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:14:13-37
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:14:13-37
 	android:permission
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:15:13-69
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:15:13-69
 	android:name
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:13:13-70
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:13:13-70
 service#com.onesignal.SyncJobService
-ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:18:9-22:19
+ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:18:9-22:19
 	android:exported
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:20:13-37
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:20:13-37
 	android:permission
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:21:13-69
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:21:13-69
 	android:name
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:19:13-56
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:19:13-56
 activity#com.onesignal.core.activities.PermissionsActivity
-ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:24:9-27:66
+ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:24:9-27:66
 	android:exported
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:26:13-37
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:26:13-37
 	android:theme
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:27:13-63
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:27:13-63
 	android:name
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:25:13-77
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:25:13-77
 provider#androidx.startup.InitializationProvider
-ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:34:9-42:20
+ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:34:9-42:20
 MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:29:9-37:20
 MERGED from [androidx.work:work-runtime:2.8.1] C:\Users\HP\.gradle\caches\transforms-3\89ea8502e792c74ca87afcc5034f59bb\transformed\work-runtime-2.8.1\AndroidManifest.xml:29:9-37:20
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\59eac9e710be3ba6f78a2c1a1f5211ef\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
@@ -647,19 +681,19 @@ MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\HP\.grad
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\HP\.gradle\caches\transforms-3\6ba0e9f9ba3d450910099ec803b3362d\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\HP\.gradle\caches\transforms-3\6ba0e9f9ba3d450910099ec803b3362d\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
 	tools:node
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:38:13-31
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:38:13-31
 	android:authorities
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:36:13-68
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:36:13-68
 	android:exported
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:37:13-37
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:37:13-37
 	android:name
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:35:13-67
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:35:13-67
 meta-data#com.onesignal.core.internal.application.impl.ActivityLifecycleInitializer
-ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:39:13-41:52
+ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:39:13-41:52
 	android:value
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:41:17-49
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:41:17-49
 	android:name
-		ADDED from [com.onesignal:core:5.10.0] C:\Users\HP\.gradle\caches\transforms-3\93fdf14391e579ec3142951763122d50\transformed\jetified-core-5.10.0\AndroidManifest.xml:40:17-105
+		ADDED from [com.onesignal:core:5.10.2] C:\Users\HP\.gradle\caches\transforms-3\63aea093c31dab6f7880624971de9d78\transformed\jetified-core-5.10.2\AndroidManifest.xml:40:17-105
 receiver#com.google.firebase.iid.FirebaseInstanceIdReceiver
 ADDED from [com.google.firebase:firebase-messaging:23.4.1] C:\Users\HP\.gradle\caches\transforms-3\b5e0f536baf7313e3a36c2eef083cd25\transformed\jetified-firebase-messaging-23.4.1\AndroidManifest.xml:29:9-40:20
 	android:exported

@@ -21,14 +21,25 @@
 
         <meta-data android:name="onesignal_app_id" android:value="cd9df2b6-fda0-463e-bebb-7d8b49edf74c" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="oms_push_channel" />
+        <!-- Suppress OneSignal from automatically launching external web browser -->
+        <meta-data android:name="com.onesignal.suppressLaunchURLs" android:value="true" />
         
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Deep link so Android opens OMS Companion app for omscompanion.com links -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="omscompanion.com" />
+                <data android:scheme="https" android:host="omscompanion.com" />
             </intent-filter>
         </activity>
     </application>

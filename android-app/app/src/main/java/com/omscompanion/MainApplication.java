@@ -3,12 +3,14 @@ package com.omscompanion;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
+import org.json.JSONObject;
 
 public class MainApplication extends Application {
 
@@ -24,6 +26,38 @@ public class MainApplication extends Application {
 
         // Initialize OneSignal
         OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
+
+        // Ensure clicking notification opens the APK rather than external browser
+        OneSignal.getNotifications().addClickListener(event -> {
+            String targetUrl = null;
+
+            // 1. Check custom additionalData payload
+            if (event.getNotification() != null && event.getNotification().getAdditionalData() != null) {
+                JSONObject data = event.getNotification().getAdditionalData();
+                if (data.has("target_url") && !data.isNull("target_url")) {
+                    targetUrl = data.optString("target_url", null);
+                } else if (data.has("url") && !data.isNull("url")) {
+                    targetUrl = data.optString("url", null);
+                }
+            }
+
+            // 2. Check launchURL if provided
+            if ((targetUrl == null || targetUrl.isEmpty()) && event.getNotification() != null) {
+                targetUrl = event.getNotification().getLaunchURL();
+            }
+
+            if (targetUrl == null || targetUrl.isEmpty()) {
+                targetUrl = "http://omscompanion.com";
+            }
+
+            // Always open or bring MainActivity to front inside the APK
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.putExtra("target_url", targetUrl);
+            intent.putExtra("launchUrl", targetUrl);
+            intent.putExtra("url", targetUrl);
+            startActivity(intent);
+        });
 
         // Create high-importance sound channel for Android 8.0+
         createNotificationChannel();

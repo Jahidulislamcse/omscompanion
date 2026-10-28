@@ -48,12 +48,17 @@ class PushNotificationService
             ];
         }
 
+        $targetUrl = $url ?: 'http://omscompanion.com';
+
         $payload = [
             'app_id' => $appId,
             'included_segments' => ['All'],
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
-            'url' => $url ?: 'http://omscompanion.com',
+            'data' => [
+                'url' => $targetUrl,
+                'target_url' => $targetUrl,
+            ],
             // Android sound & priority settings
             'android_sound' => 'notification',
             'priority' => 10,
@@ -124,6 +129,7 @@ class PushNotificationService
         }
 
         $userIdStr = (string) $user->id;
+        $targetUrl = $url ?: 'http://omscompanion.com';
 
         // 1. Try using include_aliases (OneSignal v5 external_id format)
         $payloadAliases = [
@@ -134,7 +140,10 @@ class PushNotificationService
             'target_channel' => 'push',
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
-            'url' => $url ?: 'http://omscompanion.com',
+            'data' => [
+                'url' => $targetUrl,
+                'target_url' => $targetUrl,
+            ],
             'android_sound' => 'notification',
             'priority' => 10,
             'ios_sound' => 'default',
@@ -172,7 +181,10 @@ class PushNotificationService
                 ],
                 'headings' => ['en' => $title],
                 'contents' => ['en' => $message],
-                'url' => $url ?: 'http://omscompanion.com',
+                'data' => [
+                    'url' => $targetUrl,
+                    'target_url' => $targetUrl,
+                ],
                 'android_sound' => 'notification',
                 'priority' => 10,
                 'ios_sound' => 'default',
@@ -202,7 +214,10 @@ class PushNotificationService
                 'include_external_user_ids' => [$userIdStr],
                 'headings' => ['en' => $title],
                 'contents' => ['en' => $message],
-                'url' => $url ?: 'http://omscompanion.com',
+                'data' => [
+                    'url' => $targetUrl,
+                    'target_url' => $targetUrl,
+                ],
                 'android_sound' => 'notification',
                 'priority' => 10,
                 'ios_sound' => 'default',
