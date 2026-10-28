@@ -73,7 +73,7 @@ class HandleInertiaRequests extends Middleware
             'login_side_title' => LandingSetting::where('key', 'login_side_title')->value('value') ?: 'Discover your next journey',
             'login_side_subtitle' => LandingSetting::where('key', 'login_side_subtitle')->value('value') ?: 'Explore ideas, stories, and experiences designed to inspire your everyday practice.',
             'whatsapp_number' => LandingSetting::where('key', 'whatsapp_number')->value('value') ?: '+8801700000000',
-            'is_app_installed' => $request->cookie('oms_app_installed') === 'true' || str_contains($request->header('User-Agent', ''), 'OMSCompanionAndroidApp'),
+            'is_app_installed' => str_contains($request->header('User-Agent', ''), 'OMSCompanionAndroidApp') || str_contains($request->header('User-Agent', ''), 'OMSCompanionApp'),
         ];
     }
 }

@@ -81,7 +81,7 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                         <Link href={route('app.download')} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '14px', backgroundColor: '#10b981', border: 'none', color: '#ffffff' }}>
                             📲 Install Mobile App Page
                         </Link>
-                        <a href="/download-apk-file" onClick={() => { if (typeof window !== 'undefined') { localStorage.setItem('oms_app_installed', 'true'); } }} className="btn btn-outline" style={{ padding: '10px 16px', fontSize: '14px' }}>
+                        <a href="/download-apk-file" className="btn btn-outline" style={{ padding: '10px 16px', fontSize: '14px' }}>
                             📥 Install Mobile App
                         </a>
                     </div>

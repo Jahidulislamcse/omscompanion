@@ -391,8 +391,7 @@ Route::get('/download-apk-file', function () {
         isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] . '/omscompanion.apk' : null,
     ]);
 
-    $cookie = cookie('oms_app_installed', 'true', 525600, '/', null, false, false);
-    \Illuminate\Support\Facades\Cookie::queue($cookie);
+    \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forget('oms_app_installed'));
 
     foreach ($possiblePaths as $path) {
         if (file_exists($path) && is_readable($path)) {
@@ -400,7 +399,7 @@ Route::get('/download-apk-file', function () {
                 'Content-Type' => 'application/vnd.android.package-archive',
                 'Content-Disposition' => 'attachment; filename="omscompanion.apk"',
             ]);
-            $downloadResponse->headers->setCookie($cookie);
+            $downloadResponse->headers->clearCookie('oms_app_installed');
             return $downloadResponse;
         }
     }
@@ -416,7 +415,7 @@ Route::get('/download-apk-file', function () {
                 'Content-Type' => 'application/vnd.android.package-archive',
                 'Content-Disposition' => 'attachment; filename="omscompanion.apk"',
             ]);
-            $downloadResponse->headers->setCookie($cookie);
+            $downloadResponse->headers->clearCookie('oms_app_installed');
             return $downloadResponse;
         }
     }
@@ -425,8 +424,8 @@ Route::get('/download-apk-file', function () {
 })->name('app.download_file');
 
 Route::post('/mark-app-installed', function () {
-    $cookie = cookie('oms_app_installed', 'true', 525600, '/', null, false, false);
-    return response()->json(['status' => 'ok'])->withCookie($cookie);
+    \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forget('oms_app_installed'));
+    return response()->json(['status' => 'ok'])->withCookie(\Illuminate\Support\Facades\Cookie::forget('oms_app_installed'));
 })->name('app.mark_installed');
 
 // Member Routes

@@ -1,48 +1,44 @@
 import { useState, useEffect } from 'react';
 
+// Clean up any historical browser flags so standard browsers never hide install buttons
+if (typeof window !== 'undefined') {
+    try {
+        if (localStorage.getItem('oms_app_installed')) {
+            localStorage.removeItem('oms_app_installed');
+        }
+        if (document.cookie && document.cookie.includes('oms_app_installed')) {
+            document.cookie = 'oms_app_installed=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+        }
+    } catch (e) {
+        // Ignore
+    }
+}
+
 /**
- * Checks synchronously whether the user is inside the installed mobile app
- * or has already marked the app as installed on this browser.
+ * Checks strictly whether the user is inside the APK (Android native WebView).
+ * In normal browsers (desktop or mobile Chrome/Safari/Edge), this ALWAYS returns false
+ * so install app buttons/widgets are never hidden in browser view.
  */
 export function isAppInstalled() {
     if (typeof window === 'undefined') return false;
 
     try {
-        // 1. Android WebView native JavascriptInterface
+        // 1. Android WebView native JavascriptInterface injected by MainActivity.java
         if (typeof window.OMSCompanionNative !== 'undefined') {
             return true;
         }
 
-        // 2. Explicit window flag set by mobile app
+        // 2. Explicit window flag set by mobile app WebView evaluateJavascript
         if (window.isOMSCompanionApp === true) {
             return true;
         }
 
-        // 3. User-Agent containing OMSCompanion
+        // 3. User-Agent containing OMSCompanionAndroidApp or OMSCompanionApp
         if (window.navigator && window.navigator.userAgent) {
             const ua = window.navigator.userAgent;
             if (ua.includes('OMSCompanionAndroidApp') || ua.includes('OMSCompanionApp')) {
                 return true;
             }
-        }
-
-        // 4. Standalone PWA / display-mode standalone
-        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
-            return true;
-        }
-        if (window.navigator && window.navigator.standalone === true) {
-            return true;
-        }
-
-        // 5. LocalStorage flag
-        const stored = localStorage.getItem('oms_app_installed');
-        if (stored === 'true' || stored === '1') {
-            return true;
-        }
-
-        // 6. Cookie flag
-        if (document.cookie && (document.cookie.includes('oms_app_installed=true') || document.cookie.includes('oms_app_installed=1'))) {
-            return true;
         }
     } catch (e) {
         // Ignore cross-origin / storage disabled errors
@@ -51,44 +47,32 @@ export function isAppInstalled() {
     return false;
 }
 
+export const isInsideApk = isAppInstalled;
+
 /**
- * Marks the app as installed in LocalStorage and cookie, and dispatches an event.
+ * Kept for backwards compatibility; does not disable browser view buttons.
  */
 export function markAppAsInstalled() {
-    if (typeof window === 'undefined') return;
-
-    try {
-        localStorage.setItem('oms_app_installed', 'true');
-        document.cookie = 'oms_app_installed=true;path=/;max-age=31536000;SameSite=Lax';
-        window.dispatchEvent(new Event('app-installed-status-changed'));
-    } catch (e) {
-        // Ignore
-    }
-
-    try {
-        // Also fire background beacon/request to set server cookie
-        if (typeof window.fetch === 'function') {
-            fetch('/mark-app-installed', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-                }
-            }).catch(() => {});
-        }
-    } catch (e) {
-        // Ignore
-    }
+    // Intentionally no-op so browser view does not hide install buttons
 }
 
 /**
- * React hook to reactively track whether the app is installed.
+ * React hook to reactively track whether running inside the APK.
  */
 export function useAppInstalled() {
     const [installed, setInstalled] = useState(() => isAppInstalled());
 
     useEffect(() => {
+        // Ensure browser storage/cookies are clean
+        try {
+            if (localStorage.getItem('oms_app_installed')) {
+                localStorage.removeItem('oms_app_installed');
+            }
+            if (document.cookie && document.cookie.includes('oms_app_installed')) {
+                document.cookie = 'oms_app_installed=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+            }
+        } catch (e) {}
+
         // Update in case window.OMSCompanionNative was injected after script evaluation
         setInstalled(isAppInstalled());
 
@@ -97,15 +81,13 @@ export function useAppInstalled() {
         };
 
         window.addEventListener('app-installed-status-changed', handleStatusChange);
-        window.addEventListener('storage', handleStatusChange);
 
-        // Retry check a few times in case WebView injects interface asynchronously
+        // Retry check in case WebView injects interface asynchronously
         const t1 = setTimeout(() => setInstalled(isAppInstalled()), 150);
         const t2 = setTimeout(() => setInstalled(isAppInstalled()), 600);
 
         return () => {
             window.removeEventListener('app-installed-status-changed', handleStatusChange);
-            window.removeEventListener('storage', handleStatusChange);
             clearTimeout(t1);
             clearTimeout(t2);
         };

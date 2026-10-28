@@ -10,7 +10,6 @@ export default function DownloadApp() {
     const [logoSrc, setLogoSrc] = useState(site_logo || '/app-logo.png');
 
     const handleDownload = () => {
-        markAppAsInstalled();
         setDownloading(true);
         setTimeout(() => setDownloading(false), 5000);
     };
