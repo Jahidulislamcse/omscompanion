@@ -4,6 +4,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import PublicNavbar from '@/Components/PublicNavbar';
 import ReferralModal from '@/Components/ReferralModal';
 import FloatingAppInstallWidget from '@/Components/FloatingAppInstallWidget';
+import CallToActionCard from '@/Components/CallToActionCard';
 
 export function getYouTubeId(url) {
     if (!url) return '';
@@ -1505,52 +1506,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             </section>
 
             {/* Call To Action Banner */}
-            <section className="cta-banner-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 60px', boxSizing: 'border-box' }}>
-                <div className="landing-section-container" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
-                    <div className="glass-panel cta-banner-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
-                        <h2 className="cta-title">Ready to elevate your practice with OMS Companion</h2>
-                        <p className="cta-desc">
-                            Join hundreds of practitioners, using {site_name || 'OMS COMPANION'} for professional improvement and better patient care.
-                        </p>
-                        <div className="cta-buttons" style={{ alignItems: 'center' }}>
-                            <button 
-                                type="button" 
-                                onClick={handleReferralClick}
-                                className="refer-patient-glossy-btn"
-                                aria-label="Refer Patient"
-                            >
-                                <div className="refer-patient-icon-circle">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="4" y="4" width="16" height="17" rx="2" fill="#0891b2" fillOpacity="0.12" stroke="#0e7490" strokeWidth="2"/>
-                                        <path d="M9 3H15V6H9V3Z" fill="#0891b2" stroke="#0e7490" strokeWidth="1.5"/>
-                                        <circle cx="12" cy="4.5" r="1" fill="#ffffff"/>
-                                        <circle cx="12" cy="10.5" r="2" fill="#0e7490"/>
-                                        <path d="M8.5 15C8.5 13.5 10 13 12 13C14 13 15.5 13.5 15.5 15" stroke="#0e7490" strokeWidth="1.8" strokeLinecap="round"/>
-                                        <path d="M12 17.5V20.5M10.5 19H13.5" stroke="#0891b2" strokeWidth="2.2" strokeLinecap="round"/>
-                                    </svg>
-                                </div>
-                                <span className="refer-patient-text">Refer Patient</span>
-                                <div className="refer-patient-arrow-circle">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                        <line x1="4" y1="12" x2="20" y2="12" />
-                                        <polyline points="13 5 20 12 13 19" />
-                                    </svg>
-                                </div>
-                            </button>
-                            
-                            {auth.user ? (
-                                <Link href={getDashboardRoute()} className="btn btn-outline hero-btn" style={{ borderColor: 'rgba(255, 255, 255, 0.4)', color: '#ffffff' }}>
-                                    Open Your Dashboard
-                                </Link>
-                            ) : (
-                                <Link href={route('register')} className="btn btn-outline hero-btn" style={{ borderColor: 'rgba(255, 255, 255, 0.4)', color: '#ffffff' }}>
-                                    Register
-                                </Link>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <CallToActionCard onReferralClick={handleReferralClick} />
 
             {/* Footer */}
             <footer className="landing-footer" style={{ width: '100%', alignSelf: 'stretch', boxSizing: 'border-box', padding: '60px 0 30px 0', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-white)' }}>

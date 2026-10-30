@@ -25,8 +25,23 @@ export default function PublicNavbar({ activePage = '', onReferralClick }) {
                 const newUrl = window.location.pathname;
                 window.history.replaceState({}, '', newUrl);
             }
+
+            const handleCustomOpen = () => {
+                if (auth && auth.user) {
+                    router.visit(auth.user.role === 'admin' ? route('admin.referrals') : route('member.referrals'));
+                } else if (onReferralClick) {
+                    onReferralClick();
+                } else {
+                    setReferralModalOpen(true);
+                }
+            };
+
+            window.addEventListener('open-referral-modal', handleCustomOpen);
+            return () => {
+                window.removeEventListener('open-referral-modal', handleCustomOpen);
+            };
         }
-    }, [auth]);
+    }, [auth, onReferralClick]);
 
     const getDashboardRoute = () => {
         if (!auth || !auth.user) return '#';

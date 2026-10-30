@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import PublicNavbar from '@/Components/PublicNavbar';
+import CallToActionCard from '@/Components/CallToActionCard';
 
 export default function Index({ settings = {}, teamMembers = [] }) {
     const { auth, site_name } = usePage().props;
@@ -175,6 +176,9 @@ OMS Companion — Connecting Expertise, Enhancing Practice`);
 
                 </div>
             </main>
+
+            {/* Call To Action Banner */}
+            <CallToActionCard />
 
             {/* Footer */}
             <footer className="landing-footer" style={{ width: '100%', alignSelf: 'stretch', boxSizing: 'border-box', padding: '60px 0 30px 0', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-white)' }}>
