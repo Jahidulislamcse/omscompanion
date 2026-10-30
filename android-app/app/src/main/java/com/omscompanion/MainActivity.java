@@ -104,6 +104,22 @@ public class MainActivity extends AppCompatActivity {
         webView = findViewById(R.id.webview);
         progressBar = findViewById(R.id.progressBar);
 
+        // Disable Android system autofill popups / strong password suggestion overlay
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                if (getWindow() != null && getWindow().getDecorView() != null) {
+                    getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+                }
+                webView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+                android.view.autofill.AutofillManager afm = getSystemService(android.view.autofill.AutofillManager.class);
+                if (afm != null) {
+                    afm.cancel();
+                    afm.disableAutofillServices();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
@@ -116,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
+        webSettings.setSavePassword(false);
+        webSettings.setSaveFormData(false);
 
         // Customize User Agent so mobile app requests can be identified on web
         String defaultUa = webSettings.getUserAgentString();

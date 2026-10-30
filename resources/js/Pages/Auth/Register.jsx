@@ -88,7 +88,7 @@ export default function Register() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} autoComplete="off" data-lpignore="true">
                         {/* Profile Photo Upload with Camera & Gallery */}
                         <CameraPhotoUpload
                             label="Profile Photo"
@@ -189,11 +189,18 @@ export default function Register() {
                                     <input
                                         type="text"
                                         id="bds_registration_number"
+                                        name="doctor_bmdc_reg_id"
                                         className="form-control"
                                         placeholder="BMDC Reg No."
                                         value={data.bds_registration_number}
                                         onChange={e => setData('bds_registration_number', e.target.value)}
                                         required
+                                        autoComplete="off"
+                                        autoCorrect="off"
+                                        autoCapitalize="none"
+                                        spellCheck="false"
+                                        data-lpignore="true"
+                                        data-form-type="other"
                                         style={{ padding: '9px 12px', borderRadius: '8px' }}
                                     />
                                     {errors.bds_registration_number && <span className="form-error">{errors.bds_registration_number}</span>}
@@ -252,6 +259,8 @@ export default function Register() {
                                 <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Password *</label>
                                 <PasswordInput
                                     id="password"
+                                    name="user_new_password"
+                                    autoComplete="off"
                                     placeholder="Password"
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
@@ -265,6 +274,8 @@ export default function Register() {
                                 <label className="form-label" htmlFor="password_confirmation" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '3px' }}>Confirm Password *</label>
                                 <PasswordInput
                                     id="password_confirmation"
+                                    name="user_confirm_password"
+                                    autoComplete="off"
                                     placeholder="Confirm"
                                     value={data.password_confirmation}
                                     onChange={e => setData('password_confirmation', e.target.value)}

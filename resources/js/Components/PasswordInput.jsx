@@ -8,7 +8,7 @@ export default function PasswordInput({
     placeholder = '', 
     className = 'form-control', 
     required = false, 
-    autoComplete, 
+    autoComplete = 'off', 
     style = {},
     disabled = false,
     ...props 
@@ -27,6 +27,11 @@ export default function PasswordInput({
                 className={className}
                 required={required}
                 autoComplete={autoComplete}
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                data-lpignore="true"
+                data-form-type="other"
                 disabled={disabled}
                 style={{ ...style, paddingRight: '40px' }}
                 {...props}
