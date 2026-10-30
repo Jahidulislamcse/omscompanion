@@ -728,24 +728,9 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         <h2 className="landing-section-title">
                             Benefit of Membership with <span className="title-gradient-brand">{site_name || 'OMS COMPANION'}</span>
                         </h2>
-                        <p className="landing-section-subtitle">
-                            Empowering BDS Practitioners with masterclass surgical walkthroughs, live specialist WhatsApp desk, zero-loss patient tracking, and collaborative maxillofacial care.
-                        </p>
-                        <div className="benefits-trust-badges">
-                            <span className="trust-badge-item">⚡ Live Surgeon Consultation Desk</span>
-                            <span className="trust-badge-dot">•</span>
-                            <span className="trust-badge-item">🛡️ Zero-Loss Patient Referral Log</span>
-                            <span className="trust-badge-dot">•</span>
-                            <span className="trust-badge-item">🎥 100+ HD Masterclass Streams</span>
-                        </div>
 
-                        {/* Mobile Swipe Hint Toolbar & View Mode Switcher */}
+                        {/* Mobile View Mode Switcher */}
                         <div className="benefits-mobile-header-toolbar">
-                            <div className="benefits-mobile-scroll-hint">
-                                <span className="hint-hand-bounce">{benefitsViewMode === 'carousel' ? '👉' : '📋'}</span>
-                                <span>{benefitsViewMode === 'carousel' ? 'Swipe cards to explore all' : 'Viewing all'} <strong>7 benefits</strong></span>
-                                <span className="hint-pill-counter">{benefitsViewMode === 'carousel' ? `${activeBenefitIndex + 1}/7` : '7/7'}</span>
-                            </div>
                             <button
                                 type="button"
                                 className="benefits-view-toggle-btn"
