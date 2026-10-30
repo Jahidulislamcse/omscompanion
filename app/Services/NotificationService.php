@@ -174,4 +174,121 @@ class NotificationService
             Log::error("Failed in NotificationService::notifyAdmins: " . $e->getMessage());
         }
     }
+
+    /**
+     * Formal Notification: Registration Under Review (Email + WhatsApp + Database + Push)
+     */
+    public static function sendRegistrationPendingNotification(User $user)
+    {
+        try {
+            $title = "Registration Under Review - OMS COMPANION";
+            $docType = $user->doctor_type ?: 'BDS';
+            $regNo = $user->bds_registration_number ?: 'N/A';
+            $clinic = $user->clinic_name ? " ({$user->clinic_name})" : "";
+            $supportWa = WhatsAppService::getSupportWhatsAppNumber();
+
+            $emailMessage = "Dear Dr. {$user->name},\n\n"
+                . "Thank you for registering with OMS COMPANION.\n\n"
+                . "We have successfully received your registration application (BMDC Reg. No: {$regNo}, {$docType} Doctor{$clinic}). Your professional credentials and account details are currently under formal administrative review.\n\n"
+                . "Please be advised that this review process ensures the authenticity and high clinical standards of our professional doctor network. You will be formally notified shortly via email and WhatsApp once the verification is completed.\n\n"
+                . "If you require any immediate assistance or have questions regarding your application, please contact our administrative desk at {$supportWa}.\n\n"
+                . "Respectfully,\n"
+                . "Administrative Committee\n"
+                . "OMS COMPANION\n"
+                . "https://omscompanion.com";
+
+            // 1. Dispatch Email + Database Notification + Mobile App Push
+            self::send($user, $title, $emailMessage, 'both', 'https://omscompanion.com');
+
+            // 2. Dispatch Formal WhatsApp Message
+            try {
+                $waMessage = WhatsAppService::getRegistrationUnderReviewMessage($user);
+                WhatsAppService::sendToUser($user, $waMessage);
+            } catch (\Throwable $e) {
+                Log::error("WhatsApp registration dispatch failed for User #{$user->id}: " . $e->getMessage());
+            }
+        } catch (\Throwable $e) {
+            Log::error("sendRegistrationPendingNotification failed for User #{$user->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Formal Notification: Membership Approved (Email + WhatsApp + Database + Push)
+     */
+    public static function sendMemberApprovedNotification(User $user, string $memberId, ?string $rawPassword = null)
+    {
+        try {
+            $title = "Membership Approved - Welcome to OMS COMPANION";
+            $loginEmail = $user->email ?? $user->phone;
+            $password = $rawPassword ?: ($user->raw_password ?: '(Your registered password)');
+            $regNo = $user->bds_registration_number ?: 'N/A';
+            $loginUrl = route('login');
+
+            $emailMessage = "Dear Dr. {$user->name},\n\n"
+                . "We are pleased to inform you that your membership application has been formally reviewed and approved by the OMS COMPANION administrative authority.\n\n"
+                . "Welcome to OMS COMPANION! Your official account credentials and membership details are as follows:\n\n"
+                . "• Member ID: {$memberId}\n"
+                . "• BMDC Reg. No: {$regNo}\n"
+                . "• Registered Login: {$loginEmail}\n"
+                . "• Login Password: {$password}\n"
+                . "• Access Portal: {$loginUrl}\n\n"
+                . "You now have full access to our professional platform:\n"
+                . "✓ Submit and track patient referrals with live status updates\n"
+                . "✓ Access clinical and surgical demonstration video tutorials\n"
+                . "✓ Download your official verified membership certificate\n\n"
+                . "We look forward to an esteemed and successful professional collaboration with you.\n\n"
+                . "Sincerely,\n"
+                . "Administrative Committee\n"
+                . "OMS COMPANION\n"
+                . "https://omscompanion.com";
+
+            // 1. Dispatch Email + Database Notification + Mobile App Push
+            self::send($user, $title, $emailMessage, 'both', $loginUrl);
+
+            // 2. Dispatch Formal WhatsApp Message
+            try {
+                $waMessage = WhatsAppService::getMembershipApprovedMessage($user, $memberId, $rawPassword);
+                WhatsAppService::sendToUser($user, $waMessage);
+            } catch (\Throwable $e) {
+                Log::error("WhatsApp approval dispatch failed for User #{$user->id}: " . $e->getMessage());
+            }
+        } catch (\Throwable $e) {
+            Log::error("sendMemberApprovedNotification failed for User #{$user->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Formal Notification: Membership Application Rejected (Email + WhatsApp + Database + Push)
+     */
+    public static function sendMemberRejectedNotification(User $user)
+    {
+        try {
+            $title = "Membership Application Status - OMS COMPANION";
+            $regNo = $user->bds_registration_number ?: 'N/A';
+            $supportWa = WhatsAppService::getSupportWhatsAppNumber();
+
+            $emailMessage = "Dear Dr. {$user->name},\n\n"
+                . "Thank you for your interest in joining OMS COMPANION.\n\n"
+                . "Regarding your recent registration application (BMDC Reg. No: {$regNo}), we regret to inform you that following administrative review, we are unable to approve your membership at this time.\n\n"
+                . "This may be due to incomplete documentation, unverified credentials, or membership eligibility criteria. If you believe this decision was made in error or if you wish to provide updated professional documentation for reconsideration, please contact our administrative desk at {$supportWa}.\n\n"
+                . "Thank you for your time and professional courtesy.\n\n"
+                . "Respectfully,\n"
+                . "Administrative Committee\n"
+                . "OMS COMPANION\n"
+                . "https://omscompanion.com";
+
+            // 1. Dispatch Email + Database Notification + Mobile App Push
+            self::send($user, $title, $emailMessage, 'both', 'https://omscompanion.com');
+
+            // 2. Dispatch Formal WhatsApp Message
+            try {
+                $waMessage = WhatsAppService::getMembershipRejectedMessage($user);
+                WhatsAppService::sendToUser($user, $waMessage);
+            } catch (\Throwable $e) {
+                Log::error("WhatsApp rejection dispatch failed for User #{$user->id}: " . $e->getMessage());
+            }
+        } catch (\Throwable $e) {
+            Log::error("sendMemberRejectedNotification failed for User #{$user->id}: " . $e->getMessage());
+        }
+    }
 }

@@ -125,15 +125,9 @@ class AdminController extends Controller
             $memberId = $fallbackMemberId;
         }
 
-        // Send notifications safely
+        // Send formal approval notifications via Email and WhatsApp safely
         try {
-            $userEmail = $user->email ?? 'N/A';
-            $userPassword = $user->raw_password ?? '(Registered password)';
-
-            $subject = "Membership Approved";
-            $message = "Your membership has been approved (ID: {$memberId}). Login Email: {$userEmail} | Password: {$userPassword}";
-            
-            NotificationService::send($user, $subject, $message, 'both');
+            NotificationService::sendMemberApprovedNotification($user, $memberId);
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('Approval notification failed: ' . $e->getMessage());
         }
@@ -151,12 +145,9 @@ class AdminController extends Controller
             'status' => 'rejected',
         ]);
 
-        // Send notification safely
+        // Send formal rejection notification via Email and WhatsApp safely
         try {
-            $subject = "Membership Update";
-            $message = "Your membership application could not be approved at this time.";
-            
-            NotificationService::send($user, $subject, $message, 'email');
+            NotificationService::sendMemberRejectedNotification($user);
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('Rejection notification failed: ' . $e->getMessage());
         }

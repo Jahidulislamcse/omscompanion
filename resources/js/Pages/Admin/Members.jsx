@@ -52,6 +52,30 @@ export default function Members({ members = [] }) {
         }
     };
 
+    const getMemberWhatsAppUrl = (member) => {
+        const rawPhone = member.whatsapp_number || member.phone || '';
+        let cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+        if (cleanPhone.length === 11 && cleanPhone.startsWith('01')) {
+            cleanPhone = '88' + cleanPhone;
+        } else if (cleanPhone.length === 10 && cleanPhone.startsWith('1')) {
+            cleanPhone = '880' + cleanPhone;
+        }
+        if (!cleanPhone) return null;
+
+        let msg = '';
+        if (member.status === 'pending') {
+            msg = `Dear Dr. ${member.name},\n\nGreetings from OMS COMPANION.\n\nThank you for registering with our professional network. We have received your application (BMDC Reg. No: ${member.bds_registration_number || 'N/A'}).\n\nYour account is currently under formal administrative review to verify your professional credentials. You will be formally notified shortly via WhatsApp and email once the review is completed.\n\nRespectfully,\nAdministrative Committee\nOMS COMPANION\nhttps://omscompanion.com`;
+        } else if (member.status === 'approved') {
+            msg = `Dear Dr. ${member.name},\n\nCongratulations! We are pleased to inform you that your membership application has been formally approved by OMS COMPANION.\n\nYour Official Membership Details:\n• Member ID: ${member.member_id || 'Approved'}\n• BMDC Reg. No: ${member.bds_registration_number || 'N/A'}\n• Login Email: ${member.email || member.phone}\n• Access Portal: https://omscompanion.com/login\n\nWelcome aboard,\nAdministrative Committee\nOMS COMPANION\nhttps://omscompanion.com`;
+        } else if (member.status === 'rejected') {
+            msg = `Dear Dr. ${member.name},\n\nGreetings from OMS COMPANION.\n\nRegarding your recent registration application (BMDC Reg. No: ${member.bds_registration_number || 'N/A'}), we regret to inform you that your application could not be approved at this time following administrative review.\n\nThank you for your understanding.\n\nRespectfully,\nAdministrative Committee\nOMS COMPANION\nhttps://omscompanion.com`;
+        } else {
+            msg = `Dear Dr. ${member.name},\n\nGreetings from OMS COMPANION.\n\nRespectfully,\nAdministrative Committee\nOMS COMPANION\nhttps://omscompanion.com`;
+        }
+
+        return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+    };
+
     // Filter members based on search and status
     const filteredMembers = (members || []).filter(member => {
         const query = searchTerm.toLowerCase();
@@ -310,6 +334,29 @@ export default function Members({ members = [] }) {
                                                         >
                                                             View Referrals
                                                         </button>
+                                                    )}
+                                                    {getMemberWhatsAppUrl(member) && (
+                                                        <a
+                                                            href={getMemberWhatsAppUrl(member)}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="btn btn-outline"
+                                                            style={{
+                                                                padding: '4px 8px',
+                                                                fontSize: '11px',
+                                                                color: '#10b981',
+                                                                borderColor: 'rgba(16, 185, 129, 0.4)',
+                                                                backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                                                                textDecoration: 'none',
+                                                                display: 'inline-flex',
+                                                                alignItems: 'center',
+                                                                gap: '4px',
+                                                                fontWeight: '600'
+                                                            }}
+                                                            title={`Send Formal WhatsApp Message (${member.status})`}
+                                                        >
+                                                            💬 WhatsApp
+                                                        </a>
                                                     )}
                                                     <button 
                                                         type="button"

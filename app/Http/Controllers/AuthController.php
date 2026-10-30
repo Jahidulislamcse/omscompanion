@@ -126,16 +126,14 @@ class AuthController extends Controller
 
         $user = User::create($userData);
 
-        // Send registration email notification to user
+        // 1. Send formal Registration Under Review notification via Email and WhatsApp to user
         try {
-            $subject = "Registration Received - Account Pending Approval";
-            $message = "Dear {$user->name},\n\nThank you for registering with OMSCOMPANION.\n\nPlease wait for account approval from the authority.\n\nYou will receive a notification once your account has been reviewed and approved by the admin.";
-            \App\Services\NotificationService::send($user, $subject, $message, 'both');
+            \App\Services\NotificationService::sendRegistrationPendingNotification($user);
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Registration notification failed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Registration pending notification to user failed: ' . $e->getMessage());
         }
 
-        // Send notification to Admin via App Push, In-App Database, and Email when new doctor registers
+        // 2. Send notification to Admin via App Push, In-App Database, and Email when new doctor registers
         try {
             $doctorType = $user->doctor_type ?: 'Doctor';
             $regNo = $user->bds_registration_number ? " (Reg: {$user->bds_registration_number})" : "";
