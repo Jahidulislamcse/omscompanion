@@ -595,22 +595,15 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             <PublicNavbar activePage="home" onReferralClick={handleReferralClick} />
 
             {/* Hero Section */}
-            <section className="landing-hero hero-vibrant">
+            <section className="landing-hero hero-vibrant" style={settings && settings.hero_banner ? { paddingBottom: '10px' } : {}}>
                 {settings && settings.hero_banner ? (
-                    <>
-                        <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                            <img 
-                                src={`${route('site.banner.stream')}?v=${getSetting('hero_banner_updated_at', Date.now())}`} 
-                                alt={getSetting('hero_title', 'Site Banner')} 
-                                style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'cover' }}
-                            />
-                        </div>
-                        {getSetting('hero_subtitle') && (
-                            <p className="landing-hero-desc" style={{ marginTop: '12px' }}>
-                                {getSetting('hero_subtitle')}
-                            </p>
-                        )}
-                    </>
+                    <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                        <img 
+                            src={`${route('site.banner.stream')}?v=${getSetting('hero_banner_updated_at', Date.now())}`} 
+                            alt={getSetting('hero_title', 'Site Banner')} 
+                            style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'cover' }}
+                        />
+                    </div>
                 ) : (
                     <>
                         <h1 className="landing-hero-title hero-title-colorful">
@@ -677,7 +670,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             </section>
 
             {/* Videos Section */}
-            <section id="free-videos" className="landing-section">
+            <section id="free-videos" className="landing-section" style={{ paddingTop: '20px' }}>
                 <div className="landing-section-container">
                     {/* Top Archive Pill Button */}
                     <div className="video-archive-pill-wrapper">
