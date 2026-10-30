@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Head, usePage, useForm } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import PublicNavbar from '@/Components/PublicNavbar';
-import CallToActionCard from '@/Components/CallToActionCard';
+import ReferPatientButton from '@/Components/ReferPatientButton';
 
 export default function Index({ settings = {} }) {
     const { auth, site_name, flash } = usePage().props;
@@ -338,8 +338,10 @@ export default function Index({ settings = {} }) {
                 </div>
             </main>
 
-            {/* Call To Action Banner */}
-            <CallToActionCard />
+            {/* Refer Patient Button */}
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '36px 20px', width: '100%', boxSizing: 'border-box' }}>
+                <ReferPatientButton />
+            </div>
 
             {/* Footer */}
             <footer className="landing-footer" style={{ width: '100%', alignSelf: 'stretch', boxSizing: 'border-box', padding: '60px 0 30px 0', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-white)' }}>
