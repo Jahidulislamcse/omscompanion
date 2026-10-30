@@ -150,6 +150,21 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @android.webkit.JavascriptInterface
+            public void setUserInfo(String userId, String role, boolean isAdmin) {
+                if (userId != null && !userId.isEmpty() && !userId.equals("0")) {
+                    com.onesignal.OneSignal.login(userId);
+                    com.onesignal.OneSignal.getUser().addTag("user_id", userId);
+                    if (role != null && !role.isEmpty()) {
+                        com.onesignal.OneSignal.getUser().addTag("role", role);
+                    }
+                    if (isAdmin) {
+                        com.onesignal.OneSignal.getUser().addTag("is_admin", "true");
+                    }
+                    com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
+                }
+            }
+
+            @android.webkit.JavascriptInterface
             public boolean isApp() {
                 return true;
             }
@@ -186,7 +201,11 @@ public class MainActivity extends AppCompatActivity {
                     "  window.dispatchEvent(new Event('app-installed-status-changed')); " +
                     "} catch(e) {} " +
                     "if (window.authUser && window.authUser.id && window.OMSCompanionNative) { " +
-                    "  window.OMSCompanionNative.setUserId(String(window.authUser.id)); " +
+                    "  if (window.OMSCompanionNative.setUserInfo) { " +
+                    "    window.OMSCompanionNative.setUserInfo(String(window.authUser.id), String(window.authUser.role || ''), window.authUser.role === 'admin'); " +
+                    "  } else { " +
+                    "    window.OMSCompanionNative.setUserId(String(window.authUser.id)); " +
+                    "  } " +
                     "} " +
                     "})();",
                     null

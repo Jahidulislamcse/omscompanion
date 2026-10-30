@@ -258,4 +258,117 @@ class PushNotificationService
             ];
         }
     }
+
+    /**
+     * Send push notification specifically to all administrators via OneSignal.
+     */
+    public static function sendToAdmins(string $title, string $message, ?string $url = null): array
+    {
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        if ($admins->isEmpty()) {
+            Log::info("OneSignal sendToAdmins: No admin users found in database.");
+            return [
+                'success' => false,
+                'message' => 'No admin users found in database.',
+            ];
+        }
+
+        $appId = self::getAppId();
+        $apiKey = self::getRestApiKey();
+        $targetUrl = $url ?: route('admin.members');
+        $adminIdStrings = $admins->pluck('id')->map(fn($id) => (string) $id)->values()->all();
+
+        if (empty($appId) || empty($apiKey)) {
+            Log::warning("OneSignal sendToAdmins skipped: App ID or REST API Key is missing.");
+            return [
+                'success' => false,
+                'message' => 'OneSignal App ID or REST API Key is missing.',
+            ];
+        }
+
+        // 1. Send via include_aliases (OneSignal v5 external_id targeting)
+        try {
+            $payloadAliases = [
+                'app_id' => $appId,
+                'include_aliases' => [
+                    'external_id' => $adminIdStrings,
+                ],
+                'target_channel' => 'push',
+                'headings' => ['en' => $title],
+                'contents' => ['en' => $message],
+                'data' => [
+                    'url' => $targetUrl,
+                    'target_url' => $targetUrl,
+                ],
+                'android_sound' => 'notification',
+                'priority' => 10,
+                'ios_sound' => 'default',
+                'ios_badgeType' => 'Increase',
+                'ios_badgeCount' => 1,
+            ];
+
+            $responseAliases = Http::withHeaders([
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . trim($apiKey),
+            ])->post('https://onesignal.com/api/v1/notifications', $payloadAliases);
+
+            Log::info('OneSignal sendToAdmins include_aliases response:', [
+                'status' => $responseAliases->status(),
+                'response' => $responseAliases->json(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('OneSignal sendToAdmins include_aliases error: ' . $e->getMessage());
+        }
+
+        // 2. Send via tag filter (is_admin = 'true' OR role = 'admin')
+        try {
+            $payloadTag = [
+                'app_id' => $appId,
+                'filters' => [
+                    ['field' => 'tag', 'key' => 'is_admin', 'relation' => '=', 'value' => 'true'],
+                    ['operator' => 'OR'],
+                    ['field' => 'tag', 'key' => 'role', 'relation' => '=', 'value' => 'admin'],
+                ],
+                'headings' => ['en' => $title],
+                'contents' => ['en' => $message],
+                'data' => [
+                    'url' => $targetUrl,
+                    'target_url' => $targetUrl,
+                ],
+                'android_sound' => 'notification',
+                'priority' => 10,
+                'ios_sound' => 'default',
+                'ios_badgeType' => 'Increase',
+                'ios_badgeCount' => 1,
+            ];
+
+            $responseTag = Http::withHeaders([
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . trim($apiKey),
+            ])->post('https://onesignal.com/api/v1/notifications', $payloadTag);
+
+            Log::info('OneSignal sendToAdmins tag-based response:', [
+                'status' => $responseTag->status(),
+                'response' => $responseTag->json(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('OneSignal sendToAdmins tag-based error: ' . $e->getMessage());
+        }
+
+        // 3. Send individually to each admin for guaranteed delivery
+        $results = [];
+        foreach ($admins as $admin) {
+            try {
+                $results[$admin->id] = self::sendToUser($admin, $title, $message, $targetUrl);
+            } catch (\Throwable $e) {
+                Log::error("OneSignal sendToAdmins individual sendToUser error for Admin #{$admin->id}: " . $e->getMessage());
+            }
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Admin push notifications dispatched successfully.',
+            'details' => $results,
+        ];
+    }
 }

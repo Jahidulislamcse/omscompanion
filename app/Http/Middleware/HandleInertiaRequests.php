@@ -63,6 +63,9 @@ class HandleInertiaRequests extends Middleware
                 ->where('title', 'NOT LIKE', '%Payment%')
                 ->whereNull('read_at')
                 ->count() : 0,
+            'pending_members_count' => $request->user() && $request->user()->isAdmin()
+                ? \App\Models\User::where('role', 'member')->where('status', 'pending')->count()
+                : 0,
             'site_logo' => LandingSetting::where('key', 'site_logo')->value('value') 
                 ? route('site.logo.stream') . '?v=' . (LandingSetting::where('key', 'site_logo_updated_at')->value('value') ?: time())
                 : null,

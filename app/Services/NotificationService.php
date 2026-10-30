@@ -145,4 +145,33 @@ class NotificationService
             Log::error("Failed to broadcast push notification: " . $e->getMessage());
         }
     }
+
+    /**
+     * Send notification to all administrators via App Push, In-App Database notification, and Email.
+     */
+    public static function notifyAdmins(string $title, string $message, ?string $actionUrl = null)
+    {
+        try {
+            $admins = User::where('role', 'admin')->get();
+            $actionUrl = $actionUrl ?: route('admin.members');
+
+            // 1. Send to each admin (Database notification + Email + Targeted Push)
+            foreach ($admins as $admin) {
+                try {
+                    self::send($admin, $title, $message, 'both', $actionUrl);
+                } catch (\Throwable $e) {
+                    Log::error("Failed to notify admin #{$admin->id}: " . $e->getMessage());
+                }
+            }
+
+            // 2. Dispatch Push Notification via OneSignal admin targeting (aliases + tags)
+            try {
+                PushNotificationService::sendToAdmins($title, $message, $actionUrl);
+            } catch (\Throwable $e) {
+                Log::error("Failed to dispatch push notification to admins: " . $e->getMessage());
+            }
+        } catch (\Throwable $e) {
+            Log::error("Failed in NotificationService::notifyAdmins: " . $e->getMessage());
+        }
+    }
 }

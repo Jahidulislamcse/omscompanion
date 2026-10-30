@@ -45,10 +45,19 @@
         <script>
             window.authUser = {
                 id: {{ auth()->id() }},
-                email: "{{ auth()->user()->email }}"
+                email: "{{ auth()->user()->email }}",
+                role: "{{ auth()->user()->role }}"
             };
-            if (window.OMSCompanionNative && window.OMSCompanionNative.setUserId) {
-                window.OMSCompanionNative.setUserId(String({{ auth()->id() }}));
+            if (window.OMSCompanionNative) {
+                if (window.OMSCompanionNative.setUserInfo) {
+                    window.OMSCompanionNative.setUserInfo(
+                        String({{ auth()->id() }}),
+                        "{{ auth()->user()->role }}",
+                        {{ auth()->user()->isAdmin() ? 'true' : 'false' }}
+                    );
+                } else if (window.OMSCompanionNative.setUserId) {
+                    window.OMSCompanionNative.setUserId(String({{ auth()->id() }}));
+                }
             }
         </script>
         @endauth

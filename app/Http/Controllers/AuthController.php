@@ -135,6 +135,21 @@ class AuthController extends Controller
             \Illuminate\Support\Facades\Log::error('Registration notification failed: ' . $e->getMessage());
         }
 
+        // Send notification to Admin via App Push, In-App Database, and Email when new doctor registers
+        try {
+            $doctorType = $user->doctor_type ?: 'Doctor';
+            $regNo = $user->bds_registration_number ? " (Reg: {$user->bds_registration_number})" : "";
+            $clinic = $user->clinic_name ? " [{$user->clinic_name}]" : "";
+
+            $adminTitle = "🔔 New Registration: Dr. {$user->name}";
+            $adminMessage = "Dr. {$user->name}{$regNo}{$clinic} has registered as {$doctorType} and is pending your approval.";
+            $actionUrl = route('admin.members');
+
+            \App\Services\NotificationService::notifyAdmins($adminTitle, $adminMessage, $actionUrl);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Admin registration push notification failed: ' . $e->getMessage());
+        }
+
         return redirect()->route('login')->with('success', 'Please wait for account approval from the authority');
     }
     public function logout(Request $request)

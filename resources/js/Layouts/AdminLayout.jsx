@@ -4,7 +4,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import { useAppInstalled } from '@/utils/appDetection';
 
 export default function AdminLayout({ children, title }) {
-    const { auth, flash, is_app_installed } = usePage().props;
+    const { auth, flash, is_app_installed, pending_members_count = 0 } = usePage().props;
     const isInstalled = useAppInstalled() || Boolean(is_app_installed);
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -68,8 +68,24 @@ export default function AdminLayout({ children, title }) {
                                     href={route('admin.members')} 
                                     className={`sidebar-link ${isCurrent('/admin/members') ? 'active' : ''}`}
                                     onClick={() => setIsMobileOpen(false)}
+                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                                 >
-                                    <span>&#128101;</span> Members
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span>&#128101;</span> Members
+                                    </span>
+                                    {pending_members_count > 0 && (
+                                        <span style={{
+                                            background: '#ef4444',
+                                            color: '#ffffff',
+                                            fontSize: '11px',
+                                            fontWeight: '700',
+                                            padding: '2px 7px',
+                                            borderRadius: '9999px',
+                                            lineHeight: 1
+                                        }}>
+                                            {pending_members_count}
+                                        </span>
+                                    )}
                                 </Link>
                             </li>
                             <li>
@@ -183,12 +199,26 @@ export default function AdminLayout({ children, title }) {
                 <header className="app-navbar">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         {/* Hamburger Button */}
-                        <button 
-                            className="hamburger-btn"
-                            onClick={() => setIsMobileOpen(true)}
-                        >
-                            ☰
-                        </button>
+                        <div style={{ position: 'relative', display: 'inline-flex' }}>
+                            <button 
+                                className="hamburger-btn"
+                                onClick={() => setIsMobileOpen(true)}
+                            >
+                                ☰
+                            </button>
+                            {pending_members_count > 0 && (
+                                <span style={{
+                                    position: 'absolute',
+                                    top: '-3px',
+                                    right: '-3px',
+                                    width: '10px',
+                                    height: '10px',
+                                    backgroundColor: '#ef4444',
+                                    borderRadius: '50%',
+                                    border: '2px solid var(--bg-card, #ffffff)'
+                                }} />
+                            )}
+                        </div>
                         <div>
                             <h1 style={{ fontSize: '24px', margin: 0 }}>{title}</h1>
                             <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Admin Portal</p>
