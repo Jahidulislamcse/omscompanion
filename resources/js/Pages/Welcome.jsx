@@ -230,6 +230,82 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
         setActiveBenefitIndex(index);
     };
 
+    // Mobile Horizontal Carousel for News Section (Matches Benefits)
+    const newsGridRef = useRef(null);
+    const [activeNewsIndex, setActiveNewsIndex] = useState(0);
+    const [newsViewMode, setNewsViewMode] = useState('carousel'); // 'carousel' | 'grid'
+
+    useEffect(() => {
+        const resetNewsCarousel = () => {
+            if (newsGridRef.current) {
+                newsGridRef.current.scrollLeft = 0;
+            }
+        };
+        resetNewsCarousel();
+        const t = setTimeout(resetNewsCarousel, 120);
+        return () => clearTimeout(t);
+    }, []);
+
+    const handleNewsScroll = () => {
+        const el = newsGridRef.current;
+        if (!el) return;
+        const cards = el.querySelectorAll('.news-card');
+        if (!cards || cards.length === 0) return;
+
+        const scrollLeft = el.scrollLeft;
+        if (scrollLeft <= 25) {
+            setActiveNewsIndex(0);
+            return;
+        }
+        if (scrollLeft + el.clientWidth >= el.scrollWidth - 25) {
+            setActiveNewsIndex(cards.length - 1);
+            return;
+        }
+
+        const viewportLeft = scrollLeft;
+        const viewportRight = scrollLeft + el.clientWidth;
+        let maxOverlap = 0;
+        let bestIdx = 0;
+
+        cards.forEach((card, idx) => {
+            const cardLeft = card.offsetLeft - el.offsetLeft;
+            const cardRight = cardLeft + card.offsetWidth;
+            const overlap = Math.max(0, Math.min(viewportRight, cardRight) - Math.max(viewportLeft, cardLeft));
+            if (overlap > maxOverlap) {
+                maxOverlap = overlap;
+                bestIdx = idx;
+            }
+        });
+
+        setActiveNewsIndex(bestIdx);
+    };
+
+    const scrollToNews = (index) => {
+        const el = newsGridRef.current;
+        if (!el) return;
+        const cards = el.querySelectorAll('.news-card');
+        if (!cards || !cards[index]) return;
+
+        if (index === 0) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+            setActiveNewsIndex(0);
+            return;
+        }
+        if (index === cards.length - 1) {
+            el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
+            setActiveNewsIndex(index);
+            return;
+        }
+
+        const target = cards[index];
+        const targetLeft = Math.max(0, target.offsetLeft - el.offsetLeft - 16);
+        el.scrollTo({
+            left: targetLeft,
+            behavior: 'smooth'
+        });
+        setActiveNewsIndex(index);
+    };
+
     // Referral System Modal State
     const [referralModalOpen, setReferralModalOpen] = useState(false);
 
@@ -1010,9 +1086,49 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         <p className="landing-section-subtitle">
                             Stay updated with recent surgical case studies, workshop schedules, and professional training announcements for BDS Doctors.
                         </p>
+
+                        {/* Mobile Swipe Hint Toolbar & View Mode Switcher */}
+                        {activeNewsItems.length > 1 && (
+                            <div className="news-mobile-header-toolbar">
+                                <div className="news-mobile-scroll-hint">
+                                    <span className="hint-hand-bounce">{newsViewMode === 'carousel' ? '👉' : '📋'}</span>
+                                    <span>{newsViewMode === 'carousel' ? 'Swipe cards to explore all' : 'Viewing all'} <strong>{activeNewsItems.length} updates</strong></span>
+                                    <span className="hint-pill-counter">{newsViewMode === 'carousel' ? `${activeNewsIndex + 1}/${activeNewsItems.length}` : `${activeNewsItems.length}/${activeNewsItems.length}`}</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="news-view-toggle-btn"
+                                    onClick={() => setNewsViewMode(prev => prev === 'carousel' ? 'grid' : 'carousel')}
+                                    aria-label="Toggle News View Mode"
+                                >
+                                    {newsViewMode === 'carousel' ? '⊞ Show All Cards' : '↔ Swipe Carousel'}
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Top Indicator Dots Track (Matches User Drawing) */}
+                        {newsViewMode === 'carousel' && activeNewsItems.length > 1 && (
+                            <div className="news-dots-indicator-top">
+                                <div className="news-dots-track">
+                                    {activeNewsItems.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            className={`news-dot-item ${activeNewsIndex === i ? 'is-active' : ''}`}
+                                            onClick={() => scrollToNews(i)}
+                                            aria-label={`Go to update ${i + 1}`}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="news-grid">
+                    <div 
+                        className={`news-grid ${newsViewMode === 'grid' ? 'is-grid-view' : ''}`}
+                        ref={newsGridRef}
+                        onScroll={handleNewsScroll}
+                    >
                         {activeNewsItems.map((item, idx) => {
                             const glowClass = item.theme_color ? `card-glow-${item.theme_color}` : (idx % 3 === 0 ? 'card-glow-indigo' : idx % 3 === 1 ? 'card-glow-emerald' : 'card-glow-cyan');
                             const badgeStyleClass = idx % 3 === 0 ? 'badge-new' : idx % 3 === 1 ? 'badge-completed' : 'badge-approved';
@@ -1056,6 +1172,41 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                             );
                         })}
                     </div>
+
+                    {/* Mobile Carousel Indicators & Quick Navigation Arrows */}
+                    {newsViewMode === 'carousel' && activeNewsItems.length > 1 && (
+                        <div className="news-mobile-controls">
+                            <button
+                                type="button"
+                                className="news-nav-arrow-btn"
+                                onClick={() => scrollToNews(Math.max(0, activeNewsIndex - 1))}
+                                disabled={activeNewsIndex === 0}
+                                aria-label="Previous News Item"
+                            >
+                                ‹
+                            </button>
+                            <div className="news-dots-track">
+                                {activeNewsItems.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        className={`news-dot-item ${activeNewsIndex === i ? 'is-active' : ''}`}
+                                        onClick={() => scrollToNews(i)}
+                                        aria-label={`Go to update ${i + 1}`}
+                                    />
+                                ))}
+                            </div>
+                            <button
+                                type="button"
+                                className="news-nav-arrow-btn"
+                                onClick={() => scrollToNews(Math.min(activeNewsItems.length - 1, activeNewsIndex + 1))}
+                                disabled={activeNewsIndex === activeNewsItems.length - 1}
+                                aria-label="Next News Item"
+                            >
+                                ›
+                            </button>
+                        </div>
+                    )}
                 </div>
             </section>
 
