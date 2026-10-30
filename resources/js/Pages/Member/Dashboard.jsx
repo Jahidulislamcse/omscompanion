@@ -1,11 +1,32 @@
-import React from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
 import { useAppInstalled } from '@/utils/appDetection';
 
 export default function Dashboard({ stats, recentReferrals, recentNotifications }) {
     const { site_name, is_app_installed } = usePage().props;
     const isInstalled = useAppInstalled() || Boolean(is_app_installed);
+    const [showReferralModal, setShowReferralModal] = useState(false);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        patient_name: '',
+        phone: '',
+        medical_condition: '',
+        urgency_level: 'low',
+        additional_notes: '',
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(route('member.referrals.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                setShowReferralModal(false);
+                alert('Patient referral submitted successfully!');
+            }
+        });
+    };
 
     return (
         <MemberLayout title="Member Dashboard">
@@ -49,12 +70,17 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                 <div>
                     <h3 style={{ margin: 0, fontSize: '18px' }}>Submit a Patient Referral</h3>
                     <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-muted)' }}>
-                        Send patient cases to {site_name || 'DentistChamber'} and track case progress in real-time.
+                        Send patient cases to {site_name || 'OMS Companion'} and track case progress in real-time.
                     </p>
                 </div>
-                <Link href={route('member.referrals')} className="btn btn-primary" style={{ padding: '12px 24px', fontSize: '15px' }}>
-                    ➕ Refer a New Patient
-                </Link>
+                <button
+                    type="button"
+                    onClick={() => setShowReferralModal(true)}
+                    className="btn btn-primary"
+                    style={{ padding: '12px 24px', fontSize: '15px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                >
+                    <span>➕</span> Refer a New Patient
+                </button>
             </div>
 
             {/* Download Mobile App Banner (Hidden if app is installed / inside app) */}
@@ -233,6 +259,157 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                     </div>
                 </div>
             </div>
+
+            {/* Modal: New Patient Referral Form Popup */}
+            {showReferralModal && (
+                <div 
+                    style={{ 
+                        position: 'fixed', 
+                        top: 0, 
+                        left: 0, 
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: 'rgba(0,0,0,0.75)', 
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        zIndex: 99999,
+                        padding: '20px',
+                        boxSizing: 'border-box'
+                    }}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setShowReferralModal(false);
+                    }}
+                >
+                    <div 
+                        className="glass-panel" 
+                        style={{ 
+                            width: '100%', 
+                            maxWidth: '540px', 
+                            backgroundColor: 'var(--bg-main, #0f172a)', 
+                            maxHeight: '90vh', 
+                            overflowY: 'auto', 
+                            margin: 'auto',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(6, 182, 212, 0.35)',
+                            boxShadow: '0 25px 60px rgba(0,0,0,0.6), 0 0 30px rgba(6, 182, 212, 0.2)',
+                            padding: '24px'
+                        }}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+                            <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px' }}>
+                                <span>➕</span> Submit Patient Referral
+                            </h3>
+                            <button 
+                                type="button"
+                                onClick={() => setShowReferralModal(false)} 
+                                className="video-modal-close-btn"
+                                style={{ width: '32px', height: '32px', minWidth: '32px' }}
+                                aria-label="Close"
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" htmlFor="dashboard_patient_name" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Patient Name *</label>
+                                <input 
+                                    type="text"
+                                    id="dashboard_patient_name"
+                                    className="form-control"
+                                    placeholder="Enter full name of patient"
+                                    value={data.patient_name}
+                                    onChange={e => setData('patient_name', e.target.value)}
+                                    required
+                                />
+                                {errors.patient_name && <span className="form-error" style={{ color: '#ef4444', fontSize: '12px' }}>{errors.patient_name}</span>}
+                            </div>
+
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" htmlFor="dashboard_phone" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Phone Number *</label>
+                                <input 
+                                    type="text"
+                                    id="dashboard_phone"
+                                    className="form-control"
+                                    placeholder="e.g. +88017XXXXXXXX"
+                                    value={data.phone}
+                                    onChange={e => setData('phone', e.target.value)}
+                                    required
+                                />
+                                {errors.phone && <span className="form-error" style={{ color: '#ef4444', fontSize: '12px' }}>{errors.phone}</span>}
+                            </div>
+
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" htmlFor="dashboard_medical_condition" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Medical Condition *</label>
+                                <input 
+                                    type="text"
+                                    id="dashboard_medical_condition"
+                                    className="form-control"
+                                    placeholder="e.g. Impacted Wisdom Tooth Extraction, Maxillofacial Cyst, Biopsy"
+                                    value={data.medical_condition}
+                                    onChange={e => setData('medical_condition', e.target.value)}
+                                    required
+                                />
+                                {errors.medical_condition && <span className="form-error" style={{ color: '#ef4444', fontSize: '12px' }}>{errors.medical_condition}</span>}
+                            </div>
+
+                            <div className="form-group" style={{ marginBottom: '16px' }}>
+                                <label className="form-label" htmlFor="dashboard_urgency_level" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Urgency Level *</label>
+                                <select
+                                    id="dashboard_urgency_level"
+                                    className="form-control"
+                                    value={data.urgency_level}
+                                    onChange={e => setData('urgency_level', e.target.value)}
+                                    required
+                                >
+                                    <option value="low">Low Urgency (Routine)</option>
+                                    <option value="medium">Medium Urgency (Moderate Pain)</option>
+                                    <option value="high">High Urgency (Severe Pain)</option>
+                                    <option value="critical">Critical Urgency (Immediate Care)</option>
+                                </select>
+                                {errors.urgency_level && <span className="form-error" style={{ color: '#ef4444', fontSize: '12px' }}>{errors.urgency_level}</span>}
+                            </div>
+
+                            <div className="form-group" style={{ marginBottom: '20px' }}>
+                                <label className="form-label" htmlFor="dashboard_additional_notes" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Additional Notes (Optional)</label>
+                                <textarea 
+                                    id="dashboard_additional_notes"
+                                    className="form-control"
+                                    placeholder="Medical history, references, or preferred schedules..."
+                                    value={data.additional_notes}
+                                    onChange={e => setData('additional_notes', e.target.value)}
+                                    rows="3"
+                                    style={{ resize: 'vertical', fontFamily: 'inherit' }}
+                                />
+                                {errors.additional_notes && <span className="form-error" style={{ color: '#ef4444', fontSize: '12px' }}>{errors.additional_notes}</span>}
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '24px' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => setShowReferralModal(false)} 
+                                    className="btn btn-outline"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="btn btn-primary" 
+                                    disabled={processing}
+                                >
+                                    {processing ? 'Submitting Referral...' : 'Submit Referral'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </MemberLayout>
     );
 }
