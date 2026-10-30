@@ -332,7 +332,7 @@ export default function Dashboard({ stats, recentReferrals, recentNotifications 
                             </div>
 
                             <div className="form-group" style={{ marginBottom: '16px' }}>
-                                <label className="form-label" htmlFor="dashboard_phone" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Phone Number *</label>
+                                <label className="form-label" htmlFor="dashboard_phone" style={{ fontWeight: '600', marginBottom: '6px', display: 'block' }}>Patient Phone Number *</label>
                                 <input 
                                     type="text"
                                     id="dashboard_phone"

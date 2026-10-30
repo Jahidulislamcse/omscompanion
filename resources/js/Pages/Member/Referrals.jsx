@@ -246,7 +246,7 @@ export default function Referrals({ referrals = [] }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label" htmlFor="phone">Phone Number</label>
+                                <label className="form-label" htmlFor="phone">Patient Phone Number *</label>
                                 <input 
                                     type="text"
                                     id="phone"
