@@ -1145,10 +1145,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                         <span className={`badge-status ${badgeStyleClass}`}>{item.badge_text}</span>
                                         {item.sub_badge_text && <span>{item.sub_badge_text}</span>}
                                     </div>
-                                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', lineHeight: '1.4', margin: '6px 0' }}>{item.title}</h4>
-                                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: '1.5', fontWeight: '400', margin: '0 0 14px' }}>
-                                        {item.description}
-                                    </p>
+                                    <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', lineHeight: '1.45', margin: '8px 0 16px' }}>{item.title}</h4>
                                     {isWhatsApp || targetUrl.startsWith('http') ? (
                                         <a 
                                             href={targetUrl}
