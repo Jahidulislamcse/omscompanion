@@ -312,6 +312,16 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
     // Interactive FAQ state
     const [openFaq, setOpenFaq] = useState(null);
 
+    // Doctors Review Expand/Collapse state (all minimized by default as requested)
+    const [expandedReviews, setExpandedReviews] = useState({});
+
+    const toggleReview = (idOrIdx) => {
+        setExpandedReviews(prev => ({
+            ...prev,
+            [idOrIdx]: !prev[idOrIdx]
+        }));
+    };
+
     // Share link state
     const [copiedLink, setCopiedLink] = useState(false);
     const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -508,7 +518,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
         }
         return [
             {
-                quote: "DentistChamber transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.",
+                quote: "OMS COMPANION transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.",
                 name: "Dr. Farhana Yasmin, BDS",
                 role: "General Dental Practitioner",
                 location: "Dhaka",
@@ -524,7 +534,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                 tag: "Clinical Practitioner"
             },
             {
-                quote: "Generating verified digital certificates and tracking case logs seamlessly makes DentistChamber an indispensable tool for modern dental practices.",
+                quote: "Generating verified digital certificates and tracking case logs seamlessly makes OMS COMPANION an indispensable tool for modern dental practices.",
                 name: "Dr. Noshin Tarannum, BDS",
                 role: "Orthodontics Fellow",
                 location: "Sylhet",
@@ -533,6 +543,23 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             }
         ];
     }, [reviews]);
+
+    const allReviewsExpanded = useMemo(() => {
+        if (!activeTestimonials || activeTestimonials.length === 0) return false;
+        return activeTestimonials.every((t, idx) => !!expandedReviews[t.id || idx]);
+    }, [activeTestimonials, expandedReviews]);
+
+    const toggleAllReviews = () => {
+        if (allReviewsExpanded) {
+            setExpandedReviews({});
+        } else {
+            const next = {};
+            activeTestimonials.forEach((t, idx) => {
+                next[t.id || idx] = true;
+            });
+            setExpandedReviews(next);
+        }
+    };
 
     // Clinical News Items resolution (dynamic from props, fallback to defaults)
     const activeNewsItems = useMemo(() => {
@@ -1021,27 +1048,93 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                         </div>
                         <h2 className="landing-section-title">Trusted by BDS Practitioners</h2>
                         <p className="landing-section-subtitle">
-                            Here is what practicing dentists across the network say about DentistChamber.
+                            Here is what practicing dentists across the network say about {site_name || 'OMS COMPANION'}.
                         </p>
+
+                        {/* Expand All / Minimize All Toolbar */}
+                        {activeTestimonials.length > 1 && (
+                            <div className="testimonials-header-toolbar">
+                                <div className="testimonials-count-pill">
+                                    <span>👨‍⚕️ <strong>{activeTestimonials.length} Verified Reviews</strong></span>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="testimonials-toggle-all-btn"
+                                    onClick={toggleAllReviews}
+                                    aria-label="Toggle all reviews"
+                                >
+                                    {allReviewsExpanded ? '⊟ Minimize All' : '⊞ Click to expand all'}
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div className="dashboard-grid testimonials-grid">
                         {activeTestimonials.map((t, idx) => {
+                            const reviewKey = t.id || idx;
+                            const isExpanded = !!expandedReviews[reviewKey];
                             const cleanName = (t.name || '').replace(/^(Dr\.|Prof\.|Mr\.|Mrs\.|Ms\.)\s*/i, '').trim();
                             const avatarChar = cleanName ? cleanName.charAt(0).toUpperCase() : 'D';
+                            
                             return (
-                                <div key={t.id || idx} className="glass-panel testimonial-card">
-                                    <div className="testimonial-stars">
-                                        {'★'.repeat(t.rating || 5)}
-                                    </div>
-                                    <p className="testimonial-quote">"{t.quote}"</p>
-                                    <div className="testimonial-author">
-                                        <div className="author-avatar">{avatarChar}</div>
-                                        <div>
-                                            <h5 className="author-name">{t.name}</h5>
-                                            <span className="author-role">
-                                                {t.role}{t.location ? ` • ${t.location}` : ''}
+                                <div
+                                    key={reviewKey}
+                                    className={`glass-panel testimonial-card testimonial-card-collapsible ${isExpanded ? 'is-expanded' : 'is-minimized'}`}
+                                    onClick={() => toggleReview(reviewKey)}
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            toggleReview(reviewKey);
+                                        }
+                                    }}
+                                    aria-expanded={isExpanded}
+                                >
+                                    {/* Author & Rating Header (Always Visible) */}
+                                    <div className="testimonial-card-header">
+                                        <div className="testimonial-author-group">
+                                            <div className="author-avatar">{avatarChar}</div>
+                                            <div className="testimonial-meta-box">
+                                                <div className="testimonial-meta-title-row">
+                                                    <h5 className="author-name">{t.name}</h5>
+                                                    <div className="testimonial-card-stars" aria-label={`${t.rating || 5} Stars`}>
+                                                        {'★'.repeat(t.rating || 5)}
+                                                    </div>
+                                                </div>
+                                                <span className="author-role">
+                                                    {t.role}{t.location ? ` • ${t.location}` : ''}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Action Button: Matches user drawing ↓ (Click to expand) and ✕ (Minimize) */}
+                                        <button
+                                            type="button"
+                                            className={`testimonial-action-pill ${isExpanded ? 'is-active' : ''}`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleReview(reviewKey);
+                                            }}
+                                            aria-expanded={isExpanded}
+                                            aria-label={isExpanded ? 'Minimize review' : 'Click to expand review'}
+                                        >
+                                            <span className="pill-text">
+                                                {isExpanded ? 'Minimize' : 'Click to expand'}
                                             </span>
+                                            <span className="pill-icon">
+                                                {isExpanded ? '✕' : '↓'}
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    {/* Collapsible Quote Body */}
+                                    <div className={`testimonial-quote-collapse ${isExpanded ? 'is-open' : ''}`}>
+                                        <div className="testimonial-quote-content">
+                                            <svg className="testimonial-quote-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                                            </svg>
+                                            <p className="testimonial-quote-text">"{t.quote}"</p>
                                         </div>
                                     </div>
                                 </div>

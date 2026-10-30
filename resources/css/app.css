@@ -2105,50 +2105,297 @@ select.form-control option {
 
 .testimonials-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+    gap: 20px;
+    align-items: start;
 }
 
-.testimonial-card {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 24px;
-    position: relative;
-}
-
-.testimonial-stars {
-    color: #f59e0b;
-    font-size: 18px;
-    letter-spacing: 2px;
-}
-
-.testimonial-quote {
-    font-style: italic;
-    font-size: 14px;
-    color: var(--text-main);
-    line-height: 1.6;
-}
-
-.testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: auto;
-    padding-top: 12px;
-    border-top: 1px solid var(--border-color);
-}
-
-.author-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1e4e5f, #06b6d4);
-    color: #fff;
-    font-weight: 800;
+.testimonials-header-toolbar {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.testimonials-count-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 50px;
+}
+
+.testimonials-count-pill strong {
+    color: #38bdf8;
+}
+
+.testimonials-toggle-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: #38bdf8;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+}
+
+.testimonials-toggle-all-btn:hover {
+    background: rgba(6, 182, 212, 0.25);
+    border-color: #06b6d4;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.testimonial-card-collapsible {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 16px 18px !important;
+    border-radius: 16px !important;
+    background: rgba(15, 43, 53, 0.7) !important;
+    border: 1px solid rgba(6, 182, 212, 0.22) !important;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    text-align: left !important;
+}
+
+.testimonial-card-collapsible:hover {
+    border-color: rgba(6, 182, 212, 0.5) !important;
+    background: rgba(15, 43, 53, 0.9) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -8px rgba(6, 182, 212, 0.3) !important;
+}
+
+.testimonial-card-collapsible.is-expanded {
+    border-color: rgba(6, 182, 212, 0.7) !important;
+    background: rgba(13, 40, 50, 0.95) !important;
+    box-shadow: 0 14px 34px -8px rgba(6, 182, 212, 0.38), 0 0 18px rgba(6, 182, 212, 0.15) !important;
+}
+
+/* Header row inside card */
+.testimonial-card-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+.testimonial-author-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.testimonial-author-group .author-avatar {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #0284c7, #06b6d4) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.35) !important;
+    flex-shrink: 0 !important;
+}
+
+.testimonial-meta-box {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    min-width: 0 !important;
+}
+
+.testimonial-meta-title-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+.testimonial-meta-title-row .author-name {
+    margin: 0 !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    line-height: 1.3 !important;
+}
+
+.testimonial-card-stars {
+    color: #f59e0b !important;
+    font-size: 12px !important;
+    letter-spacing: 1px !important;
+    display: inline-flex !important;
+    vertical-align: middle !important;
+}
+
+.testimonial-meta-box .author-role {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    line-height: 1.3 !important;
+}
+
+/* Action Pill (Matches pink drawing: ↓ and ✕) */
+.testimonial-action-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 14px !important;
+    border-radius: 50px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    border: 1px solid rgba(6, 182, 212, 0.4) !important;
+    background: rgba(6, 182, 212, 0.12) !important;
+    color: #38bdf8 !important;
+    cursor: pointer !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    outline: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.testimonial-card-collapsible:hover .testimonial-action-pill {
+    background: rgba(6, 182, 212, 0.28) !important;
+    border-color: #06b6d4 !important;
+    color: #ffffff !important;
+    transform: scale(1.02);
+}
+
+.testimonial-action-pill.is-active {
+    background: rgba(239, 68, 68, 0.18) !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    color: #fca5a5 !important;
+}
+
+.testimonial-action-pill.is-active:hover {
+    background: #ef4444 !important;
+    border-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+.testimonial-action-pill .pill-icon {
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Collapsible Quote Body */
+.testimonial-quote-collapse {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin 0.3s ease !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.testimonial-quote-collapse.is-open {
+    max-height: 500px !important;
+    opacity: 1 !important;
+    margin-top: 14px !important;
+    padding-top: 14px !important;
+    border-top: 1px dashed rgba(255, 255, 255, 0.14) !important;
+}
+
+.testimonial-quote-content {
+    display: flex !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+}
+
+.testimonial-quote-icon {
+    color: #06b6d4 !important;
+    opacity: 0.7 !important;
+    flex-shrink: 0 !important;
+    margin-top: 2px !important;
+}
+
+.testimonial-quote-text {
+    margin: 0 !important;
+    font-style: italic !important;
+    font-size: 13.5px !important;
+    color: #f1f5f9 !important;
+    line-height: 1.65 !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .testimonials-header-toolbar {
+        margin-top: 10px;
+        margin-bottom: 16px;
+        gap: 8px;
+    }
+
+    .testimonials-count-pill {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    .testimonials-toggle-all-btn {
+        font-size: 11px;
+        padding: 4px 12px;
+    }
+
+    .testimonial-card-collapsible {
+        padding: 12px 14px !important;
+        border-radius: 14px !important;
+    }
+
+    .testimonial-author-group .author-avatar {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        font-size: 13px !important;
+    }
+
+    .testimonial-meta-title-row .author-name {
+        font-size: 13px !important;
+    }
+
+    .testimonial-card-stars {
+        font-size: 10px !important;
+    }
+
+    .testimonial-meta-box .author-role {
+        font-size: 11px !important;
+    }
+
+    .testimonial-action-pill {
+        padding: 4px 10px !important;
+        font-size: 11px !important;
+        gap: 4px !important;
+    }
+
+    .testimonial-quote-collapse.is-open {
+        margin-top: 10px !important;
+        padding-top: 10px !important;
+    }
+
+    .testimonial-quote-text {
+        font-size: 12px !important;
+        line-height: 1.55 !important;
+    }
 }
 
 .author-name {

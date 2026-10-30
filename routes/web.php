@@ -81,7 +81,7 @@ Route::get('/', function () {
     // Ensure default doctor reviews exist
     if (\App\Models\Review::count() === 0) {
         \App\Models\Review::create([
-            'quote' => 'DentistChamber transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.',
+            'quote' => 'OMS COMPANION transformed how our chamber handles surgical impaction referrals. Being able to see patient status updates live gives complete peace of mind.',
             'name' => 'Dr. Farhana Yasmin, BDS',
             'role' => 'General Dental Practitioner',
             'location' => 'Dhaka',
@@ -101,7 +101,7 @@ Route::get('/', function () {
             'is_published' => true,
         ]);
         \App\Models\Review::create([
-            'quote' => 'Generating verified digital certificates and tracking case logs seamlessly makes DentistChamber an indispensable tool for modern dental practices.',
+            'quote' => 'Generating verified digital certificates and tracking case logs seamlessly makes OMS COMPANION an indispensable tool for modern dental practices.',
             'name' => 'Dr. Noshin Tarannum, BDS',
             'role' => 'Orthodontics Fellow',
             'location' => 'Sylhet',
