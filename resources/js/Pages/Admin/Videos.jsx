@@ -719,22 +719,31 @@ export default function Videos({ categories = [], videos = [] }) {
 
             {/* Video Preview Modal */}
             {selectedPreviewVideo && (
-                <div className="modal-wrapper" onClick={() => setSelectedPreviewVideo(null)}>
-                    <div className="glass-panel modal-card modal-card-colorful" style={{ maxWidth: '800px', width: '90%', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
-                        <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', backgroundColor: '#0f172a' }}>
-                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <h3 style={{ margin: 0, color: '#fff', fontSize: '18px' }}>🎥 {selectedPreviewVideo.title}</h3>
+                <div className="modal-wrapper video-modal-wrapper" onClick={() => setSelectedPreviewVideo(null)}>
+                    <div className="glass-panel modal-card modal-card-colorful video-modal-card" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header video-modal-header">
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', minWidth: 0, flex: 1, marginRight: '12px' }}>
+                                <h3 className="video-modal-title">🎥 {selectedPreviewVideo.title}</h3>
                                 {selectedPreviewVideo.is_free ? (
-                                    <span className="badge-status badge-completed" style={{ fontSize: '11px', padding: '4px 10px' }}>🔓 Free</span>
+                                    <span className="badge-status badge-completed" style={{ fontSize: '11px', padding: '4px 10px', flexShrink: 0 }}>🔓 Free</span>
                                 ) : (
-                                    <span className="badge-status badge-booked" style={{ fontSize: '11px', padding: '4px 10px' }}>👑 Premium</span>
+                                    <span className="badge-status badge-booked" style={{ fontSize: '11px', padding: '4px 10px', flexShrink: 0 }}>👑 Premium</span>
                                 )}
                             </div>
-                            <button onClick={() => setSelectedPreviewVideo(null)} className="btn btn-outline" style={{ padding: '4px 10px', color: '#fff' }}>
-                                Close ✕
+                            <button 
+                                type="button"
+                                onClick={() => setSelectedPreviewVideo(null)} 
+                                className="video-modal-close-btn"
+                                aria-label="Close"
+                                title="Close Video"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
                             </button>
                         </div>
-                        <div className="modal-video-frame" style={{ position: 'relative', aspectRatio: '16/9', backgroundColor: '#000' }}>
+                        <div className="modal-video-frame video-modal-frame">
                             {getYouTubeId(selectedPreviewVideo.video_path) ? (
                                 <iframe 
                                     style={{ width: '100%', height: '100%', border: 'none' }} 
@@ -746,8 +755,8 @@ export default function Videos({ categories = [], videos = [] }) {
                             ) : null}
                         </div>
                         {selectedPreviewVideo.description && (
-                            <div style={{ padding: '20px 24px', backgroundColor: '#0b131f' }}>
-                                <p style={{ color: '#cbd5e1', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
+                            <div style={{ padding: '12px 20px', backgroundColor: '#0b131f', borderTop: '1px solid rgba(255,255,255,0.08)', flexShrink: 0, maxHeight: '90px', overflowY: 'auto' }}>
+                                <p style={{ color: '#cbd5e1', fontSize: '13px', margin: 0, lineHeight: '1.5' }}>
                                     {selectedPreviewVideo.description}
                                 </p>
                             </div>

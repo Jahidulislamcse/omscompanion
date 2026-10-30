@@ -2278,6 +2278,160 @@ select.form-control option {
     aspect-ratio: 16/9;
 }
 
+/* ==========================================================================
+   FULL-WIDTH & FULL-HEIGHT VIDEO POPUP MODAL STYLES (THEATRE & MOBILE NATIVE)
+   ========================================================================== */
+.video-modal-wrapper {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 0.94) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 999999 !important;
+    box-sizing: border-box !important;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.video-modal-card {
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: #000000 !important;
+    overflow: hidden !important;
+    position: relative;
+    box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 40px rgba(6, 182, 212, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.video-modal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background-color: #0f172a !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    flex-shrink: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 12px 20px !important;
+}
+
+.video-modal-title {
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.video-modal-close-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    outline: none !important;
+    margin-left: 10px !important;
+}
+
+.video-modal-close-btn:hover {
+    background: #ef4444 !important;
+    border-color: #ef4444 !important;
+    color: #ffffff !important;
+    transform: scale(1.1) rotate(90deg) !important;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6) !important;
+}
+
+.video-modal-close-btn:active {
+    transform: scale(0.93) !important;
+}
+
+.video-modal-frame {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #000000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.video-modal-frame iframe,
+.video-modal-frame video {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+}
+
+/* Desktop: Theatre Scale (Full Available Width & Height) */
+@media (min-width: 769px) {
+    .video-modal-wrapper {
+        padding: 24px !important;
+    }
+
+    .video-modal-card {
+        width: 96vw !important;
+        height: 92vh !important;
+        max-width: 1440px !important;
+        max-height: 92vh !important;
+        border-radius: 16px !important;
+    }
+
+    .video-modal-title {
+        font-size: 17px !important;
+    }
+}
+
+/* Mobile: 100% Full Width & 100% Full Height Native Player */
+@media (max-width: 768px) {
+    .video-modal-wrapper {
+        padding: 0 !important;
+    }
+
+    .video-modal-card {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+
+    .video-modal-header {
+        padding: 10px 14px !important;
+    }
+
+    .video-modal-title {
+        font-size: 14px !important;
+    }
+
+    .video-modal-close-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+    }
+}
+
 /* Call To Action Banner */
 .cta-banner-section {
     width: 100% !important;

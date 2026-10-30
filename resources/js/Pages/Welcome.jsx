@@ -1363,19 +1363,27 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
 
             {/* Video Player Modal */}
             {activeVideo && (
-                <div className="modal-wrapper" onClick={() => setActiveVideo(null)}>
-                    <div className="glass-panel modal-card modal-card-colorful" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h3>🎥 {activeVideo.title}</h3>
-                            <button onClick={() => setActiveVideo(null)} className="btn btn-outline close-btn">
-                                Close ✕
+                <div className="modal-wrapper video-modal-wrapper" onClick={() => setActiveVideo(null)}>
+                    <div className="glass-panel modal-card modal-card-colorful video-modal-card" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header video-modal-header">
+                            <h3 className="video-modal-title">🎥 {activeVideo.title}</h3>
+                            <button 
+                                type="button"
+                                onClick={() => setActiveVideo(null)} 
+                                className="video-modal-close-btn"
+                                aria-label="Close"
+                                title="Close Video"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
                             </button>
                         </div>
-                        <div className="modal-video-frame">
+                        <div className="modal-video-frame video-modal-frame">
                             {getYouTubeId(activeVideo.video_path) ? (
                                 <iframe 
-                                    width="100%" 
-                                    height="100%" 
+                                    style={{ width: '100%', height: '100%', border: 'none' }}
                                     src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(activeVideo.video_path)}?autoplay=1`} 
                                     title={activeVideo.title}
                                     frameBorder="0" 

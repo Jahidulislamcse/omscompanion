@@ -620,22 +620,31 @@ export default function Index({ categories = [], videos = [], settings = {}, tar
 
             {/* Video Player Modal */}
             {activeVideo && (
-                <div className="modal-wrapper" onClick={() => setActiveVideo(null)}>
-                    <div className="glass-panel modal-card modal-card-colorful" style={{ maxWidth: '800px', width: '90%', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
-                        <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', backgroundColor: '#0f172a' }}>
-                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <h3 style={{ margin: 0, color: '#fff', fontSize: '18px' }}>🎥 {activeVideo.title}</h3>
+                <div className="modal-wrapper video-modal-wrapper" onClick={() => setActiveVideo(null)}>
+                    <div className="glass-panel modal-card modal-card-colorful video-modal-card" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header video-modal-header">
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', minWidth: 0, flex: 1, marginRight: '12px' }}>
+                                <h3 className="video-modal-title">🎥 {activeVideo.title}</h3>
                                 {activeVideo.is_free ? (
-                                    <span className="video-badge-free">🔓 FREE</span>
+                                    <span className="video-badge-free" style={{ flexShrink: 0 }}>🔓 FREE</span>
                                 ) : (
-                                    <span className="video-badge-premium">👑 PREMIUM</span>
+                                    <span className="video-badge-premium" style={{ flexShrink: 0 }}>👑 PREMIUM</span>
                                 )}
                             </div>
-                            <button onClick={() => setActiveVideo(null)} className="btn btn-outline" style={{ padding: '4px 10px', color: '#fff' }}>
-                                Close ✕
+                            <button 
+                                type="button"
+                                onClick={() => setActiveVideo(null)} 
+                                className="video-modal-close-btn"
+                                aria-label="Close"
+                                title="Close Video"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
                             </button>
                         </div>
-                        <div className="modal-video-frame" style={{ position: 'relative', aspectRatio: '16/9', backgroundColor: '#000' }}>
+                        <div className="modal-video-frame video-modal-frame">
                             {getYouTubeId(activeVideo.video_path) ? (
                                 <iframe 
                                     style={{ width: '100%', height: '100%', border: 'none' }} 
@@ -658,8 +667,8 @@ export default function Index({ categories = [], videos = [], settings = {}, tar
                             )}
                         </div>
                         {activeVideo.description && (
-                            <div style={{ padding: '20px 24px', backgroundColor: '#0b131f' }}>
-                                <p style={{ color: '#cbd5e1', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
+                            <div style={{ padding: '12px 20px', backgroundColor: '#0b131f', borderTop: '1px solid rgba(255,255,255,0.08)', flexShrink: 0, maxHeight: '90px', overflowY: 'auto' }}>
+                                <p style={{ color: '#cbd5e1', fontSize: '13px', margin: 0, lineHeight: '1.5' }}>
                                     {activeVideo.description}
                                 </p>
                             </div>
