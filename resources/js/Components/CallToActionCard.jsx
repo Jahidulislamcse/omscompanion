@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 
-export default function CallToActionCard({ onReferralClick }) {
+export default function CallToActionCard({ onReferralClick, style = {} }) {
     const { auth, site_name } = usePage().props;
 
     const handleReferClick = (e) => {
@@ -25,7 +25,7 @@ export default function CallToActionCard({ onReferralClick }) {
     };
 
     return (
-        <section className="cta-banner-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 60px', boxSizing: 'border-box' }}>
+        <section className="cta-banner-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 40px', boxSizing: 'border-box', ...style }}>
             <div className="landing-section-container" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
                 <div className="glass-panel cta-banner-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                     <h2 className="cta-title">Ready to Elevate Your Dental Practice?</h2>

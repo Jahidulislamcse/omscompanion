@@ -1413,8 +1413,11 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                 </div>
             )}
 
+            {/* Call To Action Banner */}
+            <CallToActionCard onReferralClick={handleReferralClick} />
+
             {/* Website Share Feature Section */}
-            <section className="share-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 40px', boxSizing: 'border-box', textAlign: 'center' }}>
+            <section className="share-section" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px 20px 50px', boxSizing: 'border-box', textAlign: 'center' }}>
                 <div className="landing-section-container" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
                     <div className="share-invite-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                         <div className="outline-pill-wrapper" style={{ justifyContent: 'center', marginBottom: '14px' }}>
@@ -1504,9 +1507,6 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                     </div>
                 </div>
             </section>
-
-            {/* Call To Action Banner */}
-            <CallToActionCard onReferralClick={handleReferralClick} />
 
             {/* Footer */}
             <footer className="landing-footer" style={{ width: '100%', alignSelf: 'stretch', boxSizing: 'border-box', padding: '60px 0 30px 0', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-white)' }}>
