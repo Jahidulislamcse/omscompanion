@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import AdminNotificationDropdown from '@/Components/AdminNotificationDropdown';
 import { useAppInstalled } from '@/utils/appDetection';
 
 export default function AdminLayout({ children, title }) {
@@ -225,7 +226,8 @@ export default function AdminLayout({ children, title }) {
                         </div>
                     </div>
 
-                    <div className="navbar-user-info">
+                    <div className="navbar-user-info" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <AdminNotificationDropdown />
                         <button onClick={toggleTheme} className="btn btn-outline" style={{ padding: '8px 12px' }}>
                             {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
                         </button>

@@ -1137,4 +1137,21 @@ class AdminController extends Controller
 
         return redirect()->back()->with('error', $result['message']);
     }
+
+    public function markNotificationRead(\App\Models\Notification $notification)
+    {
+        if ($notification->user_id === Auth::id()) {
+            $notification->update(['read_at' => now()]);
+        }
+        return redirect()->back();
+    }
+
+    public function markAllNotificationsRead()
+    {
+        \App\Models\Notification::where('user_id', Auth::id())
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
 }

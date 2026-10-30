@@ -43,6 +43,15 @@ class GuestReferralController extends Controller
             'changed_by' => null,
         ]);
 
+        // Notify Admins about new referral from medicine shop
+        try {
+            $adminTitle = "📋 New Referral: {$referral->patient_name}";
+            $adminMessage = "New patient referral for {$referral->patient_name} ({$referral->medical_condition}) submitted by Medicine Shop ({$request->shop_keeper_name}).";
+            \App\Services\NotificationService::notifyAdmins($adminTitle, $adminMessage, route('admin.referrals'));
+        } catch (\Throwable $e) {
+            Log::error('Admin medicine shop referral notification failed: ' . $e->getMessage());
+        }
+
         Log::info("[MEDICINE SHOP REFERRAL] New patient referral submitted by Medicine Shop Keeper: {$request->shop_keeper_name} for patient: {$request->patient_name}.");
 
         return redirect()->back()->with('success', 'Patient referral submitted successfully! Our team will process it shortly.');

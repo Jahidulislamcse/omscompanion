@@ -6088,5 +6088,46 @@ select.form-control option {
     transform: scale(1.15);
 }
 
+/* ==========================================================================
+   ADMIN HEADER NOTIFICATION PANEL & BELL
+   ========================================================================== */
+.admin-bell-btn:hover {
+    background-color: rgba(6, 182, 212, 0.25) !important;
+    border-color: #06b6d4 !important;
+    color: #38bdf8 !important;
+    transform: scale(1.05);
+}
+
+.admin-bell-btn:active {
+    transform: scale(0.95);
+}
+
+.admin-notif-panel {
+    animation: dropdownSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-notif-panel {
+        position: fixed !important;
+        top: 70px !important;
+        left: 12px !important;
+        right: 12px !important;
+        width: auto !important;
+        max-width: calc(100vw - 24px) !important;
+    }
+}
+
+
 
 

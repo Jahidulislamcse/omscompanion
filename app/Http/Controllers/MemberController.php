@@ -162,6 +162,15 @@ class MemberController extends Controller
         
         NotificationService::send($member, $subject, $message, 'both');
 
+        // Notify Admins about new doctor referral
+        try {
+            $adminTitle = "📋 New Referral: {$referral->patient_name}";
+            $adminMessage = "New patient referral for {$referral->patient_name} ({$referral->medical_condition}) submitted by {$prefix}{$member->name}.";
+            NotificationService::notifyAdmins($adminTitle, $adminMessage, route('admin.referrals'));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Admin referral notification failed: ' . $e->getMessage());
+        }
+
         // Log notification for Admin (optional backend log)
         \Illuminate\Support\Facades\Log::info("[ADMIN SYSTEM NOTIFICATION] New patient referral submitted by {$prefix}{$member->name} for patient: {$referral->patient_name}.");
 

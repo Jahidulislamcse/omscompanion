@@ -66,6 +66,25 @@ class HandleInertiaRequests extends Middleware
             'pending_members_count' => $request->user() && $request->user()->isAdmin()
                 ? \App\Models\User::where('role', 'member')->where('status', 'pending')->count()
                 : 0,
+            'admin_notifications' => ($request->user() && $request->user()->isAdmin()) ? [
+                'pending_members_count' => \App\Models\User::where('role', 'member')->where('status', 'pending')->count(),
+                'new_referrals_count' => \App\Models\PatientReferral::where('status', 'new')->count(),
+                'unread_notifications_count' => \App\Models\Notification::where('user_id', $request->user()->id)->whereNull('read_at')->count(),
+                'pending_members' => \App\Models\User::where('role', 'member')
+                    ->where('status', 'pending')
+                    ->latest()
+                    ->take(10)
+                    ->get(['id', 'name', 'phone', 'doctor_type', 'bds_registration_number', 'clinic_name', 'created_at']),
+                'new_referrals' => \App\Models\PatientReferral::where('status', 'new')
+                    ->with('member:id,name')
+                    ->latest()
+                    ->take(10)
+                    ->get(['id', 'patient_name', 'phone', 'medical_condition', 'urgency_level', 'status', 'referrer_type', 'referrer_name', 'member_id', 'created_at']),
+                'recent_notifications' => \App\Models\Notification::where('user_id', $request->user()->id)
+                    ->latest()
+                    ->take(10)
+                    ->get(['id', 'title', 'message', 'action_url', 'read_at', 'created_at']),
+            ] : null,
             'site_logo' => LandingSetting::where('key', 'site_logo')->value('value') 
                 ? route('site.logo.stream') . '?v=' . (LandingSetting::where('key', 'site_logo_updated_at')->value('value') ?: time())
                 : null,
