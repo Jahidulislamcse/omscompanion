@@ -57,7 +57,7 @@ export default function CameraPhotoUpload({
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    const maxDim = 1000;
+                    const maxDim = 1600; // High resolution HD support
                     let width = img.width;
                     let height = img.height;
 
@@ -91,7 +91,7 @@ export default function CameraPhotoUpload({
                             }
                         },
                         'image/jpeg',
-                        0.85
+                        0.88
                     );
                 };
                 img.onerror = () => resolve(file);
@@ -327,7 +327,7 @@ export default function CameraPhotoUpload({
                     </div>
                 ) : (
                     <div style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
-                        ক্যামেরা দিয়ে ছবি তুলুন অথবা গ্যালারি থেকে সিলেক্ট করুন
+                        ক্যামেরা দিয়ে ছবি তুলুন অথবা গ্যালারি থেকে যেকোনো সাইজের ছবি সিলেক্ট করুন (HD ও যেকোনো সাইজ সমর্থিত)
                     </div>
                 )}
 
