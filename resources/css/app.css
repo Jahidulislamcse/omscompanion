@@ -4459,7 +4459,28 @@ select.form-control option {
    ========================================================================== */
 .video-archive-pill-wrapper {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+/* Dedicated spacing above Archive button for Desktop view */
+@media (min-width: 769px) {
+    #free-videos {
+        padding-top: 80px !important;
+    }
+    .video-archive-pill-wrapper {
+        margin-top: 24px !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #free-videos {
+        padding-top: 24px !important;
+    }
+    .video-archive-pill-wrapper {
+        margin-top: 4px !important;
+        margin-bottom: 12px !important;
+    }
 }
 
 .archive-pill-btn {

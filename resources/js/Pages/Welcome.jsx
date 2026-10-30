@@ -595,7 +595,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             <PublicNavbar activePage="home" onReferralClick={handleReferralClick} />
 
             {/* Hero Section */}
-            <section className="landing-hero hero-vibrant" style={settings && settings.hero_banner ? { paddingBottom: '10px' } : {}}>
+            <section className="landing-hero hero-vibrant">
                 {settings && settings.hero_banner ? (
                     <div className="dynamic-banner-wrapper glass-panel" style={{ padding: 0, overflow: 'hidden', width: '100%', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
                         <img 
@@ -670,7 +670,7 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
             </section>
 
             {/* Videos Section */}
-            <section id="free-videos" className="landing-section" style={{ paddingTop: '20px' }}>
+            <section id="free-videos" className="landing-section">
                 <div className="landing-section-container">
                     {/* Top Archive Pill Button */}
                     <div className="video-archive-pill-wrapper">
