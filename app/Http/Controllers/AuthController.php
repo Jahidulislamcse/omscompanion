@@ -90,7 +90,7 @@ class AuthController extends Controller
                 $file = $request->file('avatar');
                 if ($file && $file->isValid()) {
                     $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
-                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp']) && $file->getSize() <= 512000) {
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp']) && $file->getSize() <= 5242880) {
                         $filename = 'avatar_' . time() . '_' . uniqid() . '.' . $ext;
                         $destinationPath = storage_path('app/public/avatars');
                         if (!file_exists($destinationPath)) {

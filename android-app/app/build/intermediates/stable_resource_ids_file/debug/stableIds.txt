@@ -34,7 +34,7 @@ com.omscompanion:styleable/MaterialCheckBoxStates = 0x7f120056
 com.omscompanion:styleable/MaterialCheckBox = 0x7f120055
 com.omscompanion:styleable/MaterialCardView = 0x7f120054
 com.omscompanion:styleable/MaterialCalendarItem = 0x7f120053
-com.omscompanion:xml/image_share_filepaths = 0x7f130000
+com.omscompanion:xml/image_share_filepaths = 0x7f130001
 com.omscompanion:styleable/MaterialButtonToggleGroup = 0x7f120051
 com.omscompanion:styleable/MaterialButton = 0x7f120050
 com.omscompanion:styleable/MaterialAlertDialogTheme = 0x7f12004e
@@ -2684,6 +2684,7 @@ com.omscompanion:style/MaterialAlertDialog.MaterialComponents.Picker.Date.Spinne
 com.omscompanion:style/Base.MaterialAlertDialog.MaterialComponents.Title.Text = 0x7f110013
 com.omscompanion:color/material_dynamic_tertiary10 = 0x7f050244
 com.omscompanion:color/material_dynamic_secondary95 = 0x7f050241
+com.omscompanion:xml/file_paths = 0x7f130000
 com.omscompanion:macro/m3_comp_outlined_text_field_focus_input_text_color = 0x7f0c009a
 com.omscompanion:attr/textColorSearchUrl = 0x7f03044d
 com.omscompanion:color/material_dynamic_secondary90 = 0x7f050240

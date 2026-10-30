@@ -15,6 +15,20 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <!-- Camera and Storage Permissions for photo uploads in registration/profile -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
     <!-- Create a unique permission for your app and use it so only your app can receive your OneSignal messages. -->
     <permission
         android:name="com.omscompanion.permission.C2D_MESSAGE"
@@ -73,6 +87,17 @@
         <meta-data
             android:name="com.onesignal.suppressLaunchURLs"
             android:value="true" />
+
+        <!-- FileProvider for capturing camera images securely -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.omscompanion.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity
             android:name="com.omscompanion.MainActivity"

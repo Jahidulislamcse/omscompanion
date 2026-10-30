@@ -2,10 +2,10 @@ import React from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import PasswordInput from '@/Components/PasswordInput';
+import CameraPhotoUpload from '@/Components/CameraPhotoUpload';
 
 export default function Register() {
     const { site_name, flash } = usePage().props;
-    const [photoPreview, setPhotoPreview] = React.useState(null);
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         avatar: null,
@@ -20,22 +20,8 @@ export default function Register() {
         password_confirmation: '',
     });
 
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.size > 500 * 1024) {
-                alert('Profile photo must be less than 500 KB.');
-                e.target.value = null;
-                setData('avatar', null);
-                setPhotoPreview(null);
-                return;
-            }
-            setData('avatar', file);
-            setPhotoPreview(URL.createObjectURL(file));
-        } else {
-            setData('avatar', null);
-            setPhotoPreview(null);
-        }
+    const handlePhotoSelected = (file) => {
+        setData('avatar', file);
     };
 
     const handleSubmit = (e) => {
@@ -103,47 +89,12 @@ export default function Register() {
                     )}
 
                     <form onSubmit={handleSubmit}>
-                        {/* Profile Photo Upload */}
-                        <div className="form-group" style={{ marginBottom: '14px', textAlign: 'center' }}>
-                            <label className="form-label" htmlFor="avatar" style={{ fontWeight: '600', fontSize: '12px', marginBottom: '6px', display: 'block' }}>
-                                Profile Photo (Max 500 KB, Optional)
-                            </label>
-                            
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px' }}>
-                                <div style={{ 
-                                    width: '64px', 
-                                    height: '64px', 
-                                    borderRadius: '50%', 
-                                    backgroundColor: 'rgba(255,255,255,0.1)', 
-                                    border: '2px dashed var(--color-cyan, #06b6d4)',
-                                    overflow: 'hidden',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexShrink: 0
-                                }}>
-                                    {photoPreview ? (
-                                        <img src={photoPreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    ) : (
-                                        <span style={{ fontSize: '24px' }}>📷</span>
-                                    )}
-                                </div>
-
-                                <div style={{ textAlign: 'left' }}>
-                                    <input
-                                        type="file"
-                                        id="avatar"
-                                        accept="image/png, image/jpeg, image/jpg, image/webp"
-                                        onChange={handleAvatarChange}
-                                        style={{ fontSize: '12px' }}
-                                    />
-                                    <div style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)', marginTop: '4px' }}>
-                                        JPG, PNG or WEBP under 500 KB
-                                    </div>
-                                    {errors.avatar && <div className="form-error" style={{ fontSize: '11px', color: '#ef4444' }}>{errors.avatar}</div>}
-                                </div>
-                            </div>
-                        </div>
+                        {/* Profile Photo Upload with Camera & Gallery */}
+                        <CameraPhotoUpload
+                            label="Profile Photo"
+                            onPhotoSelected={handlePhotoSelected}
+                        />
+                        {errors.avatar && <div className="form-error" style={{ fontSize: '11px', color: '#ef4444', textAlign: 'center', marginTop: '-8px', marginBottom: '14px' }}>{errors.avatar}</div>}
 
                         {/* Full Name */}
                         <div className="form-group" style={{ marginBottom: '10px' }}>

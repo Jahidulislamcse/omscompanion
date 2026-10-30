@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import MemberLayout from '@/Layouts/MemberLayout';
+import CameraPhotoUpload from '@/Components/CameraPhotoUpload';
 
 export default function Profile({ user }) {
     const [photoPreview, setPhotoPreview] = React.useState(user.avatar_url || null);
@@ -12,22 +13,8 @@ export default function Profile({ user }) {
         avatar: null,
     });
 
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.size > 500 * 1024) {
-                alert('Profile photo must be less than 500 KB.');
-                e.target.value = null;
-                setData('avatar', null);
-                setPhotoPreview(user.avatar_url || null);
-                return;
-            }
-            setData('avatar', file);
-            setPhotoPreview(URL.createObjectURL(file));
-        } else {
-            setData('avatar', null);
-            setPhotoPreview(user.avatar_url || null);
-        }
+    const handlePhotoSelected = (file) => {
+        setData('avatar', file);
     };
 
     const handleSubmit = (e) => {
@@ -92,18 +79,12 @@ export default function Profile({ user }) {
                     <h3 style={{ marginBottom: '20px' }}>Update Clinic Information</h3>
 
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group" style={{ marginBottom: '16px' }}>
-                            <label className="form-label" htmlFor="avatar" style={{ fontWeight: '600', fontSize: '13px' }}>Profile Photo (Max 500 KB)</label>
-                            <input 
-                                type="file"
-                                id="avatar"
-                                accept="image/png, image/jpeg, image/jpg, image/webp"
-                                onChange={handleAvatarChange}
-                                className="form-control"
-                                style={{ padding: '6px 12px' }}
-                            />
-                            {errors.avatar && <span className="form-error">{errors.avatar}</span>}
-                        </div>
+                        <CameraPhotoUpload
+                            currentPreview={photoPreview}
+                            label="Profile Photo"
+                            onPhotoSelected={handlePhotoSelected}
+                        />
+                        {errors.avatar && <span className="form-error" style={{ display: 'block', textAlign: 'center', marginTop: '-8px', marginBottom: '12px' }}>{errors.avatar}</span>}
 
                         <div className="form-group">
                             <label className="form-label" htmlFor="name">Full Name</label>

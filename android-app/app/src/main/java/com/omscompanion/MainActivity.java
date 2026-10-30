@@ -1,12 +1,18 @@
 package com.omscompanion;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -17,6 +23,12 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +39,19 @@ public class MainActivity extends AppCompatActivity {
     private WebView webView;
     private ProgressBar progressBar;
     private ValueCallback<Uri[]> uploadMessage;
+    private Uri cameraImageUri;
     private final static int FILECHOOSER_RESULTCODE = 1;
+    private final static int PERMISSION_REQUEST_CAMERA = 102;
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (storageDir == null) {
+            storageDir = getCacheDir();
+        }
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
+    }
 
     @Override
     @SuppressLint("SetJavaScriptEnabled")
@@ -36,11 +60,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Request Notification Permission on Android 13+ (API 33+)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
+
+        // Request Camera Permission on Android 6.0+ (API 23+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+            }
+        }
+
         com.onesignal.OneSignal.getNotifications().requestPermission(true, com.onesignal.Continue.none());
         com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
 
@@ -83,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
 
         // Customize User Agent so mobile app requests can be identified on web
         String defaultUa = webSettings.getUserAgentString();
@@ -177,7 +210,18 @@ public class MainActivity extends AppCompatActivity {
                 super.onProgressChanged(view, newProgress);
             }
 
-            // For Android 5.0+ (File Chooser for uploads)
+            // Grant WebRTC camera & microphone permissions for in-page camera capture
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                runOnUiThread(() -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        request.grant(request.getResources());
+                    }
+                });
+            }
+
+            // For Android 5.0+ (File & Camera Chooser for uploads)
+            @Override
             public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                 if (uploadMessage != null) {
                     uploadMessage.onReceiveValue(null);
@@ -185,11 +229,62 @@ public class MainActivity extends AppCompatActivity {
                 }
                 uploadMessage = filePathCallback;
 
-                Intent intent = fileChooserParams.createIntent();
+                // Request Camera permission if needed
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                    }
+                }
+
+                Intent takePictureIntent = null;
                 try {
-                    startActivityForResult(intent, FILECHOOSER_RESULTCODE);
+                    File photoFile = createImageFile();
+                    if (photoFile != null) {
+                        cameraImageUri = FileProvider.getUriForFile(
+                            MainActivity.this,
+                            getPackageName() + ".fileprovider",
+                            photoFile
+                        );
+                        takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
+                        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    }
+                } catch (Exception ex) {
+                    cameraImageUri = null;
+                }
+
+                // If the HTML element has capture attribute (e.g. capture="user")
+                boolean isCapture = fileChooserParams != null && fileChooserParams.isCaptureEnabled();
+                if (isCapture && takePictureIntent != null) {
+                    try {
+                        startActivityForResult(takePictureIntent, FILECHOOSER_RESULTCODE);
+                        return true;
+                    } catch (Exception e) {
+                        // Fall back to chooser
+                    }
+                }
+
+                // General content selection intent (Gallery / Files)
+                Intent contentSelectionIntent = fileChooserParams != null ? fileChooserParams.createIntent() : new Intent(Intent.ACTION_GET_CONTENT);
+                if (contentSelectionIntent.getType() == null || contentSelectionIntent.getType().isEmpty()) {
+                    contentSelectionIntent.setType("image/*");
+                }
+
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Select Photo or Camera");
+
+                if (takePictureIntent != null) {
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
+                }
+
+                try {
+                    startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
                 } catch (Exception e) {
-                    uploadMessage = null;
+                    if (uploadMessage != null) {
+                        uploadMessage.onReceiveValue(null);
+                        uploadMessage = null;
+                    }
                     Toast.makeText(MainActivity.this, "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
                     return false;
                 }
@@ -243,20 +338,30 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == FILECHOOSER_RESULTCODE) {
             if (uploadMessage == null) return;
             Uri[] results = null;
-            if (resultCode == RESULT_OK && intent != null) {
-                String dataString = intent.getDataString();
-                ClipData clipData = intent.getClipData();
-                if (clipData != null) {
-                    results = new Uri[clipData.getItemCount()];
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
-                        results[i] = clipData.getItemAt(i).getUri();
+            if (resultCode == RESULT_OK) {
+                if (intent == null || (intent.getData() == null && intent.getClipData() == null)) {
+                    // Image was captured from Camera intent
+                    if (cameraImageUri != null) {
+                        results = new Uri[]{cameraImageUri};
                     }
-                } else if (dataString != null) {
-                    results = new Uri[]{Uri.parse(dataString)};
+                } else {
+                    String dataString = intent.getDataString();
+                    ClipData clipData = intent.getClipData();
+                    if (clipData != null) {
+                        results = new Uri[clipData.getItemCount()];
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            results[i] = clipData.getItemAt(i).getUri();
+                        }
+                    } else if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    } else if (cameraImageUri != null) {
+                        results = new Uri[]{cameraImageUri};
+                    }
                 }
             }
             uploadMessage.onReceiveValue(results);
             uploadMessage = null;
+            cameraImageUri = null;
         }
     }
 
