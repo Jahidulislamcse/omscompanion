@@ -355,6 +355,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/notifications/mark-all-read', [AdminController::class, 'markAllNotificationsRead'])->name('admin.notifications.mark_all_read');
     Route::post('/notifications/read-item', [AdminController::class, 'markItemRead'])->name('admin.notifications.read_item');
     Route::post('/notifications/{notification}/read', [AdminController::class, 'markNotificationRead'])->name('admin.notifications.read');
+    Route::get('/run-migration', [AdminController::class, 'runMigration'])->name('admin.run_migration');
+    Route::get('/run-optimize', [AdminController::class, 'runOptimize'])->name('admin.run_optimize');
 });
 
 // Public Pages Routes

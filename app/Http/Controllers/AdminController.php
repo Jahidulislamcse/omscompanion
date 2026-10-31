@@ -1212,4 +1212,57 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
     }
+
+    /**
+     * Web-based Artisan migration runner for cPanel hosting without terminal access.
+     */
+    public function runMigration()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            $output = \Illuminate\Support\Facades\Artisan::output();
+            return response("
+                <div style='font-family: monospace; background: #0f172a; color: #f8fafc; padding: 25px; border-radius: 10px; max-width: 700px; margin: 40px auto; border: 1px solid #0284c7; box-shadow: 0 10px 30px rgba(0,0,0,0.5);'>
+                    <h2 style='color: #38bdf8; margin-top: 0;'>&#x2705; Database Migration Result</h2>
+                    <pre style='background: #1e293b; color: #a5f3fc; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 13.5px; line-height: 1.5;'>" . (trim($output) ? e($output) : 'Nothing to migrate. Database is already up to date.') . "</pre>
+                    <div style='margin-top: 20px; display: flex; gap: 15px;'>
+                        <a href='" . route('admin.dashboard') . "' style='display: inline-block; padding: 10px 18px; background: #0d9488; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;'>&larr; Back to Dashboard</a>
+                        <a href='" . route('admin.run_migration') . "' style='display: inline-block; padding: 10px 18px; background: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;'>&#x21bb; Re-run Migrate</a>
+                    </div>
+                </div>
+            ");
+        } catch (\Throwable $e) {
+            return response("
+                <div style='font-family: monospace; background: #450a0a; color: #fee2e2; padding: 25px; border-radius: 10px; max-width: 700px; margin: 40px auto; border: 1px solid #ef4444;'>
+                    <h2 style='color: #fca5a5; margin-top: 0;'>&#x274C; Migration Failed</h2>
+                    <pre style='background: #1c1917; color: #fca5a5; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 13px;'>" . e($e->getMessage()) . "</pre>
+                    <div style='margin-top: 20px;'>
+                        <a href='" . route('admin.dashboard') . "' style='color: #ffffff; font-weight: bold;'>&larr; Back to Dashboard</a>
+                    </div>
+                </div>
+            ", 500);
+        }
+    }
+
+    /**
+     * Web-based Artisan cache clearing / optimization runner.
+     */
+    public function runOptimize()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+            $output = \Illuminate\Support\Facades\Artisan::output();
+            return response("
+                <div style='font-family: monospace; background: #0f172a; color: #f8fafc; padding: 25px; border-radius: 10px; max-width: 700px; margin: 40px auto; border: 1px solid #10b981;'>
+                    <h2 style='color: #34d399; margin-top: 0;'>&#x2705; Cache & Optimization Cleared</h2>
+                    <pre style='background: #1e293b; color: #bbf7d0; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 13.5px; line-height: 1.5;'>" . (trim($output) ? e($output) : 'Cache cleared successfully.') . "</pre>
+                    <div style='margin-top: 20px;'>
+                        <a href='" . route('admin.dashboard') . "' style='display: inline-block; padding: 10px 18px; background: #0d9488; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;'>&larr; Back to Dashboard</a>
+                    </div>
+                </div>
+            ");
+        } catch (\Throwable $e) {
+            return response("Error: " . e($e->getMessage()), 500);
+        }
+    }
 }
