@@ -25,8 +25,20 @@ class AppServiceProvider extends ServiceProvider
                     $table->string('action_url', 500)->nullable()->after('message');
                 });
             }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('patient_referrals') && !\Illuminate\Support\Facades\Schema::hasColumn('patient_referrals', 'admin_read_at')) {
+                \Illuminate\Support\Facades\Schema::table('patient_referrals', function ($table) {
+                    $table->timestamp('admin_read_at')->nullable()->after('status');
+                });
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('users') && !\Illuminate\Support\Facades\Schema::hasColumn('users', 'admin_read_at')) {
+                \Illuminate\Support\Facades\Schema::table('users', function ($table) {
+                    $table->timestamp('admin_read_at')->nullable()->after('status');
+                });
+            }
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Auto-migration for notifications.action_url failed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::warning('Auto-migration in AppServiceProvider failed: ' . $e->getMessage());
         }
     }
 }

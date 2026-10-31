@@ -1138,19 +1138,77 @@ class AdminController extends Controller
         return redirect()->back()->with('error', $result['message']);
     }
 
+    public function markItemRead(Request $request)
+    {
+        $type = $request->input('type'); // 'referral' | 'member' | 'notification'
+        $id = $request->input('id');
+        $targetUrl = $request->input('target_url') ?: route('admin.dashboard');
+        $now = now();
+
+        if ($type === 'referral') {
+            $referral = \App\Models\PatientReferral::find($id);
+            if ($referral) {
+                $referral->update(['admin_read_at' => $now]);
+
+                // Also mark corresponding database notification as read
+                \App\Models\Notification::where('user_id', Auth::id())
+                    ->whereNull('read_at')
+                    ->where(function ($q) use ($referral) {
+                        $q->where('message', 'LIKE', '%' . $referral->patient_name . '%')
+                          ->orWhere('title', 'LIKE', '%' . $referral->patient_name . '%');
+                    })
+                    ->update(['read_at' => $now]);
+            }
+        } elseif ($type === 'member') {
+            $member = \App\Models\User::find($id);
+            if ($member) {
+                $member->update(['admin_read_at' => $now]);
+
+                // Also mark corresponding database notification as read
+                \App\Models\Notification::where('user_id', Auth::id())
+                    ->whereNull('read_at')
+                    ->where(function ($q) use ($member) {
+                        $q->where('message', 'LIKE', '%' . $member->name . '%')
+                          ->orWhere('title', 'LIKE', '%' . $member->name . '%');
+                    })
+                    ->update(['read_at' => $now]);
+            }
+        } elseif ($type === 'notification') {
+            \App\Models\Notification::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->update(['read_at' => $now]);
+        }
+
+        return redirect($targetUrl);
+    }
+
     public function markNotificationRead(\App\Models\Notification $notification)
     {
         if ($notification->user_id === Auth::id()) {
             $notification->update(['read_at' => now()]);
         }
-        return redirect()->back();
+        return redirect($notification->action_url ?: route('admin.dashboard'));
     }
 
     public function markAllNotificationsRead()
     {
+        $now = now();
+
+        // 1. Mark all pending member notifications as read
+        \App\Models\User::where('role', 'member')
+            ->where('status', 'pending')
+            ->whereNull('admin_read_at')
+            ->update(['admin_read_at' => $now]);
+
+        // 2. Mark all new patient referral notifications as read
+        \App\Models\PatientReferral::where('status', 'new')
+            ->whereNull('admin_read_at')
+            ->update(['admin_read_at' => $now]);
+
+        // 3. Mark all database notifications as read
         \App\Models\Notification::where('user_id', Auth::id())
             ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+            ->update(['read_at' => $now]);
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
     }

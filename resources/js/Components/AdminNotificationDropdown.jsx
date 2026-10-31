@@ -45,6 +45,18 @@ export default function AdminNotificationDropdown() {
         });
     };
 
+    const handleItemClick = (e, type, id, targetUrl) => {
+        e.preventDefault();
+        setIsOpen(false);
+        router.post(route('admin.notifications.read_item'), {
+            type: type,
+            id: id,
+            target_url: targetUrl
+        }, {
+            preserveScroll: true
+        });
+    };
+
     const formatTimeAgo = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -161,11 +173,12 @@ export default function AdminNotificationDropdown() {
                     <div className="admin-notif-list">
                         {/* 1. NEW REGISTRATIONS (DOCTORS PENDING APPROVAL) */}
                         {(activeTab === 'all' || activeTab === 'registrations') && pendingMembers.map(member => (
-                            <Link
+                            <a
                                 key={`member-${member.id}`}
                                 href={route('admin.members')}
-                                onClick={() => setIsOpen(false)}
+                                onClick={(e) => handleItemClick(e, 'member', member.id, route('admin.members'))}
                                 className="admin-notif-item"
+                                style={{ cursor: 'pointer' }}
                             >
                                 <div style={{
                                     width: '36px',
@@ -205,16 +218,17 @@ export default function AdminNotificationDropdown() {
                                         )}
                                     </div>
                                 </div>
-                            </Link>
+                            </a>
                         ))}
 
                         {/* 2. NEW PATIENT REFERRALS */}
                         {(activeTab === 'all' || activeTab === 'referrals') && newReferrals.map(ref => (
-                            <Link
+                            <a
                                 key={`ref-${ref.id}`}
                                 href={route('admin.referrals')}
-                                onClick={() => setIsOpen(false)}
+                                onClick={(e) => handleItemClick(e, 'referral', ref.id, route('admin.referrals'))}
                                 className="admin-notif-item"
+                                style={{ cursor: 'pointer' }}
                             >
                                 <div style={{
                                     width: '36px',
@@ -252,16 +266,17 @@ export default function AdminNotificationDropdown() {
                                         </span>
                                     </div>
                                 </div>
-                            </Link>
+                            </a>
                         ))}
 
                         {/* 3. RECENT DATABASE NOTIFICATIONS */}
                         {activeTab === 'all' && recentNotifs.filter(n => !n.read_at).map(notif => (
-                            <Link
+                            <a
                                 key={`notif-${notif.id}`}
                                 href={notif.action_url || route('admin.dashboard')}
-                                onClick={() => setIsOpen(false)}
+                                onClick={(e) => handleItemClick(e, 'notification', notif.id, notif.action_url || route('admin.dashboard'))}
                                 className="admin-notif-item"
+                                style={{ cursor: 'pointer' }}
                             >
                                 <div style={{
                                     width: '36px',
@@ -291,7 +306,7 @@ export default function AdminNotificationDropdown() {
                                         {notif.message}
                                     </div>
                                 </div>
-                            </Link>
+                            </a>
                         ))}
 
                         {/* EMPTY STATE */}

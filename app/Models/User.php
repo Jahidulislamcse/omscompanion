@@ -37,6 +37,7 @@ class User extends Authenticatable
         'is_commission_applicable',
         'commission_note',
         'avatar',
+        'admin_read_at',
     ];
 
     /**

@@ -18,6 +18,7 @@ class PatientReferral extends Model
         'medical_condition',
         'urgency_level',
         'status',
+        'admin_read_at',
         'additional_notes',
         'commission_amount',
         'commission_status',
