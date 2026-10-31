@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import AdminNotificationDropdown from '@/Components/AdminNotificationDropdown';
-import { useAppInstalled } from '@/utils/appDetection';
+import { useAppInstalled, syncNativeUser } from '@/utils/appDetection';
 
 export default function AdminLayout({ children, title }) {
     const { auth, flash, is_app_installed, pending_members_count = 0 } = usePage().props;
     const isInstalled = useAppInstalled() || Boolean(is_app_installed);
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    useEffect(() => {
+        if (auth?.user) {
+            syncNativeUser(auth.user);
+        }
+    }, [auth?.user]);
 
     useEffect(() => {
         document.body.setAttribute('data-theme', theme);

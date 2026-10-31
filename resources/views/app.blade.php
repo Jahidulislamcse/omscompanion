@@ -41,26 +41,49 @@
         @inertiaHead
     </head>
     <body>
-        @auth
         <script>
-            window.authUser = {
+            window.syncOMSUser = function(user) {
+                if (!user || !user.id) return;
+                window.authUser = {
+                    id: user.id,
+                    email: user.email || '',
+                    role: user.role || ''
+                };
+                var doSync = function() {
+                    if (window.OMSCompanionNative) {
+                        try {
+                            if (typeof window.OMSCompanionNative.setUserInfo === 'function') {
+                                window.OMSCompanionNative.setUserInfo(
+                                    String(user.id),
+                                    String(user.role || ''),
+                                    user.role === 'admin'
+                                );
+                                return true;
+                            } else if (typeof window.OMSCompanionNative.setUserId === 'function') {
+                                window.OMSCompanionNative.setUserId(String(user.id));
+                                return true;
+                            }
+                        } catch (e) {
+                            console.error('OMSCompanionNative sync error:', e);
+                        }
+                    }
+                    return false;
+                };
+                if (!doSync()) {
+                    setTimeout(doSync, 200);
+                    setTimeout(doSync, 600);
+                    setTimeout(doSync, 1500);
+                    setTimeout(doSync, 3000);
+                }
+            };
+            @auth
+            window.syncOMSUser({
                 id: {{ auth()->id() }},
                 email: "{{ auth()->user()->email }}",
                 role: "{{ auth()->user()->role }}"
-            };
-            if (window.OMSCompanionNative) {
-                if (window.OMSCompanionNative.setUserInfo) {
-                    window.OMSCompanionNative.setUserInfo(
-                        String({{ auth()->id() }}),
-                        "{{ auth()->user()->role }}",
-                        {{ auth()->user()->isAdmin() ? 'true' : 'false' }}
-                    );
-                } else if (window.OMSCompanionNative.setUserId) {
-                    window.OMSCompanionNative.setUserId(String({{ auth()->id() }}));
-                }
-            }
+            });
+            @endauth
         </script>
-        @endauth
         @inertia
     </body>
 </html>

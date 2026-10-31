@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { useAppInstalled } from '@/utils/appDetection';
+import { useAppInstalled, syncNativeUser } from '@/utils/appDetection';
 
 export default function MemberLayout({ children, title }) {
     const { auth, flash, unread_notifications_count = 0, is_app_installed } = usePage().props;
     const isInstalled = useAppInstalled() || Boolean(is_app_installed);
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    useEffect(() => {
+        if (auth?.user) {
+            syncNativeUser(auth.user);
+        }
+    }, [auth?.user]);
 
     useEffect(() => {
         document.body.setAttribute('data-theme', theme);

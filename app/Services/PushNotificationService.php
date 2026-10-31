@@ -33,6 +33,25 @@ class PushNotificationService
     }
 
     /**
+     * Normalize URL for mobile app target navigation.
+     * Prevents localhost URLs from being sent to mobile devices, defaulting to omscompanion.com domain.
+     */
+    public static function normalizeTargetUrl(?string $url): string
+    {
+        if (empty($url)) {
+            return 'http://omscompanion.com/admin/referrals';
+        }
+        if (preg_match('#^https?://localhost(:\d+)?(/.*)?$#i', $url, $matches)) {
+            $path = $matches[2] ?? '';
+            return 'http://omscompanion.com' . $path;
+        }
+        if (str_starts_with($url, '/')) {
+            return 'http://omscompanion.com' . $url;
+        }
+        return $url;
+    }
+
+    /**
      * Send push notification to all subscribed Android & iOS devices via OneSignal.
      */
     public static function sendToAll(string $title, string $message, ?string $url = null): array
@@ -48,13 +67,14 @@ class PushNotificationService
             ];
         }
 
-        $targetUrl = $url ?: 'http://omscompanion.com';
+        $targetUrl = self::normalizeTargetUrl($url ?: 'http://omscompanion.com');
 
         $payload = [
             'app_id' => $appId,
             'included_segments' => ['All'],
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
+            'url' => $targetUrl,
             'data' => [
                 'url' => $targetUrl,
                 'target_url' => $targetUrl,
@@ -129,7 +149,7 @@ class PushNotificationService
         }
 
         $userIdStr = (string) $user->id;
-        $targetUrl = $url ?: 'http://omscompanion.com';
+        $targetUrl = self::normalizeTargetUrl($url ?: 'http://omscompanion.com');
 
         // 1. Try using include_aliases (OneSignal v5 external_id format)
         $payloadAliases = [
@@ -140,6 +160,7 @@ class PushNotificationService
             'target_channel' => 'push',
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
+            'url' => $targetUrl,
             'data' => [
                 'url' => $targetUrl,
                 'target_url' => $targetUrl,
@@ -181,6 +202,7 @@ class PushNotificationService
                 ],
                 'headings' => ['en' => $title],
                 'contents' => ['en' => $message],
+                'url' => $targetUrl,
                 'data' => [
                     'url' => $targetUrl,
                     'target_url' => $targetUrl,
@@ -214,6 +236,7 @@ class PushNotificationService
                 'include_external_user_ids' => [$userIdStr],
                 'headings' => ['en' => $title],
                 'contents' => ['en' => $message],
+                'url' => $targetUrl,
                 'data' => [
                     'url' => $targetUrl,
                     'target_url' => $targetUrl,
@@ -275,7 +298,7 @@ class PushNotificationService
 
         $appId = self::getAppId();
         $apiKey = self::getRestApiKey();
-        $targetUrl = $url ?: route('admin.members');
+        $targetUrl = self::normalizeTargetUrl($url ?: route('admin.referrals'));
         $adminIdStrings = $admins->pluck('id')->map(fn($id) => (string) $id)->values()->all();
 
         if (empty($appId) || empty($apiKey)) {
@@ -286,51 +309,27 @@ class PushNotificationService
             ];
         }
 
-        // 1. Send via include_aliases (OneSignal v5 external_id targeting)
+        $results = [];
+
+        // 1. Send via Tag Filter (is_admin = 'true' OR role = 'admin' OR user_id = <admin_id>)
+        // Most reliable delivery for devices tagged by the mobile app
         try {
-            $payloadAliases = [
-                'app_id' => $appId,
-                'include_aliases' => [
-                    'external_id' => $adminIdStrings,
-                ],
-                'target_channel' => 'push',
-                'headings' => ['en' => $title],
-                'contents' => ['en' => $message],
-                'data' => [
-                    'url' => $targetUrl,
-                    'target_url' => $targetUrl,
-                ],
-                'android_sound' => 'notification',
-                'priority' => 10,
-                'ios_sound' => 'default',
-                'ios_badgeType' => 'Increase',
-                'ios_badgeCount' => 1,
+            $tagFilters = [
+                ['field' => 'tag', 'key' => 'is_admin', 'relation' => '=', 'value' => 'true'],
+                ['operator' => 'OR'],
+                ['field' => 'tag', 'key' => 'role', 'relation' => '=', 'value' => 'admin'],
             ];
+            foreach ($adminIdStrings as $adminId) {
+                $tagFilters[] = ['operator' => 'OR'];
+                $tagFilters[] = ['field' => 'tag', 'key' => 'user_id', 'relation' => '=', 'value' => (string) $adminId];
+            }
 
-            $responseAliases = Http::withHeaders([
-                'Content-Type' => 'application/json; charset=utf-8',
-                'Authorization' => 'Basic ' . trim($apiKey),
-            ])->post('https://onesignal.com/api/v1/notifications', $payloadAliases);
-
-            Log::info('OneSignal sendToAdmins include_aliases response:', [
-                'status' => $responseAliases->status(),
-                'response' => $responseAliases->json(),
-            ]);
-        } catch (\Throwable $e) {
-            Log::error('OneSignal sendToAdmins include_aliases error: ' . $e->getMessage());
-        }
-
-        // 2. Send via tag filter (is_admin = 'true' OR role = 'admin')
-        try {
             $payloadTag = [
                 'app_id' => $appId,
-                'filters' => [
-                    ['field' => 'tag', 'key' => 'is_admin', 'relation' => '=', 'value' => 'true'],
-                    ['operator' => 'OR'],
-                    ['field' => 'tag', 'key' => 'role', 'relation' => '=', 'value' => 'admin'],
-                ],
+                'filters' => $tagFilters,
                 'headings' => ['en' => $title],
                 'contents' => ['en' => $message],
+                'url' => $targetUrl,
                 'data' => [
                     'url' => $targetUrl,
                     'target_url' => $targetUrl,
@@ -347,12 +346,94 @@ class PushNotificationService
                 'Authorization' => 'Basic ' . trim($apiKey),
             ])->post('https://onesignal.com/api/v1/notifications', $payloadTag);
 
+            $results['tag_filter'] = [
+                'status' => $responseTag->status(),
+                'response' => $responseTag->json(),
+            ];
+
             Log::info('OneSignal sendToAdmins tag-based response:', [
                 'status' => $responseTag->status(),
                 'response' => $responseTag->json(),
             ]);
         } catch (\Throwable $e) {
             Log::error('OneSignal sendToAdmins tag-based error: ' . $e->getMessage());
+        }
+
+        // 2. Send via include_aliases (OneSignal v5 external_id targeting)
+        try {
+            $payloadAliases = [
+                'app_id' => $appId,
+                'include_aliases' => [
+                    'external_id' => $adminIdStrings,
+                ],
+                'target_channel' => 'push',
+                'headings' => ['en' => $title],
+                'contents' => ['en' => $message],
+                'url' => $targetUrl,
+                'data' => [
+                    'url' => $targetUrl,
+                    'target_url' => $targetUrl,
+                ],
+                'android_sound' => 'notification',
+                'priority' => 10,
+                'ios_sound' => 'default',
+                'ios_badgeType' => 'Increase',
+                'ios_badgeCount' => 1,
+            ];
+
+            $responseAliases = Http::withHeaders([
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . trim($apiKey),
+            ])->post('https://onesignal.com/api/v1/notifications', $payloadAliases);
+
+            $results['aliases'] = [
+                'status' => $responseAliases->status(),
+                'response' => $responseAliases->json(),
+            ];
+
+            Log::info('OneSignal sendToAdmins include_aliases response:', [
+                'status' => $responseAliases->status(),
+                'response' => $responseAliases->json(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('OneSignal sendToAdmins include_aliases error: ' . $e->getMessage());
+        }
+
+        // 3. Send via legacy include_external_user_ids (OneSignal v3/v4 SDK targeting)
+        try {
+            $payloadExternal = [
+                'app_id' => $appId,
+                'include_external_user_ids' => $adminIdStrings,
+                'headings' => ['en' => $title],
+                'contents' => ['en' => $message],
+                'url' => $targetUrl,
+                'data' => [
+                    'url' => $targetUrl,
+                    'target_url' => $targetUrl,
+                ],
+                'android_sound' => 'notification',
+                'priority' => 10,
+                'ios_sound' => 'default',
+                'ios_badgeType' => 'Increase',
+                'ios_badgeCount' => 1,
+            ];
+
+            $responseExternal = Http::withHeaders([
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . trim($apiKey),
+            ])->post('https://onesignal.com/api/v1/notifications', $payloadExternal);
+
+            $results['external_user_ids'] = [
+                'status' => $responseExternal->status(),
+                'response' => $responseExternal->json(),
+            ];
+
+            Log::info('OneSignal sendToAdmins include_external_user_ids response:', [
+                'status' => $responseExternal->status(),
+                'response' => $responseExternal->json(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('OneSignal sendToAdmins include_external_user_ids error: ' . $e->getMessage());
         }
 
         // 3. Send individually to each admin for guaranteed delivery

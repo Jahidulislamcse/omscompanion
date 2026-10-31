@@ -153,7 +153,7 @@ class NotificationService
     {
         try {
             $admins = User::where('role', 'admin')->get();
-            $actionUrl = $actionUrl ?: route('admin.members');
+            $actionUrl = $actionUrl ?: route('admin.referrals');
 
             // 1. Send to each admin (Database notification + Email + Targeted Push)
             foreach ($admins as $admin) {

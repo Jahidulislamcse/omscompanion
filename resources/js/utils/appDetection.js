@@ -95,3 +95,46 @@ export function useAppInstalled() {
 
     return installed;
 }
+
+/**
+ * Synchronize the authenticated user with the Android native WebView interface.
+ * Registers the device with OneSignal external_id, tag user_id, tag role, and tag is_admin="true".
+ */
+export function syncNativeUser(user) {
+    if (typeof window === 'undefined' || !user || !user.id) return;
+
+    window.authUser = {
+        id: user.id,
+        email: user.email || '',
+        role: user.role || ''
+    };
+
+    const doSync = () => {
+        if (typeof window.OMSCompanionNative !== 'undefined') {
+            try {
+                if (typeof window.OMSCompanionNative.setUserInfo === 'function') {
+                    window.OMSCompanionNative.setUserInfo(
+                        String(user.id),
+                        String(user.role || ''),
+                        user.role === 'admin'
+                    );
+                    return true;
+                } else if (typeof window.OMSCompanionNative.setUserId === 'function') {
+                    window.OMSCompanionNative.setUserId(String(user.id));
+                    return true;
+                }
+            } catch (e) {
+                console.error('[OMS App] Native sync error:', e);
+            }
+        }
+        return false;
+    };
+
+    if (!doSync()) {
+        setTimeout(doSync, 200);
+        setTimeout(doSync, 600);
+        setTimeout(doSync, 1500);
+        setTimeout(doSync, 3000);
+    }
+}
+
