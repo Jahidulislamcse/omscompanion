@@ -6089,21 +6089,425 @@ select.form-control option {
 }
 
 /* ==========================================================================
-   ADMIN HEADER NOTIFICATION PANEL & BELL
+   ADMIN HEADER NOTIFICATION PANEL & BELL (LIGHT & DARK THEMES)
    ========================================================================== */
+
+/* Bell Trigger Button */
+.admin-bell-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 .admin-bell-btn:hover {
+    background-color: #f1f5f9;
+    border-color: #06b6d4;
+    color: #0284c7;
+    transform: scale(1.04);
+}
+
+.admin-bell-btn.is-active {
+    background-color: #e0f2fe !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+
+[data-theme="dark"] .admin-bell-btn {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .admin-bell-btn:hover {
+    background-color: rgba(6, 182, 212, 0.2) !important;
+    border-color: #06b6d4 !important;
+    color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .admin-bell-btn.is-active {
     background-color: rgba(6, 182, 212, 0.25) !important;
     border-color: #06b6d4 !important;
     color: #38bdf8 !important;
-    transform: scale(1.05);
 }
 
 .admin-bell-btn:active {
     transform: scale(0.95);
 }
 
+/* Notification Panel Container */
 .admin-notif-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 999999;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     animation: dropdownSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .admin-notif-panel {
+    background-color: #0b1519;
+    border-color: rgba(6, 182, 212, 0.35);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 30px rgba(6, 182, 212, 0.2);
+}
+
+/* Panel Header */
+.admin-notif-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8fafc;
+}
+
+[data-theme="dark"] .admin-notif-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    background-color: #0f1c23;
+}
+
+.admin-notif-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+[data-theme="dark"] .admin-notif-title {
+    color: #ffffff;
+}
+
+.admin-notif-badge-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+}
+
+[data-theme="dark"] .admin-notif-badge-pill {
+    background-color: rgba(6, 182, 212, 0.2);
+    color: #38bdf8;
+    border-color: rgba(6, 182, 212, 0.4);
+}
+
+.admin-notif-mark-read {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0;
+    transition: color 0.15s ease;
+}
+
+.admin-notif-mark-read:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+[data-theme="dark"] .admin-notif-mark-read {
+    color: #38bdf8;
+}
+
+[data-theme="dark"] .admin-notif-mark-read:hover {
+    color: #7dd3fc;
+}
+
+/* Tabs Bar */
+.admin-notif-tabs {
+    display: flex;
+    padding: 8px 12px;
+    gap: 6px;
+    background-color: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .admin-notif-tabs {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-notif-tab {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    background-color: transparent;
+    color: #64748b;
+    transition: all 0.15s ease;
+    text-align: center;
+}
+
+.admin-notif-tab:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+.admin-notif-tab.is-active-all {
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border-color: #bae6fd;
+    font-weight: 700;
+}
+
+.admin-notif-tab.is-active-registrations {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border-color: #bbf7d0;
+    font-weight: 700;
+}
+
+.admin-notif-tab.is-active-referrals {
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border-color: #bae6fd;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .admin-notif-tab {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .admin-notif-tab:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .admin-notif-tab.is-active-all {
+    background-color: rgba(6, 182, 212, 0.25);
+    color: #38bdf8;
+    border-color: rgba(6, 182, 212, 0.4);
+}
+
+[data-theme="dark"] .admin-notif-tab.is-active-registrations {
+    background-color: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+[data-theme="dark"] .admin-notif-tab.is-active-referrals {
+    background-color: rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Notifications Items List */
+.admin-notif-list {
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 4px 0;
+    background-color: #ffffff;
+}
+
+[data-theme="dark"] .admin-notif-list {
+    background-color: #0b1519;
+}
+
+.admin-notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 18px;
+    text-decoration: none;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: #ffffff;
+    transition: background-color 0.15s ease;
+}
+
+.admin-notif-item:hover {
+    background-color: #f8fafc;
+}
+
+[data-theme="dark"] .admin-notif-item {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="dark"] .admin-notif-item:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+/* Item Titles and Subtitles - FULL CONTRAST FOR LIGHT & DARK THEMES */
+.admin-notif-item-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0f172a !important; /* Rich Dark Charcoal in light mode */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+[data-theme="dark"] .admin-notif-item-title {
+    color: #f8fafc !important; /* Bright crisp white in dark mode */
+}
+
+.admin-notif-item-subtitle {
+    font-size: 12px;
+    color: #334155 !important; /* Dark Slate Gray in light mode for crystal clear readability */
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+[data-theme="dark"] .admin-notif-item-subtitle {
+    color: #cbd5e1 !important; /* Soft light gray in dark mode */
+}
+
+.admin-notif-item-time {
+    font-size: 11px;
+    color: #64748b;
+    white-space: nowrap;
+    margin-left: 6px;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .admin-notif-item-time {
+    color: #94a3b8;
+}
+
+.admin-notif-item-subtext {
+    font-size: 11px;
+    color: #475569;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .admin-notif-item-subtext {
+    color: #94a3b8;
+}
+
+/* Tag Badges */
+.admin-notif-tag-referral {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+}
+
+[data-theme="dark"] .admin-notif-tag-referral {
+    background-color: rgba(6, 182, 212, 0.2);
+    color: #38bdf8;
+    border-color: rgba(6, 182, 212, 0.35);
+}
+
+.admin-notif-tag-approval {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+[data-theme="dark"] .admin-notif-tag-approval {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+
+/* Footer Quick Links */
+.admin-notif-footer {
+    padding: 12px 18px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8fafc;
+    font-size: 12.5px;
+}
+
+[data-theme="dark"] .admin-notif-footer {
+    border-top-color: rgba(255, 255, 255, 0.08);
+    background-color: #0f1c23;
+}
+
+.admin-notif-footer-link-member {
+    color: #059669;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.15s ease;
+}
+
+.admin-notif-footer-link-member:hover {
+    text-decoration: underline;
+    opacity: 0.85;
+}
+
+[data-theme="dark"] .admin-notif-footer-link-member {
+    color: #34d399;
+}
+
+.admin-notif-footer-link-referral {
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.15s ease;
+}
+
+.admin-notif-footer-link-referral:hover {
+    text-decoration: underline;
+    opacity: 0.85;
+}
+
+[data-theme="dark"] .admin-notif-footer-link-referral {
+    color: #38bdf8;
+}
+
+/* Empty State */
+.admin-notif-empty {
+    padding: 36px 20px;
+    text-align: center;
+    color: #64748b;
+}
+
+[data-theme="dark"] .admin-notif-empty {
+    color: #94a3b8;
+}
+
+.admin-notif-empty-title {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .admin-notif-empty-title {
+    color: #ffffff;
 }
 
 @keyframes dropdownSlideIn {
