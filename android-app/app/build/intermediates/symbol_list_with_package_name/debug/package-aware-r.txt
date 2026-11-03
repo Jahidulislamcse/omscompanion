@@ -3193,6 +3193,7 @@ id cradle
 id currentState
 id custom
 id customPanel
+id customViewContainer
 id cut
 id dark
 id date_picker_actions

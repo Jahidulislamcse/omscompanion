@@ -101,7 +101,7 @@
 
         <activity
             android:name="com.omscompanion.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTask" >
             <intent-filter>

@@ -2558,12 +2558,14 @@ select.form-control option {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    background-color: #0f172a !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(180deg, #16202e 0%, #0d1522 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
     flex-shrink: 0 !important;
     width: 100% !important;
     box-sizing: border-box !important;
     padding: 12px 20px !important;
+    position: relative !important;
+    z-index: 999999 !important;
 }
 
 .video-modal-title {
@@ -2580,35 +2582,37 @@ select.form-control option {
 }
 
 .video-modal-close-btn {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
     border-radius: 50% !important;
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background: rgba(239, 68, 68, 0.9) !important;
+    border: 2px solid rgba(255, 255, 255, 0.8) !important;
     color: #ffffff !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
+    touch-action: manipulation !important;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
     padding: 0 !important;
     flex-shrink: 0 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6) !important;
     outline: none !important;
     margin-left: 10px !important;
+    z-index: 1000000 !important;
 }
 
 .video-modal-close-btn:hover {
-    background: #ef4444 !important;
-    border-color: #ef4444 !important;
+    background: #dc2626 !important;
+    border-color: #ffffff !important;
     color: #ffffff !important;
     transform: scale(1.1) rotate(90deg) !important;
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6) !important;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.8) !important;
 }
 
 .video-modal-close-btn:active {
-    transform: scale(0.93) !important;
+    transform: scale(0.92) !important;
 }
 
 .video-modal-frame {
@@ -2666,6 +2670,7 @@ select.form-control option {
 
     .video-modal-header {
         padding: 10px 14px !important;
+        background: #0d1522 !important;
     }
 
     .video-modal-title {
@@ -2673,9 +2678,12 @@ select.form-control option {
     }
 
     .video-modal-close-btn {
-        width: 34px !important;
-        height: 34px !important;
-        min-width: 34px !important;
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        background: #ef4444 !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7) !important;
     }
 }
 

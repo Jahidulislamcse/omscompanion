@@ -15,6 +15,26 @@ export default function Videos({ categories = [], videos = [] }) {
     const [viewLayout, setViewLayout] = useState('list'); // 'list' | 'grid' | 'table'
     const [selectedPreviewVideo, setSelectedPreviewVideo] = useState(null);
 
+    const handleClosePreview = (e) => {
+        if (e && typeof e.stopPropagation === 'function') {
+            e.stopPropagation();
+        }
+        setSelectedPreviewVideo(null);
+    };
+
+    useEffect(() => {
+        if (selectedPreviewVideo) {
+            window.history.pushState({ preview_modal: true }, '');
+            const handlePop = () => {
+                setSelectedPreviewVideo(null);
+            };
+            window.addEventListener('popstate', handlePop);
+            return () => {
+                window.removeEventListener('popstate', handlePop);
+            };
+        }
+    }, [selectedPreviewVideo]);
+
     // Video Form
     const { data: vidData, setData: setVidData, post: postVid, processing: vidProcessing, errors: vidErrors, reset: resetVidForm } = useForm({
         category_id: '',
@@ -719,8 +739,8 @@ export default function Videos({ categories = [], videos = [] }) {
 
             {/* Video Preview Modal */}
             {selectedPreviewVideo && (
-                <div className="modal-wrapper video-modal-wrapper" onClick={() => setSelectedPreviewVideo(null)}>
-                    <div className="glass-panel modal-card modal-card-colorful video-modal-card" onClick={e => e.stopPropagation()}>
+                <div className="modal-wrapper video-modal-wrapper" onClick={handleClosePreview}>
+                    <div className="glass-panel modal-card modal-card-colorful video-modal-card" onClick={e => e.stopPropagation()} onTouchEnd={e => e.stopPropagation()}>
                         <div className="modal-header video-modal-header">
                             <div style={{ display: 'flex', gap: '10px', alignItems: 'center', minWidth: 0, flex: 1, marginRight: '12px' }}>
                                 <h3 className="video-modal-title">🎥 {selectedPreviewVideo.title}</h3>
@@ -732,12 +752,13 @@ export default function Videos({ categories = [], videos = [] }) {
                             </div>
                             <button 
                                 type="button"
-                                onClick={() => setSelectedPreviewVideo(null)} 
+                                onClick={handleClosePreview} 
+                                onTouchEnd={handleClosePreview}
                                 className="video-modal-close-btn"
                                 aria-label="Close"
                                 title="Close Video"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
@@ -747,10 +768,13 @@ export default function Videos({ categories = [], videos = [] }) {
                             {getYouTubeId(selectedPreviewVideo.video_path) ? (
                                 <iframe 
                                     style={{ width: '100%', height: '100%', border: 'none' }} 
-                                    src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(selectedPreviewVideo.video_path)}?autoplay=1`} 
+                                    src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(selectedPreviewVideo.video_path)}?autoplay=1&enablejsapi=1&fs=1&rel=0`} 
                                     title={selectedPreviewVideo.title}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowFullScreen
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
+                                    allowFullScreen={true}
+                                    webkitallowfullscreen="true"
+                                    mozallowfullscreen="true"
                                 ></iframe>
                             ) : null}
                         </div>

@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
+    private android.widget.FrameLayout customViewContainer;
+    private View customView;
+    private WebChromeClient.CustomViewCallback customViewCallback;
     private ValueCallback<Uri[]> uploadMessage;
     private Uri cameraImageUri;
     private final static int FILECHOOSER_RESULTCODE = 1;
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webview);
         progressBar = findViewById(R.id.progressBar);
+        customViewContainer = findViewById(R.id.customViewContainer);
 
         // Disable Android system autofill popups / strong password suggestion overlay
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -290,6 +294,17 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
 
+            // Enable HTML5 and YouTube full screen video
+            @Override
+            public void onShowCustomView(View view, CustomViewCallback callback) {
+                showCustomViewInternal(view, callback);
+            }
+
+            @Override
+            public void onHideCustomView() {
+                hideCustomViewInternal();
+            }
+
             // For Android 5.0+ (File & Camera Chooser for uploads)
             @Override
             public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
@@ -469,9 +484,99 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showCustomViewInternal(View view, WebChromeClient.CustomViewCallback callback) {
+        if (customView != null) {
+            hideCustomViewInternal();
+            return;
+        }
+        customView = view;
+        customViewCallback = callback;
+
+        if (webView != null) {
+            webView.setVisibility(View.GONE);
+        }
+        if (customViewContainer != null) {
+            customViewContainer.setVisibility(View.VISIBLE);
+            customViewContainer.removeAllViews();
+            customViewContainer.addView(view, new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
+            ));
+        }
+
+        try {
+            setRequestedOrientation(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        } catch (Exception ignored) {}
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                getWindow().setDecorFitsSystemWindows(false);
+                android.view.WindowInsetsController controller = getWindow().getInsetsController();
+                if (controller != null) {
+                    controller.hide(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                    controller.setSystemBarsBehavior(android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                }
+            } catch (Exception ignored) {}
+        } else {
+            try {
+                getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                );
+            } catch (Exception ignored) {}
+        }
+    }
+
+    private void hideCustomViewInternal() {
+        if (customView == null) return;
+
+        if (customViewContainer != null) {
+            customViewContainer.removeView(customView);
+            customViewContainer.setVisibility(View.GONE);
+        }
+        customView = null;
+
+        if (webView != null) {
+            webView.setVisibility(View.VISIBLE);
+        }
+
+        if (customViewCallback != null) {
+            try {
+                customViewCallback.onCustomViewHidden();
+            } catch (Exception ignored) {}
+            customViewCallback = null;
+        }
+
+        try {
+            setRequestedOrientation(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } catch (Exception ignored) {}
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                getWindow().setDecorFitsSystemWindows(true);
+                android.view.WindowInsetsController controller = getWindow().getInsetsController();
+                if (controller != null) {
+                    controller.show(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                }
+            } catch (Exception ignored) {}
+        } else {
+            try {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            } catch (Exception ignored) {}
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        if (webView.canGoBack()) {
+        if (customView != null) {
+            hideCustomViewInternal();
+            return;
+        }
+        if (webView != null && webView.canGoBack()) {
             webView.goBack();
         } else {
             super.onBackPressed();

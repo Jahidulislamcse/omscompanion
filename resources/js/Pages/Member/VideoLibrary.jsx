@@ -21,6 +21,26 @@ export default function VideoLibrary({ categories = [], targetVideoId = null, in
     });
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
+
+    const handleClosePlayer = (e) => {
+        if (e && typeof e.stopPropagation === 'function') {
+            e.stopPropagation();
+        }
+        setSelectedVideo(null);
+    };
+
+    useEffect(() => {
+        if (selectedVideo) {
+            window.history.pushState({ member_video_modal: true }, '');
+            const handlePop = () => {
+                setSelectedVideo(null);
+            };
+            window.addEventListener('popstate', handlePop);
+            return () => {
+                window.removeEventListener('popstate', handlePop);
+            };
+        }
+    }, [selectedVideo]);
     const [activeAccessFilter, setActiveAccessFilter] = useState('all'); // 'all' | 'free' | 'premium'
     const [viewLayout, setViewLayout] = useState('list'); // Default to list view layout
 
@@ -317,10 +337,13 @@ export default function VideoLibrary({ categories = [], targetVideoId = null, in
                             <iframe 
                                 className="video-player"
                                 style={{ width: '100%', height: '100%', border: 'none' }}
-                                src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(selectedVideo.video_path)}?autoplay=1`} 
+                                src={`https://www.youtube-nocookie.com/embed/${getYouTubeId(selectedVideo.video_path)}?autoplay=1&enablejsapi=1&fs=1&rel=0`} 
                                 title={selectedVideo.title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                allowFullScreen={true}
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
                             ></iframe>
                         ) : (
                             <video 
@@ -335,9 +358,11 @@ export default function VideoLibrary({ categories = [], targetVideoId = null, in
                             </video>
                         )}
                         <button 
-                            onClick={() => setSelectedVideo(null)} 
+                            type="button"
+                            onClick={handleClosePlayer} 
+                            onTouchEnd={handleClosePlayer}
                             className="btn btn-danger" 
-                            style={{ position: 'absolute', top: '15px', right: '15px', padding: '6px 12px', zIndex: 10, borderRadius: '20px', fontWeight: 'bold' }}
+                            style={{ position: 'absolute', top: '15px', right: '15px', padding: '8px 16px', zIndex: 10, borderRadius: '24px', fontWeight: 'bold', touchAction: 'manipulation', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
                         >
                             ✕ Close Player
                         </button>
