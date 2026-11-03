@@ -4856,6 +4856,34 @@ select.form-control option {
 }
 
 /* ==========================================================================
+   HERO BANNER SUBTITLE - DESKTOP VIEW ONLY
+   ========================================================================== */
+.hero-banner-subtitle-desktop {
+    display: none !important;
+}
+
+@media (min-width: 769px) {
+    .hero-banner-subtitle-desktop {
+        display: block !important;
+        margin-top: 22px;
+        margin-bottom: 0;
+        text-align: center;
+        max-width: 860px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16.5px;
+        line-height: 1.6;
+        color: var(--text-muted);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-banner-subtitle-desktop {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
    VIDEO MASTERCLASSES - 2 CATEGORIES & AUTO ROLLING CAROUSEL STYLES
    ========================================================================== */
 .video-archive-pill-wrapper {
@@ -4866,10 +4894,10 @@ select.form-control option {
 /* Dedicated spacing above Archive button for Desktop view */
 @media (min-width: 769px) {
     #free-videos {
-        padding-top: 80px !important;
+        padding-top: 50px !important;
     }
     .video-archive-pill-wrapper {
-        margin-top: 24px !important;
+        margin-top: 16px !important;
         margin-bottom: 20px !important;
     }
 }
