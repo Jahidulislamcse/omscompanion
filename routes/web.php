@@ -433,6 +433,29 @@ Route::post('/mark-app-installed', function () {
     return response()->json(['status' => 'ok'])->withCookie(\Illuminate\Support\Facades\Cookie::forget('oms_app_installed'));
 })->name('app.mark_installed');
 
+// Native Mobile App Device Registration & OneSignal Tagging Route
+Route::post('/api/native/sync-device', function (\Illuminate\Http\Request $request) {
+    $userId = $request->input('user_id') ?: (auth()->check() ? auth()->id() : null);
+    $role = $request->input('role') ?: (auth()->check() ? auth()->user()->role : null);
+    $isAdmin = (bool) ($request->input('is_admin') || (auth()->check() && auth()->user()->isAdmin()) || strtolower((string)$role) === 'admin');
+    $subId = $request->input('subscription_id');
+    $deviceModel = $request->input('device_model');
+
+    if (empty($subId)) {
+        return response()->json(['success' => false, 'message' => 'No subscription_id provided'], 400);
+    }
+
+    $result = \App\Services\PushNotificationService::syncDeviceSubscription(
+        $userId ? (int) $userId : null,
+        $role,
+        $isAdmin,
+        (string) $subId,
+        $deviceModel
+    );
+
+    return response()->json($result);
+})->name('api.native.sync_device');
+
 // Member Routes
 Route::middleware(['auth', 'member'])->prefix('member')->group(function () {
     Route::get('/dashboard', [MemberController::class, 'dashboard'])->name('member.dashboard');

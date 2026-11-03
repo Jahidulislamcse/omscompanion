@@ -103,38 +103,64 @@ export function useAppInstalled() {
 export function syncNativeUser(user) {
     if (typeof window === 'undefined' || !user || !user.id) return;
 
+    const roleStr = String(user.role || '').toLowerCase();
+    const isAdmin = (roleStr === 'admin');
+
     window.authUser = {
         id: user.id,
         email: user.email || '',
-        role: user.role || ''
+        role: roleStr,
+        isAdmin: isAdmin
     };
 
+    let attempts = 0;
     const doSync = () => {
+        attempts++;
         if (typeof window.OMSCompanionNative !== 'undefined') {
             try {
                 if (typeof window.OMSCompanionNative.setUserInfo === 'function') {
                     window.OMSCompanionNative.setUserInfo(
                         String(user.id),
-                        String(user.role || ''),
-                        user.role === 'admin'
+                        roleStr,
+                        isAdmin
                     );
-                    return true;
                 } else if (typeof window.OMSCompanionNative.setUserId === 'function') {
                     window.OMSCompanionNative.setUserId(String(user.id));
+                }
+
+                // If native interface exposes getSubscriptionId, capture it & sync with backend API
+                let subId = '';
+                if (typeof window.OMSCompanionNative.getSubscriptionId === 'function') {
+                    subId = window.OMSCompanionNative.getSubscriptionId();
+                }
+
+                if (subId) {
+                    fetch('/api/native/sync-device', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                        },
+                        body: JSON.stringify({
+                            user_id: user.id,
+                            role: roleStr,
+                            is_admin: isAdmin,
+                            subscription_id: subId
+                        })
+                    }).catch(err => console.debug('[OMS App] Device sync network error', err));
                     return true;
                 }
             } catch (e) {
                 console.error('[OMS App] Native sync error:', e);
             }
         }
+
+        if (attempts < 6) {
+            setTimeout(doSync, attempts * 500);
+        }
         return false;
     };
 
-    if (!doSync()) {
-        setTimeout(doSync, 200);
-        setTimeout(doSync, 600);
-        setTimeout(doSync, 1500);
-        setTimeout(doSync, 3000);
-    }
+    doSync();
 }
 

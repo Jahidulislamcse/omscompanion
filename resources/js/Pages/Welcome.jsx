@@ -5,6 +5,7 @@ import PublicNavbar from '@/Components/PublicNavbar';
 import ReferralModal from '@/Components/ReferralModal';
 import FloatingAppInstallWidget from '@/Components/FloatingAppInstallWidget';
 import CallToActionCard from '@/Components/CallToActionCard';
+import { syncNativeUser } from '@/utils/appDetection';
 
 export function getYouTubeId(url) {
     if (!url) return '';
@@ -404,6 +405,12 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, [auth]);
+
+    useEffect(() => {
+        if (auth?.user) {
+            syncNativeUser(auth.user);
+        }
+    }, [auth?.user]);
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -141,26 +141,56 @@ public class MainActivity extends AppCompatActivity {
 
         webView.addJavascriptInterface(new Object() {
             @android.webkit.JavascriptInterface
-            public void setUserId(String userId) {
-                if (userId != null && !userId.isEmpty() && !userId.equals("0")) {
-                    com.onesignal.OneSignal.login(userId);
-                    com.onesignal.OneSignal.getUser().addTag("user_id", userId);
-                    com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
+            public String getSubscriptionId() {
+                try {
+                    String subId = com.onesignal.OneSignal.getUser().getPushSubscription().getId();
+                    return subId != null ? subId : "";
+                } catch (Exception e) {
+                    return "";
                 }
             }
 
             @android.webkit.JavascriptInterface
+            public String getPushToken() {
+                try {
+                    String token = com.onesignal.OneSignal.getUser().getPushSubscription().getToken();
+                    return token != null ? token : "";
+                } catch (Exception e) {
+                    return "";
+                }
+            }
+
+            @android.webkit.JavascriptInterface
+            public void setUserId(String userId) {
+                setUserInfo(userId, "member", false);
+            }
+
+            @android.webkit.JavascriptInterface
             public void setUserInfo(String userId, String role, boolean isAdmin) {
-                if (userId != null && !userId.isEmpty() && !userId.equals("0")) {
-                    com.onesignal.OneSignal.login(userId);
-                    com.onesignal.OneSignal.getUser().addTag("user_id", userId);
-                    if (role != null && !role.isEmpty()) {
-                        com.onesignal.OneSignal.getUser().addTag("role", role);
+                try {
+                    if (userId != null && !userId.isEmpty() && !userId.equals("0")) {
+                        com.onesignal.OneSignal.login(userId);
+                        com.onesignal.OneSignal.getUser().addTag("user_id", userId);
+                        String cleanRole = role != null ? role.trim().toLowerCase() : "member";
+                        com.onesignal.OneSignal.getUser().addTag("role", cleanRole);
+                        boolean admin = isAdmin || "admin".equalsIgnoreCase(cleanRole);
+                        if (admin) {
+                            com.onesignal.OneSignal.getUser().addTag("is_admin", "true");
+                            com.onesignal.OneSignal.getUser().addTag("role", "admin");
+                        }
+                        com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
+
+                        // Sync with backend API in background thread
+                        final String subId = com.onesignal.OneSignal.getUser().getPushSubscription().getId();
+                        final String fUserId = userId;
+                        final String fRole = cleanRole;
+                        final boolean fIsAdmin = admin;
+                        new Thread(() -> {
+                            syncDeviceWithBackend(fUserId, fRole, fIsAdmin, subId);
+                        }).start();
                     }
-                    if (isAdmin) {
-                        com.onesignal.OneSignal.getUser().addTag("is_admin", "true");
-                    }
-                    com.onesignal.OneSignal.getUser().getPushSubscription().optIn();
+                } catch (Exception e) {
+                    android.util.Log.e("OMSCompanion", "setUserInfo native error", e);
                 }
             }
 
@@ -201,11 +231,14 @@ public class MainActivity extends AppCompatActivity {
                     "  window.dispatchEvent(new Event('app-installed-status-changed')); " +
                     "} catch(e) {} " +
                     "if (window.authUser && window.authUser.id && window.OMSCompanionNative) { " +
-                    "  if (window.OMSCompanionNative.setUserInfo) { " +
-                    "    window.OMSCompanionNative.setUserInfo(String(window.authUser.id), String(window.authUser.role || ''), window.authUser.role === 'admin'); " +
-                    "  } else { " +
-                    "    window.OMSCompanionNative.setUserId(String(window.authUser.id)); " +
-                    "  } " +
+                    "  try { " +
+                    "    var isAdm = (window.authUser.role === 'admin' || window.authUser.isAdmin === true); " +
+                    "    if (window.OMSCompanionNative.setUserInfo) { " +
+                    "      window.OMSCompanionNative.setUserInfo(String(window.authUser.id), String(window.authUser.role || ''), isAdm); " +
+                    "    } else { " +
+                    "      window.OMSCompanionNative.setUserId(String(window.authUser.id)); " +
+                    "    } " +
+                    "  } catch(e) {} " +
                     "} " +
                     "})();",
                     null
@@ -399,6 +432,40 @@ public class MainActivity extends AppCompatActivity {
             uploadMessage.onReceiveValue(results);
             uploadMessage = null;
             cameraImageUri = null;
+        }
+    }
+
+    private void syncDeviceWithBackend(String userId, String role, boolean isAdmin, String subscriptionId) {
+        if (subscriptionId == null || subscriptionId.isEmpty()) {
+            return;
+        }
+        try {
+            java.net.URL url = new java.net.URL(APP_URL + "/api/native/sync-device");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+            conn.setConnectTimeout(6000);
+            conn.setReadTimeout(6000);
+
+            JSONObject json = new JSONObject();
+            json.put("user_id", userId);
+            json.put("role", role);
+            json.put("is_admin", isAdmin);
+            json.put("subscription_id", subscriptionId);
+            json.put("device_model", Build.MANUFACTURER + " " + Build.MODEL);
+            json.put("device_os", String.valueOf(Build.VERSION.SDK_INT));
+
+            byte[] input = json.toString().getBytes("utf-8");
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                os.write(input, 0, input.length);
+            }
+            int code = conn.getResponseCode();
+            android.util.Log.i("OMSCompanion", "syncDeviceWithBackend response code: " + code);
+            conn.disconnect();
+        } catch (Exception e) {
+            android.util.Log.w("OMSCompanion", "syncDeviceWithBackend network notice: " + e.getMessage());
         }
     }
 

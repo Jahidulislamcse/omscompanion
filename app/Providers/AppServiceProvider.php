@@ -37,6 +37,12 @@ class AppServiceProvider extends ServiceProvider
                     $table->timestamp('admin_read_at')->nullable()->after('status');
                 });
             }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('users') && !\Illuminate\Support\Facades\Schema::hasColumn('users', 'onesignal_player_id')) {
+                \Illuminate\Support\Facades\Schema::table('users', function ($table) {
+                    $table->string('onesignal_player_id', 191)->nullable()->after('remember_token');
+                });
+            }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Auto-migration in AppServiceProvider failed: ' . $e->getMessage());
         }
