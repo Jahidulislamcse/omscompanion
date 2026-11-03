@@ -1178,177 +1178,6 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                 </div>
             </section>
 
-            {/* News & Professional Training Section */}
-            <section id="news" className="landing-section news-section">
-                <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <div className="outline-pill-wrapper">
-                            <span className="outline-pill-badge">
-                                Latest Updates
-                            </span>
-                        </div>
-                        <h2 className="landing-section-title">Clinical News & Professional Training</h2>
-                        <p className="landing-section-subtitle">
-                            Stay updated with recent surgical case studies, workshop schedules, and professional training announcements for BDS Doctors.
-                        </p>
-
-                        {/* Mobile Swipe Hint Toolbar & View Mode Switcher */}
-                        {activeNewsItems.length > 1 && (
-                            <div className="news-mobile-header-toolbar">
-                                <div className="news-mobile-scroll-hint">
-                                    <span className="hint-hand-bounce">{newsViewMode === 'carousel' ? '👉' : '📋'}</span>
-                                    <span>{newsViewMode === 'carousel' ? 'Swipe cards to explore all' : 'Viewing all'} <strong>{activeNewsItems.length} updates</strong></span>
-                                    <span className="hint-pill-counter">{newsViewMode === 'carousel' ? `${activeNewsIndex + 1}/${activeNewsItems.length}` : `${activeNewsItems.length}/${activeNewsItems.length}`}</span>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="news-view-toggle-btn"
-                                    onClick={() => setNewsViewMode(prev => prev === 'carousel' ? 'grid' : 'carousel')}
-                                    aria-label="Toggle News View Mode"
-                                >
-                                    {newsViewMode === 'carousel' ? '⊞ Show All Cards' : '↔ Swipe Carousel'}
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Top Indicator Dots Track (Matches User Drawing) */}
-                        {newsViewMode === 'carousel' && activeNewsItems.length > 1 && (
-                            <div className="news-dots-indicator-top">
-                                <div className="news-dots-track">
-                                    {activeNewsItems.map((_, i) => (
-                                        <button
-                                            key={i}
-                                            type="button"
-                                            className={`news-dot-item ${activeNewsIndex === i ? 'is-active' : ''}`}
-                                            onClick={() => scrollToNews(i)}
-                                            aria-label={`Go to update ${i + 1}`}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div 
-                        className={`news-grid ${newsViewMode === 'grid' ? 'is-grid-view' : ''}`}
-                        ref={newsGridRef}
-                        onScroll={handleNewsScroll}
-                    >
-                        {activeNewsItems.map((item, idx) => {
-                            const glowClass = item.theme_color ? `card-glow-${item.theme_color}` : (idx % 3 === 0 ? 'card-glow-indigo' : idx % 3 === 1 ? 'card-glow-emerald' : 'card-glow-cyan');
-                            const badgeStyleClass = idx % 3 === 0 ? 'badge-new' : idx % 3 === 1 ? 'badge-completed' : 'badge-approved';
-
-                            const isWhatsApp = item.button_type === 'whatsapp' || item.button_url === 'whatsapp';
-                            const waNumber = (getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000';
-                            const targetUrl = isWhatsApp 
-                                ? `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hello OMSCOMPANION! Inquiry regarding: ${item.title}`)}`
-                                : (item.button_url || route('videos.public'));
-
-                            return (
-                                <div key={item.id || idx} className={`glass-panel news-card ${glowClass}`}>
-                                    <div className="news-meta">
-                                        <span className={`badge-status ${badgeStyleClass}`}>{item.badge_text}</span>
-                                        {item.sub_badge_text && <span>{item.sub_badge_text}</span>}
-                                    </div>
-                                    <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', lineHeight: '1.45', margin: '8px 0 16px' }}>{item.title}</h4>
-                                    {isWhatsApp || targetUrl.startsWith('http') ? (
-                                        <a 
-                                            href={targetUrl}
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
-                                            className={`btn ${isWhatsApp ? 'btn-whatsapp' : 'btn-outline'}`}
-                                            style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
-                                        >
-                                            {item.button_text}
-                                        </a>
-                                    ) : (
-                                        <Link 
-                                            href={targetUrl.startsWith('/') ? targetUrl : route('videos.public')} 
-                                            className="btn btn-outline" 
-                                            style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
-                                        >
-                                            {item.button_text}
-                                        </Link>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Mobile Carousel Indicators & Quick Navigation Arrows */}
-                    {newsViewMode === 'carousel' && activeNewsItems.length > 1 && (
-                        <div className="news-mobile-controls">
-                            <button
-                                type="button"
-                                className="news-nav-arrow-btn"
-                                onClick={() => scrollToNews(Math.max(0, activeNewsIndex - 1))}
-                                disabled={activeNewsIndex === 0}
-                                aria-label="Previous News Item"
-                            >
-                                ‹
-                            </button>
-                            <div className="news-dots-track">
-                                {activeNewsItems.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        type="button"
-                                        className={`news-dot-item ${activeNewsIndex === i ? 'is-active' : ''}`}
-                                        onClick={() => scrollToNews(i)}
-                                        aria-label={`Go to update ${i + 1}`}
-                                    />
-                                ))}
-                            </div>
-                            <button
-                                type="button"
-                                className="news-nav-arrow-btn"
-                                onClick={() => scrollToNews(Math.min(activeNewsItems.length - 1, activeNewsIndex + 1))}
-                                disabled={activeNewsIndex === activeNewsItems.length - 1}
-                                aria-label="Next News Item"
-                            >
-                                ›
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* Interactive FAQ Section */}
-            <section id="faq" className="landing-section faq-section">
-                <div className="landing-section-container">
-                    <div className="landing-section-header">
-                        <div className="outline-pill-wrapper">
-                            <span className="outline-pill-badge">
-                                Common Questions
-                            </span>
-                        </div>
-                        <h2 className="landing-section-title">Frequently Asked Questions</h2>
-                    </div>
-
-                    <div className="faq-accordion-list">
-                        {faqs.map((faq, index) => {
-                            const isOpen = openFaq === index;
-                            return (
-                                <div 
-                                    key={index} 
-                                    className={`glass-panel faq-item ${isOpen ? 'faq-open' : ''}`}
-                                    onClick={() => setOpenFaq(isOpen ? null : index)}
-                                >
-                                    <div className="faq-question-row">
-                                        <h4 className="faq-question">{faq.q}</h4>
-                                        <span className="faq-toggle-icon">{isOpen ? '−' : '+'}</span>
-                                    </div>
-                                    {isOpen && (
-                                        <div className="faq-answer-row">
-                                            <p>{faq.a}</p>
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </section>
-
             {/* Access Blocked / Registration Required Modal */}
             {accessBlockedReason && (
                 <div className="modal-wrapper" onClick={() => setAccessBlockedReason(null)}>
@@ -1768,6 +1597,177 @@ export default function Welcome({ settings, freeVideos, reviews = [], newsItems 
                                 <span>{copiedLink ? '✓ Link Copied!' : 'Copy Link'}</span>
                             </button>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* News & Professional Training Section */}
+            <section id="news" className="landing-section news-section">
+                <div className="landing-section-container">
+                    <div className="landing-section-header">
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Latest Updates
+                            </span>
+                        </div>
+                        <h2 className="landing-section-title">Clinical News & Professional Training</h2>
+                        <p className="landing-section-subtitle">
+                            Stay updated with recent surgical case studies, workshop schedules, and professional training announcements for BDS Doctors.
+                        </p>
+
+                        {/* Mobile Swipe Hint Toolbar & View Mode Switcher */}
+                        {activeNewsItems.length > 1 && (
+                            <div className="news-mobile-header-toolbar">
+                                <div className="news-mobile-scroll-hint">
+                                    <span className="hint-hand-bounce">{newsViewMode === 'carousel' ? '👉' : '📋'}</span>
+                                    <span>{newsViewMode === 'carousel' ? 'Swipe cards to explore all' : 'Viewing all'} <strong>{activeNewsItems.length} updates</strong></span>
+                                    <span className="hint-pill-counter">{newsViewMode === 'carousel' ? `${activeNewsIndex + 1}/${activeNewsItems.length}` : `${activeNewsItems.length}/${activeNewsItems.length}`}</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="news-view-toggle-btn"
+                                    onClick={() => setNewsViewMode(prev => prev === 'carousel' ? 'grid' : 'carousel')}
+                                    aria-label="Toggle News View Mode"
+                                >
+                                    {newsViewMode === 'carousel' ? '⊞ Show All Cards' : '↔ Swipe Carousel'}
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Top Indicator Dots Track (Matches User Drawing) */}
+                        {newsViewMode === 'carousel' && activeNewsItems.length > 1 && (
+                            <div className="news-dots-indicator-top">
+                                <div className="news-dots-track">
+                                    {activeNewsItems.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            className={`news-dot-item ${activeNewsIndex === i ? 'is-active' : ''}`}
+                                            onClick={() => scrollToNews(i)}
+                                            aria-label={`Go to update ${i + 1}`}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div 
+                        className={`news-grid ${newsViewMode === 'grid' ? 'is-grid-view' : ''}`}
+                        ref={newsGridRef}
+                        onScroll={handleNewsScroll}
+                    >
+                        {activeNewsItems.map((item, idx) => {
+                            const glowClass = item.theme_color ? `card-glow-${item.theme_color}` : (idx % 3 === 0 ? 'card-glow-indigo' : idx % 3 === 1 ? 'card-glow-emerald' : 'card-glow-cyan');
+                            const badgeStyleClass = idx % 3 === 0 ? 'badge-new' : idx % 3 === 1 ? 'badge-completed' : 'badge-approved';
+
+                            const isWhatsApp = item.button_type === 'whatsapp' || item.button_url === 'whatsapp';
+                            const waNumber = (getSetting('footer_contact_phone', '8801700000000')).replace(/[^0-9]/g, '') || '8801700000000';
+                            const targetUrl = isWhatsApp 
+                                ? `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hello OMSCOMPANION! Inquiry regarding: ${item.title}`)}`
+                                : (item.button_url || route('videos.public'));
+
+                            return (
+                                <div key={item.id || idx} className={`glass-panel news-card ${glowClass}`}>
+                                    <div className="news-meta">
+                                        <span className={`badge-status ${badgeStyleClass}`}>{item.badge_text}</span>
+                                        {item.sub_badge_text && <span>{item.sub_badge_text}</span>}
+                                    </div>
+                                    <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', lineHeight: '1.45', margin: '8px 0 16px' }}>{item.title}</h4>
+                                    {isWhatsApp || targetUrl.startsWith('http') ? (
+                                        <a 
+                                            href={targetUrl}
+                                            target="_blank" 
+                                            rel="noopener noreferrer" 
+                                            className={`btn ${isWhatsApp ? 'btn-whatsapp' : 'btn-outline'}`}
+                                            style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
+                                        >
+                                            {item.button_text}
+                                        </a>
+                                    ) : (
+                                        <Link 
+                                            href={targetUrl.startsWith('/') ? targetUrl : route('videos.public')} 
+                                            className="btn btn-outline" 
+                                            style={{ alignSelf: 'flex-start', marginTop: 'auto' }}
+                                        >
+                                            {item.button_text}
+                                        </Link>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Mobile Carousel Indicators & Quick Navigation Arrows */}
+                    {newsViewMode === 'carousel' && activeNewsItems.length > 1 && (
+                        <div className="news-mobile-controls">
+                            <button
+                                type="button"
+                                className="news-nav-arrow-btn"
+                                onClick={() => scrollToNews(Math.max(0, activeNewsIndex - 1))}
+                                disabled={activeNewsIndex === 0}
+                                aria-label="Previous News Item"
+                            >
+                                ‹
+                            </button>
+                            <div className="news-dots-track">
+                                {activeNewsItems.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        className={`news-dot-item ${activeNewsIndex === i ? 'is-active' : ''}`}
+                                        onClick={() => scrollToNews(i)}
+                                        aria-label={`Go to update ${i + 1}`}
+                                    />
+                                ))}
+                            </div>
+                            <button
+                                type="button"
+                                className="news-nav-arrow-btn"
+                                onClick={() => scrollToNews(Math.min(activeNewsItems.length - 1, activeNewsIndex + 1))}
+                                disabled={activeNewsIndex === activeNewsItems.length - 1}
+                                aria-label="Next News Item"
+                            >
+                                ›
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* Interactive FAQ Section */}
+            <section id="faq" className="landing-section faq-section">
+                <div className="landing-section-container">
+                    <div className="landing-section-header">
+                        <div className="outline-pill-wrapper">
+                            <span className="outline-pill-badge">
+                                Common Questions
+                            </span>
+                        </div>
+                        <h2 className="landing-section-title">Frequently Asked Questions</h2>
+                    </div>
+
+                    <div className="faq-accordion-list">
+                        {faqs.map((faq, index) => {
+                            const isOpen = openFaq === index;
+                            return (
+                                <div 
+                                    key={index} 
+                                    className={`glass-panel faq-item ${isOpen ? 'faq-open' : ''}`}
+                                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                                >
+                                    <div className="faq-question-row">
+                                        <h4 className="faq-question">{faq.q}</h4>
+                                        <span className="faq-toggle-icon">{isOpen ? '−' : '+'}</span>
+                                    </div>
+                                    {isOpen && (
+                                        <div className="faq-answer-row">
+                                            <p>{faq.a}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

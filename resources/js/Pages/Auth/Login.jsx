@@ -101,9 +101,17 @@ export default function Login() {
                             </div>
 
                             <div className="form-group" style={{ marginBottom: '14px' }}>
-                                <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '13px', marginBottom: '4px' }}>
-                                    Password
-                                </label>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                    <label className="form-label" htmlFor="password" style={{ fontWeight: '600', fontSize: '13px', margin: 0 }}>
+                                        Password
+                                    </label>
+                                    <Link
+                                        href={route('password.request')}
+                                        style={{ fontSize: '12px', color: 'var(--color-cyan, #06b6d4)', fontWeight: '600', textDecoration: 'none' }}
+                                    >
+                                        Forgot Password?
+                                    </Link>
+                                </div>
                                 <PasswordInput
                                     id="password"
                                     placeholder="Enter your password"
