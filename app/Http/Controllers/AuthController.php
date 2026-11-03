@@ -148,7 +148,7 @@ class AuthController extends Controller
             \Illuminate\Support\Facades\Log::error('Admin registration push notification failed: ' . $e->getMessage());
         }
 
-        return redirect()->route('login')->with('success', 'Please wait for account approval from the authority');
+        return redirect()->route('login')->with('success', "Please wait for account approval from the authority. You'll get approval update via email.");
     }
     public function logout(Request $request)
     {

@@ -28,6 +28,9 @@ export default function Register() {
         e.preventDefault();
         post(route('register'), {
             forceFormData: true,
+            onSuccess: () => {
+                alert("Please wait for account approval from the authority. You'll get approval update via email.");
+            },
         });
     };
 
