@@ -6569,66 +6569,281 @@ select.form-control option {
 }
 
 /* ==========================================================================
-   CAMERA PHOTO UPLOAD SOURCE SELECTION SHEET / MODAL
+   CAMERA PHOTO UPLOAD SOURCE SELECTION MODAL
    ========================================================================== */
 .camera-options-overlay {
     position: fixed !important;
     inset: 0 !important;
-    background-color: rgba(0, 0, 0, 0.72) !important;
+    background-color: rgba(15, 23, 42, 0.65) !important;
     z-index: 999999 !important;
     display: flex !important;
+    align-items: center !important;
     justify-content: center !important;
-    backdrop-filter: blur(5px) !important;
+    padding: 16px !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
     animation: fadeIn 0.18s ease-out !important;
 }
 
 .camera-options-sheet {
-    background-color: var(--bg-card, #0f172a) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: auto !important;
+    background-color: #ffffff !important;
+    border: 1px solid rgba(226, 232, 240, 0.9) !important;
+    border-radius: 24px !important;
+    padding: 22px 20px 20px !important;
+    color: #0f172a !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
+    position: relative !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 25px rgba(6, 182, 212, 0.12) !important;
+    animation: cameraModalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-@media (max-width: 640px) {
-    .camera-options-overlay {
-        align-items: flex-end !important;
-        padding: 0 !important;
-    }
-    .camera-options-sheet {
-        width: 100% !important;
-        max-width: 100% !important;
-        border-radius: 24px 24px 0 0 !important;
-        border-bottom: none !important;
-        padding: 20px 20px 28px !important;
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6) !important;
-        animation: cameraSheetSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
+[data-theme="dark"] .camera-options-sheet {
+    background-color: #0f1e25 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 25px rgba(6, 182, 212, 0.2) !important;
 }
 
-@media (min-width: 641px) {
-    .camera-options-overlay {
-        align-items: center !important;
-        padding: 24px !important;
-    }
-    .camera-options-sheet {
-        width: 100% !important;
-        max-width: 440px !important;
-        border-radius: 20px !important;
-        padding: 24px !important;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
-        animation: cameraModalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
+/* Modal Title & Subtitle */
+.camera-options-title {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    letter-spacing: -0.2px !important;
 }
 
-@keyframes cameraSheetSlideUp {
-    from {
-        transform: translateY(100%);
-    }
-    to {
-        transform: translateY(0);
-    }
+[data-theme="dark"] .camera-options-title {
+    color: #f8fafc !important;
+}
+
+.camera-options-subtitle {
+    margin: 4px 0 0 !important;
+    font-size: 12px !important;
+    color: #64748b !important;
+    font-weight: 500 !important;
+}
+
+[data-theme="dark"] .camera-options-subtitle {
+    color: #94a3b8 !important;
+}
+
+/* Modal Close Button */
+.camera-options-close {
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+
+.camera-options-close:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="dark"] .camera-options-close {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .camera-options-close:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+/* Option Button Base */
+.camera-option-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 13px 16px !important;
+    border-radius: 16px !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.camera-option-btn:hover {
+    transform: translateY(-1px) !important;
+}
+
+.camera-option-btn:active {
+    transform: translateY(0) scale(0.99) !important;
+}
+
+/* Camera Option Item */
+.camera-option-btn-camera {
+    background-color: #f0fdfa !important;
+    border: 1.5px solid #99f6e4 !important;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08) !important;
+}
+
+.camera-option-btn-camera:hover {
+    background-color: #ccfbf1 !important;
+    border-color: #0d9488 !important;
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.16) !important;
+}
+
+[data-theme="dark"] .camera-option-btn-camera {
+    background-color: rgba(13, 148, 136, 0.12) !important;
+    border: 1.5px solid rgba(6, 182, 212, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .camera-option-btn-camera:hover {
+    background-color: rgba(13, 148, 136, 0.22) !important;
+    border-color: #06b6d4 !important;
+}
+
+/* Gallery Option Item */
+.camera-option-btn-gallery {
+    background-color: #fffbeb !important;
+    border: 1.5px solid #fde68a !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08) !important;
+}
+
+.camera-option-btn-gallery:hover {
+    background-color: #fef3c7 !important;
+    border-color: #d97706 !important;
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.16) !important;
+}
+
+[data-theme="dark"] .camera-option-btn-gallery {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+    border: 1.5px solid rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .camera-option-btn-gallery:hover {
+    background-color: rgba(245, 158, 11, 0.22) !important;
+    border-color: #f59e0b !important;
+}
+
+/* Option Titles & Subtexts */
+.camera-option-item-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="dark"] .camera-option-item-title {
+    color: #f8fafc !important;
+}
+
+.camera-option-item-desc {
+    font-size: 12px !important;
+    color: #64748b !important;
+    margin-top: 2px !important;
+    font-weight: 500 !important;
+}
+
+[data-theme="dark"] .camera-option-item-desc {
+    color: #94a3b8 !important;
+}
+
+/* Option Arrow */
+.camera-option-arrow {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #94a3b8 !important;
+    transition: transform 0.15s ease !important;
+}
+
+.camera-option-btn:hover .camera-option-arrow {
+    transform: translateX(3px) !important;
+}
+
+.camera-option-btn-camera .camera-option-arrow {
+    color: #0d9488 !important;
+}
+
+.camera-option-btn-gallery .camera-option-arrow {
+    color: #d97706 !important;
+}
+
+/* Remove Photo Button */
+.camera-option-btn-remove {
+    background-color: #fef2f2 !important;
+    border: 1.5px solid #fecaca !important;
+}
+
+.camera-option-btn-remove:hover {
+    background-color: #fee2e2 !important;
+    border-color: #ef4444 !important;
+}
+
+[data-theme="dark"] .camera-option-btn-remove {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border: 1.5px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+[data-theme="dark"] .camera-option-btn-remove:hover {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    border-color: #ef4444 !important;
+}
+
+.camera-option-remove-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #dc2626 !important;
+}
+
+.camera-option-remove-desc {
+    font-size: 11px !important;
+    color: #ef4444 !important;
+    margin-top: 2px !important;
+}
+
+/* Cancel Button */
+.camera-options-cancel-btn {
+    width: 100% !important;
+    padding: 11px !important;
+    border-radius: 14px !important;
+    background-color: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    margin-top: 6px !important;
+    transition: all 0.15s ease !important;
+}
+
+.camera-options-cancel-btn:hover {
+    background-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="dark"] .camera-options-cancel-btn {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .camera-options-cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
 }
 
 @keyframes cameraModalScaleIn {

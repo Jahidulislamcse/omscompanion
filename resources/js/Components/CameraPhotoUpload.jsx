@@ -406,107 +406,104 @@ export default function CameraPhotoUpload({
                         className="camera-options-sheet"
                         onClick={e => e.stopPropagation()}
                     >
-                        {/* Drag Handle for mobile sheet */}
-                        <div style={{ width: '38px', height: '4px', backgroundColor: 'rgba(255, 255, 255, 0.25)', borderRadius: '2px', margin: '0 auto 12px auto' }}></div>
+                        {/* Top Close Button */}
+                        <button
+                            type="button"
+                            className="camera-options-close"
+                            onClick={() => setShowOptionsModal(false)}
+                            aria-label="Close"
+                        >
+                            ✕
+                        </button>
 
                         {/* Title Header */}
-                        <div style={{ textAlign: 'center', marginBottom: '14px' }}>
-                            <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#ffffff' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '18px', paddingLeft: '24px', paddingRight: '24px' }}>
+                            <div style={{
+                                width: '46px',
+                                height: '46px',
+                                borderRadius: '14px',
+                                background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(13, 148, 136, 0.15) 100%)',
+                                border: '1px solid rgba(6, 182, 212, 0.3)',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '22px',
+                                marginBottom: '8px'
+                            }}>
+                                📸
+                            </div>
+                            <h4 className="camera-options-title">
                                 প্রোফাইল ছবি আপলোড (Profile Photo)
                             </h4>
-                            <p style={{ margin: '4px 0 0', fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)' }}>
+                            <p className="camera-options-subtitle">
                                 ছবি দেওয়ার মাধ্যম নির্বাচন করুন
                             </p>
                         </div>
 
                         {/* Options Buttons */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
                             {/* Option 1: Phone Camera */}
                             <button
                                 type="button"
                                 onClick={handleSelectCamera}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '14px',
-                                    padding: '13px 16px',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                                    border: '1.5px solid rgba(6, 182, 212, 0.35)',
-                                    borderRadius: '16px',
-                                    color: '#ffffff',
-                                    cursor: 'pointer',
-                                    textAlign: 'left',
-                                    transition: 'all 0.18s ease',
-                                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
-                                }}
+                                className="camera-option-btn camera-option-btn-camera"
                             >
                                 <div style={{
-                                    width: '42px',
-                                    height: '42px',
-                                    borderRadius: '12px',
-                                    background: 'linear-gradient(135deg, #0d9488 0%, #0891b2 100%)',
+                                    width: '44px',
+                                    height: '44px',
+                                    borderRadius: '13px',
+                                    background: 'linear-gradient(135deg, #0d9488 0%, #06b6d4 100%)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: '20px',
+                                    fontSize: '22px',
                                     flexShrink: 0,
                                     boxShadow: '0 4px 12px rgba(13, 148, 136, 0.35)',
+                                    color: '#ffffff',
                                 }}>
                                     📷
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff' }}>
+                                    <div className="camera-option-item-title">
                                         Phone Camera (ফোন ক্যামেরা)
                                     </div>
-                                    <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.7)', marginTop: '2px' }}>
+                                    <div className="camera-option-item-desc">
                                         ক্যামেরা দিয়ে সরাসরি নতুন ছবি তুলুন
                                     </div>
                                 </div>
-                                <span style={{ fontSize: '18px', color: 'rgba(255, 255, 255, 0.4)' }}>›</span>
+                                <span className="camera-option-arrow">›</span>
                             </button>
 
                             {/* Option 2: Gallery */}
                             <button
                                 type="button"
                                 onClick={handleSelectGallery}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '14px',
-                                    padding: '13px 16px',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                                    border: '1.5px solid rgba(245, 158, 11, 0.35)',
-                                    borderRadius: '16px',
-                                    color: '#ffffff',
-                                    cursor: 'pointer',
-                                    textAlign: 'left',
-                                    transition: 'all 0.18s ease',
-                                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
-                                }}
+                                className="camera-option-btn camera-option-btn-gallery"
                             >
                                 <div style={{
-                                    width: '42px',
-                                    height: '42px',
-                                    borderRadius: '12px',
+                                    width: '44px',
+                                    height: '44px',
+                                    borderRadius: '13px',
                                     background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: '20px',
+                                    fontSize: '22px',
                                     flexShrink: 0,
                                     boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)',
+                                    color: '#ffffff',
                                 }}>
                                     📁
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff' }}>
+                                    <div className="camera-option-item-title">
                                         Gallery (গ্যালারি / ফাইল)
                                     </div>
-                                    <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.7)', marginTop: '2px' }}>
+                                    <div className="camera-option-item-desc">
                                         ফোন মেমোরি বা গ্যালারি থেকে ছবি সিলেক্ট করুন
                                     </div>
                                 </div>
-                                <span style={{ fontSize: '18px', color: 'rgba(255, 255, 255, 0.4)' }}>›</span>
+                                <span className="camera-option-arrow">›</span>
                             </button>
 
                             {/* Option 3: Remove photo (if preview exists) */}
@@ -517,38 +514,27 @@ export default function CameraPhotoUpload({
                                         handleRemovePhoto();
                                         setShowOptionsModal(false);
                                     }}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '14px',
-                                        padding: '12px 16px',
-                                        backgroundColor: 'rgba(239, 68, 68, 0.08)',
-                                        border: '1.5px solid rgba(239, 68, 68, 0.35)',
-                                        borderRadius: '16px',
-                                        color: '#ef4444',
-                                        cursor: 'pointer',
-                                        textAlign: 'left',
-                                        transition: 'all 0.18s ease',
-                                    }}
+                                    className="camera-option-btn camera-option-btn-remove"
                                 >
                                     <div style={{
-                                        width: '42px',
-                                        height: '42px',
-                                        borderRadius: '12px',
-                                        background: 'rgba(239, 68, 68, 0.18)',
+                                        width: '44px',
+                                        height: '44px',
+                                        borderRadius: '13px',
+                                        background: 'rgba(239, 68, 68, 0.15)',
+                                        border: '1px solid rgba(239, 68, 68, 0.3)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        fontSize: '18px',
+                                        fontSize: '20px',
                                         flexShrink: 0,
                                     }}>
                                         🗑️
                                     </div>
                                     <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#ef4444' }}>
+                                        <div className="camera-option-remove-title">
                                             Remove Photo (ছবি মুছুন)
                                         </div>
-                                        <div style={{ fontSize: '11px', color: 'rgba(239, 68, 68, 0.8)', marginTop: '2px' }}>
+                                        <div className="camera-option-remove-desc">
                                             বর্তমান সিলেক্ট করা ছবিটি বাদ দিন
                                         </div>
                                     </div>
@@ -560,18 +546,7 @@ export default function CameraPhotoUpload({
                         <button
                             type="button"
                             onClick={() => setShowOptionsModal(false)}
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '14px',
-                                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                                border: '1px solid rgba(255, 255, 255, 0.18)',
-                                color: '#ffffff',
-                                fontSize: '14px',
-                                fontWeight: '600',
-                                cursor: 'pointer',
-                                marginTop: '4px',
-                            }}
+                            className="camera-options-cancel-btn"
                         >
                             বাতিল (Cancel)
                         </button>
